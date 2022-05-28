@@ -1,17 +1,18 @@
 import React from 'react';
 import Employee from '../ListItem/Employee';
-//import styles from './EmployeeList.module.css';
+import styles from './EmployeesList.module.css';
 
-const EmployeeList = ({ list, deleteItem }) => {
+const EmployeesList = ({ list, deleteItem }) => {
   return (
-    <div>
-      <table>
+    <div className={styles.container}>
+      <table className={styles.table}>
         <thead>
-          <tr>
+          <tr className={styles.headerRow}>
             <th id="firstName">First Name</th>
             <th id="lastName">Last Name</th>
             <th id="email">Email</th>
             <th id="isActive">Active</th>
+            <th id="delete">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -24,4 +25,4 @@ const EmployeeList = ({ list, deleteItem }) => {
   );
 };
 
-export default EmployeeList;
+export default EmployeesList;

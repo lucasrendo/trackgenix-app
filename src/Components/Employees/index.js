@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './employees.module.css';
-import EmployeeList from './EmployeesList';
+import EmployeesList from './EmployeesList';
 
-function Employees() {
+const Employees = () => {
   const [employeesList, saveEmployees] = useState([]);
   console.log(employeesList);
   useEffect(async () => {
@@ -23,14 +23,9 @@ function Employees() {
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <div>
-        <EmployeeList list={employeesList} setList={saveEmployees} deleteItem={deleteEmployee} />
-        {/* {employeesList.map((employee) => {
-          return <div key={employee._id}>{employee.firstName}</div>;
-        })} */}
-      </div>
+      <EmployeesList list={employeesList} setList={saveEmployees} deleteItem={deleteEmployee} />
     </section>
   );
-}
+};
 
 export default Employees;
