@@ -14,6 +14,7 @@ const List = ({ list, deleteItem }) => {
             <th>Start Date</th>
             <th>Active</th>
             <th>Client</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>

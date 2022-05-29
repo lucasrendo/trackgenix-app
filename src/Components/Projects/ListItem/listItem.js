@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './listItem.module.css';
 
 const ListItem = ({ listItem, deleteItem }) => {
   const handleDelete = () => {
@@ -9,9 +10,9 @@ const ListItem = ({ listItem, deleteItem }) => {
     <tr>
       <td>{listItem.projectName}</td>
       <td>{listItem.startDate}</td>
-      <td>{listItem.isActive}</td>
+      <td className={styles.center}>{listItem.isActive ? 'True' : 'False'}</td>
       <td>{listItem.client}</td>
-      <td>
+      <td className={styles.center}>
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>
     </tr>
