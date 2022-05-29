@@ -1,0 +1,7 @@
+.rows {
+    display: flex;
+}
+
+tr {
+    justify-content:  right;
+}
