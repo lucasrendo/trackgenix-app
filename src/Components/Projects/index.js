@@ -15,7 +15,18 @@ function Projects() {
     }
   }, []);
 
-  const deleteItem = (_id) => {
+  const deleteItem = async (_id) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects/${_id}`, {
+        method: 'DELETE'
+      });
+      const data = await response.json();
+      alert(`Project "${data.data.projectName}" was deleted successfully`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+
     setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
   };
 

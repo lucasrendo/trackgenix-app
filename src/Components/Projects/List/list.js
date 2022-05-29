@@ -3,8 +3,6 @@ import ListItem from '../ListItem/listItem';
 import styles from './list.module.css';
 
 const List = ({ list, deleteItem }) => {
-  // eslint-disable-next-line no-console
-  console.log('lista de projects en list', list);
   return (
     <div className={styles.container}>
       <table>
