@@ -15,7 +15,7 @@ const TimeSheetForm = () => {
   const [tasksOptions, setTasksOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
 
-  const onChangeDataInput = (e) => {
+  const onChangeDateInput = (e) => {
     setDate(e.target.value);
   };
 
@@ -25,6 +25,7 @@ const TimeSheetForm = () => {
 
   const onChangeEmployeeIdInput = (e) => {
     setEmployeeId(e.target.value);
+    console.log(employeeId);
   };
 
   const onChangeProjectValueInput = (e) => {
@@ -43,19 +44,15 @@ const TimeSheetForm = () => {
     setTimeSheetDescription(e.target.value);
   };
 
+  const onChangeEmployeeRole = (e) => {
+    setEmployeeRole(e.target.value);
+  };
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const employees = await response.json();
-      for (let i = 0; i < employees.data.length; i++) {
-        setEmployeeOptions((employeeOptions) => [
-          ...employeeOptions,
-          {
-            value: `${employees.data[i]._id}`,
-            label: `${employees.data[i].firstName} ${employees.data[i].lastName}`
-          }
-        ]);
-      }
+      const employeeData = await response.json();
+      setEmployeeOptions(employeeData.data);
     } catch (error) {
       console.error(error);
     }
@@ -64,16 +61,8 @@ const TimeSheetForm = () => {
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const projects = await response.json();
-      for (let i = 0; i < projects.data.length; i++) {
-        setProjectOptions((projectOptions) => [
-          ...projectOptions,
-          {
-            value: `${projects.data[i]._id}`,
-            label: `${projects.data[i].projectName} `
-          }
-        ]);
-      }
+      const projectData = await response.json();
+      setProjectOptions(projectData.data);
     } catch (error) {
       console.error(error);
     }
@@ -82,51 +71,40 @@ const TimeSheetForm = () => {
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
-      const tasks = await response.json();
-      for (let i = 0; i < tasks.data.length; i++) {
-        setTasksOptions((tasksOptions) => [
-          ...tasksOptions,
-          {
-            value: `${tasks.data[i]._id}`,
-            label: `${tasks.data[i].description}`
-          }
-        ]);
-      }
+      const taskData = await response.json();
+      setTasksOptions(taskData.data);
     } catch (error) {
       console.error(error);
     }
   }, []);
 
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const params = new URLSearchParams(window.location.search);
     const timeSheetId = params.get('id');
-
-    let url = `${process.env.REACT_APP_API_URL}/time-sheets/`;
+    let url = `${process.env.REACT_APP_API_URL}/timesheets/`;
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        employee: employeeId,
-        project: project,
+        employee: employeeId._id,
+        project: project._id,
         role: employeeRole,
         date: date,
         rate: rate,
         workedHour: workedHours,
         description: timeSheetDescription,
-        tasks: task
+        tasks: task._id
       })
     };
     if (timeSheetId) {
       options.method = 'PUT';
+      url = `${process.env.REACT_APP_API_URL}/time-sheets/${timeSheetId}`;
     }
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/time-sheets/${timeSheetId}`,
-        options
-      );
+      const response = await fetch(url, options);
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -135,28 +113,108 @@ const TimeSheetForm = () => {
   };
 
   return (
-    <section>
-      <div>
-        <h2>Timesheet form</h2>
-        <form>
-          <select
-            onChange={onChangeEmployeeIdInput}
-            value={employeeId}
-            type="text"
-            id="employeeId"
-            name="employeeId"
-            required
-          >
-            <option>Select an employee</option>
-            {employeeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </form>
-      </div>
-    </section>
+    <div>
+      <h2>Timesheet form</h2>
+      <form onSubmit={handleSubmit}>
+        <select
+          onChange={onChangeEmployeeIdInput}
+          value={employeeId}
+          type="text"
+          id="employeeId"
+          name="employeeId"
+          required
+        >
+          <option value="" disabled>
+            Select an employee
+          </option>
+          {employeeOptions.map((employee) => {
+            return (
+              <option key={employee._id} value={employee._id}>{`${
+                employee.firstName + ' ' + employee.lastName
+              }`}</option>
+            );
+          })}
+        </select>
+        <select
+          onChange={onChangeProjectValueInput}
+          value={project}
+          type="text"
+          id="projectId"
+          name="projectId"
+          required
+        >
+          <option>Select a project</option>
+          {projectOptions.map((project) => (
+            <option key={project._id} value={project._id}>
+              {project.projectName}
+            </option>
+          ))}
+        </select>
+        <select
+          onChange={onChangeEmployeeRole}
+          value={employeeRole}
+          type="text"
+          id="employee-role"
+          name="employee-role"
+          required
+        >
+          <option>Select a role</option>
+          <option value="QA">QA</option>
+          <option value="DEV">DEV</option>
+          <option value="PM">PM</option>
+          <option value="TL">TL</option>
+        </select>
+        <input
+          type="date"
+          value={date}
+          onChange={onChangeDateInput}
+          id="date"
+          name="date"
+          required
+        />
+        <input
+          type="number"
+          value={rate}
+          onChange={onChangeRateValueInput}
+          id="date"
+          name="date"
+          placeholder="Enter a rate"
+          required
+        />
+        <input
+          type="number"
+          value={workedHours}
+          onChange={onChangeWorkedHoursInput}
+          placeholder="Enter a number of hours"
+          required
+        />
+        <textarea
+          type=""
+          value={timeSheetDescription}
+          onChange={onChangeDescriptionInput}
+          id="date"
+          name="date"
+          placeholder="Enter a description"
+          required
+        />
+        <select
+          onChange={onChangeTaskValueInput}
+          value={task}
+          type="text"
+          id="task"
+          name="task"
+          required
+        >
+          <option>Select a task</option>
+          {tasksOptions.map((task) => (
+            <option key={task._id} value={task._id}>
+              {task.title}
+            </option>
+          ))}
+        </select>
+        <button type="submit">Save Timesheet</button>
+      </form>
+    </div>
   );
 };
 

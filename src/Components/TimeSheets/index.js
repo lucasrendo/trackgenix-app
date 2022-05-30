@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import TimeSheetList from './Lists/time-sheet-list';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
