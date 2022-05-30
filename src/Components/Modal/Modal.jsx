@@ -6,23 +6,15 @@ const Modal = (props) => {
   }
 
   const onConfirm = () => {
-    props.onCloseModal();
-    props.close();
-  };
-
-  const onCancel = () => {
     props.close();
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
-        <h3>Modal</h3>
+        <h3>{props.title}</h3>
         <button className={styles.button} onClick={onConfirm}>
-          Accept
-        </button>
-        <button className={styles.button} onClick={onCancel}>
-          Cancel
+          Close
         </button>
       </div>
     </div>

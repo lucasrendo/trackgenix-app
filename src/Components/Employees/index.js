@@ -12,31 +12,28 @@ const Employees = () => {
       const jsonResponse = await response.json();
       saveEmployees(jsonResponse.data);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }, []);
-
-  //Delete employee
-  const deleteEmployeeofList = (id) => {
-    saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
-  };
 
   const closeModal = () => {
     setShowModal(false);
   };
 
-  const deleteEmployeeofDB = () => {
-    console.log('se borro');
+  //Delete employee
+  const deleteEmployee = (id) => {
+    saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
   };
 
   return (
     <section className={styles.container}>
-      <Modal show={showModal} close={closeModal} onCloseModal={deleteEmployeeofDB} />
+      <Modal title={'Employee succesfully deleted'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
       <EmployeesList
         list={employeesList}
         setList={saveEmployees}
-        deleteItem={deleteEmployeeofList}
+        deleteItem={deleteEmployee}
         setShowModal={setShowModal}
       />
     </section>

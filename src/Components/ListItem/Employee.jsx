@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './employee.module.css';
-import Modal from '../Modal/Modal';
 
 const Employee = ({ listItem, deleteItem, setShowModal }) => {
-  const handleDelete = () => {
-    setShowModal(true);
+  const onClick = () => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    const url = `${process.env.REACT_APP_API_URL}/employees/${listItem._id}`;
+    fetch(url, options).then((response) => {
+      if (response.status !== 200) {
+        return response.json().then(({ message }) => {
+          throw new Error(message);
+        });
+      }
+      setShowModal(true);
+      return deleteItem(listItem._id);
+    });
   };
 
   return (
@@ -14,7 +28,10 @@ const Employee = ({ listItem, deleteItem, setShowModal }) => {
       <td>{listItem.email}</td>
       <td>{listItem.isActive.toString()}</td>
       <td>
-        <button onClick={() => handleDelete(listItem._id)}>X</button>
+        <button>Edit</button>
+      </td>
+      <td>
+        <button onClick={onClick}>X</button>
       </td>
     </tr>
   );

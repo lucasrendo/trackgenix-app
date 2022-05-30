@@ -12,6 +12,7 @@ const EmployeesList = ({ list, deleteItem, setShowModal }) => {
             <th id="lastName">Last Name</th>
             <th id="email">Email</th>
             <th id="isActive">Active</th>
+            <th id="edit">Edit</th>
             <th id="delete">Delete</th>
           </tr>
         </thead>
