@@ -1,23 +1,17 @@
 .rows {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .rows td {
-    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
 }
 
-#_id {
-    max-width: 189px;
-    width: 90%;
-}
-
-#name {
-    max-width: 113px;
-    width: 100%;
-    margin-left: 20px;
-}
-
-#last {
-    max-width: 113px;
-    width: 100%;
+.rows td:first-child {
+    font-size: 13px;
 }
