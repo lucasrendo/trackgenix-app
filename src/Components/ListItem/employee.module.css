@@ -11,3 +11,19 @@ td{
 }
 
 tr:nth-child(even) {background-color: #e3e7ec;}
+
+.button{
+  border-radius: 3px;
+}
+
+.buttonDelete{
+  border-radius: 3px;
+}
+
+.button:hover{
+  background-color: #d8dde4;
+}
+
+.buttonDelete:hover{
+  background-color: #EA3354;
+}

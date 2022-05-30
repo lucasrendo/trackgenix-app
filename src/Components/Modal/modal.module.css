@@ -21,4 +21,9 @@
 .button{
   width: 50%;
   margin-bottom: 0.5rem;
+  border-radius: 3px;
+}
+
+.button:hover{
+  background-color: #d8dde4;
 }

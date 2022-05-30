@@ -28,10 +28,12 @@ const Employee = ({ listItem, deleteItem, setShowModal }) => {
       <td>{listItem.email}</td>
       <td>{listItem.isActive.toString()}</td>
       <td>
-        <button>Edit</button>
+        <button className={styles.button}>Edit</button>
       </td>
       <td>
-        <button onClick={onClick}>X</button>
+        <button className={styles.buttonDelete} onClick={onClick}>
+          X
+        </button>
       </td>
     </tr>
   );
