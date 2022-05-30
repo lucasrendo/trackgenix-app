@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './employee.module.css';
+import Modal from '../Modal/Modal';
 
-const Employee = ({ listItem, deleteItem }) => {
+const Employee = ({ listItem, deleteItem, setShowModal }) => {
   const handleDelete = () => {
-    deleteItem(listItem._id);
+    setShowModal(true);
   };
 
   return (

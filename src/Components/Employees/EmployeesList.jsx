@@ -2,7 +2,7 @@ import React from 'react';
 import Employee from '../ListItem/Employee';
 import styles from './EmployeesList.module.css';
 
-const EmployeesList = ({ list, deleteItem }) => {
+const EmployeesList = ({ list, deleteItem, setShowModal }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -17,7 +17,12 @@ const EmployeesList = ({ list, deleteItem }) => {
         </thead>
         <tbody>
           {list.map((item) => (
-            <Employee key={item._id} listItem={item} deleteItem={deleteItem} />
+            <Employee
+              key={item._id}
+              listItem={item}
+              deleteItem={deleteItem}
+              setShowModal={setShowModal}
+            />
           ))}
         </tbody>
       </table>
