@@ -1,32 +1,36 @@
 import { useEffect, useState } from 'react';
-import styles from './Form/EmployeesForm.module.css';
+import styles from './employees.module.css';
+import AddEmployee from './AddItem/AddItem';
 
 function Employees() {
-  const [employees, saveEmployees] = useState([]);
+  const [employees, setEmployee] = useState([]);
 
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((response) => response.json())
-      .then((response) => {
-        saveEmployees(response);
-      });
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const data = await response.json();
+      setEmployee(data.data);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
+  const addEmployee = ({ firstName, lastName, email }) => {
+    const newEmployee = {
+      firstName,
+      lastName,
+      email
+    };
+    setEmployee([...employees, newEmployee]);
+  };
 
   return (
     <section className={styles.container}>
-      <h2>Employees</h2>
-      <div>
-        {employees.map((employee) => {
-          //return <div key={employee.id}>{employee.name}</div>;
-          return (
-            <a href="./Form" key={employee.id}>
-              {employee.name}
-            </a>
-          );
-        })}
-      </div>
+      <AddEmployee addEmployee={addEmployee} />
     </section>
   );
 }
 
 export default Employees;
+// {employees.map((employee) => {
+//   return <div key={employee.id}>{employee.name}</div>;
+// })}
