@@ -1,5 +1,5 @@
 import React from 'react';
-import ListItem from '../../ListItem/SuperAdmin';
+import ListItem from '../ListItem/SuperAdmin';
 import Styles from '../List/superadminlist.module.css';
 
 const SuperAdminList = ({ list, deleteItem }) => {
