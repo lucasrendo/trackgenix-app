@@ -17,6 +17,7 @@ function SuperAdmins() {
 
   const deleteSuperadmin = (id) => {
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
+    alert(`Super admin with ID: "${id}" is going to be deleted`);
   };
 
   return (

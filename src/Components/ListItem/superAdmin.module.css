@@ -2,6 +2,22 @@
     display: flex;
 }
 
-tr {
-    justify-content:  right;
+.rows td {
+    margin-right: 20px;
+}
+
+#_id {
+    max-width: 189px;
+    width: 90%;
+}
+
+#name {
+    max-width: 113px;
+    width: 100%;
+    margin-left: 20px;
+}
+
+#last {
+    max-width: 113px;
+    width: 100%;
 }

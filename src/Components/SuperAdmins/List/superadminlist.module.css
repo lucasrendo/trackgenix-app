@@ -1,6 +1,15 @@
 table {
     display: flex;
     flex-direction: column;
-    align-content: space-around;
 }
 
+.container th {
+    font-size: 18px;
+    max-width: 930px;
+    width: 100%;
+    padding: 8px 29px;
+}
+
+table tbody {
+    font-size: 16px;
+}

@@ -8,11 +8,11 @@ const ListItem = ({ listItem, deleteItem }) => {
 
   return (
     <tr className={Styles.rows}>
-      <td>{listItem._id}</td>
-      <td>{listItem.firstName}</td>
-      <td>{listItem.lastName}</td>
-      <td>{listItem.email}</td>
-      <td>{listItem.isActive.toString()}</td>
+      <td id="_id">{listItem._id}</td>
+      <td id="name">{listItem.firstName}</td>
+      <td id="last">{listItem.lastName}</td>
+      <td id="email">{listItem.email}</td>
+      <td id="status">{listItem.isActive.toString()}</td>
       <td>
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>
