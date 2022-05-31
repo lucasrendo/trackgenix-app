@@ -1,0 +1,28 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F0F4F9;
+  box-shadow: 0 2px 1px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  width: 90%;
+  margin-bottom: 1rem;
+}
+
+.table{
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.headerRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+th{
+  width: 20%;
+  text-align: center;
+  padding: 10px;
+}
