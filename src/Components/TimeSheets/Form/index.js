@@ -13,7 +13,6 @@ const TimeSheetForm = ({ timeSheetId }) => {
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [tasksOptions, setTasksOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
-  let timeSheetIdInput = '';
 
   const onChangeDateInput = (e) => {
     setDate(e.target.value);
@@ -124,13 +123,6 @@ const TimeSheetForm = ({ timeSheetId }) => {
         task: task
       })
     };
-    try {
-      const response = await fetch(url, options);
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
     if (timeSheetId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API_URL}/timesheets/${timeSheetId}`;
@@ -138,7 +130,6 @@ const TimeSheetForm = ({ timeSheetId }) => {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.error(error);
     }

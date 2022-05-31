@@ -8,7 +8,7 @@ function TimeSheets() {
   const [showedScreen, setShowedScreen] = useState(false);
   const [method, setMethod] = useState('POST');
   const [timeSheetId, setTimesheetId] = useState('');
-  console.log(timeSheetsList);
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);

@@ -8,7 +8,8 @@ const TimeSheetList = ({ list, deleteItem, editTimeSheet }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Employee surname</th>
             <th>Project ID</th>
             <th>Employee role</th>
             <th>Date</th>
