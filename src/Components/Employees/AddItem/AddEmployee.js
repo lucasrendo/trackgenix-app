@@ -7,11 +7,13 @@ const AddEmployee = ({ addEmployee }) => {
     lastName: '',
     email: '',
     password: '',
-    assignedProject: ''
+    isActive: false
   });
+
   const onChange = (e) => {
     setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     const postEmployee = {
@@ -24,14 +26,14 @@ const AddEmployee = ({ addEmployee }) => {
         lastName: employeeInput.lastName,
         email: employeeInput.email,
         password: employeeInput.password,
-        assignedProject: employeeInput.assignedProject
+        isActive: employeeInput.isActive
       })
     };
-    const url = `${process.env.REACT_APP_API_URL}/employees`;
+
+    const url = `${process.env.REACT_APP_API_URL}employees`;
     fetch(url, postEmployee)
       .then((response) => response.json())
-      // eslint-disable-next-line no-console
-      .then((data) => console.log('data:', data));
+      .then(() => alert('New employee created'));
 
     addEmployee(employeeInput);
     setEmployeeInput({
@@ -39,7 +41,7 @@ const AddEmployee = ({ addEmployee }) => {
       lastName: '',
       email: '',
       password: '',
-      assignedProject: ''
+      isActive: false
     });
   };
 
@@ -70,16 +72,6 @@ const AddEmployee = ({ addEmployee }) => {
           />
         </div>
         <div>
-          <label>Assigned Project</label>
-          <input
-            type="text"
-            name="assignedProject"
-            value={employeeInput.assignedProject}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <div>
           <label>Email</label>
           <input
             type="text"
@@ -99,7 +91,17 @@ const AddEmployee = ({ addEmployee }) => {
             required
           />
         </div>
-        <input type="submit" value="Add Employee" />
+        <div>
+          <label>Is Active?</label>
+          <input
+            type="checkbox"
+            name="isActive"
+            value={employeeInput.isActive}
+            onChange={onchange}
+            required
+          />
+        </div>
+        <input type="submit" value="Submit" />
       </form>
     </div>
   );

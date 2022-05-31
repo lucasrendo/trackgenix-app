@@ -7,30 +7,33 @@ function Employees() {
 
   useEffect(async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}employees`);
       const data = await response.json();
-      setEmployee(data);
+      setEmployee(data.data);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     }
   }, []);
 
-  const addEmployees = ({ firstName, lastName, email, password, assignedProject }) => {
+  const addEmployees = ({ firstName, lastName, email, password, isActive }) => {
     const newEmployee = {
       id: Math.floor(Math.random() * 1000),
       firstName,
       lastName,
       email,
       password,
-      assignedProject
+      isActive
     };
     setEmployee([...employees, newEmployee]);
   };
-
+  // const url = `${process.env.REACT_APP_API_URL}employees?id=${listItem._id}`;
   return (
     <section className={styles.container}>
-      <AddEmployee addEmployee={addEmployees} />
+      <div>
+        <AddEmployee addEmployee={addEmployees} />
+        <button>{/* <a href={url}>Edit</a> */}</button>
+      </div>
     </section>
   );
 }

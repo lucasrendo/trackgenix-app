@@ -3,11 +3,12 @@ import styles from './EmployeesForm.module.css';
 
 const EditEmployee = () => {
   const [employeeInput, setEmployeeInput] = useState({
-    firstName: '',
-    lastName: '',
+    _id: '6287e6f01c1709ee93503342',
+    firstName: 'Gonzalo',
+    lastName: 'Braca',
     email: '',
     password: '',
-    assignedProject: ''
+    isActive: true
   });
   const onChange = (e) => {
     setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
@@ -24,23 +25,17 @@ const EditEmployee = () => {
         lastName: employeeInput.lastName,
         email: employeeInput.email,
         password: employeeInput.password,
-        assignedProject: employeeInput.assignedProject
+        isActive: employeeInput.isActive
       })
     };
-    const url = `${process.env.REACT_APP_API_URL}/employees`;
+    const params = new URLSearchParams(window.location.search);
+    const employeeId = params.get('id');
+    const url = `${process.env.REACT_APP_API_URL}employees/${employeeId}`;
 
     fetch(url, putEmployee)
       .then((response) => response.json())
       // eslint-disable-next-line no-console
       .then((data) => console.log('data:', data));
-
-    setEmployeeInput({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      assignedProject: ''
-    });
   };
 
   return (
@@ -50,13 +45,17 @@ const EditEmployee = () => {
       </div>
       <form onSubmit={onSubmit}>
         <div>
+          <label>ID</label>
+          <input value={employeeInput._id} readOnly />
+        </div>
+        <div>
           <label>First Name</label>
           <input
             type="text"
             name="firstName"
             value={employeeInput.firstName}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -66,17 +65,7 @@ const EditEmployee = () => {
             name="lastName"
             value={employeeInput.lastName}
             onChange={onChange}
-            optional
-          />
-        </div>
-        <div>
-          <label>Assigned Project</label>
-          <input
-            type="text"
-            name="assignedProject"
-            value={employeeInput.assignedProject}
-            onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -86,7 +75,7 @@ const EditEmployee = () => {
             name="email"
             value={employeeInput.email}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -96,10 +85,20 @@ const EditEmployee = () => {
             name="password"
             value={employeeInput.password}
             onChange={onChange}
-            optional
+            required
           />
         </div>
-        <input type="submit" value="Add Employee" />
+        <div>
+          <label>Is Active?</label>
+          <input
+            type="checkbox"
+            name="isActive"
+            value={employeeInput.isActive}
+            onChange={onchange}
+            requ
+          />
+        </div>
+        <input type="submit" value="Edit Employee" />
       </form>
     </div>
   );
