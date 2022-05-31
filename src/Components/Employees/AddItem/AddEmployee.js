@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styles from './EmployeesForm.module.css';
+import styles from './AddEmployee.module.css';
 
-const EditEmployee = () => {
+const AddEmployee = ({ addEmployee }) => {
   const [employeeInput, setEmployeeInput] = useState({
     firstName: '',
     lastName: '',
@@ -14,8 +14,8 @@ const EditEmployee = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const putEmployee = {
-      method: 'PUT',
+    const postEmployee = {
+      method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
@@ -28,12 +28,12 @@ const EditEmployee = () => {
       })
     };
     const url = `${process.env.REACT_APP_API_URL}/employees`;
-
-    fetch(url, putEmployee)
+    fetch(url, postEmployee)
       .then((response) => response.json())
       // eslint-disable-next-line no-console
       .then((data) => console.log('data:', data));
 
+    addEmployee(employeeInput);
     setEmployeeInput({
       firstName: '',
       lastName: '',
@@ -56,7 +56,7 @@ const EditEmployee = () => {
             name="firstName"
             value={employeeInput.firstName}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -66,7 +66,7 @@ const EditEmployee = () => {
             name="lastName"
             value={employeeInput.lastName}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -76,7 +76,7 @@ const EditEmployee = () => {
             name="assignedProject"
             value={employeeInput.assignedProject}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -86,7 +86,7 @@ const EditEmployee = () => {
             name="email"
             value={employeeInput.email}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -96,7 +96,7 @@ const EditEmployee = () => {
             name="password"
             value={employeeInput.password}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <input type="submit" value="Add Employee" />
@@ -105,4 +105,4 @@ const EditEmployee = () => {
   );
 };
 
-export default EditEmployee;
+export default AddEmployee;

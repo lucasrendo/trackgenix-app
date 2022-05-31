@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './employees.module.css';
-import AddEmployee from './Form/EmployeesForm';
+import AddEmployee from './AddItem/AddEmployee';
 
 function Employees() {
   const [employees, setEmployee] = useState([]);
@@ -9,26 +9,28 @@ function Employees() {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
       const data = await response.json();
-      setEmployee(data.data);
+      setEmployee(data);
     } catch (error) {
-      error;
+      // eslint-disable-next-line
+      console.log(error);
     }
   }, []);
 
-  const addEmployee = ({ firstName, lastName, email, password }) => {
+  const addEmployees = ({ firstName, lastName, email, password, assignedProject }) => {
     const newEmployee = {
       id: Math.floor(Math.random() * 1000),
       firstName,
       lastName,
       email,
-      password
+      password,
+      assignedProject
     };
     setEmployee([...employees, newEmployee]);
   };
 
   return (
     <section className={styles.container}>
-      <AddEmployee addEmployee={addEmployee} />
+      <AddEmployee addEmployee={addEmployees} />
     </section>
   );
 }
