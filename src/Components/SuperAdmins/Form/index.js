@@ -6,7 +6,8 @@ function Form() {
     firstName: '',
     lastName: '',
     email: '',
-    isActive: ''
+    password: '',
+    isActive: false
   });
 
   const onChange = (e) => {
@@ -18,18 +19,21 @@ function Form() {
     const putSuperAdmin = {
       method: 'PUT',
       headers: {
-        'Content-type': 'aplication/json'
+        'Content-type': 'application/json'
       },
       body: JSON.stringify({
         firstName: superAdminInput.firstName,
         lastName: superAdminInput.lastName,
         email: superAdminInput.email,
-        isActive: superAdminInput.isActive.toString()
+        password: superAdminInput.password,
+        isActive: superAdminInput.isActive
       })
     };
-    const url = `http://localhost:4000/super-admins/form`;
 
-    fetch(url, putSuperAdmin)
+    const params = new URLSearchParams(window.location.search);
+    const superAdminId = params.get('id');
+
+    fetch(`${process.env.REACT_APP_API_URL}/super-admin/${superAdminId}`, putSuperAdmin)
       .then((response) => response.json())
       // eslint-disable-next-line no-console
       .then((data) => console.log('data:', data));
@@ -72,15 +76,25 @@ function Form() {
           />
         </div>
         <div>
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={superAdminInput.password}
+            onChange={onChange}
+            optional
+          />
+        </div>
+        {/* <div>
           <label>Is active?</label>
           <input
-            type="string"
+            type="boolean"
             name="isActive"
             value={superAdminInput.isActive}
             onChange={onChange}
             optional
           />
-        </div>
+        </div> */}
         <div>
           <input type="submit" value="Save changes" />
         </div>

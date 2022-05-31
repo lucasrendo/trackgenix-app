@@ -5,7 +5,7 @@ const ListItem = ({ listItem, deleteItem }) => {
   const handleDelete = () => {
     deleteItem(listItem._id);
   };
-
+  const url = `http://localhost:3000/super-admins/form?id=${listItem._id}`;
   return (
     <tr className={Styles.rows}>
       <td>{listItem._id}</td>
@@ -18,7 +18,7 @@ const ListItem = ({ listItem, deleteItem }) => {
       </td>
       <td>
         <button>
-          <a href="/super-admins/form">Edit</a>
+          <a href={url}>Edit</a>
         </button>
       </td>
     </tr>

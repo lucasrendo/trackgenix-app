@@ -16,17 +16,27 @@ function SuperAdmins() {
     }
   }, []);
 
-  const deleteSuperadmin = (id) => {
+  const deleteSuperadmin = async (id) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
+        method: 'DELETE'
+      });
+      // eslint-disable-next-line no-unused-vars
+      const data = await response.json;
+      alert(`Super admin ${id} is going to be deleted`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
-    alert(`Super admin with ID: "${id}" is going to be deleted`);
   };
 
-  const addItem = async ({ firstName, lastName, email, isActive }) => {
+  const addItem = async ({ firstName, lastName, email, password, isActive }) => {
     const newSuperAdmin = {
-      _id: Math.floor(Math.random() * 1000),
       firstName,
       lastName,
       email,
+      password,
       isActive
     };
     saveSuperadmins([...superadminsList, newSuperAdmin]);

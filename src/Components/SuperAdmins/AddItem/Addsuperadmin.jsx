@@ -6,6 +6,7 @@ const AddItem = ({ addItem }) => {
     firstName: '',
     lastName: '',
     email: '',
+    password: '',
     isActive: ''
   });
 
@@ -13,32 +14,32 @@ const AddItem = ({ addItem }) => {
     setSuperAdmin({ ...superAdminInput, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const postSuperAdmin = {
       method: 'POST',
       headers: {
-        'Content-type': 'aplication/json'
+        'Content-type': 'application/json'
       },
       body: JSON.stringify({
         firstName: superAdminInput.firstName,
         lastName: superAdminInput.lastName,
         email: superAdminInput.email,
+        password: superAdminInput.password,
         isActive: superAdminInput.isActive
       })
     };
-    const url = `http://localhost:4000/super-admins/`;
 
-    fetch(url, postSuperAdmin)
+    fetch(`${process.env.REACT_APP_API_URL}/super-admin`, postSuperAdmin)
       .then((response) => response.json())
-      // eslint-disable-next-line no-console
-      .then((data) => console.log('data:', data));
+      .then(() => alert('New super admin created'));
 
     addItem(superAdminInput);
     setSuperAdmin({
       firstName: '',
       lastName: '',
       email: '',
+      password: '',
       isActive: ''
     });
   };
@@ -75,6 +76,16 @@ const AddItem = ({ addItem }) => {
             type="string"
             name="email"
             value={superAdminInput.email}
+            onChange={onChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={superAdminInput.password}
             onChange={onChange}
             required
           />

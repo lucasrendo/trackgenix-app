@@ -3,6 +3,7 @@ import Footer from '../Footer/index';
 import Admins from '../Admins/index';
 import SuperAdmins from '../SuperAdmins/index';
 import SuperAdminsForm from '../SuperAdmins/Form';
+//import AddSuperAdmin from '../SuperAdmins/AddItem/Addsuperadmin';
 import Home from '../Home/index';
 import styles from './layout.module.css';
 import Employees from '../Employees/index';
@@ -22,6 +23,9 @@ function Layout() {
     case '/super-admins/form':
       currentScreen = <SuperAdminsForm />;
       break;
+    //case '/super-admins/add':
+    //  currentScreen = <AddSuperAdmin />;
+    //  break;
     case '/employees':
       currentScreen = <Employees />;
       break;
