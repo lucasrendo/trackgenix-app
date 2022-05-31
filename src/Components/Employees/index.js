@@ -11,14 +11,17 @@ function Employees() {
       const data = await response.json();
       setEmployee(data.data);
     } catch (error) {
-      console.log(error);
+      error;
     }
   }, []);
-  const addEmployee = ({ firstName, lastName, email }) => {
+
+  const addEmployee = ({ firstName, lastName, email, password }) => {
     const newEmployee = {
+      id: Math.floor(Math.random() * 1000),
       firstName,
       lastName,
-      email
+      email,
+      password
     };
     setEmployee([...employees, newEmployee]);
   };
@@ -31,6 +34,3 @@ function Employees() {
 }
 
 export default Employees;
-// {employees.map((employee) => {
-//   return <div key={employee.id}>{employee.name}</div>;
-// })}

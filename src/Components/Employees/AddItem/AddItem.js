@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-// import Form from '../Form/EmployeesForm';
 import styles from './AddItem.module.css';
 
 const AddEmployee = ({ addEmployee }) => {
   const [employeeInput, setEmployeeInput] = useState({
     firstName: '',
     lastName: '',
-    email: ''
+    email: '',
+    password: ''
   });
   const onChange = (e) => {
-    setEmployeeInput({ ...employeeInput, [e.target.firstName]: e.target.value });
+    setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
   };
 
   const onSubmit = (e) => {
@@ -18,7 +18,8 @@ const AddEmployee = ({ addEmployee }) => {
     setEmployeeInput({
       firstName: '',
       lastName: '',
-      email: ''
+      email: '',
+      password: ''
     });
   };
 
@@ -32,38 +33,44 @@ const AddEmployee = ({ addEmployee }) => {
           <label>First Name</label>
           <input
             type="text"
-            placeholder="Insert Employee Name"
+            name="firstName"
             value={employeeInput.firstName}
             onChange={onChange}
+            required
           />
         </div>
         <div>
           <label>Last Name</label>
           <input
             type="text"
-            placeholder="Insert Employee Last Name"
+            name="lastName"
             value={employeeInput.lastName}
             onChange={onChange}
+            required
           />
         </div>
         <div>
           <label>Email</label>
           <input
             type="text"
-            placeholder="Insert Employee Email"
+            name="email"
             value={employeeInput.email}
             onChange={onChange}
+            required
           />
         </div>
         <div>
           <label>Password</label>
-          <input type="password" placeholder="Insert Password" />
-        </div>
-        <div>
-          <label>Assigned Projects</label>
-          <input type="text" placeholder="Insert Employee Assigned Projects" />
+          <input
+            type="password"
+            name="password"
+            value={employeeInput.password}
+            onChange={onChange}
+            required
+          />
         </div>
         <input type="submit" value="Add Employee" />
+        <input type="submit" value="Edit Employee" />
       </form>
     </div>
   );
