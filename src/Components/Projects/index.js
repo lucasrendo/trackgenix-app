@@ -1,9 +1,33 @@
+import react, { useState, useEffect } from 'react';
 import styles from './projects.module.css';
+import AddProject from './AddProject/addProjects';
 
 function Projects() {
+  const [projects, setProject] = useState([]);
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+      const data = await response.json();
+      setProject(data.data);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    }
+  }, []);
+  const addProject = ({ name, description, admin, client }) => {
+    const newProject = {
+      id: Math.floor(Math.random() * 1000),
+      name,
+      description,
+      admin,
+      client
+    };
+    setProject([...Projects, newProject]);
+  };
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
+      <AddProject addProject={addProject} />
     </section>
   );
 }
