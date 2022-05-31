@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import TimeSheetList from './List/time-sheet-list';
+import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
   const [timeSheetsList, saveTimeSheets] = useState([]);
-  console.log(timeSheetsList);
+  const [modal, setModal] = useState(false);
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
@@ -19,10 +21,20 @@ function TimeSheets() {
     saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
   };
 
+  const closeModal = () => {
+    setModal(false);
+  };
+
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <TimeSheetList list={timeSheetsList} setlist={saveTimeSheets} deleteItem={deleteItem} />
+      <Modal message={'Employee succesfully deleted'} show={modal} close={closeModal} />
+      <TimeSheetList
+        list={timeSheetsList}
+        setlist={saveTimeSheets}
+        deleteItem={deleteItem}
+        setModal={setModal}
+      />
     </section>
   );
 }

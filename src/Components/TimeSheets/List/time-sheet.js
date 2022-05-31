@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimeSheet = ({ listItem, deleteItem }) => {
+const TimeSheet = ({ listItem, deleteItem, setModal }) => {
   const handleDeleteItem = () => {
     const options = {
       method: 'DELETE',
@@ -15,6 +15,7 @@ const TimeSheet = ({ listItem, deleteItem }) => {
             throw new Error(message);
           });
         }
+        setModal(true);
         return deleteItem(listItem._id);
       }
     );
