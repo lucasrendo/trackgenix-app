@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './employees.module.css';
 import AddEmployee from './AddItem/AddEmployee';
 import EmployeesList from './EmployeesList';
+import listItem from '../ListItem/Employee';
 import Modal from '../Modal/Modal';
 
 const Employees = () => {
@@ -9,7 +10,7 @@ const Employees = () => {
   const [showModal, setShowModal] = useState(false);
   useEffect(async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}employees`);
       const jsonResponse = await response.json();
       saveEmployees(jsonResponse.data);
     } catch (error) {
@@ -32,7 +33,7 @@ const Employees = () => {
     };
     saveEmployees([...employeesList, newEmployee]);
   };
-  // const url = `${process.env.REACT_APP_API_URL}employees?id=${listItem._id}`;
+  const url = `${process.env.REACT_APP_API_URL}employees?id=${listItem._id}`;
 
   //Delete employee
   const deleteEmployee = (id) => {
@@ -42,7 +43,9 @@ const Employees = () => {
   return (
     <section className={styles.container}>
       <AddEmployee addEmployee={addEmployees} />
-      <button>{/* <a href={url}>Edit</a> */}</button>
+      <button>
+        <a href={url}>Edit</a>
+      </button>
       <Modal title={'Employee successfully deleted'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
       <EmployeesList

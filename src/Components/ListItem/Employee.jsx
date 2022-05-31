@@ -28,7 +28,9 @@ const Employee = ({ listItem, deleteItem, setShowModal }) => {
       <td>{listItem.email}</td>
       <td>{listItem.isActive.toString()}</td>
       <td>
-        <button className={styles.button}>Edit</button>
+        <button className={styles.button}>
+          <a href={`${process.env.REACT_APP_API_URL}/employees/${listItem._id}`}>Edit</a>
+        </button>
       </td>
       <td>
         <button className={styles.buttonDelete} onClick={onClick}>

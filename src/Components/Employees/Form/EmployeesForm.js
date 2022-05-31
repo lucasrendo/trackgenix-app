@@ -3,9 +3,9 @@ import styles from './EmployeesForm.module.css';
 
 const EditEmployee = () => {
   const [employeeInput, setEmployeeInput] = useState({
-    _id: '6287e6f01c1709ee93503342',
-    firstName: 'Gonzalo',
-    lastName: 'Braca',
+    _id: 'gonza',
+    firstName: 'braca',
+    lastName: '',
     email: '',
     password: '',
     isActive: true
@@ -30,7 +30,7 @@ const EditEmployee = () => {
     };
     const params = new URLSearchParams(window.location.search);
     const employeeId = params.get('id');
-    const url = `${process.env.REACT_APP_API_URL}employees/${employeeId}`;
+    const url = `${process.env.REACT_APP_API_URL}/employees/${employeeId}`;
 
     fetch(url, putEmployee)
       .then((response) => response.json())
