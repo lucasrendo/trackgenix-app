@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import styles from './addProjects.module.css';
+import styles from './editProjects.module.css';
 
-const AddProject = ({ addProject }) => {
-  const [projectInput, setProject] = useState({
+const EditProjects = () => {
+  const [projectInput, setProjectInput] = useState({
+    _id: '',
     projectName: '',
     description: '',
-    isActive: false,
+    isActive: true,
     admin: '',
     client: '',
     startDate: '',
     endDate: ''
   });
   const onChange = (e) => {
-    setProject({ ...projectInput, [e.target.name]: e.target.value });
+    setProjectInput({ ...projectInput, [e.target.name]: e.target.value });
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const postProject = {
-      method: 'POST',
+    const putProject = {
+      method: 'PUT',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
         projectName: projectInput.projectName,
@@ -29,24 +30,19 @@ const AddProject = ({ addProject }) => {
         endDate: projectInput.endDate
       })
     };
-    const url = `${process.env.REACT_APP_API_URL}/projects`;
-    fetch(url, postProject)
+    const params = new URLSearchParams(window.location.search);
+    const projectId = params.get('id');
+    const url = `${process.env.REACT_APP_API_URL}/projects/${projectId}`;
+
+    fetch(url, putProject)
       .then((response) => response.json())
-      .then((data) => console.log('data', data));
-    addProject(projectInput);
-    setProject({
-      projectName: '',
-      description: '',
-      isActive: false,
-      admin: '',
-      client: '',
-      startDate: '',
-      endDate: ''
-    });
+      .then((data) => console.log('data:', data));
   };
   return (
     <div className={styles.container}>
-      <h2>Add new Project</h2>
+      <div>
+        <h2>Edit a project</h2>
+      </div>
       <form onSubmit={onSubmit}>
         <div>
           <label>Project name</label>
@@ -117,10 +113,10 @@ const AddProject = ({ addProject }) => {
             required
           ></input>
         </div>
-        <input type="submit" value="addProject"></input>
+        <input type="submit" value="editProject"></input>
       </form>
     </div>
   );
 };
 
-export default AddProject;
+export default EditProjects;
