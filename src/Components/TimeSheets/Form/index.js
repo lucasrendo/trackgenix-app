@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
+import styles from './Form.module.css';
 
-//import styles from './form';
-
-const TimeSheetForm = () => {
+const TimeSheetForm = ({ timeSheetId }) => {
   const [date, setDate] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const [employeeRole, setEmployeeRole] = useState('');
@@ -14,6 +13,7 @@ const TimeSheetForm = () => {
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [tasksOptions, setTasksOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
+  let timeSheetIdInput = '';
 
   const onChangeDateInput = (e) => {
     setDate(e.target.value);
@@ -78,10 +78,35 @@ const TimeSheetForm = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (timeSheetId) {
+      fetch(`${process.env.REACT_APP_API_URL}/timesheets/${timeSheetId}`)
+        .then((response) => {
+          if (response.status !== 200) {
+            return response.json().then(({ message }) => {
+              throw new Error(message);
+            });
+          }
+          return response.json();
+        })
+        .then((response) => {
+          setEmployeeId(response.data.employee._id);
+          setProjectValue(response.data.project._id);
+          setEmployeeRole(response.data.role);
+          setDate(response.data.date.split('T')[0]);
+          setRateValue(response.data.rate);
+          setWorkedHours(response.data.workedHours);
+          setTimeSheetDescription(response.data.description);
+          setTaskValue(response.data.task._id);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const params = new URLSearchParams(window.location.search);
-    const timeSheetId = params.get('id');
     let url = `${process.env.REACT_APP_API_URL}/timesheets/`;
     const options = {
       method: 'POST',
@@ -89,19 +114,26 @@ const TimeSheetForm = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        employee: employeeId._id,
-        project: project._id,
+        employee: employeeId,
+        project: project,
         role: employeeRole,
         date: date,
         rate: rate,
-        workedHour: workedHours,
+        workedHours: workedHours,
         description: timeSheetDescription,
-        tasks: task._id
+        task: task
       })
     };
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
     if (timeSheetId) {
       options.method = 'PUT';
-      url = `${process.env.REACT_APP_API_URL}/time-sheets/${timeSheetId}`;
+      url = `${process.env.REACT_APP_API_URL}/timesheets/${timeSheetId}`;
     }
     try {
       const response = await fetch(url, options);
@@ -115,7 +147,7 @@ const TimeSheetForm = () => {
   return (
     <div>
       <h2>Timesheet form</h2>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.container} onSubmit={handleSubmit}>
         <select
           onChange={onChangeEmployeeIdInput}
           value={employeeId}

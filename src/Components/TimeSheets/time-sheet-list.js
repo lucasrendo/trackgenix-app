@@ -1,0 +1,36 @@
+import React from 'react';
+import TimeSheet from './time-sheet';
+
+const TimeSheetList = ({ list, deleteItem, editTimeSheet }) => {
+  return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Project ID</th>
+            <th>Employee role</th>
+            <th>Date</th>
+            <th>Rate</th>
+            <th>Worked hours</th>
+            <th>description</th>
+            <th>Task</th>
+          </tr>
+        </thead>
+        <tbody>
+          {list.map((item) => (
+            <TimeSheet
+              key={item._id}
+              listItem={item}
+              deleteItem={deleteItem}
+              editTimeSheet={editTimeSheet}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default TimeSheetList;
