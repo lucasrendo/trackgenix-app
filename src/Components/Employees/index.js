@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './employees.module.css';
-import AddEmployee from './AddItem/AddItem';
+import AddEmployee from './Form/EmployeesForm';
 
 function Employees() {
   const [employees, setEmployee] = useState([]);
