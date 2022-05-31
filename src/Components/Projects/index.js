@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './projects.module.css';
 import AddProject from './AddProject/addProjects';
 
@@ -14,15 +14,26 @@ function Projects() {
       console.log(error);
     }
   }, []);
-  const addProject = ({ name, description, admin, client }) => {
+  const addProject = ({
+    projectName,
+    description,
+    isActive,
+    admin,
+    client,
+    startDate,
+    endDate
+  }) => {
     const newProject = {
       id: Math.floor(Math.random() * 1000),
-      name,
+      projectName,
       description,
+      isActive,
       admin,
-      client
+      client,
+      startDate,
+      endDate
     };
-    setProject([...Projects, newProject]);
+    setProject([...projects, newProject]);
   };
   return (
     <section className={styles.container}>

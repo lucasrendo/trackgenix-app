@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 
 const AddProject = ({ addProject }) => {
-  const [projectImput, setProject] = useState({
-    name: '',
+  const [projectInput, setProject] = useState({
+    projectName: '',
     description: '',
+    isActive: false,
     admin: '',
-    client: ''
+    client: '',
+    startDate: '',
+    endDate: ''
   });
   const onChange = (e) => {
-    setProject({ ...projectImput, [e.target.name]: e.target.value });
+    setProject({ ...projectInput, [e.target.name]: e.target.value });
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -16,22 +19,28 @@ const AddProject = ({ addProject }) => {
       method: 'POST',
       Headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
-        name: projectImput.name,
-        description: projectImput.description,
-        admin: projectImput.admin,
-        client: projectImput.client
+        projectName: projectInput.projectName,
+        description: projectInput.description,
+        isActive: projectInput.isActive,
+        admin: projectInput.admin,
+        client: projectInput.client,
+        startDate: projectInput.startDate,
+        endDate: projectInput.endDate
       })
     };
     const url = `${process.env.REACT_APP_API_URL}/projects`;
     fetch(url, postProject)
       .then((response) => response.json())
       .then((data) => console.log('data', data));
-    addProject(projectImput);
+    addProject(projectInput);
     setProject({
-      name: '',
+      projectName: '',
       description: '',
+      isActive: false,
       admin: '',
-      client: ''
+      client: '',
+      startDate: '',
+      endDate: ''
     });
   };
   return (
@@ -39,11 +48,11 @@ const AddProject = ({ addProject }) => {
       <h2>Add new Project</h2>
       <form onSubmit={onSubmit}>
         <div>
-          <label>name</label>
+          <label>Project name</label>
           <input
             type="text"
-            name="name"
-            value={projectImput.name}
+            name="projectName"
+            value={projectInput.projectName}
             onChange={onChange}
             required
           ></input>
@@ -53,7 +62,16 @@ const AddProject = ({ addProject }) => {
           <input
             type="text"
             name="description"
-            value={projectImput.description}
+            value={projectInput.description}
+            onChange={onChange}
+          ></input>
+        </div>
+        <div>
+          <label>isActive</label>
+          <input
+            type="checkbox"
+            name="isActive"
+            value={projectInput.isActive}
             onChange={onChange}
             required
           ></input>
@@ -63,7 +81,7 @@ const AddProject = ({ addProject }) => {
           <input
             type="text"
             name="admin"
-            value={projectImput.admin}
+            value={projectInput.admin}
             onChange={onChange}
             required
           ></input>
@@ -73,7 +91,27 @@ const AddProject = ({ addProject }) => {
           <input
             type="text"
             name="client"
-            value={projectImput.client}
+            value={projectInput.client}
+            onChange={onChange}
+            required
+          ></input>
+        </div>
+        <div>
+          <label>Start date</label>
+          <input
+            type="text"
+            name="startDate"
+            value={projectInput.startDate}
+            onChange={onChange}
+            required
+          ></input>
+        </div>
+        <div>
+          <label>End Date</label>
+          <input
+            type="text"
+            name="endDate"
+            value={projectInput.endDate}
             onChange={onChange}
             required
           ></input>
