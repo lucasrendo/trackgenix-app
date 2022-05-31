@@ -8,13 +8,15 @@ const TimeSheetList = ({ list, deleteItem }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Date</th>
-            <th>Employee ID</th>
-            <th>Employee name</th>
+            <th>Employee Name</th>
+            <th>Employee surname</th>
+            <th>Project ID</th>
             <th>Employee role</th>
-            <th>Hours in project</th>
-            <th>Project Name</th>
-            <th>Task description</th>
+            <th>Date</th>
+            <th>Rate</th>
+            <th>Worked hours</th>
+            <th>description</th>
+            <th>Task</th>
           </tr>
         </thead>
         <tbody>

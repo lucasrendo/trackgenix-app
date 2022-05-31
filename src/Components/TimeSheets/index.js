@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import TimeSheetList from './time-sheet-list';
+import TimeSheetList from './List/time-sheet-list';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
   const [timeSheetsList, saveTimeSheets] = useState([]);
-  // eslint-disable-next-line no-console
   console.log(timeSheetsList);
   useEffect(async () => {
     try {
