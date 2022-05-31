@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TimeSheetList from './time-sheet-list';
+import TimeSheetList from './List/time-sheet-list';
 import TimeSheetForm from './Form';
 import styles from './time-sheets.module.css';
 
