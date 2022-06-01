@@ -32,7 +32,7 @@ function SuperAdmins() {
 
   return (
     <section className={styles.container}>
-      <h2>SuperAdmins</h2>
+      <h2>Super Admins</h2>
       <div>
         <ListItem list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
       </div>
