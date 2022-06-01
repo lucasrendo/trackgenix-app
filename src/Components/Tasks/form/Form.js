@@ -20,7 +20,7 @@ const Form = ({ formMethod, back, id }) => {
 
   const createTask = async (task) => {
     try {
-      const res = await fetch('http://localhost:4000/tasks', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(task)
@@ -37,7 +37,7 @@ const Form = ({ formMethod, back, id }) => {
 
   const updateTask = async (task) => {
     try {
-      const res = await fetch(`http://localhost:4000/tasks/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(task)
@@ -53,7 +53,7 @@ const Form = ({ formMethod, back, id }) => {
 
   const getTask = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/tasks/${id}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${id}`);
       const body = await res.json();
       return body.data;
     } catch (error) {
@@ -63,7 +63,7 @@ const Form = ({ formMethod, back, id }) => {
 
   const getProjects = async () => {
     try {
-      const res = await fetch('http://localhost:4000/projects');
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
       const body = await res.json();
       setProjectsList(body.data);
     } catch (error) {
@@ -73,7 +73,7 @@ const Form = ({ formMethod, back, id }) => {
 
   const getEmployees = async () => {
     try {
-      const res = await fetch('http://localhost:4000/employees');
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
       const body = await res.json();
       setEmployeesList(body.data);
     } catch (error) {
