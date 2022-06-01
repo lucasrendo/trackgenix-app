@@ -1,8 +1,8 @@
 .modal {
-  display: none;
+  display: flex;
   position: fixed;
-  z-index: 1;
-  max-width: 500px;
+  z-index: 5;
+  max-width: 300px;
   width: 100%;
   height: 200px;
   border: 1px solid #373867;
@@ -11,7 +11,7 @@
   overflow: auto;
 }
 
-.modal-header {
+.header {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -21,19 +21,19 @@
 .close {
   font-size: 28px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #000;
 }
 
 .modal-header h3 {
   border: none;
-  font-size:  20px;
-  color: #FFFFFF;
+  font-size:  30px;
+  color: #000000;
 
 }
 
 .modal p {
   margin-top: 20px;
-  font-size: 20px;
+  font-size: 30px;
   text-align: center;
   font-weight: 700;
 }

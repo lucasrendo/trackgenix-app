@@ -1,17 +1,18 @@
-import styles from './Modal.module.style';
+import styles from './Modal.module.css';
 
-const Modal = ({ message, close, show }) => {
-  if (!show) {
+const Modal = (props) => {
+  if (!props.show) {
     return null;
   }
 
   const handleClose = () => {
-    close();
+    props.close();
   };
   return (
     <div id="modal" className={styles.modal}>
-      <div className={styles.modalHeader}>
-        <h3>{message}</h3>
+      <div className={styles.header}>
+        <h3>Trackgenix</h3>
+        <p>{props.message}</p>
         <span className={styles.close} onClick={handleClose}>
           &times;
         </span>

@@ -28,7 +28,7 @@ function TimeSheets() {
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Modal message={'Employee succesfully deleted'} show={modal} close={closeModal} />
+      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       <TimeSheetList
         list={timeSheetsList}
         setlist={saveTimeSheets}
