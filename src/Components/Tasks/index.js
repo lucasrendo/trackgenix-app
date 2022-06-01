@@ -11,7 +11,7 @@ function Tasks() {
 
   useEffect(async () => {
     try {
-      const response = await fetch(`http://localhost:4000/tasks`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
       const data = await response.json();
       // eslint-disable-next-line no-console
       setTasksList(data.data);
