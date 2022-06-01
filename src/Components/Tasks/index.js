@@ -6,6 +6,7 @@ import List from './List/list';
 function Tasks() {
   const [tasksList, setTasksList] = useState([]);
   const [screen, changeScreen] = useState(false);
+  const [showingList, toggleList] = useState(true);
   const [formMethod, setMethod] = useState('POST');
   const [updTaskId, setId] = useState('');
 
@@ -16,6 +17,7 @@ function Tasks() {
       // eslint-disable-next-line no-console
       setTasksList(data.data);
     } catch (error) {
+      toggleList(false);
       alert(error);
     }
   }, []);
@@ -52,13 +54,12 @@ function Tasks() {
           List of Tasks
         </button>
         <button onMouseDown={() => changeScreen(true)} className={styles.btn}>
-          Create Task
+          Create and edit Tasks
         </button>
       </div>
       {screen ? (
-        // <Form formMethod={formMethod} setMethod={setMethod} id={updTaskId} />
         <Form addTask={addTask} />
-      ) : (
+      ) : showingList ? (
         <List
           list={tasksList}
           setList={setTasksList}
@@ -67,6 +68,8 @@ function Tasks() {
           editTask={() => editTask()}
           setId={() => setId()}
         />
+      ) : (
+        <h2>There was an error showing the tasks</h2>
       )}
     </section>
   );
