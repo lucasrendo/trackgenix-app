@@ -5,7 +5,7 @@ import styles from './time-sheets.module.css';
 
 function TimeSheets() {
   const [timeSheetsList, saveTimeSheets] = useState([]);
-  const [showedScreen, setShowedScreen] = useState(false);
+  const [showedScreen, setShowedScreen] = useState();
   const [method, setMethod] = useState('POST');
   const [timeSheetId, setTimesheetId] = useState('');
 

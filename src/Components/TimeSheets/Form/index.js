@@ -13,6 +13,8 @@ const TimeSheetForm = ({ timeSheetId }) => {
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [tasksOptions, setTasksOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
+  const [timeSheetModal, setTimeSheetModal] = useState('');
+  const [showModal, setShowModal] = useState('');
 
   const onChangeDateInput = (e) => {
     setDate(e.target.value);
@@ -24,7 +26,6 @@ const TimeSheetForm = ({ timeSheetId }) => {
 
   const onChangeEmployeeIdInput = (e) => {
     setEmployeeId(e.target.value);
-    console.log(employeeId);
   };
 
   const onChangeProjectValueInput = (e) => {
@@ -45,6 +46,10 @@ const TimeSheetForm = ({ timeSheetId }) => {
 
   const onChangeEmployeeRole = (e) => {
     setEmployeeRole(e.target.value);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   useEffect(async () => {
@@ -106,6 +111,7 @@ const TimeSheetForm = ({ timeSheetId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setTimeSheetModal('Timesheet created');
     let url = `${process.env.REACT_APP_API_URL}/timesheets/`;
     const options = {
       method: 'POST',
@@ -124,14 +130,20 @@ const TimeSheetForm = ({ timeSheetId }) => {
       })
     };
     if (timeSheetId) {
+      setTimeSheetModal('Timesheet edited');
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API_URL}/timesheets/${timeSheetId}`;
     }
     try {
       const response = await fetch(url, options);
       const data = await response.json();
+      if (data.error) {
+        setTimeSheetModal('An error has an error');
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setShowModal(true);
     }
   };
 
@@ -236,6 +248,17 @@ const TimeSheetForm = ({ timeSheetId }) => {
           ))}
         </select>
         <button type="submit">Save Timesheet</button>
+        {showModal && (
+          <div id="modal" className={styles.modal}>
+            <div className={styles.header}>
+              <h3>Trackgenix</h3>
+              <span className={styles.close} onClick={closeModal}>
+                &times;
+              </span>
+            </div>
+            <p>{timeSheetModal}</p>
+          </div>
+        )}
       </form>
     </div>
   );
