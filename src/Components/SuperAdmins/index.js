@@ -33,6 +33,7 @@ function SuperAdmins() {
 
   const addItem = async ({ firstName, lastName, email, password, isActive }) => {
     const newSuperAdmin = {
+      _id: Math.floor(Math.random() * 100000),
       firstName,
       lastName,
       email,

@@ -52,7 +52,7 @@ function Form() {
             name="firstName"
             value={superAdminInput.firstName}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ function Form() {
             name="lastName"
             value={superAdminInput.lastName}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -72,7 +72,7 @@ function Form() {
             name="email"
             value={superAdminInput.email}
             onChange={onChange}
-            optional
+            required
           />
         </div>
         <div>
@@ -82,23 +82,28 @@ function Form() {
             name="password"
             value={superAdminInput.password}
             onChange={onChange}
-            optional
+            required
           />
         </div>
-        {/* <div>
+        <div>
           <label>Is active?</label>
           <input
             type="boolean"
             name="isActive"
             value={superAdminInput.isActive}
             onChange={onChange}
-            optional
+            required
           />
-        </div> */}
+        </div>
         <div>
-          <input type="submit" value="Save changes" />
+          <input type="submit" value="Submit" />
         </div>
       </form>
+      <div>
+        <button>
+          <a href="/super-admins">Save changes</a>
+        </button>
+      </div>
     </div>
   );
 }
