@@ -138,12 +138,20 @@ const TimeSheetForm = ({ timeSheetId }) => {
       const response = await fetch(url, options);
       const data = await response.json();
       if (data.error) {
-        setTimeSheetModal('An error has an error');
+        setTimeSheetModal('An error has ocurred');
       }
     } catch (error) {
       console.error(error);
     } finally {
       setShowModal(true);
+      setEmployeeId('');
+      setProjectValue('');
+      setEmployeeRole('');
+      setDate('');
+      setRateValue('');
+      setWorkedHours('');
+      setTimeSheetDescription('');
+      setTaskValue('');
     }
   };
 
@@ -151,6 +159,17 @@ const TimeSheetForm = ({ timeSheetId }) => {
     <div>
       <h2>Timesheet form</h2>
       <form className={styles.container} onSubmit={handleSubmit}>
+        {showModal && (
+          <div id="modal" className={styles.modal}>
+            <div className={styles.header}>
+              <h3>Trackgenix</h3>
+              <span className={styles.close} onClick={closeModal}>
+                &times;
+              </span>
+            </div>
+            <p>{timeSheetModal}</p>
+          </div>
+        )}
         <select
           onChange={onChangeEmployeeIdInput}
           value={employeeId}
@@ -248,17 +267,6 @@ const TimeSheetForm = ({ timeSheetId }) => {
           ))}
         </select>
         <button type="submit">Save Timesheet</button>
-        {showModal && (
-          <div id="modal" className={styles.modal}>
-            <div className={styles.header}>
-              <h3>Trackgenix</h3>
-              <span className={styles.close} onClick={closeModal}>
-                &times;
-              </span>
-            </div>
-            <p>{timeSheetModal}</p>
-          </div>
-        )}
       </form>
     </div>
   );
