@@ -19,7 +19,12 @@ const List = ({ list, deleteItem, editTask }) => {
         </thead>
         <tbody>
           {list.map((item) => (
-            <ListItem key={item._id} listItem={item} deleteItem={deleteItem} editTask={editTask} />
+            <ListItem
+              key={item._id}
+              listItem={item}
+              deleteItem={deleteItem}
+              editTask={(id) => editTask(id)}
+            />
           ))}
         </tbody>
       </table>

@@ -16,6 +16,17 @@ const Form = ({ formMethod, back, id }) => {
   const [employees, setEmployeesList] = useState([]);
   const [projects, setProjectsList] = useState([]);
 
+  // ===== RESET THE FORM IF CHANGE FROM UPDATE TO POST OR VICEVERSA ===== /
+  useEffect(async () => {
+    setEmployeeId('');
+    setProjectId('');
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setDone(false);
+    setTask(undefined);
+  }, [formMethod]);
+
   // ===== FETCH DATA ===== //
 
   const createTask = async (task) => {
@@ -97,18 +108,6 @@ const Form = ({ formMethod, back, id }) => {
     await getEmployees();
     if (formMethod === 'PUT') fillInputs();
   }, []);
-
-  // ===== RESET THE FORM IF CHANGE FROM UPDATE TO POST OR VICEVERSA ===== /
-  useEffect(async () => {
-    setEmployeeId('');
-    setProjectId('');
-    setTitle('');
-    setDescription('');
-    setDate('');
-    setDone(false);
-    setTask(undefined);
-    setStatus(true);
-  }, [formMethod]);
 
   // ===== HANDLE SUBMIT ===== //
 

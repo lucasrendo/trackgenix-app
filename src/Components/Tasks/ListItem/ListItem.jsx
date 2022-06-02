@@ -30,7 +30,7 @@ const ListItem = ({ listItem, deleteItem, editTask }) => {
       <td>{listItem.projectId && listItem.projectId.projectName}</td>
       <td>{listItem.title}</td>
       <td>{listItem.description}</td>
-      <td>{listItem.date}</td>
+      <td>{listItem.date.substring(0, 10)}</td>
       <td>{listItem.done.toString()}</td>
       <td>
         <button onClick={() => handleEdit(listItem._id)}>Edit</button>
