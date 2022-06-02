@@ -37,7 +37,7 @@ const Admins = () => {
       <h2>Admins</h2>
       <div>
         <button onMouseDown={() => changeScreen(false)}>Admin List</button>
-        <button onMouseDown={() => changeScreen(true)}>Create Admin</button>
+        <button onMouseDown={() => changeScreen(true)}>Save Admin</button>
       </div>
       {screen ? (
         <Form
