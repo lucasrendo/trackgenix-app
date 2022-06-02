@@ -29,7 +29,7 @@ const Employee = ({ listItem, deleteItem, setShowModal }) => {
       <td>{listItem.isActive.toString()}</td>
       <td>
         <button className={styles.button}>
-          <a href={`${process.env.REACT_APP_API_URL}/employees/${listItem._id}`}>Edit</a>
+          <a href={`http://localhost:3000/employees/form?id=${listItem._id}`}>Edit</a>
         </button>
       </td>
       <td>

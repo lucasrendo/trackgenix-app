@@ -3,8 +3,8 @@ import styles from './EmployeesForm.module.css';
 
 const EditEmployee = () => {
   const [employeeInput, setEmployeeInput] = useState({
-    _id: 'gonza',
-    firstName: 'braca',
+    _id: '',
+    firstName: '',
     lastName: '',
     email: '',
     password: '',
@@ -44,10 +44,6 @@ const EditEmployee = () => {
         <h2>Add new employee</h2>
       </div>
       <form onSubmit={onSubmit}>
-        <div>
-          <label>ID</label>
-          <input value={employeeInput._id} readOnly />
-        </div>
         <div>
           <label>First Name</label>
           <input
@@ -91,11 +87,11 @@ const EditEmployee = () => {
         <div>
           <label>Is Active?</label>
           <input
-            type="checkbox"
+            type="boolean"
             name="isActive"
             value={employeeInput.isActive}
             onChange={onchange}
-            requ
+            required
           />
         </div>
         <input type="submit" value="Edit Employee" />
