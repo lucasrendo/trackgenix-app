@@ -30,9 +30,7 @@ const AddProject = ({ addProject }) => {
       })
     };
     const url = `${process.env.REACT_APP_API_URL}/projects`;
-    fetch(url, postProject)
-      .then((response) => response.json())
-      .then((data) => console.log('data', data));
+    fetch(url, postProject).then((response) => response.json());
     addProject(projectInput);
     setProject({
       projectName: '',
@@ -74,7 +72,6 @@ const AddProject = ({ addProject }) => {
             name="isActive"
             value={projectInput.isActive}
             onChange={onChange}
-            required
           ></input>
         </div>
         <div>

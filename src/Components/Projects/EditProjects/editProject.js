@@ -34,9 +34,7 @@ const EditProjects = () => {
     const projectId = params.get('id');
     const url = `${process.env.REACT_APP_API_URL}/projects/${projectId}`;
 
-    fetch(url, putProject)
-      .then((response) => response.json())
-      .then((data) => console.log('data:', data));
+    fetch(url, putProject).then((response) => response.json());
   };
   return (
     <div className={styles.container}>
@@ -70,7 +68,6 @@ const EditProjects = () => {
             name="isActive"
             value={projectInput.isActive}
             onChange={onChange}
-            required
           ></input>
         </div>
         <div>

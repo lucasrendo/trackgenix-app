@@ -15,6 +15,7 @@ function Projects() {
     }
   }, []);
   const addProject = ({
+    id,
     projectName,
     description,
     isActive,
@@ -24,7 +25,7 @@ function Projects() {
     endDate
   }) => {
     const newProject = {
-      id: Math.floor(Math.random() * 1000),
+      id,
       projectName,
       description,
       isActive,
