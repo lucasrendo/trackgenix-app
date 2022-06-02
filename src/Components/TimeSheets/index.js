@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TimeSheetList from './List/time-sheet-list';
+import TimeSheetForm from './Form';
 import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
   const [timeSheetsList, saveTimeSheets] = useState([]);
+  const [showedScreen, setShowedScreen] = useState();
+  const [method, setMethod] = useState('POST');
+  const [timeSheetId, setTimesheetId] = useState('');
   const [modal, setModal] = useState(false);
 
   useEffect(async () => {
@@ -21,6 +25,15 @@ function TimeSheets() {
     saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
   };
 
+  const editTimeSheet = (id) => {
+    setMethod('PUT');
+    setShowedScreen(true);
+    setTimesheetId(id);
+    const closeModal = () => {
+      setModal(false);
+    };
+  };
+
   const closeModal = () => {
     setModal(false);
   };
@@ -29,12 +42,21 @@ function TimeSheets() {
     <section className={styles.container}>
       <h2>TimeSheets</h2>
       <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
-      <TimeSheetList
-        list={timeSheetsList}
-        setlist={saveTimeSheets}
-        deleteItem={deleteItem}
-        setModal={setModal}
-      />
+      {showedScreen ? (
+        <TimeSheetForm method={method} setMethod={setMethod} timeSheetId={timeSheetId} />
+      ) : (
+        <TimeSheetList
+          list={timeSheetsList}
+          setlist={saveTimeSheets}
+          deleteItem={deleteItem}
+          editTimeSheet={editTimeSheet}
+          setModal={setModal}
+        />
+      )}
+      <div>
+        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
+        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
+      </div>
     </section>
   );
 }
