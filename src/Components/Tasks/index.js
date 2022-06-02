@@ -46,7 +46,13 @@ function Tasks() {
         <button onMouseDown={() => changeScreen(false)} className={styles.btn}>
           List of Tasks
         </button>
-        <button onMouseDown={() => changeScreen(true)} className={styles.btn}>
+        <button
+          onMouseDown={() => {
+            changeScreen(true);
+            setMethod('POST');
+          }}
+          className={styles.btn}
+        >
           Create and edit Tasks
         </button>
       </div>
