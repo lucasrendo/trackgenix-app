@@ -15,7 +15,7 @@ function Projects() {
     }
   }, []);
   const addProject = ({
-    id,
+    _id,
     projectName,
     description,
     isActive,
@@ -25,7 +25,7 @@ function Projects() {
     endDate
   }) => {
     const newProject = {
-      id,
+      _id,
       projectName,
       description,
       isActive,
