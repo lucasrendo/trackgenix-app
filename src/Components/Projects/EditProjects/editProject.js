@@ -34,7 +34,9 @@ const EditProjects = () => {
     const projectId = params.get('id');
     const url = `${process.env.REACT_APP_API_URL}/projects/${projectId}`;
 
-    fetch(url, putProject).then((response) => response.json());
+    fetch(url, putProject)
+      .then((response) => response.json())
+      .then((data) => ('data', data));
   };
   return (
     <div className={styles.container}>

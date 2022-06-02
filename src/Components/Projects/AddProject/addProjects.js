@@ -30,7 +30,9 @@ const AddProject = ({ addProject }) => {
       })
     };
     const url = `${process.env.REACT_APP_API_URL}/projects`;
-    fetch(url, postProject).then((response) => response.json());
+    fetch(url, postProject)
+      .then((response) => response.json())
+      .then((data) => ('data', data));
     addProject(projectInput);
     setProject({
       projectName: '',
