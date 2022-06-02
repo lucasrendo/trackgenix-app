@@ -23,7 +23,7 @@ function SuperAdmins() {
       });
       // eslint-disable-next-line no-unused-vars
       const data = await response.json;
-      alert(`Super admin ${id} is going to be deleted`);
+      alert(`Super admin with ${id} is going to be deleted`);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -33,7 +33,6 @@ function SuperAdmins() {
 
   const addItem = async ({ firstName, lastName, email, password, isActive }) => {
     const newSuperAdmin = {
-      _id: Math.floor(Math.random() * 100000),
       firstName,
       lastName,
       email,

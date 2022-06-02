@@ -8,7 +8,6 @@ const ListItem = ({ listItem, deleteItem }) => {
   const url = `/super-admins/form?id=${listItem._id}`;
   return (
     <tr className={Styles.rows}>
-      <td>{listItem._id}</td>
       <td>{listItem.firstName}</td>
       <td>{listItem.lastName}</td>
       <td>{listItem.email}</td>
