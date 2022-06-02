@@ -8,12 +8,12 @@ const SuperAdminList = ({ list, deleteItem }) => {
       <table className={Styles.table}>
         <thead>
           <tr className={Styles.header}>
-            <th id="id">ID</th>
             <th id="firstName">First Name</th>
             <th id="lastName">Last Name</th>
             <th id="email">Email</th>
             <th id="isActive">Is Active?</th>
             <th id="delete">Delete</th>
+            <th id="edit">Edit</th>
           </tr>
         </thead>
         <tbody>
