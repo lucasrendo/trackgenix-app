@@ -1,6 +1,9 @@
 import React from 'react';
 
-const TimeSheet = ({ listItem, deleteItem, setModal }) => {
+const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
+  const handleEditTimeSheet = () => {
+    editTimeSheet(listItem._id);
+  };
   const handleDeleteItem = () => {
     const options = {
       method: 'DELETE',
@@ -32,9 +35,9 @@ const TimeSheet = ({ listItem, deleteItem, setModal }) => {
       <td>{listItem.rate}</td>
       <td>{listItem.workedHours}</td>
       <td>{listItem.description}</td>
-      <td>{listItem.task._id}.</td>
+      <td>{listItem.task.description}.</td>
       <td>
-        <button>Edit</button>
+        <button onClick={handleEditTimeSheet}>Edit</button>
       </td>
       <td>
         <button onClick={handleDeleteItem}>X</button>
