@@ -100,7 +100,7 @@ const AddProject = ({ addProject }) => {
         <div>
           <label>Start date</label>
           <input
-            type="text"
+            type="date"
             name="startDate"
             value={projectInput.startDate}
             onChange={onChange}
@@ -110,7 +110,7 @@ const AddProject = ({ addProject }) => {
         <div>
           <label>End Date</label>
           <input
-            type="text"
+            type="date"
             name="endDate"
             value={projectInput.endDate}
             onChange={onChange}
