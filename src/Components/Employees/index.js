@@ -1,27 +1,43 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './employees.module.css';
+import EmployeesList from './EmployeesList';
+import Modal from '../Modal/Modal';
 
-function Employees() {
-  const [employees, saveEmployees] = useState([]);
-
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((response) => response.json())
-      .then((response) => {
-        saveEmployees(response);
-      });
+const Employees = () => {
+  const [employeesList, saveEmployees] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const jsonResponse = await response.json();
+      saveEmployees(jsonResponse.data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
   }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  //Delete employee
+  const deleteEmployee = (id) => {
+    saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
+  };
 
   return (
     <section className={styles.container}>
+      <Modal title={'Employee succesfully deleted'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
-      <div>
-        {employees.map((employee) => {
-          return <div key={employee.id}>{employee.name}</div>;
-        })}
-      </div>
+      <EmployeesList
+        list={employeesList}
+        setList={saveEmployees}
+        deleteItem={deleteEmployee}
+        setShowModal={setShowModal}
+      />
     </section>
   );
-}
+};
 
 export default Employees;
