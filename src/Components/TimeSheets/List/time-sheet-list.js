@@ -1,7 +1,7 @@
 import React from 'react';
 import TimeSheet from './time-sheet';
 
-const TimeSheetList = ({ list, deleteItem, editTimeSheet }) => {
+const TimeSheetList = ({ list, deleteItem, editTimeSheet, setModal }) => {
   return (
     <div>
       <table>
@@ -26,6 +26,7 @@ const TimeSheetList = ({ list, deleteItem, editTimeSheet }) => {
               listItem={item}
               deleteItem={deleteItem}
               editTimeSheet={editTimeSheet}
+              setModal={setModal}
             />
           ))}
         </tbody>

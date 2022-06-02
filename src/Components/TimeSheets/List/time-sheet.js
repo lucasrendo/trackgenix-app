@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimeSheet = ({ listItem, deleteItem, editTimeSheet }) => {
+const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
   const handleEditTimeSheet = () => {
     editTimeSheet(listItem._id);
   };
@@ -18,6 +18,7 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet }) => {
             throw new Error(message);
           });
         }
+        setModal(true);
         return deleteItem(listItem._id);
       }
     );

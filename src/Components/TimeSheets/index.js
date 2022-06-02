@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TimeSheetList from './List/time-sheet-list';
 import TimeSheetForm from './Form';
+import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
@@ -8,6 +9,7 @@ function TimeSheets() {
   const [showedScreen, setShowedScreen] = useState();
   const [method, setMethod] = useState('POST');
   const [timeSheetId, setTimesheetId] = useState('');
+  const [modal, setModal] = useState(false);
 
   useEffect(async () => {
     try {
@@ -27,11 +29,19 @@ function TimeSheets() {
     setMethod('PUT');
     setShowedScreen(true);
     setTimesheetId(id);
+    const closeModal = () => {
+      setModal(false);
+    };
+  };
+
+  const closeModal = () => {
+    setModal(false);
   };
 
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
+      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
         <TimeSheetForm method={method} setMethod={setMethod} timeSheetId={timeSheetId} />
       ) : (
@@ -40,6 +50,7 @@ function TimeSheets() {
           setlist={saveTimeSheets}
           deleteItem={deleteItem}
           editTimeSheet={editTimeSheet}
+          setModal={setModal}
         />
       )}
       <div>
