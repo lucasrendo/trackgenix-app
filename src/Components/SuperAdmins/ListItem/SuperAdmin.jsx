@@ -5,7 +5,7 @@ const ListItem = ({ listItem, deleteItem }) => {
   const handleDelete = () => {
     deleteItem(listItem._id);
   };
-  const url = `http://localhost:3000/super-admins/form?id=${listItem._id}`;
+  const url = `/super-admins/form?id=${listItem._id}`;
   return (
     <tr className={Styles.rows}>
       <td>{listItem._id}</td>

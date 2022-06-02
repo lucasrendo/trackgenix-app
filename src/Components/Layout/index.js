@@ -23,9 +23,6 @@ function Layout() {
     case '/super-admins/form':
       currentScreen = <SuperAdminsForm />;
       break;
-    //case '/super-admins/add':
-    //  currentScreen = <AddSuperAdmin />;
-    //  break;
     case '/employees':
       currentScreen = <Employees />;
       break;
