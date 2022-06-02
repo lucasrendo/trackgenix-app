@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styles from './tasks.module.css';
 import Form from './form/Form';
-// import List from './list';
 
 function Tasks() {
   const [screen, changeScreen] = useState(false);
@@ -40,7 +39,6 @@ function Tasks() {
       {screen ? (
         <Form formMethod={formMethod} back={() => backToList()} id={updTaskId} />
       ) : (
-        // <List editTask={editTask} /> --- Waiting for the list to be ready to integrate ---
         <button onClick={() => editTask('6298bea43c79ac9e521343c0')} className={styles.btn}>
           Update task
         </button>
