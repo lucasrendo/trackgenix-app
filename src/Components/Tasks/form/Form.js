@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../tasks.module.css';
-// import Sent from './Sent';
+import Sent from './Sent';
 
 const Form = ({ formMethod, back, id }) => {
   // LISTEN FOR USER INPUT
@@ -11,7 +11,7 @@ const Form = ({ formMethod, back, id }) => {
   const [date, setDate] = useState('');
   const [done, setDone] = useState(false);
   // LISTEN FOR FETCH RESPONSE
-  const [newTask, setTask] = useState({});
+  const [newTask, setTask] = useState(undefined);
   const [status, setStatus] = useState(true);
   const [employees, setEmployeesList] = useState([]);
   const [projects, setProjectsList] = useState([]);
@@ -43,9 +43,8 @@ const Form = ({ formMethod, back, id }) => {
         body: JSON.stringify(task)
       });
       const body = await res.json();
-      if (body.error) alert(body.message);
+      alert(body.message);
       setStatus(body.error);
-      setTask(body.data);
     } catch (error) {
       alert(error);
     }
@@ -107,7 +106,7 @@ const Form = ({ formMethod, back, id }) => {
     setDescription('');
     setDate('');
     setDone(false);
-    setTask({});
+    setTask(undefined);
     setStatus(true);
   }, [formMethod]);
 
@@ -145,7 +144,6 @@ const Form = ({ formMethod, back, id }) => {
       setDescription('');
       setDate('');
       setDone(false);
-      setTask({});
       setStatus(true);
       if (formMethod === 'PUT') back();
     }
@@ -153,7 +151,11 @@ const Form = ({ formMethod, back, id }) => {
 
   return (
     <>
-      <form className={styles.taskForm} onSubmit={submitHandler} onFocus={() => setTask(undefined)}>
+      <form
+        className={styles.taskForm}
+        onSubmit={submitHandler}
+        onChange={() => setTask(undefined)}
+      >
         {formMethod === 'PUT' && (
           <div className={styles.inputContainer}>
             <label>Task ID</label>
@@ -170,7 +172,7 @@ const Form = ({ formMethod, back, id }) => {
             onChange={(e) => setEmployeeId(e.target.value)}
             required
           >
-            <option disabled selected>
+            <option disabled value="">
               - Select an Employee -
             </option>
             {employees.map((employee) => (
@@ -190,7 +192,7 @@ const Form = ({ formMethod, back, id }) => {
             onChange={(e) => setProjectId(e.target.value)}
             required
           >
-            <option disabled selected>
+            <option disabled value="">
               - Select a Project -
             </option>
             {projects.map((project) => (
@@ -241,7 +243,7 @@ const Form = ({ formMethod, back, id }) => {
           value={formMethod === 'POST' ? 'Add Task' : 'Update Task'}
         />
       </form>
-      {/* {!status && <Sent data={newTask} formMethod={formMethod} />} --- CURRENTLY NOT WORKING CORRECTLY*/}
+      {newTask && <Sent data={newTask} formMethod={formMethod} />}
     </>
   );
 };
