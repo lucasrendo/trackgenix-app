@@ -11,9 +11,19 @@ const AddProject = ({ addProject }) => {
     startDate: '',
     endDate: ''
   });
+
+  const [isActiveInput, setIsActiveInput] = useState({
+    isActive: false
+  });
+
   const onChange = (e) => {
     setProject({ ...projectInput, [e.target.name]: e.target.value });
   };
+
+  const onChangeBoolean = (e) => {
+    setIsActiveInput({ ...isActiveInput, [e.target.name]: e.currentTarget.checked });
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     const postProject = {
@@ -32,7 +42,7 @@ const AddProject = ({ addProject }) => {
     const url = `${process.env.REACT_APP_API_URL}/projects`;
     fetch(url, postProject)
       .then((response) => response.json())
-      .then((data) => ('data', data));
+      .then(() => alert('New project created'));
     addProject(projectInput);
     setProject({
       projectName: '',
@@ -73,7 +83,7 @@ const AddProject = ({ addProject }) => {
             type="checkbox"
             name="isActive"
             value={projectInput.isActive}
-            onChange={onChange}
+            onChange={onChangeBoolean}
           ></input>
         </div>
         <div>

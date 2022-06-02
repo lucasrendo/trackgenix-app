@@ -12,9 +12,19 @@ const EditProjects = () => {
     startDate: '',
     endDate: ''
   });
+
+  const [isActiveInput, setIsActiveInput] = useState({
+    isActive: false
+  });
+
   const onChange = (e) => {
     setProjectInput({ ...projectInput, [e.target.name]: e.target.value });
   };
+
+  const onChangeBoolean = (e) => {
+    setIsActiveInput({ ...isActiveInput, [e.target.name]: e.currentTarget.checked });
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     const putProject = {
@@ -36,7 +46,7 @@ const EditProjects = () => {
 
     fetch(url, putProject)
       .then((response) => response.json())
-      .then((data) => ('data', data));
+      .then(() => alert('Project edited successfully'));
   };
   return (
     <div className={styles.container}>
@@ -69,7 +79,7 @@ const EditProjects = () => {
             type="checkbox"
             name="isActive"
             value={projectInput.isActive}
-            onChange={onChange}
+            onChange={onChangeBoolean}
           ></input>
         </div>
         <div>
