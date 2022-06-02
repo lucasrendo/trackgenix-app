@@ -1,6 +1,9 @@
 import React from 'react';
 
-const ListAdmin = ({ listItem, deleteAdmin }) => {
+const ListAdmin = ({ listItem, deleteAdmin, editAdmin }) => {
+  const handleEditAdmin = () => {
+    editAdmin(listItem._id);
+  };
   const handleDelete = () => {
     const deleteMethod = {
       method: 'DELETE',
@@ -28,6 +31,9 @@ const ListAdmin = ({ listItem, deleteAdmin }) => {
       <td>{listItem.email}</td>
       <td>{listItem.password}</td>
       <td>{listItem.isActive.toString()}</td>
+      <td>
+        <button onClick={handleEditAdmin}>Edit</button>
+      </td>
       <td>
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>

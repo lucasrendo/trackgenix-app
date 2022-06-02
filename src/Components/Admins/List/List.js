@@ -1,7 +1,7 @@
 import React from 'react';
 import ListAdmin from '../ListItem/ListItem';
 
-const Admin = ({ list, deleteAdmin }) => {
+const Admin = ({ list, deleteAdmin, editAdmin }) => {
   return (
     <div className="table-container">
       <table>
@@ -17,7 +17,12 @@ const Admin = ({ list, deleteAdmin }) => {
         </thead>
         <tbody>
           {list.map((item) => (
-            <ListAdmin key={item._id} listItem={item} deleteAdmin={deleteAdmin} />
+            <ListAdmin
+              key={item._id}
+              listItem={item}
+              deleteAdmin={deleteAdmin}
+              editAdmin={editAdmin}
+            />
           ))}
         </tbody>
       </table>
