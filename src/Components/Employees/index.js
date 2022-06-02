@@ -21,9 +21,9 @@ const Employees = () => {
   const closeModal = () => {
     setShowModal(false);
   };
-  const addEmployees = ({ firstName, lastName, email, password, isActive }) => {
+  const addEmployees = ({ _id, firstName, lastName, email, password, isActive }) => {
     const newEmployee = {
-      id: Math.floor(Math.random() * 1000),
+      _id,
       firstName,
       lastName,
       email,
@@ -33,7 +33,6 @@ const Employees = () => {
     saveEmployees([...employeesList, newEmployee]);
   };
 
-  //Delete employee
   const deleteEmployee = (id) => {
     saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
   };

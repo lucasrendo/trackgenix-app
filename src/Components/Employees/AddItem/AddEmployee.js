@@ -30,7 +30,7 @@ const AddEmployee = ({ addEmployee }) => {
       })
     };
 
-    const url = `${process.env.REACT_APP_API_URL}employees`;
+    const url = `${process.env.REACT_APP_API_URL}/employees`;
     fetch(url, postEmployee)
       .then((response) => response.json())
       .then(() => alert('New employee created'));
@@ -98,7 +98,6 @@ const AddEmployee = ({ addEmployee }) => {
             name="isActive"
             value={employeeInput.isActive}
             onChange={onchange}
-            required
           />
         </div>
         <input type="submit" value="Submit" />

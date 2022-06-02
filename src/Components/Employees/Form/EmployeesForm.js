@@ -36,6 +36,17 @@ const EditEmployee = () => {
       .then((response) => response.json())
       // eslint-disable-next-line no-console
       .then((data) => console.log('data:', data));
+    // const deleteEmployee = (id) => {
+    //   saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
+    // };
+
+    setEmployeeInput({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      isActive: false
+    });
   };
 
   return (
@@ -87,11 +98,10 @@ const EditEmployee = () => {
         <div>
           <label>Is Active?</label>
           <input
-            type="boolean"
+            type="checkbox"
             name="isActive"
             value={employeeInput.isActive}
             onChange={onchange}
-            required
           />
         </div>
         <input type="submit" value="Edit Employee" />
