@@ -7,12 +7,21 @@ const EditEmployee = () => {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
-    isActive: true
+    password: ''
   });
+
+  const [isActiveInput, setIsActiveInput] = useState({
+    isActive: false
+  });
+
   const onChange = (e) => {
     setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
   };
+
+  const onChangeBoolean = (e) => {
+    setIsActiveInput({ ...isActiveInput, [e.target.name]: e.currentTarget.checked });
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     const putEmployee = {
@@ -25,7 +34,7 @@ const EditEmployee = () => {
         lastName: employeeInput.lastName,
         email: employeeInput.email,
         password: employeeInput.password,
-        isActive: employeeInput.isActive
+        isActive: isActiveInput.isActive
       })
     };
     const params = new URLSearchParams(window.location.search);
@@ -36,23 +45,19 @@ const EditEmployee = () => {
       .then((response) => response.json())
       // eslint-disable-next-line no-console
       .then((data) => console.log('data:', data));
-    // const deleteEmployee = (id) => {
-    //   saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
-    // };
 
     setEmployeeInput({
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      isActive: false
+      password: ''
     });
   };
 
   return (
     <div className={styles.container}>
       <div>
-        <h2>Add new employee</h2>
+        <h2>Edit employee</h2>
       </div>
       <form onSubmit={onSubmit}>
         <div>
@@ -100,8 +105,8 @@ const EditEmployee = () => {
           <input
             type="checkbox"
             name="isActive"
-            value={employeeInput.isActive}
-            onChange={onchange}
+            value={isActiveInput.isActive}
+            onChange={onChangeBoolean}
           />
         </div>
         <input type="submit" value="Edit Employee" />

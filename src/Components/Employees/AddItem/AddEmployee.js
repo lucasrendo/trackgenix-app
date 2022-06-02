@@ -78,6 +78,7 @@ const AddEmployee = ({ addEmployee }) => {
             name="email"
             value={employeeInput.email}
             onChange={onChange}
+            autoComplete="name"
             required
           />
         </div>
