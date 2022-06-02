@@ -49,7 +49,7 @@ const AddAdmin = ({ adminId, onAdd }) => {
 
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.h2}>
         <h2>Add Admin</h2>
       </div>
       <form onSubmit={onSubmit}>
@@ -60,6 +60,7 @@ const AddAdmin = ({ adminId, onAdd }) => {
             name="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -69,6 +70,7 @@ const AddAdmin = ({ adminId, onAdd }) => {
             name="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -78,6 +80,7 @@ const AddAdmin = ({ adminId, onAdd }) => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -87,15 +90,17 @@ const AddAdmin = ({ adminId, onAdd }) => {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
-        <div>
+        <div className={styles.activeContainer}>
           <label>Is Active</label>
           <input
             type="checkbox"
             name="is active"
             value={isActive}
             onChange={(e) => setIsActive(e.currentTarget.checked)}
+            required
           />
         </div>
         <div>
