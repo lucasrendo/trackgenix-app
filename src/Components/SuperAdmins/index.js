@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ListItem from '../SuperAdmins/List/superadmin-list';
+import List from '../SuperAdmins/List/superadmin-list';
 import AddItem from './AddItem/Addsuperadmin';
 import styles from './super-admins.module.css';
 
@@ -23,7 +23,7 @@ function SuperAdmins() {
       });
       // eslint-disable-next-line no-unused-vars
       const data = await response.json;
-      alert(`Super admin with ${id} is going to be deleted`);
+      alert(`Super admin with id ${id} is going to be deleted`);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -31,8 +31,9 @@ function SuperAdmins() {
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
   };
 
-  const addItem = async ({ firstName, lastName, email, password, isActive }) => {
+  const addItem = async ({ _id, firstName, lastName, email, password, isActive }) => {
     const newSuperAdmin = {
+      _id,
       firstName,
       lastName,
       email,
@@ -47,7 +48,7 @@ function SuperAdmins() {
       <h2>SuperAdmins</h2>
       <div>
         <AddItem addItem={addItem} />
-        <ListItem list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
+        <List list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
       </div>
     </section>
   );

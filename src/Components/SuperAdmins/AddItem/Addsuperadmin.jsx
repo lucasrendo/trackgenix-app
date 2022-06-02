@@ -14,7 +14,7 @@ const AddItem = ({ addItem }) => {
     setSuperAdmin({ ...superAdminInput, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     const postSuperAdmin = {
       method: 'POST',
@@ -32,16 +32,17 @@ const AddItem = ({ addItem }) => {
 
     fetch(`${process.env.REACT_APP_API_URL}/super-admin`, postSuperAdmin)
       .then((response) => response.json())
-      .then(() => alert('New super admin created'));
-
-    addItem(superAdminInput);
-    setSuperAdmin({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      isActive: ''
-    });
+      .then((responseJson) => {
+        addItem(responseJson.data);
+        setSuperAdmin({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          isActive: ''
+        });
+        alert('New super admin created');
+      });
   };
 
   return (
