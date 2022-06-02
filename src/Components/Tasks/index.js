@@ -28,21 +28,15 @@ function Tasks() {
     setId(id);
   };
 
+  const backToList = () => {
+    setMethod('POST');
+    changeScreen(false);
+    alert('Successfully updated!');
+  };
+
   const deleteItem = (_id) => {
     setTasksList([...tasksList.filter((task) => task._id !== _id)]);
     window.alert('Task successfully deleted');
-  };
-
-  const addTask = ({ employee, project, title, description, date, done }) => {
-    const newItem = {
-      employee,
-      project,
-      title,
-      description,
-      date,
-      done
-    };
-    setTasksList([...tasksList, newItem]);
   };
 
   return (
@@ -57,7 +51,7 @@ function Tasks() {
         </button>
       </div>
       {screen ? (
-        <Form addTask={addTask} />
+        <Form formMethod={formMethod} back={() => backToList()} id={updTaskId} />
       ) : showingList ? (
         <List
           list={tasksList}
