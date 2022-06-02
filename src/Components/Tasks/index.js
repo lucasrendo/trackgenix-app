@@ -35,7 +35,6 @@ function Tasks() {
 
   const addTask = ({ employee, project, title, description, date, done }) => {
     const newItem = {
-      _id: Math.floor(Math.random() * 1000),
       employee,
       project,
       title,
