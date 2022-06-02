@@ -37,6 +37,7 @@ const EditEmployee = () => {
         isActive: isActiveInput.isActive
       })
     };
+
     const params = new URLSearchParams(window.location.search);
     const employeeId = params.get('id');
     const url = `${process.env.REACT_APP_API_URL}/employees/${employeeId}`;

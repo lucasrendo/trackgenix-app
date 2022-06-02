@@ -6,12 +6,18 @@ const AddEmployee = ({ addEmployee }) => {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
+    password: ''
+  });
+  const [isActiveInput, setIsActiveInput] = useState({
     isActive: false
   });
 
   const onChange = (e) => {
     setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
+  };
+
+  const onChangeBoolean = (e) => {
+    setIsActiveInput({ ...isActiveInput, [e.target.name]: e.currentTarget.checked });
   };
 
   const onSubmit = (e) => {
@@ -26,7 +32,7 @@ const AddEmployee = ({ addEmployee }) => {
         lastName: employeeInput.lastName,
         email: employeeInput.email,
         password: employeeInput.password,
-        isActive: employeeInput.isActive
+        isActive: isActiveInput.isActive
       })
     };
 
@@ -40,8 +46,7 @@ const AddEmployee = ({ addEmployee }) => {
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      isActive: false
+      password: ''
     });
   };
 
@@ -98,7 +103,7 @@ const AddEmployee = ({ addEmployee }) => {
             type="checkbox"
             name="isActive"
             value={employeeInput.isActive}
-            onChange={onchange}
+            onChange={onChangeBoolean}
           />
         </div>
         <input type="submit" value="Submit" />
