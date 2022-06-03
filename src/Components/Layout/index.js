@@ -1,5 +1,5 @@
 import Header from '../Header/Header';
-import Footer from '../Footer/index';
+import Footer from '../Footer/Footer';
 import styles from './layout.module.css';
 
 const Layout = ({ children }) => {

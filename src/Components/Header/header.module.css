@@ -17,6 +17,10 @@
   color: #AACE9B;
 }
 
+.appName > h1 > a:hover, .rutes > li > a:hover{
+  color: #95b587;
+}
+
 .rutes {
   display: flex;
   flex-wrap: wrap;
