@@ -45,7 +45,7 @@ const EditEmployee = () => {
     fetch(url, putEmployee)
       .then((response) => response.json())
       // eslint-disable-next-line no-console
-      .then((data) => console.log('data:', data));
+      .then(() => alert('The employee was edited successfully'));
 
     setEmployeeInput({
       firstName: '',
@@ -68,6 +68,7 @@ const EditEmployee = () => {
             name="firstName"
             value={employeeInput.firstName}
             onChange={onChange}
+            minLength={3}
             required
           />
         </div>
@@ -78,13 +79,14 @@ const EditEmployee = () => {
             name="lastName"
             value={employeeInput.lastName}
             onChange={onChange}
+            minLength={3}
             required
           />
         </div>
         <div>
           <label>Email</label>
           <input
-            type="text"
+            type="email"
             name="email"
             value={employeeInput.email}
             onChange={onChange}
@@ -110,7 +112,7 @@ const EditEmployee = () => {
             onChange={onChangeBoolean}
           />
         </div>
-        <input type="submit" value="Edit Employee" />
+        <input type="submit" value="Edit Employee" href></input>
       </form>
     </div>
   );
