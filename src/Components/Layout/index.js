@@ -2,11 +2,13 @@ import Header from '../Header/index';
 import Footer from '../Footer/index';
 import Admins from '../Admins/index';
 import SuperAdmins from '../SuperAdmins/index';
+import SuperAdminsForm from '../SuperAdmins/Form';
 import Home from '../Home/index';
 import styles from './layout.module.css';
 import Employees from '../Employees/index';
 import EmployeesForm from '../Employees/Form/EmployeesForm';
 import Projects from '../Projects';
+import ProjectEdit from '../Projects/EditProjects/editProject';
 import TimeSheets from '../TimeSheets';
 import Tasks from '../Tasks/index';
 
@@ -19,6 +21,9 @@ function Layout() {
     case '/super-admins':
       currentScreen = <SuperAdmins />;
       break;
+    case '/super-admins/form':
+      currentScreen = <SuperAdminsForm />;
+      break;
     case '/employees':
       currentScreen = <Employees />;
       break;
@@ -27,6 +32,9 @@ function Layout() {
       break;
     case '/projects':
       currentScreen = <Projects />;
+      break;
+    case '/project/edit':
+      currentScreen = <ProjectEdit />;
       break;
     case '/time-sheets':
       currentScreen = <TimeSheets />;
