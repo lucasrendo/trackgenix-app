@@ -15,6 +15,11 @@ const ListItem = ({ listItem, deleteItem }) => {
       <td className={styles.center}>
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>
+      <td className={styles.center}>
+        <button>
+          <a href={`/project/edit?id=${listItem._id}`}>Edit</a>
+        </button>
+      </td>
     </tr>
   );
 };
