@@ -1,5 +1,5 @@
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import Header from '../Shared/Header/Header';
+import Footer from '../Shared/Footer/Footer';
 import styles from './layout.module.css';
 
 const Layout = ({ children }) => {
