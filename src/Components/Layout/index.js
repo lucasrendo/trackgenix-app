@@ -1,4 +1,4 @@
-import Header from '../Header/index';
+import Header from '../Header/Header';
 import Footer from '../Footer/index';
 import styles from './layout.module.css';
 
