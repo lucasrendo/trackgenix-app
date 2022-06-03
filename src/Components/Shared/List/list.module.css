@@ -1,0 +1,46 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 90%;
+}
+
+.table{
+  width: 100%;
+  border: 0;
+  border-collapse: collapse;
+  border-radius: 5px;
+  box-shadow: 0 2px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.headerRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+th{
+  width: 25%;
+  text-align: center;
+  padding: 5px;
+  background-color: #e3e7ec;
+  color: #373867;
+}
+
+.rows{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+td{
+  width: 20%;
+  text-align: center;
+  padding: 10px;
+}
+
+tr:nth-child(odd) {background-color: white;}
+
+tr:nth-child(even) {background-color: #AACE9B33;}

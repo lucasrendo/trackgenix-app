@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TimeSheetList from './List/time-sheet-list';
-import TimeSheetForm from './Form';
-import Modal from './Modal/Modal';
+import List from '../Shared/List/List';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
@@ -20,7 +18,7 @@ function TimeSheets() {
       // eslint-disable-next-line no-console
       console.error(error);
     }
-  }, []);
+  }, [timeSheetsList]);
 
   const deleteItem = (_id) => {
     saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
@@ -42,18 +40,7 @@ function TimeSheets() {
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
-      {showedScreen ? (
-        <TimeSheetForm method={method} setMethod={setMethod} timeSheetId={timeSheetId} />
-      ) : (
-        <TimeSheetList
-          list={timeSheetsList}
-          setlist={saveTimeSheets}
-          deleteItem={deleteItem}
-          editTimeSheet={editTimeSheet}
-          setModal={setModal}
-        />
-      )}
+      <List data={timeSheetsList} headers={['Employee', 'Project', 'Role', 'Date', 'Task']} />
       <div>
         <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
         <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
