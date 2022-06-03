@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './employees.module.css';
+import AddEmployee from './AddItem/AddEmployee';
 import EmployeesList from './EmployeesList';
 import Modal from '../Modal/Modal';
 
 const Employees = () => {
   const [employeesList, saveEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
@@ -21,14 +23,26 @@ const Employees = () => {
     setShowModal(false);
   };
 
-  //Delete employee
+  const addEmployees = ({ _id, firstName, lastName, email, password, isActive }) => {
+    const newEmployee = {
+      _id,
+      firstName,
+      lastName,
+      email,
+      password,
+      isActive
+    };
+    saveEmployees([...employeesList, newEmployee]);
+  };
+
   const deleteEmployee = (id) => {
     saveEmployees([...employeesList.filter((listItem) => listItem._id !== id)]);
   };
 
   return (
     <section className={styles.container}>
-      <Modal title={'Employee succesfully deleted'} show={showModal} close={closeModal} />
+      <AddEmployee addEmployee={addEmployees} />
+      <Modal title={'Employee successfully added'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
       <EmployeesList
         list={employeesList}
