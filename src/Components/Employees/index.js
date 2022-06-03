@@ -7,6 +7,7 @@ import Modal from '../Modal/Modal';
 const Employees = () => {
   const [employeesList, saveEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
@@ -21,6 +22,7 @@ const Employees = () => {
   const closeModal = () => {
     setShowModal(false);
   };
+
   const addEmployees = ({ _id, firstName, lastName, email, password, isActive }) => {
     const newEmployee = {
       _id,
@@ -40,7 +42,7 @@ const Employees = () => {
   return (
     <section className={styles.container}>
       <AddEmployee addEmployee={addEmployees} />
-      <Modal title={'Employee successfully deleted'} show={showModal} close={closeModal} />
+      <Modal title={'Employee successfully added'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
       <EmployeesList
         list={employeesList}

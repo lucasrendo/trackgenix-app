@@ -39,15 +39,16 @@ const AddEmployee = ({ addEmployee }) => {
     const url = `${process.env.REACT_APP_API_URL}/employees`;
     fetch(url, postEmployee)
       .then((response) => response.json())
+      .then((responseJson) => {
+        addEmployee(responseJson.data);
+        setEmployeeInput({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: ''
+        });
+      })
       .then(() => alert('New employee created'));
-
-    addEmployee(employeeInput);
-    setEmployeeInput({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
-    });
   };
 
   return (
