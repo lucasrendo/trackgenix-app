@@ -1,5 +1,5 @@
-import Header from '../Header/index';
-import Footer from '../Footer/index';
+import Header from '../Shared/Header/Header';
+import Footer from '../Shared/Footer/Footer';
 import styles from './layout.module.css';
 import Form from '../Shared/Form/Form';
 

@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #373867;
+}
+
+.license {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 90%;
+  margin: 1rem;
+  background-color: #373867;
+}
+
+.copyright {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: #AACE9B;
+}
+
+.socialIcon {
+  border-radius: 50%;
+  background-color: #AACE9B;
+}
+
+.socialIcon:hover{
+  background-color: #95b587;
+}
+
+@media screen and (min-width: 750px) {
+  .main {
+    padding: 0 20%;
+    width: unset;
+  }
+
+  .license {
+    padding: 0 20px;
+    width: calc(60% - 40px);
+  }
+
+  .socialIcon {
+    margin: 0 5px;
+  }
+}
