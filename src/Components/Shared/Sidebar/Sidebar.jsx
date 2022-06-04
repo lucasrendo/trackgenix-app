@@ -1,3 +1,5 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './sidebar.module.css';
 
 const Sidebar = () => {
@@ -8,22 +10,22 @@ const Sidebar = () => {
         <div className={styles.verticalLine}></div>
         <ul>
           <li>
-            <a href="">Homepage</a>
+            <Link to={'/'}>Homepage</Link>
           </li>
           <li>
-            <a href="">What is Trackgenix</a>
+            <Link to={'#'}>What is Trackgenix</Link>
           </li>
           <li>
-            <a href="">Why choose Trackgenix</a>
+            <Link to={'#'}>Why choose Trackgenix</Link>
           </li>
           <li>
-            <a href="">About us</a>
+            <Link to={'#'}>About us</Link>
           </li>
           <li>
-            <a href="">Get in touch</a>
+            <Link to={'#'}>Get in touch</Link>
           </li>
           <li>
-            <a href="">Log in</a>
+            <Link to={'#'}>Log in</Link>
           </li>
         </ul>
       </nav>
