@@ -7,7 +7,7 @@ const Sidebar = () => {
     <aside className={styles.aside}>
       <nav>
         <span className={styles.shortcuts}>Shortcuts</span>
-        <div className={styles.verticalLine}></div>
+        <div className={styles.horizontalLine}></div>
         <ul>
           <li>
             <Link to={'/'}>Homepage</Link>
