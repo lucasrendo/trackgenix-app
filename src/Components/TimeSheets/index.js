@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import List from '../Shared/List/List';
+import Loading from '../Shared/Loading/Loading';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
@@ -8,12 +9,14 @@ function TimeSheets() {
   const [method, setMethod] = useState('POST');
   const [timeSheetId, setTimesheetId] = useState('');
   const [modal, setModal] = useState(false);
+  const [isLoading, setIsLoading] = useState([true]);
 
   const fetchTimeSheet = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
       const jsonResponse = await response.json();
       saveTimeSheets(jsonResponse.data);
+      setIsLoading(false);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -65,7 +68,9 @@ function TimeSheets() {
     { header: 'Task', key: 'task' }
   ];
 
-  return (
+  return isLoading ? (
+    <Loading></Loading>
+  ) : (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
       <List data={formatData(timeSheetsList)} headers={headers} />
