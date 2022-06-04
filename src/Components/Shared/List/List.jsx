@@ -8,8 +8,10 @@ const List = ({ data, headers }) => {
         <thead>
           <tr className={styles.headerRow}>
             {headers.map((header, index) => {
-              return <th key={index}>{header}</th>;
+              return <th key={index}>{header.header}</th>;
             })}
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -17,8 +19,14 @@ const List = ({ data, headers }) => {
             return (
               <tr key={row.id} className={styles.rows}>
                 {headers.map((header, index) => {
-                  return <td key={index}>{row[header]}</td>;
+                  return <td key={index}>{row[header.key]}</td>;
                 })}
+                <td>
+                  <button>&#9998;</button>
+                </td>
+                <td>
+                  <button>X</button>
+                </td>
               </tr>
             );
           })}
