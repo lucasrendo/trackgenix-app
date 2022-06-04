@@ -74,6 +74,10 @@
   color: #373867;
 }
 
+.inputContainer input[type="number"]{
+  -moz-appearance: textfield;
+}
+
 .inputContainer input:focus {
   border-color: #373867;
 }

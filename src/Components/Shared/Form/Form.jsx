@@ -1,145 +1,109 @@
-import react, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import style from './styles.module.css';
+import { useLocation, useParams } from 'react-router-dom';
 
-/*
-titles is an array of the labels text: ['employees','projects', 'date', 'name', ...]
-template is an empty object with all the necessary keys with data type defined but empty: {name: '', lastName: '', date: 'date', checked: false}
-objKeys: receives the keys of the template object and makes an array with it, only the keys, no values, the keys are the values of the array
-*/
+const Form = ({ data }) => {
+  const resource = useLocation();
+  const { id } = useParams();
+  const [inputValues, setInputValues] = useState({});
 
-const Form = ({ formMethod, titles, template, match }) => {
-  const objKeys = Object.keys(template);
-  const [lists, setLists] = useState({});
-
-  const setInputType = (value) => {
-    if (typeof value === 'boolean') return 'checkbox';
-    if (value === 'date') return 'date';
-    if (typeof value === 'string') return 'text';
-  };
-
+  // === Create instance state on mount === //
   useEffect(() => {
-    objKeys.forEach(async (key, index) => {
-      if (typeof template[key] === 'object') {
-        await fetchObjects(titles[index].toLowerCase());
-      }
+    let template = {};
+    data.forEach((item) => {
+      if (item.type === 'checkbox') template[item.id] = false;
+      else template[item.id] = '';
     });
-    return setLists({});
+    setInputValues(template);
   }, []);
 
-  // ===== FETCH DATA ===== //
+  // === Handle value change for different input types === //
+  const handleChange = (e, input) => {
+    if (input.type === 'checkbox')
+      setInputValues({ ...inputValues, [input.id]: !inputValues[input.id] });
+    else if (input.type === 'date')
+      setInputValues({ ...inputValues, [input.id]: e.target.value.substring(0, 10) });
+    else setInputValues({ ...inputValues, [input.id]: e.target.value });
+  };
 
-  const fetchObjects = async (resource) => {
+  // === Fetch functions === //
+  const createInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/${resource}s`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource.pathname}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
       const body = await res.json();
-      // eslint-disable-next-line prettier/prettier
-      setLists(lists[resource] = body.data);
-      console.log('lists object');
-      console.log(lists);
+      return { msg: body.message, err: body.error };
     } catch (error) {
       alert(error);
     }
   };
 
-  // const getInstance = async () => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${match.path}`);
-  //     const body = await res.json();
-  //     return body.data;
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
+  const updateInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource.pathname}${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { msg: body.message, err: body.error };
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-  // const createTask = async (task) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks`, {
-  //       method: 'POST',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(task)
-  //     });
-  //     const body = await res.json();
-  //     alert(`${body.message}`);
-  //     setStatus(body.error);
-  //     setTask(body.data);
-  //     return body;
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
+  // === Handle submit data and method === //
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let result;
 
-  // const updateTask = async (task) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${id}`, {
-  //       method: 'PUT',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(task)
-  //     });
-  //     const body = await res.json();
-  //     alert(body.message);
-  //     setStatus(body.error);
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
+    if (id) {
+      result = await updateInstance(inputValues);
+    } else {
+      result = await createInstance(inputValues);
+    }
 
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-
-  //   if (formMethod === 'PUT') {
-  //     await updateTask({
-  //       employeeId: employeeId,
-  //       projectId: projectId,
-  //       title: title,
-  //       description: description,
-  //       date: date,
-  //       done: done
-  //     });
-  //   }
-  //   if (formMethod === 'POST') {
-  //     if (projectId === '' || title === '') return alert('title and project are required');
-  //     await createTask({
-  //       employeeId: employeeId,
-  //       projectId: projectId,
-  //       title: title,
-  //       description: description,
-  //       date: date,
-  //       done: done
-  //     });
-  //   }
-  // };
+    if (result.error === false) setInputValues({});
+    alert(result.msg);
+  };
 
   return (
-    <form className={style.form}>
-      {titles.map((title, index) => {
+    <form className={style.form} onSubmit={submitHandler}>
+      {data.map((item) => {
         return (
           <div
-            key={index}
-            className={
-              setInputType(template[objKeys[index]]) === 'checkbox'
-                ? style.check
-                : style.inputContainer
-            }
+            key={item.id}
+            className={item.type === 'checkbox' ? style.check : style.inputContainer}
           >
-            {setInputType(template[objKeys[index]]) !== 'checkbox' && (
-              <label htmlFor={objKeys[index]}>{title}</label>
-            )}
-            {typeof template[objKeys[index]] === 'object' ? (
-              <select id={objKeys[index]} value="">
-                <option value="" disabled>{`select ${title}`}</option>
-                {/* {lists[title.toLowerCase()].map((item) => (
-                  <option key={item._id} value={item._id}>
-                  {item._id}
+            {item.type !== 'checkbox' && <label htmlFor={item.id}>{item.title}</label>}
+            {item.type === 'select' ? (
+              <select
+                id={item.id}
+                required={item.required && item.required}
+                value={inputValues ? inputValues[item.id] : ''}
+                onChange={(e) => setInputValues({ ...inputValues, [item.id]: e.target.value })}
+              >
+                <option selected disabled value="">{`select ${item.title}`}</option>
+                {item.options.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.text}
                   </option>
-                ))} */}
-                {console.log(lists)}
+                ))}
               </select>
             ) : (
-              <input type={setInputType(template[objKeys[index]])} id={objKeys[index]} />
+              <input
+                type={item.type}
+                id={item.id}
+                required={item.required && item.required}
+                {...(item.type === 'checkbox' && { checked: inputValues[item.id] })}
+                value={inputValues ? inputValues[item.id] : item.type === 'checkbox' ? true : ''}
+                onChange={(e) => handleChange(e, item)}
+              />
             )}
-            {setInputType(template[objKeys[index]]) === 'checkbox' && (
-              <label htmlFor={objKeys[index]}>{title}</label>
-            )}
+            {item.type === 'checkbox' && <label htmlFor={item.id}>{item.title}</label>}
           </div>
         );
       })}

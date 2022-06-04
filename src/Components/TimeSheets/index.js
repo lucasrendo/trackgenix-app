@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TimeSheetList from './List/time-sheet-list';
-import TimeSheetForm from './Form';
+import Form from '../Shared/Form/Form';
 import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
@@ -39,12 +39,102 @@ function TimeSheets() {
     setModal(false);
   };
 
+  const projects = [
+    {
+      id: '6289110ececee60c913cb4fa',
+      text: 'Acme'
+    },
+    {
+      id: '6298e1de30e0bd6de799e19e',
+      text: 'CryptoWorld'
+    }
+  ];
+
+  const employees = [
+    {
+      id: '6287e6f01c1709ee93503342',
+      text: 'Lucas Rendo'
+    },
+    {
+      id: '6288f73964ed6961bb7c2075',
+      text: 'Nicolas Micheletti'
+    }
+  ];
+
+  const tasks = [
+    {
+      id: '6296377916724c71ace949ef',
+      text: 'Create Form Component'
+    },
+    {
+      id: '62965b5916724c71ace94ad7',
+      text: 'Create list Component'
+    }
+  ];
+
+  const data = [
+    {
+      title: 'Employee',
+      type: 'select',
+      id: 'employeeId',
+      options: employees,
+      required: true
+    },
+    {
+      title: 'Project',
+      type: 'select',
+      id: 'projectId',
+      options: projects,
+      required: true
+    },
+    {
+      title: 'Role',
+      type: 'text',
+      id: 'role',
+      required: true
+    },
+    {
+      title: 'Date',
+      type: 'date',
+      id: 'date',
+      required: true
+    },
+    {
+      title: 'Rate',
+      type: 'number',
+      id: 'rate',
+      required: true
+    },
+    {
+      title: 'Worked Hours',
+      type: 'number',
+      id: 'workedHours',
+      required: true
+    },
+    {
+      title: 'Description',
+      type: 'text',
+      id: 'description'
+    },
+    {
+      title: 'Tasks',
+      type: 'select',
+      id: 'tasks',
+      options: tasks
+    },
+    {
+      title: 'Mock checkbox',
+      type: 'checkbox',
+      id: 'mockCheckbox'
+    }
+  ];
+
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
       <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
-        <TimeSheetForm method={method} setMethod={setMethod} timeSheetId={timeSheetId} />
+        <Form data={data} />
       ) : (
         <TimeSheetList
           list={timeSheetsList}

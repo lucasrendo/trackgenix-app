@@ -23,7 +23,7 @@ const TimeSheetList = ({ list, deleteItem, editTimeSheet, setModal }) => {
           {list.map((item) => (
             <TimeSheet
               key={item._id}
-              listItem={item}
+              listItem={item && item}
               deleteItem={deleteItem}
               editTimeSheet={editTimeSheet}
               setModal={setModal}
