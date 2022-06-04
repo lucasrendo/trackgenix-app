@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import List from '../Shared/List/List';
 import Loading from '../Shared/Loading/Loading';
-import styles from './time-sheets.module.css';
+import styles from './index.module.css';
 
 function TimeSheets() {
   const [timeSheetsList, setTimeSheets] = useState([]);
@@ -10,10 +10,11 @@ function TimeSheets() {
   const [timeSheetId, setTimesheetId] = useState('');
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState([true]);
+  const resource = 'timesheets';
 
   const fetchTimeSheet = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/${resource}`);
       const jsonResponse = await response.json();
       setTimeSheets(jsonResponse.data);
       setIsLoading(false);
@@ -48,7 +49,7 @@ function TimeSheets() {
     const data = responseData.map((timeSheet) => {
       return {
         id: timeSheet._id,
-        date: timeSheet.date,
+        date: timeSheet.date.slice(0, 10),
         employee: timeSheet.employee
           ? timeSheet.employee.firstName + ' ' + timeSheet.employee.lastName
           : '',
@@ -69,11 +70,17 @@ function TimeSheets() {
   ];
 
   return isLoading ? (
-    <Loading></Loading>
+    <Loading />
   ) : (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <List data={formatData(timeSheetsList)} headers={headers} />
+      <List
+        data={formatData(timeSheetsList)}
+        headers={headers}
+        resource={resource}
+        deleteItem={deleteItem}
+        method={method}
+      />
       <div>
         <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
         <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>

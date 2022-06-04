@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './list.module.css';
 
-const List = ({ data, headers }) => {
+const List = ({ data, headers, resource, method }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
