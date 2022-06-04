@@ -13,10 +13,10 @@ const Sidebar = () => {
             <Link to={'/'}>Homepage</Link>
           </li>
           <li>
-            <Link to={'#'}>What is Trackgenix</Link>
+            <Link to={'#'}>What is Trackgenix?</Link>
           </li>
           <li>
-            <Link to={'#'}>Why choose Trackgenix</Link>
+            <Link to={'#'}>Why choose Trackgenix?</Link>
           </li>
           <li>
             <Link to={'#'}>About us</Link>
