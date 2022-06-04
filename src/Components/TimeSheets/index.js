@@ -4,7 +4,7 @@ import Loading from '../Shared/Loading/Loading';
 import styles from './time-sheets.module.css';
 
 function TimeSheets() {
-  const [timeSheetsList, saveTimeSheets] = useState([]);
+  const [timeSheetsList, setTimeSheets] = useState([]);
   const [showedScreen, setShowedScreen] = useState();
   const [method, setMethod] = useState('POST');
   const [timeSheetId, setTimesheetId] = useState('');
@@ -15,7 +15,7 @@ function TimeSheets() {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
       const jsonResponse = await response.json();
-      saveTimeSheets(jsonResponse.data);
+      setTimeSheets(jsonResponse.data);
       setIsLoading(false);
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -28,7 +28,7 @@ function TimeSheets() {
   }, []);
 
   const deleteItem = (_id) => {
-    saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
+    setTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
   };
 
   const editTimeSheet = (id) => {

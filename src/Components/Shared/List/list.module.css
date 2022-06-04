@@ -21,7 +21,7 @@
   justify-content: space-between;
 }
 
-th{
+.th{
   width: 25%;
   text-align: center;
   padding: 5px;
@@ -35,14 +35,14 @@ th{
   justify-content: space-between;
 }
 
-td{
+.td{
   width: 25%;
   text-align: center;
   padding: 10px;
 }
 
-tr:nth-child(odd) {background-color: white;}
+.rows:nth-child(odd) {background-color: white;}
 
-tr:nth-child(even) {background-color: #AACE9B33;}
+.rows:nth-child(even) {background-color: #AACE9B33;}
 
-tr:hover {background-color: #aace9bb7;}
+.rows:hover {background-color: #aace9bb7;}
