@@ -1,6 +1,6 @@
 import Header from '../Shared/Header/Header';
 import Footer from '../Shared/Footer/Footer';
-import Sidebar from '../Shared/Sidebar/Sidebar';
+import Sidebar from '../Shared/Sidebar/index';
 import styles from './layout.module.css';
 
 const Layout = ({ children }) => {
