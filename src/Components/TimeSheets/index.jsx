@@ -28,8 +28,8 @@ function TimeSheets() {
     fetchTimeSheet();
   }, []);
 
-  const deleteItem = (_id) => {
-    setTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
+  const deleteItem = (id) => {
+    setTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== id)]);
   };
 
   const editTimeSheet = (id) => {
@@ -79,6 +79,7 @@ function TimeSheets() {
         headers={headers}
         resource={resource}
         deleteItem={deleteItem}
+        editItem={editTimeSheet}
         method={method}
       />
       <div>

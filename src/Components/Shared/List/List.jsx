@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './list.module.css';
 
-const List = ({ data, headers, resource, method }) => {
+const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -30,10 +30,14 @@ const List = ({ data, headers, resource, method }) => {
                   );
                 })}
                 <td className={styles.td}>
-                  <button>&#9998;</button>
+                  <button _id={row.id} resource={resource} editItem={editItem} method={method}>
+                    &#9998;
+                  </button>
                 </td>
                 <td className={styles.td}>
-                  <button>X</button>
+                  <button _id={row.id} resource={resource} deleteItem={deleteItem}>
+                    X
+                  </button>
                 </td>
               </tr>
             );
