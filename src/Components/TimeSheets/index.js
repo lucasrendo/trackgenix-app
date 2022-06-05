@@ -4,7 +4,7 @@ import Form from '../Shared/Form/Form';
 import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
-function TimeSheets() {
+const TimeSheets = (props) => {
   const [timeSheetsList, saveTimeSheets] = useState([]);
   const [showedScreen, setShowedScreen] = useState();
   const [method, setMethod] = useState('POST');
@@ -76,14 +76,14 @@ function TimeSheets() {
     {
       title: 'Employee',
       type: 'select',
-      id: 'employeeId',
+      id: 'employee',
       options: employees,
       required: true
     },
     {
       title: 'Project',
       type: 'select',
-      id: 'projectId',
+      id: 'project',
       options: projects,
       required: true
     },
@@ -119,13 +119,8 @@ function TimeSheets() {
     {
       title: 'Tasks',
       type: 'select',
-      id: 'tasks',
+      id: 'task',
       options: tasks
-    },
-    {
-      title: 'Mock checkbox',
-      type: 'checkbox',
-      id: 'mockCheckbox'
     }
   ];
 
@@ -134,7 +129,7 @@ function TimeSheets() {
       <h2>TimeSheets</h2>
       <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
-        <Form data={data} />
+        <Form data={data} props={props} />
       ) : (
         <TimeSheetList
           list={timeSheetsList}
@@ -150,6 +145,19 @@ function TimeSheets() {
       </div>
     </section>
   );
-}
+
+  // return (
+  //   <section className={styles.container}>
+  //     <h2>TimeSheets</h2>
+  //     <Router>
+  //       <Route exact path="/time-sheets/add" render />
+  //     </Router>
+  //     <div>
+  //       <button onClick={() => props.history.push('/time-sheets')}>Timesheet list</button>
+  //       <button onClick={() => props.history.push('/time-sheets/add')}>Add new Timesheet</button>
+  //     </div>
+  //   </section>
+  // );
+};
 
 export default TimeSheets;

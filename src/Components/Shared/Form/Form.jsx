@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import style from './styles.module.css';
 import { useLocation, useParams } from 'react-router-dom';
 
-const Form = ({ data }) => {
-  const resource = useLocation();
+const Form = ({ data, props }) => {
+  const { pathname } = useLocation();
   const { id } = useParams();
   const [inputValues, setInputValues] = useState({});
 
@@ -15,6 +15,7 @@ const Form = ({ data }) => {
       else template[item.id] = '';
     });
     setInputValues(template);
+    // console.log(props);
   }, []);
 
   // === Handle value change for different input types === //
@@ -29,12 +30,13 @@ const Form = ({ data }) => {
   // === Fetch functions === //
   const createInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource.pathname}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${pathname}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
       const body = await res.json();
+      console.log(body.data);
       return { msg: body.message, err: body.error };
     } catch (error) {
       alert(error);
@@ -43,7 +45,7 @@ const Form = ({ data }) => {
 
   const updateInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource.pathname}${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${pathname}${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
@@ -66,7 +68,7 @@ const Form = ({ data }) => {
       result = await createInstance(inputValues);
     }
 
-    if (result.error === false) setInputValues({});
+    if (result) if (result.error === false) setInputValues({});
     alert(result.msg);
   };
 
