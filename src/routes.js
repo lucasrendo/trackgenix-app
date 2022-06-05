@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Admins from './Components/Admins/index';
 import SuperAdmins from './Components/SuperAdmins/index';
@@ -9,6 +8,7 @@ import Employees from './Components/Employees/index';
 import Projects from './Components/Projects';
 import TimeSheets from './Components/TimeSheets';
 import Tasks from './Components/Tasks/index';
+import Form from './Components/Shared/Form/Form';
 
 const Routes = () => {
   return (
@@ -21,6 +21,7 @@ const Routes = () => {
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/timesheets'} component={TimeSheets} />
+          <Route exact path={'/timesheets/:id'} component={Form} />
           <Route exact path={'/tasks'} component={Tasks} />
         </Switch>
       </Layout>

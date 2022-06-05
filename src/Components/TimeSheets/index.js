@@ -6,71 +6,11 @@ import styles from './time-sheets.module.css';
 
 const TimeSheets = (props) => {
   const [timeSheetsList, saveTimeSheets] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [showedScreen, setShowedScreen] = useState();
-  const [method, setMethod] = useState('POST');
-  const [timeSheetId, setTimesheetId] = useState('');
   const [modal, setModal] = useState(false);
-
-  useEffect(async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
-      const jsonResponse = await response.json();
-      saveTimeSheets(jsonResponse.data);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-  }, []);
-
-  const deleteItem = (_id) => {
-    saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
-  };
-
-  const editTimeSheet = (id) => {
-    setMethod('PUT');
-    setShowedScreen(true);
-    setTimesheetId(id);
-    const closeModal = () => {
-      setModal(false);
-    };
-  };
-
-  const closeModal = () => {
-    setModal(false);
-  };
-
-  const projects = [
-    {
-      id: '6289110ececee60c913cb4fa',
-      text: 'Acme'
-    },
-    {
-      id: '6298e1de30e0bd6de799e19e',
-      text: 'CryptoWorld'
-    }
-  ];
-
-  const employees = [
-    {
-      id: '6287e6f01c1709ee93503342',
-      text: 'Lucas Rendo'
-    },
-    {
-      id: '6288f73964ed6961bb7c2075',
-      text: 'Nicolas Micheletti'
-    }
-  ];
-
-  const tasks = [
-    {
-      id: '6296377916724c71ace949ef',
-      text: 'Create Form Component'
-    },
-    {
-      id: '62965b5916724c71ace94ad7',
-      text: 'Create list Component'
-    }
-  ];
 
   const data = [
     {
@@ -124,6 +64,94 @@ const TimeSheets = (props) => {
     }
   ];
 
+  useEffect(() => {
+    getTimesheets();
+    formatDataOptions();
+  }, []);
+
+  const getTimesheets = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
+      const jsonResponse = await response.json();
+      saveTimeSheets(jsonResponse.data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  const getProjects = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+      const jsonResponse = await response.json();
+      return jsonResponse.data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  const getEmployees = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const jsonResponse = await response.json();
+      return jsonResponse.data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  const getTasks = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
+      const jsonResponse = await response.json();
+      return jsonResponse.data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  const formatDataOptions = async () => {
+    const rawProjects = await getProjects();
+    const rawEmployees = await getEmployees();
+    const rawTasks = await getTasks();
+    let projectsData = [];
+    let employeesData = [];
+    let tasksData = [];
+    rawProjects.forEach((project, index) => {
+      projectsData.push({ id: project._id });
+      projectsData[index].text = project.projectName;
+    });
+    rawEmployees.forEach((employee, index) => {
+      employeesData.push({ id: employee._id });
+      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+    });
+    rawTasks.forEach((task, index) => {
+      tasksData.push({ id: task._id });
+      tasksData[index].text = task.title;
+    });
+    setProjects(projectsData);
+    setEmployees(employeesData);
+    setTasks(tasksData);
+  };
+
+  const deleteItem = (_id) => {
+    saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
+  };
+
+  const editTimeSheet = (id) => {
+    setShowedScreen(true);
+    const closeModal = () => {
+      setModal(false);
+    };
+  };
+
+  const closeModal = () => {
+    setModal(false);
+  };
+
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
@@ -137,6 +165,7 @@ const TimeSheets = (props) => {
           deleteItem={deleteItem}
           editTimeSheet={editTimeSheet}
           setModal={setModal}
+          data={data}
         />
       )}
       <div>
@@ -145,19 +174,6 @@ const TimeSheets = (props) => {
       </div>
     </section>
   );
-
-  // return (
-  //   <section className={styles.container}>
-  //     <h2>TimeSheets</h2>
-  //     <Router>
-  //       <Route exact path="/time-sheets/add" render />
-  //     </Router>
-  //     <div>
-  //       <button onClick={() => props.history.push('/time-sheets')}>Timesheet list</button>
-  //       <button onClick={() => props.history.push('/time-sheets/add')}>Add new Timesheet</button>
-  //     </div>
-  //   </section>
-  // );
 };
 
 export default TimeSheets;

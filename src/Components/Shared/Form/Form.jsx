@@ -1,21 +1,39 @@
 import { useState, useEffect } from 'react';
 import style from './styles.module.css';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
 
-const Form = ({ data, props }) => {
-  const { pathname } = useLocation();
+const Form = ({ data }) => {
+  const { state, linkData, itemData } = useLocation();
   const { id } = useParams();
+  const { goBack } = useHistory();
   const [inputValues, setInputValues] = useState({});
+  const [config, setConfig] = useState([]);
 
   // === Create instance state on mount === //
   useEffect(() => {
-    let template = {};
-    data.forEach((item) => {
-      if (item.type === 'checkbox') template[item.id] = false;
-      else template[item.id] = '';
-    });
-    setInputValues(template);
-    // console.log(props);
+    if (data) {
+      setConfig(data);
+      let template = {};
+
+      data.forEach((item) => {
+        if (item.type === 'checkbox') template[item.id] = false;
+        else template[item.id] = '';
+      });
+      setInputValues(template);
+    } else if (linkData) {
+      let formattedItem = {};
+      setConfig(linkData);
+
+      linkData.forEach((item) => {
+        if (itemData[item.id] && typeof itemData[item.id] === 'object') {
+          formattedItem[item.id] = itemData[item.id]._id;
+        } else if (item.type === 'date') {
+          formattedItem[item.id] = itemData[item.id].substring(0, 10);
+        } else formattedItem[item.id] = itemData[item.id];
+      });
+      setInputValues(formattedItem);
+    }
+    console.log(history);
   }, []);
 
   // === Handle value change for different input types === //
@@ -30,13 +48,12 @@ const Form = ({ data, props }) => {
   // === Fetch functions === //
   const createInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${pathname}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${state.from}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
       const body = await res.json();
-      console.log(body.data);
       return { msg: body.message, err: body.error };
     } catch (error) {
       alert(error);
@@ -45,7 +62,8 @@ const Form = ({ data, props }) => {
 
   const updateInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${pathname}${id}`, {
+      console.log(`${process.env.REACT_APP_API_URL}${state.from}/${id}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${state.from}/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
@@ -68,13 +86,15 @@ const Form = ({ data, props }) => {
       result = await createInstance(inputValues);
     }
 
-    if (result) if (result.error === false) setInputValues({});
+    if (result && result.error === false) setInputValues({});
     alert(result.msg);
+
+    if (id) goBack();
   };
 
   return (
     <form className={style.form} onSubmit={submitHandler}>
-      {data.map((item) => {
+      {config.map((item) => {
         return (
           <div
             key={item.id}
@@ -110,11 +130,11 @@ const Form = ({ data, props }) => {
         );
       })}
       <div className={style.btnsContainer}>
-        <button className={`${style.btn} ${style.redBtn}`}>Reset</button>
+        <button className={`${style.btn} ${style.redBtn}`}>Back</button>
         <button className={style.btn}>Save</button>
       </div>
     </form>
   );
 };
 
-export default Form;
+export default withRouter(Form);
