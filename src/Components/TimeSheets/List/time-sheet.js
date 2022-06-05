@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
+const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal, data }) => {
   const handleEditTimeSheet = () => {
     editTimeSheet(listItem._id);
   };
@@ -37,7 +38,20 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
       <td>{listItem.description}</td>
       <td>{listItem.task && listItem.task.description}.</td>
       <td>
-        <button onClick={handleEditTimeSheet}>Edit</button>
+        <button onClick={handleEditTimeSheet}>
+          <Link
+            to={{
+              pathname: `timesheets/${listItem._id}`,
+              state: {
+                from: '/timesheets'
+              },
+              linkData: data,
+              itemData: listItem
+            }}
+          >
+            Edit
+          </Link>
+        </button>
       </td>
       <td>
         <button onClick={handleDeleteItem}>X</button>

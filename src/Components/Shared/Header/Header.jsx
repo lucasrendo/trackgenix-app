@@ -25,7 +25,7 @@ function Header() {
             <Link to={'/projects'}>projects</Link>
           </li>
           <li>
-            <Link to={'/time-sheets'}>timesheets</Link>
+            <Link to={'/timesheets'}>timesheets</Link>
           </li>
           <li>
             <Link to={'/tasks'}>tasks</Link>
