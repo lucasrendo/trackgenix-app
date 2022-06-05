@@ -35,7 +35,7 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
       <td>{listItem.rate}</td>
       <td>{listItem.workedHours}</td>
       <td>{listItem.description}</td>
-      <td>{listItem.task.description && listItem.task.description}.</td>
+      <td>{listItem.task && listItem.task.description}.</td>
       <td>
         <button onClick={handleEditTimeSheet}>Edit</button>
       </td>
