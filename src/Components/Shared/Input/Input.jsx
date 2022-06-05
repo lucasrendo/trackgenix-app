@@ -4,10 +4,10 @@ import styles from './input.module.css'
 const Input = ({text, type, id, required, value}) => {
     return (
         <div className={styles.inputContainer}>
-            <label className={styles.label}>
+            <label className={styles.labelInput}>
                 {text}
             </label>
-            <input className={styles.input} type={type} id={id} required={required} value={value}>
+            <input className={styles.inputBox} type={type} id={id} required={required} value={value}>
             </input>
         </div>
     );
