@@ -27,15 +27,15 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal }) => {
   return (
     <tr>
       <td>{listItem._id}</td>
-      <td>{listItem.employee.firstName}</td>
-      <td>{listItem.employee.lastName}</td>
-      <td>{listItem.project._id}.</td>
+      <td>{listItem.employee && listItem.employee.firstName}</td>
+      <td>{listItem.employee && listItem.employee.lastName}</td>
+      <td>{listItem.project && listItem.project._id}.</td>
       <td>{listItem.role}.</td>
       <td>{listItem.date}</td>
       <td>{listItem.rate}</td>
       <td>{listItem.workedHours}</td>
       <td>{listItem.description}</td>
-      <td>{listItem.task.description}.</td>
+      <td>{listItem.task && listItem.task.description}.</td>
       <td>
         <button onClick={handleEditTimeSheet}>Edit</button>
       </td>
