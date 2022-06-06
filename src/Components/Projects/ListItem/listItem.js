@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './listItem.module.css';
 
-const ListItem = ({ listItem, deleteItem }) => {
+const ListItem = ({ listItem, deleteItem, data }) => {
   const handleDelete = () => {
     deleteItem(listItem._id);
   };
@@ -17,7 +18,16 @@ const ListItem = ({ listItem, deleteItem }) => {
       </td>
       <td className={styles.center}>
         <button>
-          <a href={`/project/edit?id=${listItem._id}`}>Edit</a>
+          <Link
+            to={{
+              pathname: `projects/${listItem._id}`,
+              state: { from: '/projects}' },
+              linkData: data,
+              itemData: listItem
+            }}
+          >
+            Edit
+          </Link>
         </button>
       </td>
     </tr>

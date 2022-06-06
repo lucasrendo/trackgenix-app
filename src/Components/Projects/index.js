@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import styles from './projects.module.css';
-import AddProject from './AddProject/addProjects';
+import Form from '../Shared/Form/Form';
 import List from './List/list';
 
-function Projects() {
+function Projects(props) {
   const [projectsList, setProjectsList] = useState([]);
+  const [screen, changeScreen] = useState(false);
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
@@ -53,12 +55,63 @@ function Projects() {
     setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
   };
 
+  const data = [
+    {
+      title: 'Project Name',
+      type: 'text',
+      id: 'projectName',
+      required: true
+    },
+    {
+      title: 'Description',
+      type: 'text',
+      id: 'description',
+      required: false
+    },
+    {
+      title: 'Start Date',
+      type: 'date',
+      id: 'startDate',
+      required: true
+    },
+    {
+      title: 'End Date',
+      type: 'date',
+      id: 'endDate',
+      required: false
+    },
+    {
+      title: 'Admin',
+      type: 'text',
+      id: 'client',
+      required: true
+    },
+    {
+      title: 'Client',
+      type: 'text',
+      id: 'client',
+      required: true
+    },
+    {
+      title: 'Is active',
+      type: 'checkbox',
+      id: 'isActive',
+      required: false
+    }
+  ];
+
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} />
-      <h2>Projects</h2>
-      <AddProject addProject={addProject} />
+      {screen ? (
+        <Form data={data} props={props} addProject={addProject} />
+      ) : (
+        <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
+      )}
+      <div>
+        <button onClick={() => changeScreen(false)}>Project List</button>
+        <button onClick={() => changeScreen(true)}>Save Project</button>
+      </div>
     </section>
   );
 }
