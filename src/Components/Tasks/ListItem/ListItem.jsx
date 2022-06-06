@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Styles from './listItem.component.css';
 
-const ListItem = ({ listItem, deleteItem, editTask }) => {
+const ListItem = ({ listItem, deleteItem, data }) => {
   const handleDelete = () => {
     const options = {
       method: 'DELETE',
@@ -19,9 +20,9 @@ const ListItem = ({ listItem, deleteItem, editTask }) => {
     });
   };
 
-  const handleEdit = (id) => {
-    return editTask(id);
-  };
+  //const handleEdit = (id) => {
+  //  return editTask(id);
+  //};
 
   return (
     <tr className={Styles.rows}>
@@ -33,7 +34,20 @@ const ListItem = ({ listItem, deleteItem, editTask }) => {
       <td>{listItem.date.substring(0, 10)}</td>
       <td>{listItem.done.toString()}</td>
       <td>
-        <button onClick={() => handleEdit(listItem._id)}>Edit</button>
+        <button>
+          <Link
+            to={{
+              pathname: `tasks/${listItem._id}`,
+              state: {
+                from: '/tasks'
+              },
+              linkData: data,
+              itemData: listItem
+            }}
+          >
+            Edit
+          </Link>
+        </button>
       </td>
       <td>
         <button onClick={() => handleDelete(listItem.id)}>X</button>

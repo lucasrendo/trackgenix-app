@@ -23,6 +23,7 @@ const Routes = () => {
           <Route exact path={'/timesheets'} component={TimeSheets} />
           <Route exact path={'/timesheets/:id'} component={Form} />
           <Route exact path={'/tasks'} component={Tasks} />
+          <Route exact path={'/tasks/:id'} component={Form} />
         </Switch>
       </Layout>
     </Router>
