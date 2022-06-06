@@ -6,7 +6,7 @@ import SuperAdmins from './Components/SuperAdmins/index';
 import Home from './Components/Home/index';
 import Employees from './Components/Employees/index';
 import Projects from './Components/Projects';
-import TimeSheets from './Components/TimeSheets';
+import TimeSheets from './Components/TimeSheets/index';
 import Tasks from './Components/Tasks/index';
 import Form from './Components/Shared/Form/Form';
 
