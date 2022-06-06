@@ -46,6 +46,12 @@
   outline: none;
 }
 
+.btn *,
+.btn *:any-link{
+  text-decoration: none;
+  color: inherit;
+}
+
 /*Variants*/
 .btnBlock {
   display: block;
@@ -76,8 +82,8 @@
   font-size: var(--button);
   font-weight: var(--button-weight);
   font-family: inherit;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   text-decoration: none;
   transition:

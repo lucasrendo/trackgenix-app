@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TimeSheetList from './List/time-sheet-list';
 import Form from '../Shared/Form/Form';
 import Modal from './Modal/Modal';
+import Button from '../Shared/Button/Button';
 import styles from './time-sheets.module.css';
 
 const TimeSheets = () => {
@@ -169,8 +170,8 @@ const TimeSheets = () => {
         />
       )}
       <div>
-        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
-        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
+        <Button onClick={() => setShowedScreen(false)}>Timesheet list</Button>
+        <Button onClick={() => setShowedScreen(true)}>Add new Timesheet</Button>
       </div>
     </section>
   );
