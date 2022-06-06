@@ -3,7 +3,7 @@ import style from './styles.module.css';
 import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
 
 const Form = ({ data }) => {
-  const { state, linkData, itemData } = useLocation();
+  const { state, linkData, itemData, pathname } = useLocation();
   const { id } = useParams();
   const { goBack } = useHistory();
   const [inputValues, setInputValues] = useState({});
@@ -11,6 +11,7 @@ const Form = ({ data }) => {
 
   // === Create instance state on mount === //
   useEffect(() => {
+    console.log(state);
     if (data) {
       setConfig(data);
       let template = {};
@@ -48,13 +49,13 @@ const Form = ({ data }) => {
   // === Fetch functions === //
   const createInstance = async (obj) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${state.from}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${pathname}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
       const body = await res.json();
-      return { msg: body.message, err: body.error };
+      return { msg: body.msg, err: body.error };
     } catch (error) {
       alert(error);
     }

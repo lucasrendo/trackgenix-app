@@ -2,7 +2,7 @@ import React from 'react';
 import ListItem from '../ListItem/SuperAdmin';
 import Styles from '../List/superadminlist.module.css';
 
-const SuperAdminList = ({ list, deleteItem }) => {
+const SuperAdminList = ({ list, deleteItem, data }) => {
   return (
     <div className={Styles.container}>
       <table className={Styles.table}>
@@ -18,7 +18,7 @@ const SuperAdminList = ({ list, deleteItem }) => {
         </thead>
         <tbody>
           {list.map((item) => (
-            <ListItem key={item._id} listItem={item} deleteItem={deleteItem} />
+            <ListItem key={item._id} listItem={item} deleteItem={deleteItem} data={data} />
           ))}
         </tbody>
       </table>

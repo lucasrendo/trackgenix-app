@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Styles from './superAdmin.module.css';
 
-const ListItem = ({ listItem, deleteItem }) => {
+const ListItem = ({ listItem, deleteItem, data }) => {
   const handleDelete = () => {
     deleteItem(listItem._id);
   };
-  const url = `/super-admins/form?id=${listItem._id}`;
+
   return (
     <tr className={Styles.rows}>
       <td>{listItem.firstName}</td>
@@ -17,7 +18,19 @@ const ListItem = ({ listItem, deleteItem }) => {
       </td>
       <td>
         <button>
-          <a href={url}>Edit</a>
+          <Link
+            to={{
+              pathname: `super-admin/${listItem._id}`,
+              state: {
+                from: '/super-admin'
+              },
+              linkData: data,
+              itemData: listItem
+            }}
+          >
+            {console.log(data)}
+            Edit
+          </Link>
         </button>
       </td>
     </tr>

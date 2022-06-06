@@ -73,20 +73,23 @@ function SuperAdmins(props) {
       title: 'Is active',
       type: 'checkbox',
       id: 'isActive',
-      required: true
+      required: false
     }
   ];
 
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
-      <div>
-        {showedScreen ? (
-          <Form data={data} props={props} />
-        ) : (
-          <List list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
-        )}
-      </div>
+      {showedScreen ? (
+        <Form data={data} props={props} />
+      ) : (
+        <List
+          list={superadminsList}
+          setList={saveSuperadmins}
+          deleteItem={deleteSuperadmin}
+          data={data}
+        />
+      )}
       <div>
         <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
         <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
