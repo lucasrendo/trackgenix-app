@@ -1,10 +1,9 @@
 import React from 'react';
 import ListItem from '../ListItem/listItem';
-import styles from './list.module.css';
 
 const List = ({ list, deleteItem }) => {
   return (
-    <div className={styles.container}>
+    <div>
       <table>
         <thead>
           <tr>
