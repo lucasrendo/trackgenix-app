@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Form from '../Shared/Form/Form';
 import List from '../SuperAdmins/List/superadmin-list';
-import AddItem from './AddItem/Addsuperadmin';
 import styles from './super-admins.module.css';
 
-function SuperAdmins() {
+function SuperAdmins(props) {
   const [superadminsList, saveSuperadmins] = useState([]);
+  const [showedScreen, setShowedScreen] = useState();
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
@@ -43,12 +44,52 @@ function SuperAdmins() {
     saveSuperadmins([...superadminsList, newSuperAdmin]);
   };
 
+  const data = [
+    {
+      title: 'First Name',
+      type: 'text',
+      id: 'firstName',
+      required: true
+    },
+    {
+      title: 'Last Name',
+      type: 'text',
+      id: 'lastName',
+      required: true
+    },
+    {
+      title: 'Email',
+      type: 'email',
+      id: 'email',
+      required: true
+    },
+    {
+      title: 'Password',
+      type: 'password',
+      id: 'password',
+      required: true
+    },
+    {
+      title: 'Is active',
+      type: 'checkbox',
+      id: 'isActive',
+      required: true
+    }
+  ];
+
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
       <div>
-        <AddItem addItem={addItem} />
-        <List list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
+        {showedScreen ? (
+          <Form data={data} props={props} />
+        ) : (
+          <List list={superadminsList} setList={saveSuperadmins} deleteItem={deleteSuperadmin} />
+        )}
+      </div>
+      <div>
+        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
+        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
       </div>
     </section>
   );
