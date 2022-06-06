@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './tasks.module.css';
-import Form from './Form/Form.js';
+import Form from './Form/Form';
 import List from './List/list';
 
 function Tasks() {
