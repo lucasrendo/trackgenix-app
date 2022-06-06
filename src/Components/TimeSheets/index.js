@@ -4,7 +4,7 @@ import Form from '../Shared/Form/Form';
 import Modal from './Modal/Modal';
 import styles from './time-sheets.module.css';
 
-const TimeSheets = (props) => {
+const TimeSheets = () => {
   const [timeSheetsList, saveTimeSheets] = useState([]);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -157,7 +157,7 @@ const TimeSheets = (props) => {
       <h2>TimeSheets</h2>
       <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
-        <Form data={data} props={props} />
+        <Form data={data} />
       ) : (
         <TimeSheetList
           list={timeSheetsList}
