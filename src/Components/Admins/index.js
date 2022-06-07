@@ -11,33 +11,33 @@ const Admins = () => {
   const serverPath = '/admins';
   const config = [
     {
-      title: 'First Name',
+      header: 'First Name',
       type: 'text',
-      id: 'firstName',
+      key: 'firstName',
       required: true
     },
     {
-      title: 'Last Name',
+      header: 'Last Name',
       type: 'text',
-      id: 'lastName',
+      key: 'lastName',
       required: true
     },
     {
-      title: 'email',
+      header: 'Email',
       type: 'email',
-      id: 'email',
+      key: 'email',
       required: true
     },
     {
-      title: 'Password',
-      type: 'string',
-      id: 'password',
+      header: 'Password',
+      type: 'password',
+      key: 'password',
       required: true
     },
     {
-      title: 'Is Active?',
+      header: 'Is Active?',
       type: 'checkbox',
-      id: 'isActive',
+      key: 'isActive',
       required: false
     }
   ];
@@ -93,7 +93,8 @@ const Admins = () => {
           to={{
             pathname: '/admins/form',
             linkData: config,
-            itemData: ''
+            itemData: '',
+            DBPath: serverPath
           }}
           className={styles.LinkReset}
         >
