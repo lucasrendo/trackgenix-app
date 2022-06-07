@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import styles from './projects.module.css';
-import Form from '../Shared/Form/Form';
 import List from './List/list';
 import { Link } from 'react-router-dom';
 import Button from '../Shared/Button/Button';
 import Loading from '../Shared/Loading/Loading';
 
-function Projects(props) {
+function Projects() {
   const [projectsList, setProjectsList] = useState([]);
-  const [screen, changeScreen] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -106,18 +104,18 @@ function Projects(props) {
       id: 'description',
       required: false
     },
-    {
-      title: 'Start Date',
-      type: 'date',
-      id: 'startDate',
-      required: true
-    },
-    {
-      title: 'End Date',
-      type: 'date',
-      id: 'endDate',
-      required: false
-    },
+    // {
+    //   title: 'Start Date',
+    //   type: 'date',
+    //   id: 'startDate',
+    //   required: true
+    // },
+    // {
+    //   title: 'End Date',
+    //   type: 'date',
+    //   id: 'endDate',
+    //   required: false
+    // },
     {
       title: 'Admin',
       type: 'select',
@@ -163,17 +161,17 @@ function Projects(props) {
   ) : (
     <section className={styles.container}>
       <h2>Projects</h2>
-      {screen ? (
-        <Form data={data} props={props} />
-      ) : (
-        <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
-      )}
+      <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
       <div>
-        <Link to="/projects">
-          <Button onClick={() => changeScreen(false)}>Project List</Button>
-        </Link>
-        <Link to="/projects/form">
-          <Button onClick={() => changeScreen(true)}>Save Project</Button>
+        <Button>Project List</Button>
+        <Link
+          to={{
+            pathname: '/projects/form',
+            linkData: data,
+            itemData: ''
+          }}
+        >
+          <Button>Save Project</Button>
         </Link>
       </div>
     </section>
