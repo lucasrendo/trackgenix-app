@@ -19,6 +19,7 @@ function SuperAdmins(props) {
   const formatListData = (responseData) => {
     const data = responseData.map((superAdmins) => {
       return {
+        id: superAdmins._id,
         firstName: superAdmins.firstName,
         lastName: superAdmins.lastName,
         email: superAdmins.email,
@@ -49,6 +50,7 @@ function SuperAdmins(props) {
     }
     setSuperAdmins([...superAdminsList.filter((ListItem) => ListItem._id !== id)]);
   };
+
   const data = [
     {
       title: 'First Name',
@@ -81,6 +83,7 @@ function SuperAdmins(props) {
       required: false
     }
   ];
+
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
