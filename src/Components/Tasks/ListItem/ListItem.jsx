@@ -38,7 +38,7 @@ const ListItem = ({ listItem, deleteItem, data }) => {
         <Button>
           <Link
             to={{
-              pathname: `tasks/${listItem._id}`,
+              pathname: `tasks/form/${listItem._id}`,
               state: {
                 from: '/tasks'
               },

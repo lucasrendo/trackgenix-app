@@ -26,7 +26,8 @@ const Routes = () => {
           <Route exact path={'/timesheets/form/'} component={Form} />
           <Route exact path={'/timesheets/form/:id'} component={Form} />
           <Route exact path={'/tasks'} component={Tasks} />
-          <Route exact path={'/tasks/:id'} component={Form} />
+          <Route exact path={'/tasks/form/'} component={Form} />
+          <Route exact path={'/tasks/form/:id'} component={Form} />
         </Switch>
       </Layout>
     </Router>

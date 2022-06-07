@@ -4,6 +4,7 @@ import Form from '../Shared/Form/Form';
 import List from './List/list';
 import Loading from '../Shared/Loading/Loading';
 import Button from '../Shared/Button/Button';
+import { Link } from 'react-router-dom';
 
 function Tasks() {
   const [tasksList, setTasksList] = useState([]);
@@ -11,6 +12,8 @@ function Tasks() {
   const [projects, setProjects] = useState([]);
   const [screen, changeScreen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const resource = 'tasks';
+
   //const [formMethod, setMethod] = useState('POST');
   //const [updTaskId, setId] = useState('');
 
@@ -21,7 +24,7 @@ function Tasks() {
 
   const getTask = async () => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/${resource}`);
       const body = await res.json();
       setTasksList(body.data);
       setLoading(false);
@@ -84,43 +87,43 @@ function Tasks() {
   //  alert('Successfully updated!');
   //};
 
-  const data = [
+  const config = [
     {
-      title: 'Employee',
+      header: 'Employee',
       type: 'select',
-      id: 'employeeId',
+      key: 'employeeId',
       options: employees,
       required: true
     },
     {
-      title: 'Project',
+      header: 'Project',
       type: 'select',
-      id: 'projectId',
+      key: 'projectId',
       options: projects,
       required: true
     },
     {
-      title: 'Title',
+      header: 'Title',
       type: 'text',
-      id: 'title',
+      key: 'title',
       required: true
     },
     {
-      title: 'Description',
+      header: 'Description',
       type: 'text',
-      id: 'description',
+      key: 'description',
       required: true
     },
     {
-      title: 'Date',
+      header: 'Date',
       type: 'date',
-      id: 'date',
+      key: 'date',
       required: true
     },
     {
-      title: 'Done',
+      header: 'Done',
       type: 'checkbox',
-      id: 'done',
+      key: 'done',
       required: false
     }
   ];
@@ -130,37 +133,26 @@ function Tasks() {
   ) : (
     <section className={styles.container}>
       <h2>Tasks</h2>
+      <List
+        list={tasksList}
+        setList={setTasksList}
+        deleteItem={deleteItem}
+        resource={resource}
+        //editTask={editTask}
+        data={config}
+      />
       <div>
-        <Button
-          onClick={() => {
-            changeScreen(false);
-            //setMethod('GET');
+        <Link
+          to={{
+            pathname: '/tasks/form',
+            linkData: config,
+            DBPath: resource
           }}
-          className={styles.btn}
+          className={styles.LinkReset}
         >
-          List of Tasks
-        </Button>
-        <Button
-          onClick={() => {
-            changeScreen(true);
-            //setMethod('POST');
-          }}
-          className={styles.btn}
-        >
-          Create Task
-        </Button>
+          <Button classes="block">Create a Task</Button>
+        </Link>
       </div>
-      {screen ? (
-        <Form data={data} />
-      ) : (
-        <List
-          list={tasksList}
-          setList={setTasksList}
-          deleteItem={deleteItem}
-          //editTask={editTask}
-          data={data}
-        />
-      )}
     </section>
   );
 }

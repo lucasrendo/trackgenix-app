@@ -110,6 +110,7 @@ const Form = ({ data, dbPath }) => {
           setIsAdding(false);
         }}
         isOpen={isAdding}
+        isConfirmation={false}
       >
         <p>{modal}</p>
       </Modal>
