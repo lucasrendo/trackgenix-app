@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import editSuperAdmin from '../SuperAdmins/List/superadmin-list';
 import List from '../Shared/List/List';
+import Form from '../Shared/Form/Form';
+import Button from '../Shared/Button/Button';
 import styles from './super-admins.module.css';
 
-function SuperAdmins() {
+function SuperAdmins(props) {
   const [superAdminsList, setSuperAdmins] = useState([]);
+  const [showedScreen, setShowedScreen] = useState();
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
@@ -17,7 +20,6 @@ function SuperAdmins() {
   const formatListData = (responseData) => {
     const data = responseData.map((superAdmins) => {
       return {
-        id: superAdmins._id,
         firstName: superAdmins.firstName,
         lastName: superAdmins.lastName,
         email: superAdmins.email,
@@ -27,7 +29,6 @@ function SuperAdmins() {
     return data;
   };
   const headers = [
-    { headers: 'Id', key: 'id' },
     { headers: 'First Name', key: 'firstName' },
     { headers: 'Last Name', key: 'lastName' },
     { headers: 'email', key: 'email' },
@@ -49,19 +50,58 @@ function SuperAdmins() {
     }
     setSuperAdmins([...superAdminsList.filter((ListItem) => ListItem._id !== id)]);
   };
-
+  const data = [
+    {
+      title: 'First Name',
+      type: 'text',
+      id: 'firstName',
+      required: true
+    },
+    {
+      title: 'Last Name',
+      type: 'text',
+      id: 'lastName',
+      required: true
+    },
+    {
+      title: 'Email',
+      type: 'email',
+      id: 'email',
+      required: true
+    },
+    {
+      title: 'Password',
+      type: 'password',
+      id: 'password',
+      required: true
+    },
+    {
+      title: 'Is active',
+      type: 'checkbox',
+      id: 'isActive',
+      required: false
+    }
+  ];
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
       <div>
-        <List
-          data={formatListData(superAdminsList)}
-          headers={headers}
-          resource={resource}
-          deleteItem={deleteSuperAdmin}
-          editItem={editSuperAdmin}
-        />
+        <Button onClick={() => setShowedScreen(false)}>Super Admin List</Button>
+        <Button onClick={() => setShowedScreen(true)}>Add new Super Admin</Button>
       </div>
+      {showedScreen ? (
+        <Form data={data} props={props} />
+      ) : (
+        <div>
+          <List
+            data={formatListData(superAdminsList)}
+            headers={headers}
+            resource={resource}
+            deleteItem={deleteSuperAdmin}
+            editItem={editSuperAdmin}
+          />
+        </div>
+      )}
     </section>
   );
 }
