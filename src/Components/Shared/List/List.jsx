@@ -1,7 +1,9 @@
 import React from 'react';
 import styles from './list.module.css';
+import { Link } from 'react-router-dom';
+import Button from '../Button/Button';
 
-const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
+const List = ({ fullList, data, headers, resource, deleteItem, linkData }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -19,7 +21,7 @@ const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => {
+          {data.map((row, index) => {
             return (
               <tr key={row.id} className={styles.rows}>
                 {headers.map((header, index) => {
@@ -30,14 +32,25 @@ const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
                   );
                 })}
                 <td className={styles.td}>
-                  <button _id={row.id} resource={resource} editItem={editItem} method={method}>
-                    &#9998;
-                  </button>
+                  <Link
+                    to={{
+                      pathname: `${resource}/form/${row.id}`,
+                      linkData: linkData,
+                      DBPath: resource,
+                      itemData: fullList[index]
+                    }}
+                  >
+                    <Button classes="edit" _id={row.id} resource={resource}>
+                      &#9998;
+                    </Button>
+                  </Link>
                 </td>
                 <td className={styles.td}>
-                  <button _id={row.id} resource={resource} deleteItem={deleteItem}>
-                    X
-                  </button>
+                  <Button classes="close">
+                    <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
+                      X
+                    </span>
+                  </Button>
                 </td>
               </tr>
             );

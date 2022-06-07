@@ -17,13 +17,16 @@ const Routes = () => {
         <Switch>
           <Route exact path={'/'} component={Home} />
           <Route exact path={'/admins'} component={Admins} />
+          <Route exact path={'/admins/form'} component={Form} />
+          <Route exact path={'/admins/form/:id'} component={Form} />
           <Route exact path={'/super-admins'} component={SuperAdmins} />
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/projects/form/:id'} component={Form} />
           <Route exact path={'/projects/form'} component={Form} />
           <Route exact path={'/timesheets'} component={TimeSheets} />
-          <Route exact path={'/timesheets/:id'} component={Form} />
+          <Route exact path={'/timesheets/form/'} component={Form} />
+          <Route exact path={'/timesheets/form/:id'} component={Form} />
           <Route exact path={'/tasks'} component={Tasks} />
         </Switch>
       </Layout>
