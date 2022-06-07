@@ -21,7 +21,6 @@ const Admins = () => {
   const formatListData = (responseData) => {
     const data = responseData.map((admin) => {
       return {
-        id: admin._id,
         firstName: admin.firstName,
         lastName: admin.lastName,
         email: admin.email,
@@ -32,11 +31,10 @@ const Admins = () => {
   };
 
   const headers = [
-    { header: 'id', key: 'id' },
-    { header: 'firstName', key: 'firstName' },
-    { header: 'lastName', key: 'lastName' },
-    { header: 'email', key: 'email' },
-    { header: 'isActive', key: 'isActive' }
+    { header: 'First name', key: 'firstName' },
+    { header: 'Last name', key: 'lastName' },
+    { header: 'Email', key: 'email' },
+    { header: 'is Active?', key: 'isActive' }
   ];
 
   const resource = 'admins';
@@ -77,6 +75,7 @@ const Admins = () => {
           headers={headers}
           resource={resource}
           deleteAdmin={deleteAdmin}
+          editAdmin={editAdmin}
         />
       )}
       ;
