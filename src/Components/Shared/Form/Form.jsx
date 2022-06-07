@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Modal from '../Modal/Modal';
 import style from './styles.module.css';
 import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
 
@@ -8,10 +9,11 @@ const Form = ({ data }) => {
   const { goBack } = useHistory();
   const [inputValues, setInputValues] = useState({});
   const [config, setConfig] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [modal, setModal] = useState('');
 
   // === Create instance state on mount === //
   useEffect(() => {
-    console.log(state);
     if (data) {
       setConfig(data);
       let template = {};
@@ -55,7 +57,7 @@ const Form = ({ data }) => {
         body: JSON.stringify(obj)
       });
       const body = await res.json();
-      return { msg: body.msg, err: body.error };
+      return { message: body.message, err: body.error };
     } catch (error) {
       alert(error);
     }
@@ -70,7 +72,7 @@ const Form = ({ data }) => {
         body: JSON.stringify(obj)
       });
       const body = await res.json();
-      return { msg: body.message, err: body.error };
+      return { message: body.message, err: body.error };
     } catch (error) {
       alert(error);
     }
@@ -88,13 +90,22 @@ const Form = ({ data }) => {
     }
 
     if (result && result.error === false) setInputValues({});
-    alert(result.msg);
+    setModal(result.message);
 
     if (id) goBack();
+    setIsAdding(true);
   };
 
   return (
     <form className={style.form} onSubmit={submitHandler}>
+      <Modal
+        handleClose={() => {
+          setIsAdding(false);
+        }}
+        isOpen={isAdding}
+      >
+        <p>{modal}</p>
+      </Modal>
       {config.map((item) => {
         return (
           <div
