@@ -24,19 +24,22 @@ function Projects() {
     }
   }, []);
 
-  const deleteItem = async (_id) => {
+  const deleteItem = (id) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects/${_id}`, {
-        method: 'DELETE'
+      const response = fetch(`${process.env.REACT_APP_API_URL}/projects/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json'
+        }
       });
-      const data = await response.json();
-      alert(`Project "${data.data.projectName}" was deleted successfully`);
+      const data = response.json();
+      alert(`Project ${data.data.projectName} was deleted successfully`);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
 
-    setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
+    setProjectsList([...projectsList.filter((project) => project._id !== id)]);
   };
 
   const editProject = (id) => {
@@ -69,10 +72,10 @@ function Projects() {
         description: project.description,
         admin: project.admin ? project.admin.firstName + ' ' + project.admin.lastName : '',
         client: project.client,
-        employee: project.employee
-          ? project.employee.firstName + ' ' + project.employee.lastName
+        employee: project.employeeId
+          ? project.employeeId.firstName + ' ' + project.employeeId.lastName
           : '',
-        isActive: project.isActive
+        isActive: project.isActive.toString()
       };
     });
     return data;
