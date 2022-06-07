@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import style from './styles.module.css';
 import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
+import style from './styles.module.css';
+import Button from '../Button/Button';
 
 const Form = ({ data }) => {
   const { state, linkData, itemData, pathname } = useLocation();
@@ -33,7 +34,6 @@ const Form = ({ data }) => {
       });
       setInputValues(formattedItem);
     }
-    console.log(history);
   }, []);
 
   // === Handle value change for different input types === //
@@ -62,7 +62,6 @@ const Form = ({ data }) => {
 
   const updateInstance = async (obj) => {
     try {
-      console.log(`${process.env.REACT_APP_API_URL}${state.from}/${id}`);
       const res = await fetch(`${process.env.REACT_APP_API_URL}${state.from}/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
@@ -130,8 +129,10 @@ const Form = ({ data }) => {
         );
       })}
       <div className={style.btnsContainer}>
-        <button className={`${style.btn} ${style.redBtn}`}>Back</button>
-        <button className={style.btn}>Save</button>
+        <Button classes={'red'} onClick={() => goBack()}>
+          Back
+        </Button>
+        <Button>Save</Button>
       </div>
     </form>
   );

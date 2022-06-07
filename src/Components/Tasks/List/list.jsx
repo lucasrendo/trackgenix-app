@@ -1,10 +1,9 @@
 import React from 'react';
 import ListItem from '../ListItem/ListItem';
-import styles from './list.component.css';
 
 const List = ({ list, deleteItem, data }) => {
   return (
-    <div className={styles.tableContainerTasks}>
+    <div>
       <table>
         <thead>
           <tr>

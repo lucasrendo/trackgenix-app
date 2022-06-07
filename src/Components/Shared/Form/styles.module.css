@@ -38,9 +38,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 40px;
+  margin: 40px auto;
   border: 3px solid #373867;
   border-radius: 10px;
   background-color: #aace9b1a;
