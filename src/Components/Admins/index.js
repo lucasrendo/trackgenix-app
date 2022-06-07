@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './admins.module.css';
-import List from './List/List';
+import List from '../Shared/List/List';
 import Form from './Form/index';
+import Button from '../Shared/Button/Button';
 
 const Admins = () => {
   const [admins, setAdmins] = useState([]);
@@ -16,6 +17,29 @@ const Admins = () => {
         setAdmins(response.data);
       });
   }, []);
+
+  const formatListData = (responseData) => {
+    const data = responseData.map((admin) => {
+      return {
+        id: admin._id,
+        firstName: admin.firstName,
+        lastName: admin.lastName,
+        email: admin.email,
+        isActive: admin.isActive.toString()
+      };
+    });
+    return data;
+  };
+
+  const headers = [
+    { header: 'id', key: 'id' },
+    { header: 'firstName', key: 'firstName' },
+    { header: 'lastName', key: 'lastName' },
+    { header: 'email', key: 'email' },
+    { header: 'isActive', key: 'isActive' }
+  ];
+
+  const resource = 'admins';
 
   const createAdmin = (adm) => {
     const newAdmin = { ...adm };
@@ -36,8 +60,8 @@ const Admins = () => {
     <section className={styles.container}>
       <h2>Admins</h2>
       <div>
-        <button onMouseDown={() => changeScreen(false)}>Admin List</button>
-        <button onMouseDown={() => changeScreen(true)}>Save Admin</button>
+        <Button onClick={() => changeScreen(false)}>Admin List</Button>
+        <Button onClick={() => changeScreen(true)}>Save Admin</Button>
       </div>
       {screen ? (
         <Form
@@ -48,7 +72,12 @@ const Admins = () => {
           editAdmin={editAdmin}
         />
       ) : (
-        <List list={admins} setList={setAdmins} deleteAdmin={deleteAdmin} editAdmin={editAdmin} />
+        <List
+          data={formatListData(admins)}
+          headers={headers}
+          resource={resource}
+          deleteAdmin={deleteAdmin}
+        />
       )}
       ;
     </section>
