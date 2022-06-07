@@ -1,7 +1,9 @@
 import React from 'react';
 import styles from './list.module.css';
+import { Link } from 'react-router-dom';
+import Button from '../Button/Button';
 
-const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
+const List = ({ data, headers, resource, deleteItem, editItem, method, linkData }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -30,14 +32,25 @@ const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
                   );
                 })}
                 <td className={styles.td}>
-                  <button _id={row.id} resource={resource} editItem={editItem} method={method}>
-                    &#9998;
-                  </button>
+                  <Link
+                    to={{
+                      pathname: `${resource}/form/${row.id}`,
+                      linkData: linkData,
+                      DBPath: resource,
+                      itemData: row
+                    }}
+                  >
+                    <button _id={row.id} resource={resource} editItem={editItem} method={method}>
+                      &#9998;
+                    </button>
+                  </Link>
                 </td>
                 <td className={styles.td}>
-                  <button _id={row.id} resource={resource} deleteItem={deleteItem}>
-                    X
-                  </button>
+                  <Button classes="close">
+                    <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
+                      X
+                    </span>
+                  </Button>
                 </td>
               </tr>
             );
