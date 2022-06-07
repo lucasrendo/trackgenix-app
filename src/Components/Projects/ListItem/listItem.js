@@ -21,7 +21,7 @@ const ListItem = ({ listItem, deleteItem, data }) => {
           <Link
             to={{
               pathname: `projects/${listItem._id}`,
-              state: { from: '/projects}' },
+              state: { from: '/projects' },
               linkData: data,
               itemData: listItem
             }}

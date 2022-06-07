@@ -6,6 +6,8 @@ import List from './List/list';
 function Projects(props) {
   const [projectsList, setProjectsList] = useState([]);
   const [screen, changeScreen] = useState(false);
+  const [employees, setEmployees] = useState([]);
+  const [admins, setAdmins] = useState([]);
 
   useEffect(async () => {
     try {
@@ -17,28 +19,28 @@ function Projects(props) {
       console.log(error);
     }
   }, []);
-  const addProject = ({
-    _id,
-    projectName,
-    description,
-    isActive,
-    admin,
-    client,
-    startDate,
-    endDate
-  }) => {
-    const newProject = {
-      _id,
-      projectName,
-      description,
-      isActive,
-      admin,
-      client,
-      startDate,
-      endDate
-    };
-    setProjectsList([...projectsList, newProject]);
-  };
+  // const addProject = ({
+  //   _id,
+  //   projectName,
+  //   description,
+  //   isActive,
+  //   admin,
+  //   client,
+  //   startDate,
+  //   endDate
+  // }) => {
+  //   const newProject = {
+  //     _id,
+  //     projectName,
+  //     description,
+  //     isActive,
+  //     admin,
+  //     client,
+  //     startDate,
+  //     endDate
+  //   };
+  //   setProjectsList([...projectsList, newProject]);
+  // };
 
   const deleteItem = async (_id) => {
     try {
@@ -54,6 +56,59 @@ function Projects(props) {
 
     setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
   };
+
+  const getProjects = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+      const jsonResponse = await response.json();
+      setProjectsList(jsonResponse.data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  const getEmployees = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const body = await res.json();
+      return body.data;
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const getAdmins = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const body = await res.json();
+      return body.data;
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const formatDataOptions = async () => {
+    const rawEmployees = await getEmployees();
+    const rawAdmins = await getAdmins();
+    let adminsData = [];
+    let employeesData = [];
+    rawAdmins.forEach((admin, index) => {
+      adminsData.push({ id: admin._id });
+      adminsData[index].text = `${admin.firstName} ${admin.lastName}`;
+      setAdmins(adminsData);
+    });
+    rawEmployees.forEach((employee, index) => {
+      employeesData.push({ id: employee._id });
+      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+      setEmployees(employeesData);
+    });
+  };
+
+  useEffect(() => {
+    formatDataOptions();
+    getProjects();
+  }, []);
 
   const data = [
     {
@@ -82,14 +137,22 @@ function Projects(props) {
     },
     {
       title: 'Admin',
-      type: 'text',
-      id: 'client',
+      type: 'select',
+      id: 'admin',
+      options: admins,
       required: true
     },
     {
       title: 'Client',
       type: 'text',
       id: 'client',
+      required: true
+    },
+    {
+      title: 'Employees',
+      type: 'select',
+      id: 'employees',
+      options: employees,
       required: true
     },
     {
@@ -104,7 +167,7 @@ function Projects(props) {
     <section className={styles.container}>
       <h2>Projects</h2>
       {screen ? (
-        <Form data={data} props={props} addProject={addProject} />
+        <Form data={data} props={props} />
       ) : (
         <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
       )}

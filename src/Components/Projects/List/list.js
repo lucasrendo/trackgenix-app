@@ -1,7 +1,7 @@
 import React from 'react';
 import ListItem from '../ListItem/listItem';
 
-const List = ({ list, deleteItem }) => {
+const List = ({ list, deleteItem, data }) => {
   return (
     <div>
       <table>
@@ -16,7 +16,7 @@ const List = ({ list, deleteItem }) => {
         </thead>
         <tbody>
           {list.map((item) => (
-            <ListItem key={item._id} listItem={item} deleteItem={deleteItem} />
+            <ListItem key={item._id} listItem={item} deleteItem={deleteItem} data={data} />
           ))}
         </tbody>
       </table>
