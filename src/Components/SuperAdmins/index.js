@@ -15,7 +15,6 @@ function SuperAdmins(props) {
         setSuperAdmins(superAdmins.data);
       });
   }, []);
-
   const formatListData = (responseData) => {
     const data = responseData.map((superAdmins) => {
       return {
@@ -88,7 +87,6 @@ function SuperAdmins(props) {
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
       <div>
-        <Button onClick={() => setShowedScreen(false)}>Super Admin List</Button>
         <Button onClick={() => setShowedScreen(true)}>Add new Super Admin</Button>
       </div>
       {showedScreen ? (
