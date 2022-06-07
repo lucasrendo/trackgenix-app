@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Form from '../Shared/Form/Form';
 import List from '../SuperAdmins/List/superadmin-list';
+import Button from '../Shared/Button/Button';
 import styles from './super-admins.module.css';
 
 function SuperAdmins(props) {
@@ -81,6 +82,10 @@ function SuperAdmins(props) {
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
+      <div>
+        <Button onClick={() => setShowedScreen(false)}>Super Admin list</Button>
+        <Button onClick={() => setShowedScreen(true)}>Add new Super Admin</Button>
+      </div>
       {showedScreen ? (
         <Form data={data} props={props} />
       ) : (
@@ -91,10 +96,6 @@ function SuperAdmins(props) {
           data={data}
         />
       )}
-      <div>
-        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
-        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
-      </div>
     </section>
   );
 }
