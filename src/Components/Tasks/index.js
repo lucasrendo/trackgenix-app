@@ -2,25 +2,29 @@ import React, { useState, useEffect } from 'react';
 import styles from './tasks.module.css';
 import Form from '../Shared/Form/Form';
 import List from './List/list';
+import Loading from '../Shared/Loading/Loading';
+import Button from '../Shared/Button/Button';
 
 function Tasks() {
   const [tasksList, setTasksList] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
   const [screen, changeScreen] = useState(false);
-  const [formMethod, setMethod] = useState('POST');
-  const [updTaskId, setId] = useState('');
+  const [loading, setLoading] = useState(true);
+  //const [formMethod, setMethod] = useState('POST');
+  //const [updTaskId, setId] = useState('');
 
   useEffect(() => {
     getTask();
     dataOptions();
-  }, [formMethod]);
+  }, []);
 
   const getTask = async () => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
       const body = await res.json();
       setTasksList(body.data);
+      setLoading(false);
     } catch (error) {
       alert(error);
     }
@@ -63,22 +67,22 @@ function Tasks() {
     setProjects(projectsData);
   };
 
-  const editTask = (id) => {
-    setMethod('PUT');
-    changeScreen(true);
-    setId(id);
-  };
+  //const editTask = (id) => {
+  //  setMethod('PUT');
+  //  changeScreen(true);
+  //  setId(id);
+  //};
 
   const deleteItem = (_id) => {
     setTasksList([...tasksList.filter((task) => task._id !== _id)]);
     window.alert('Task successfully deleted');
   };
 
-  const backToList = () => {
-    setMethod('GET');
-    changeScreen(false);
-    alert('Successfully updated!');
-  };
+  //const backToList = () => {
+  //  setMethod('GET');
+  //  changeScreen(false);
+  //  alert('Successfully updated!');
+  //};
 
   const data = [
     {
@@ -121,37 +125,39 @@ function Tasks() {
     }
   ];
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <section className={styles.container}>
       <h2>Tasks</h2>
       <div>
-        <button
+        <Button
           onClick={() => {
             changeScreen(false);
-            setMethod('GET');
+            //setMethod('GET');
           }}
           className={styles.btn}
         >
           List of Tasks
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             changeScreen(true);
-            setMethod('POST');
+            //setMethod('POST');
           }}
           className={styles.btn}
         >
           Create Task
-        </button>
+        </Button>
       </div>
       {screen ? (
-        <Form data={data} formMethod={formMethod} back={() => backToList()} id={updTaskId} />
+        <Form data={data} />
       ) : (
         <List
           list={tasksList}
           setList={setTasksList}
           deleteItem={deleteItem}
-          editTask={editTask}
+          //editTask={editTask}
           data={data}
         />
       )}

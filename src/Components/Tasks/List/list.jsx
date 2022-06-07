@@ -7,13 +7,13 @@ const List = ({ list, deleteItem, data }) => {
       <table>
         <thead>
           <tr>
-            <th id="id">ID</th>
-            <th id="employee">Employee</th>
-            <th id="project">Project</th>
-            <th id="title">Title</th>
-            <th id="description">Description</th>
-            <th id="date">Date</th>
-            <th id="done">Done</th>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Project</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Done</th>
           </tr>
         </thead>
         <tbody>

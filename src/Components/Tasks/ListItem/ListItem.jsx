@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Styles from './listItem.component.css';
+import Button from '../../Shared/Button/Button';
 
 const ListItem = ({ listItem, deleteItem, data }) => {
   const handleDelete = () => {
@@ -34,7 +35,7 @@ const ListItem = ({ listItem, deleteItem, data }) => {
       <td>{listItem.date.substring(0, 10)}</td>
       <td>{listItem.done.toString()}</td>
       <td>
-        <button>
+        <Button>
           <Link
             to={{
               pathname: `tasks/${listItem._id}`,
@@ -47,10 +48,10 @@ const ListItem = ({ listItem, deleteItem, data }) => {
           >
             Edit
           </Link>
-        </button>
+        </Button>
       </td>
       <td>
-        <button onClick={() => handleDelete(listItem.id)}>X</button>
+        <Button onClick={() => handleDelete(listItem.id)}>X</Button>
       </td>
     </tr>
   );
