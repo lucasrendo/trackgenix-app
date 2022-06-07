@@ -1,15 +1,15 @@
-.selectContainer{
+.textAreaContainer{
     display:flex;
     flex-direction: column;
 }
 
-.labelSelect{
+.labelTextArea{
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
 }
 
-.selectBox{
+.textAreaBox{
     border-radius: 4px;
-    height: 38px;
+    resize: none;
     width: 260px;
-} 
+}
