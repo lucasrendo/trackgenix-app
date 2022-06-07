@@ -24,7 +24,21 @@ const Employees = () => {
   };
 
   const deleteEmployee = (id) => {
-    setEmployeesList([...employeesList.filter((listItem) => listItem._id !== id)]);
+    try {
+      const response = fetch(`${process.env.REACT_APP_API_URL}/employees/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json'
+        }
+      });
+      const data = response.json();
+      alert(`Project ${data.data.firstName} was deleted successfully`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+
+    setEmployeesList([...employeesList.filter((employee) => employee._id !== id)]);
   };
 
   const formatListData = (responseData) => {
