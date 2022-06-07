@@ -32,8 +32,8 @@ const ListItem = ({ listItem, deleteItem, data }) => {
       <td>{listItem.projectId && listItem.projectId.projectName}</td>
       <td>{listItem.title}</td>
       <td>{listItem.description}</td>
-      <td>{listItem.date.substring(0, 10)}</td>
-      <td>{listItem.done.toString()}</td>
+      <td>{listItem.date}</td>
+      <td>{listItem.done}</td>
       <td>
         <Button>
           <Link
@@ -51,7 +51,9 @@ const ListItem = ({ listItem, deleteItem, data }) => {
         </Button>
       </td>
       <td>
-        <Button onClick={() => handleDelete(listItem.id)}>X</Button>
+        <Button classes={'close'} onClick={() => handleDelete(listItem.id)}>
+          X
+        </Button>
       </td>
     </tr>
   );
