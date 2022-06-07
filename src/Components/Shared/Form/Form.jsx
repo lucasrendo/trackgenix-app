@@ -13,6 +13,7 @@ const Form = ({ data, dbPath }) => {
 
   // === Create instance state on mount === //
   useEffect(() => {
+    console.log();
     let template = {};
     if (data) {
       setConfig(data);

@@ -64,13 +64,20 @@ const Admins = () => {
     }
   };
 
-  const deleteAdmin = (_id) => {
-    setAdmins([...admins.filter((admin) => admin._id !== _id)]);
+  const deleteAdmin = async (id) => {
+    await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    });
+    setAdmins([...admins.filter((admin) => admin._id !== id)]);
   };
 
   const formatListData = (responseData) => {
     const data = responseData.map((admin) => {
       return {
+        id: admin._id,
         firstName: admin.firstName,
         lastName: admin.lastName,
         email: admin.email,
@@ -93,7 +100,6 @@ const Admins = () => {
           to={{
             pathname: '/admins/form',
             linkData: config,
-            itemData: '',
             DBPath: serverPath
           }}
           className={styles.LinkReset}
@@ -105,7 +111,8 @@ const Admins = () => {
         data={formatListData(admins)}
         headers={headers}
         resource={serverPath}
-        deleteAdmin={deleteAdmin}
+        deleteItem={deleteAdmin}
+        linkData={config}
       />
     </section>
   );
