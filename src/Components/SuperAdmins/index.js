@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import editSuperAdmin from '../SuperAdmins/List/superadmin-list';
 import List from '../Shared/List/List';
 import Form from '../Shared/Form/Form';
 import Button from '../Shared/Button/Button';
-import styles from './super-admins.module.css';
+import styles from '../Shared/List/list.module.css';
 
 function SuperAdmins(props) {
   const [superAdminsList, setSuperAdmins] = useState([]);
@@ -29,10 +28,10 @@ function SuperAdmins(props) {
     return data;
   };
   const headers = [
-    { headers: 'First Name', key: 'firstName' },
-    { headers: 'Last Name', key: 'lastName' },
-    { headers: 'email', key: 'email' },
-    { headers: 'Is Active?', key: 'isActive' }
+    { header: 'First Name', key: 'firstName' },
+    { header: 'Last Name', key: 'lastName' },
+    { header: 'email', key: 'email' },
+    { header: 'Is Active?', key: 'isActive' }
   ];
   const resource = 'super-admins';
 
@@ -98,7 +97,6 @@ function SuperAdmins(props) {
             headers={headers}
             resource={resource}
             deleteItem={deleteSuperAdmin}
-            editItem={editSuperAdmin}
           />
         </div>
       )}
