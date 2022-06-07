@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import List from '../Shared/List/List';
 import Form from '../Shared/Form/Form';
 import Loading from '../Shared/Loading/Loading';
-import Modal from '../Modal/Modal';
-import styles from './index.module.css';
+import Button from '../Shared/Button/Button';
+import styles from './time-sheets.module.css';
 
-function TimeSheets(props) {
+const TimeSheets = () => {
   const [timeSheetsList, setTimeSheets] = useState([]);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -189,9 +189,8 @@ function TimeSheets(props) {
   ) : (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
-        <Form data={data} props={props} />
+        <Form data={data} />
       ) : (
         <List
           data={formatListData(timeSheetsList)}
@@ -203,11 +202,11 @@ function TimeSheets(props) {
         />
       )}
       <div>
-        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
-        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
+        <Button onClick={() => setShowedScreen(false)}>Timesheet list</Button>
+        <Button onClick={() => setShowedScreen(true)}>Add new Timesheet</Button>
       </div>
     </section>
   );
-}
+};
 
 export default TimeSheets;

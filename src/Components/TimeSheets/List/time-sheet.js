@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Button from '../../Shared/Button/Button';
 
 const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal, data }) => {
   const handleEditTimeSheet = () => {
@@ -38,7 +39,7 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal, data }) => {
       <td>{listItem.description}</td>
       <td>{listItem.task && listItem.task.description}.</td>
       <td>
-        <button onClick={handleEditTimeSheet}>
+        <Button classes={'red'} onClick={() => handleEditTimeSheet()}>
           <Link
             to={{
               pathname: `timesheets/${listItem._id}`,
@@ -51,10 +52,12 @@ const TimeSheet = ({ listItem, deleteItem, editTimeSheet, setModal, data }) => {
           >
             Edit
           </Link>
-        </button>
+        </Button>
       </td>
       <td>
-        <button onClick={handleDeleteItem}>X</button>
+        <Button classes={'close'} onClick={() => handleDeleteItem()}>
+          X
+        </Button>
       </td>
     </tr>
   );
