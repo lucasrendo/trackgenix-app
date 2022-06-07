@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
 import Modal from '../Modal/Modal';
 import style from './styles.module.css';
-import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
 import Button from '../Button/Button';
 
 const Form = ({ data }) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Form from '../Shared/Form/Form';
 import List from '../SuperAdmins/List/superadmin-list';
 import Button from '../Shared/Button/Button';
+import { Link } from 'react-router-dom';
 import styles from './super-admins.module.css';
 
 function SuperAdmins(props) {
@@ -32,18 +33,6 @@ function SuperAdmins(props) {
       console.error(error);
     }
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
-  };
-
-  const addItem = async ({ _id, firstName, lastName, email, password, isActive }) => {
-    const newSuperAdmin = {
-      _id,
-      firstName,
-      lastName,
-      email,
-      password,
-      isActive
-    };
-    saveSuperadmins([...superadminsList, newSuperAdmin]);
   };
 
   const data = [
