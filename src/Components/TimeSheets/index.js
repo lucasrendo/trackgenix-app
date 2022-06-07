@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import List from '../Shared/List/List';
 import Form from '../Shared/Form/Form';
-import Modal from './Modal/Modal';
 import Loading from '../Shared/Loading/Loading';
 import Button from '../Shared/Button/Button';
 import styles from './time-sheets.module.css';
@@ -190,7 +189,6 @@ const TimeSheets = () => {
   ) : (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
         <Form data={data} />
       ) : (
