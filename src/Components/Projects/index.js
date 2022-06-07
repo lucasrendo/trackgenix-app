@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react';
 import styles from './projects.module.css';
-import AddProject from './AddProject/addProjects';
-import List from './List/list';
+import Form from '../Shared/Form/Form';
+import List from '../Shared/List/List';
+import Button from '../Shared/Button/Button';
+import Loading from '../Shared/Loading/Loading';
 
 function Projects() {
   const [projectsList, setProjectsList] = useState([]);
+  const [method, setMethod] = useState('POST');
+  const [screen, changeScreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [projectId, setProjectId] = useState('');
+  const resource = 'projects';
+
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
@@ -15,28 +23,6 @@ function Projects() {
       console.log(error);
     }
   }, []);
-  const addProject = ({
-    _id,
-    projectName,
-    description,
-    isActive,
-    admin,
-    client,
-    startDate,
-    endDate
-  }) => {
-    const newProject = {
-      _id,
-      projectName,
-      description,
-      isActive,
-      admin,
-      client,
-      startDate,
-      endDate
-    };
-    setProjectsList([...projectsList, newProject]);
-  };
 
   const deleteItem = async (_id) => {
     try {
@@ -53,12 +39,76 @@ function Projects() {
     setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
   };
 
-  return (
+  const editProject = (id) => {
+    setMethod('PUT');
+    changeScreen(true);
+    setProjectId(id);
+  };
+
+  const fetchProject = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/${resource}`);
+      const jsonResponse = await response.json();
+      setProjectsList(jsonResponse.data);
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+
+  useEffect(async () => {
+    fetchProject();
+  }, []);
+
+  const formatListData = (responseData) => {
+    const data = responseData.map((project) => {
+      return {
+        id: project._id,
+        projectName: project.projectName,
+        description: project.description,
+        admin: project.admin ? project.admin.firstName + ' ' + project.admin.lastName : '',
+        client: project.client,
+        employee: project.employee
+          ? project.employee.firstName + ' ' + project.employee.lastName
+          : '',
+        isActive: project.isActive
+      };
+    });
+    return data;
+  };
+
+  const headers = [
+    { header: 'Project Name', key: 'projectName' },
+    { header: 'Description', key: 'description' },
+    { header: 'Start Date', key: 'startDate' },
+    { header: 'Admin', key: 'admin' },
+    { header: 'Client', key: 'client' },
+    { header: 'Employees', key: 'employee' },
+    { header: 'Is Active?', key: 'isActive' }
+  ];
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} />
-      <h2>Projects</h2>
-      <AddProject addProject={addProject} />
+      {screen ? (
+        <Form />
+      ) : (
+        <List
+          data={formatListData(projectsList)}
+          headers={headers}
+          resource={resource}
+          deleteItem={deleteItem}
+          editItem={editProject}
+          method={method}
+        />
+      )}
+      <div>
+        <Button onClick={() => changeScreen(false)}>Project List</Button>
+        <Button onClick={() => changeScreen(true)}>Save Project</Button>
+      </div>
     </section>
   );
 }
