@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Form from '../Shared/Form/Form';
 import List from '../SuperAdmins/List/superadmin-list';
 import Button from '../Shared/Button/Button';
-import { Link } from 'react-router-dom';
 import styles from './super-admins.module.css';
 
 function SuperAdmins(props) {
   const [superadminsList, saveSuperadmins] = useState([]);
   const [showedScreen, setShowedScreen] = useState();
-  const [isAdding, setIsAdding] = useState(false);
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
