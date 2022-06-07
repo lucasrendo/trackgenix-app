@@ -14,4 +14,3 @@ const Input = ({text, type, id, required, value}) => {
 };
 
 export default Input;
-
