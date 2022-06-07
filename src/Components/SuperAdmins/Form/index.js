@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Styles from './superadminform.module.css';
+import styles from './superadminform.module.css';
 
 function Form() {
   const [superAdminInput, setSuperAdmin] = useState({
@@ -40,7 +40,7 @@ function Form() {
   };
 
   return (
-    <div className={Styles.container}>
+    <div className={styles.container}>
       <div>
         <h2>Form</h2>
       </div>
