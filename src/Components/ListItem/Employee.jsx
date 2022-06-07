@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './employee.module.css';
 
 const Employee = ({ listItem, deleteItem, setShowModal }) => {
   const onClick = () => {
@@ -22,20 +21,18 @@ const Employee = ({ listItem, deleteItem, setShowModal }) => {
   };
 
   return (
-    <tr className={styles.rows}>
+    <tr>
       <td>{listItem.firstName}</td>
       <td>{listItem.lastName}</td>
       <td>{listItem.email}</td>
       <td>{listItem.isActive.toString()}</td>
       <td>
-        <button className={styles.button}>
+        <button>
           <a href={`/employees/form?id=${listItem._id}`}>Edit</a>
         </button>
       </td>
       <td>
-        <button className={styles.buttonDelete} onClick={onClick}>
-          X
-        </button>
+        <button onClick={onClick}>X</button>
       </td>
     </tr>
   );

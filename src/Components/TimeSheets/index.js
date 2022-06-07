@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import TimeSheetList from './List/time-sheet-list';
+import List from '../Shared/List/List';
 import Form from '../Shared/Form/Form';
-import Modal from './Modal/Modal';
+import Loading from '../Shared/Loading/Loading';
+import Button from '../Shared/Button/Button';
 import styles from './time-sheets.module.css';
 
-const TimeSheets = (props) => {
-  const [timeSheetsList, saveTimeSheets] = useState([]);
+const TimeSheets = () => {
+  const [timeSheetsList, setTimeSheets] = useState([]);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [showedScreen, setShowedScreen] = useState();
+  const [method, setMethod] = useState('POST');
+  const [timeSheetId, setTimesheetId] = useState('');
   const [modal, setModal] = useState(false);
+  const [isLoading, setIsLoading] = useState([true]);
+  const resource = 'timesheets';
 
   const data = [
     {
@@ -64,21 +69,22 @@ const TimeSheets = (props) => {
     }
   ];
 
-  useEffect(() => {
-    getTimesheets();
-    formatDataOptions();
-  }, []);
-
-  const getTimesheets = async () => {
+  const fetchTimeSheet = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/${resource}`);
       const jsonResponse = await response.json();
-      saveTimeSheets(jsonResponse.data);
+      setTimeSheets(jsonResponse.data);
+      setIsLoading(false);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
   };
+
+  useEffect(async () => {
+    fetchTimeSheet();
+    formatDataOptions();
+  }, []);
 
   const getProjects = async () => {
     try {
@@ -137,12 +143,14 @@ const TimeSheets = (props) => {
     setTasks(tasksData);
   };
 
-  const deleteItem = (_id) => {
-    saveTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== _id)]);
+  const deleteItem = (id) => {
+    setTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== id)]);
   };
 
   const editTimeSheet = (id) => {
+    setMethod('PUT');
     setShowedScreen(true);
+    setTimesheetId(id);
     const closeModal = () => {
       setModal(false);
     };
@@ -152,25 +160,50 @@ const TimeSheets = (props) => {
     setModal(false);
   };
 
-  return (
+  const formatListData = (responseData) => {
+    const data = responseData.map((timeSheet) => {
+      return {
+        id: timeSheet._id,
+        date: timeSheet.date.slice(0, 10),
+        employee: timeSheet.employee
+          ? timeSheet.employee.firstName + ' ' + timeSheet.employee.lastName
+          : '',
+        project: timeSheet.project ? timeSheet.project.projectName : '',
+        role: timeSheet.role,
+        task: timeSheet.task ? timeSheet.task.title : ''
+      };
+    });
+    return data;
+  };
+
+  const headers = [
+    { header: 'Date', key: 'date' },
+    { header: 'Employee', key: 'employee' },
+    { header: 'Project', key: 'project' },
+    { header: 'Role', key: 'role' },
+    { header: 'Task', key: 'task' }
+  ];
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Modal message={'Time sheet deleted'} show={modal} close={closeModal} />
       {showedScreen ? (
-        <Form data={data} props={props} />
+        <Form data={data} />
       ) : (
-        <TimeSheetList
-          list={timeSheetsList}
-          setlist={saveTimeSheets}
+        <List
+          data={formatListData(timeSheetsList)}
+          headers={headers}
+          resource={resource}
           deleteItem={deleteItem}
-          editTimeSheet={editTimeSheet}
-          setModal={setModal}
-          data={data}
+          editItem={editTimeSheet}
+          method={method}
         />
       )}
       <div>
-        <button onClick={() => setShowedScreen(false)}>Timesheet list</button>
-        <button onClick={() => setShowedScreen(true)}>Add new Timesheet</button>
+        <Button onClick={() => setShowedScreen(false)}>Timesheet list</Button>
+        <Button onClick={() => setShowedScreen(true)}>Add new Timesheet</Button>
       </div>
     </section>
   );
