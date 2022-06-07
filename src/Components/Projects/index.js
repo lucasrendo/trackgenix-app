@@ -70,6 +70,7 @@ function Projects() {
         id: project._id,
         projectName: project.projectName,
         description: project.description,
+        startDate: project.startDate.slice(0, 10),
         admin: project.admin ? project.admin.firstName + ' ' + project.admin.lastName : '',
         client: project.client,
         employee: project.employeeId
