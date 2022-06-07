@@ -76,6 +76,7 @@ const Admins = () => {
           resource={resource}
           deleteAdmin={deleteAdmin}
           editAdmin={editAdmin}
+          method={method}
         />
       )}
       ;
