@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import styles from './projects.module.css';
 import Form from '../Shared/Form/Form';
 import List from './List/list';
+import { Link } from 'react-router-dom';
+import Button from '../Shared/Button/Button';
+import Loading from '../Shared/Loading/Loading';
 
 function Projects(props) {
   const [projectsList, setProjectsList] = useState([]);
   const [screen, changeScreen] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [admins, setAdmins] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(async () => {
     try {
@@ -19,28 +23,6 @@ function Projects(props) {
       console.log(error);
     }
   }, []);
-  // const addProject = ({
-  //   _id,
-  //   projectName,
-  //   description,
-  //   isActive,
-  //   admin,
-  //   client,
-  //   startDate,
-  //   endDate
-  // }) => {
-  //   const newProject = {
-  //     _id,
-  //     projectName,
-  //     description,
-  //     isActive,
-  //     admin,
-  //     client,
-  //     startDate,
-  //     endDate
-  //   };
-  //   setProjectsList([...projectsList, newProject]);
-  // };
 
   const deleteItem = async (_id) => {
     try {
@@ -62,6 +44,7 @@ function Projects(props) {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
       const jsonResponse = await response.json();
       setProjectsList(jsonResponse.data);
+      setIsLoading(false);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -156,6 +139,18 @@ function Projects(props) {
       required: true
     },
     {
+      title: 'Role',
+      type: 'text',
+      id: 'role',
+      required: true
+    },
+    {
+      title: 'Rate',
+      type: 'number',
+      id: 'rate',
+      required: true
+    },
+    {
       title: 'Is active',
       type: 'checkbox',
       id: 'isActive',
@@ -163,7 +158,9 @@ function Projects(props) {
     }
   ];
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <section className={styles.container}>
       <h2>Projects</h2>
       {screen ? (
@@ -172,8 +169,12 @@ function Projects(props) {
         <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
       )}
       <div>
-        <button onClick={() => changeScreen(false)}>Project List</button>
-        <button onClick={() => changeScreen(true)}>Save Project</button>
+        <Link to="/projects">
+          <Button onClick={() => changeScreen(false)}>Project List</Button>
+        </Link>
+        <Link to="/projects/form">
+          <Button onClick={() => changeScreen(true)}>Save Project</Button>
+        </Link>
       </div>
     </section>
   );
