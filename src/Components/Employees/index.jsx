@@ -96,12 +96,12 @@ const Employees = () => {
     { header: 'Active', key: 'isActive' }
   ];
 
-  const resource = 'employees';
+  const resource = '/employees';
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <Link to={{ pathname: '/employees/form', linkData: config, itemData: '' }}>
+      <Link to={{ pathname: '/employees/form', linkData: config, DBPath: resource }}>
         <Button>Create employee</Button>
       </Link>
       <List
@@ -109,7 +109,6 @@ const Employees = () => {
         headers={headers}
         resource={resource}
         deleteItem={deleteEmployee}
-        DBPath={resource}
       />
     </section>
   );
