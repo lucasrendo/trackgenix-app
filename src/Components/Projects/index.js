@@ -153,7 +153,6 @@ function Projects() {
       <h2>Projects</h2>
       <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
       <div>
-        <Button>Project List</Button>
         <Link
           to={{
             pathname: '/projects/form',
