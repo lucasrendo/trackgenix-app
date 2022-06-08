@@ -35,7 +35,7 @@ const List = ({ data, headers, resource, deleteItem, editItem, method }) => {
                   </button>
                 </td>
                 <td className={styles.td}>
-                  <button _id={row.id} resource={resource} deleteItem={deleteItem}>
+                  <button _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
                     X
                   </button>
                 </td>
