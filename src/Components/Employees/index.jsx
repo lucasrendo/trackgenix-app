@@ -67,7 +67,7 @@ const Employees = () => {
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <Button>Form employee</Button>
+      <Button>Create employee</Button>
       <List
         data={formatListData(employeesList)}
         headers={headers}
