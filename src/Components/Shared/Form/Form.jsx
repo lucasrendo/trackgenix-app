@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
-import Modal from '../Modal/Modal';
 import style from './styles.module.css';
+import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
-import Input from '../Input/Input';
 
 const Form = ({ data, dbPath }) => {
   const { linkData, itemData, DBPath } = useLocation();
@@ -17,31 +16,33 @@ const Form = ({ data, dbPath }) => {
 
   // === Create instance state on mount === //
   useEffect(() => {
-    console.log(url);
-    console.log(DBPath);
+    let template = {};
     if (data) {
       setConfig(data);
-      let template = {};
-
       data.forEach((item) => {
         if (item.type === 'checkbox') template[item.key] = false;
         else template[item.key] = '';
       });
       setInputValues(template);
     } else if (linkData) {
-      let formattedItem = {};
       setConfig(linkData);
-
-      linkData.forEach((item) => {
-        if (itemData[item.key] && typeof itemData[item.key] === 'object') {
-          formattedItem[item.key] = itemData[item.key]._id;
-        } else if (item.type === 'date') {
-          formattedItem[item.key] = itemData[item.key].substring(0, 10);
-        } else if (item.type === 'checkbox') formattedItem[item.key] = false;
-        else formattedItem[item.key] = itemData[item.key];
-        console.log(formattedItem[item.key]);
-      });
-      setInputValues(formattedItem);
+      if (itemData) {
+        let formattedItem = {};
+        linkData.forEach((item) => {
+          if (itemData[item.key] && typeof itemData[item.key] === 'object') {
+            formattedItem[item.key] = itemData[item.key]._id;
+          } else if (item.type === 'date') {
+            formattedItem[item.key] = itemData[item.key].substring(0, 10);
+          } else formattedItem[item.key] = itemData[item.key];
+        });
+        setInputValues(formattedItem);
+      } else {
+        linkData.forEach((item) => {
+          if (item.type === 'checkbox') template[item.key] = false;
+          else template[item.key] = '';
+        });
+        setInputValues(template);
+      }
     }
   }, []);
 
@@ -65,7 +66,9 @@ const Form = ({ data, dbPath }) => {
       const body = await res.json();
       return { message: body.message, err: body.error };
     } catch (error) {
-      alert(error);
+      // alert(error);
+      setModal(error);
+      setIsAdding(true);
     }
   };
 
@@ -79,7 +82,9 @@ const Form = ({ data, dbPath }) => {
       const body = await res.json();
       return { message: body.message, err: body.error };
     } catch (error) {
-      alert(error);
+      // alert(error);
+      setModal(error);
+      setIsAdding(true);
     }
   };
 
@@ -95,22 +100,14 @@ const Form = ({ data, dbPath }) => {
     }
 
     if (result && result.error === false) setInputValues({});
+    // alert(result.message);
     setModal(result.message);
-
-    if (id) goBack();
     setIsAdding(true);
+    if (id) goBack();
   };
 
   return (
     <form className={style.form} onSubmit={submitHandler}>
-      <Modal
-        handleClose={() => {
-          setIsAdding(false);
-        }}
-        isOpen={isAdding}
-      >
-        <p>{modal}</p>
-      </Modal>
       {config.map((item) => {
         return (
           <div
@@ -143,6 +140,15 @@ const Form = ({ data, dbPath }) => {
               />
             )}
             {item.type === 'checkbox' && <label htmlFor={item.key}>{item.header}</label>}
+            <Modal
+              handleClose={() => {
+                setIsAdding(false);
+              }}
+              isOpen={isAdding}
+              isConfirmation={false}
+            >
+              <h2>{modal}</h2>
+            </Modal>
           </div>
         );
       })}
