@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Styles from './superAdmin.module.css';
+import Button from '../../Shared/Button/Button';
 
 const ListItem = ({ listItem, deleteItem, data }) => {
   const handleDelete = () => {
@@ -17,10 +18,10 @@ const ListItem = ({ listItem, deleteItem, data }) => {
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>
       <td>
-        <button>
+        <Button>
           <Link
             to={{
-              pathname: `super-admin/${listItem._id}`,
+              pathname: `super-admin/form/${listItem._id}`,
               state: {
                 from: '/super-admin'
               },
@@ -28,10 +29,9 @@ const ListItem = ({ listItem, deleteItem, data }) => {
               itemData: listItem
             }}
           >
-            {console.log(data)}
             Edit
           </Link>
-        </button>
+        </Button>
       </td>
     </tr>
   );

@@ -3,6 +3,7 @@ import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom
 import Modal from '../Modal/Modal';
 import style from './styles.module.css';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 
 const Form = ({ data, dbPath }) => {
   const { linkData, itemData, DBPath } = useLocation();
@@ -16,34 +17,31 @@ const Form = ({ data, dbPath }) => {
 
   // === Create instance state on mount === //
   useEffect(() => {
-    console.log();
-    let template = {};
+    console.log(url);
+    console.log(DBPath);
     if (data) {
       setConfig(data);
+      let template = {};
+
       data.forEach((item) => {
         if (item.type === 'checkbox') template[item.key] = false;
         else template[item.key] = '';
       });
       setInputValues(template);
     } else if (linkData) {
+      let formattedItem = {};
       setConfig(linkData);
-      if (itemData) {
-        let formattedItem = {};
-        linkData.forEach((item) => {
-          if (itemData[item.key] && typeof itemData[item.key] === 'object') {
-            formattedItem[item.key] = itemData[item.key]._id;
-          } else if (item.type === 'date') {
-            formattedItem[item.key] = itemData[item.key].substring(0, 10);
-          } else formattedItem[item.key] = itemData[item.key];
-        });
-        setInputValues(formattedItem);
-      } else {
-        linkData.forEach((item) => {
-          if (item.type === 'checkbox') template[item.key] = false;
-          else template[item.key] = '';
-        });
-        setInputValues(template);
-      }
+
+      linkData.forEach((item) => {
+        if (itemData[item.key] && typeof itemData[item.key] === 'object') {
+          formattedItem[item.key] = itemData[item.key]._id;
+        } else if (item.type === 'date') {
+          formattedItem[item.key] = itemData[item.key].substring(0, 10);
+        } else if (item.type === 'checkbox') formattedItem[item.key] = false;
+        else formattedItem[item.key] = itemData[item.key];
+        console.log(formattedItem[item.key]);
+      });
+      setInputValues(formattedItem);
     }
   }, []);
 

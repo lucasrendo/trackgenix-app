@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Form from '../Shared/Form/Form';
+import { Link } from 'react-router-dom';
 import List from '../SuperAdmins/List/superadmin-list';
 import Button from '../Shared/Button/Button';
 import styles from './super-admins.module.css';
 
-function SuperAdmins(props) {
+function SuperAdmins() {
   const [superadminsList, saveSuperadmins] = useState([]);
-  const [showedScreen, setShowedScreen] = useState();
+  const resource = '/super-admin';
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
@@ -33,35 +33,35 @@ function SuperAdmins(props) {
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
   };
 
-  const data = [
+  const config = [
     {
-      title: 'First Name',
+      header: 'First Name',
       type: 'text',
-      id: 'firstName',
+      key: 'firstName',
       required: true
     },
     {
-      title: 'Last Name',
+      header: 'Last Name',
       type: 'text',
-      id: 'lastName',
+      key: 'lastName',
       required: true
     },
     {
-      title: 'Email',
+      header: 'Email',
       type: 'email',
-      id: 'email',
+      key: 'email',
       required: true
     },
     {
-      title: 'Password',
+      header: 'Password',
       type: 'password',
-      id: 'password',
+      key: 'password',
       required: true
     },
     {
-      title: 'Is active',
+      header: 'Is active',
       type: 'checkbox',
-      id: 'isActive',
+      key: 'isActive',
       required: false
     }
   ];
@@ -70,19 +70,24 @@ function SuperAdmins(props) {
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
       <div>
-        <Button onClick={() => setShowedScreen(false)}>Super Admin list</Button>
-        <Button onClick={() => setShowedScreen(true)}>Add new Super Admin</Button>
+        <Link
+          to={{
+            pathname: '/super-admin/form',
+            linkData: config,
+            itemData: '',
+            DBPath: resource
+          }}
+          className={styles.create}
+        >
+          <Button classes="block">Create Super Admin</Button>
+        </Link>
       </div>
-      {showedScreen ? (
-        <Form data={data} props={props} />
-      ) : (
-        <List
-          list={superadminsList}
-          setList={saveSuperadmins}
-          deleteItem={deleteSuperadmin}
-          data={data}
-        />
-      )}
+      <List
+        list={superadminsList}
+        setList={saveSuperadmins}
+        deleteItem={deleteSuperadmin}
+        data={config}
+      />
     </section>
   );
 }
