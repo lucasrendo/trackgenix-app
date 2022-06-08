@@ -38,6 +38,7 @@
 .form {
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   margin: 40px auto;
   border: 3px solid #373867;
   border-radius: 10px;
