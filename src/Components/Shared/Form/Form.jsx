@@ -141,20 +141,16 @@ const Form = ({ data, dbPath }) => {
             {item.type === 'checkbox' && <label htmlFor={item.key}>{item.header}</label>}
             <Modal
               handleClose={() => {
-                setIsAdding(false);
+                if (modal === 'New Super Admin created') {
+                  goBack();
+                } else {
+                  setIsAdding(false);
+                }
               }}
               isOpen={isAdding}
               isConfirmation={false}
             >
               <h2>{modal}</h2>
-              <Button
-                onClick={() => {
-                  setIsAdding(false);
-                  goBack();
-                }}
-              >
-                OK
-              </Button>
             </Modal>
           </div>
         );
