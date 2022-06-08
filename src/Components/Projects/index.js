@@ -11,16 +11,6 @@ function Projects() {
   const [admins, setAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const resource = '/projects';
-  useEffect(async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const data = await response.json();
-      setProjectsList(data.data);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  }, []);
 
   const deleteItem = async (_id) => {
     try {
