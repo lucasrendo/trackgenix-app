@@ -10,10 +10,9 @@ function Tasks() {
   const [tasksList, setTasksList] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [screen, changeScreen] = useState(false);
+  //const [screen, changeScreen] = useState(false);
   const [loading, setLoading] = useState(true);
   const resource = 'tasks';
-
   //const [formMethod, setMethod] = useState('POST');
   //const [updTaskId, setId] = useState('');
 
@@ -146,7 +145,7 @@ function Tasks() {
           to={{
             pathname: '/tasks/form',
             linkData: config,
-            DBPath: resource
+            DBPath: '/tasks'
           }}
           className={styles.LinkReset}
         >
