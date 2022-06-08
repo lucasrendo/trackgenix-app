@@ -15,8 +15,12 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
           </button>
           <div className={styles.childrenContainer}>{children}</div>
           <div className={styles.buttonwrapper}>
-            <button onClick={confirmed}>Accept</button>
-            <button onClick={handleClose}>Cancel</button>
+            <button className={styles.modalButton} onClick={confirmed}>
+              Accept
+            </button>
+            <button className={styles.modalButton} onClick={handleClose}>
+              Cancel
+            </button>
           </div>
         </div>
       </div>
@@ -32,7 +36,9 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
           </button>
           {children}
           <div className={styles.buttonwrapper}>
-            <button onClick={handleClose}>OK</button>
+            <button className={styles.modalButton} onClick={handleClose}>
+              OK
+            </button>
           </div>
         </div>
       </div>
