@@ -10,11 +10,8 @@ function Tasks() {
   const [tasksList, setTasksList] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  //const [screen, changeScreen] = useState(false);
   const [loading, setLoading] = useState(true);
   const resource = 'tasks';
-  //const [formMethod, setMethod] = useState('POST');
-  //const [updTaskId, setId] = useState('');
 
   useEffect(() => {
     getTask();
@@ -69,22 +66,10 @@ function Tasks() {
     setProjects(projectsData);
   };
 
-  //const editTask = (id) => {
-  //  setMethod('PUT');
-  //  changeScreen(true);
-  //  setId(id);
-  //};
-
   const deleteItem = (_id) => {
     setTasksList([...tasksList.filter((task) => task._id !== _id)]);
     window.alert('Task successfully deleted');
   };
-
-  //const backToList = () => {
-  //  setMethod('GET');
-  //  changeScreen(false);
-  //  alert('Successfully updated!');
-  //};
 
   const config = [
     {
@@ -137,7 +122,6 @@ function Tasks() {
         setList={setTasksList}
         deleteItem={deleteItem}
         resource={resource}
-        //editTask={editTask}
         data={config}
       />
       <div>

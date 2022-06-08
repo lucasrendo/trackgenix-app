@@ -99,7 +99,6 @@ const Form = ({ data, dbPath }) => {
     if (result && result.error === false) setInputValues({});
     setModal(result.message);
 
-    if (id) goBack();
     setIsAdding(true);
   };
 
@@ -108,6 +107,7 @@ const Form = ({ data, dbPath }) => {
       <Modal
         handleClose={() => {
           setIsAdding(false);
+          goBack();
         }}
         isOpen={isAdding}
         isConfirmation={false}
