@@ -161,26 +161,6 @@ function Tasks() {
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      <div>
-        <Button
-          onClick={() => {
-            changeScreen(false);
-            setMethod('GET');
-          }}
-          className={styles.btn}
-        >
-          List of Tasks
-        </Button>
-        <Button
-          onClick={() => {
-            changeScreen(true);
-            setMethod('POST');
-          }}
-          className={styles.btn}
-        >
-          Create Task
-        </Button>
-      </div>
       {screen ? (
         <Form formMethod={formMethod} back={() => backToList()} id={updTaskId} />
       ) : (
@@ -194,6 +174,17 @@ function Tasks() {
           editTask={(id) => editTask(id)}
         />
       )}
+      <div>
+        <Button
+          onClick={() => {
+            changeScreen(true);
+            setMethod('POST');
+          }}
+          className={styles.btn}
+        >
+          Create Task
+        </Button>
+      </div>
     </section>
   );
 }
