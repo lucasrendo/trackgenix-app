@@ -13,17 +13,6 @@ function Projects() {
   const [projectId, setProjectId] = useState('');
   const resource = 'projects';
 
-  useEffect(async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const data = await response.json();
-      setProjectsList(data.data);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  }, []);
-
   const deleteItem = (id) => {
     try {
       const response = fetch(`${process.env.REACT_APP_API_URL}/projects/${id}`, {
@@ -35,8 +24,7 @@ function Projects() {
       const data = response.json();
       alert(`Project ${data.data.projectName} was deleted successfully`);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      alert(error);
     }
 
     setProjectsList([...projectsList.filter((project) => project._id !== id)]);
@@ -55,8 +43,7 @@ function Projects() {
       setProjectsList(jsonResponse.data);
       setIsLoading(false);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      alert(error);
     }
   };
 
