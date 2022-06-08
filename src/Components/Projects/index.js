@@ -5,7 +5,6 @@ import List from '../Shared/List/List';
 import Button from '../Shared/Button/Button';
 import Loading from '../Shared/Loading/Loading';
 
-
 function Projects() {
   const [projectsList, setProjectsList] = useState([]);
   const [method, setMethod] = useState('POST');
