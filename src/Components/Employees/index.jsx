@@ -109,6 +109,7 @@ const Employees = () => {
         headers={headers}
         resource={resource}
         deleteItem={deleteEmployee}
+        DBPath={resource}
       />
     </section>
   );
