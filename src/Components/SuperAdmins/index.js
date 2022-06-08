@@ -8,26 +8,27 @@ function SuperAdmins() {
   const [superadminsList, saveSuperadmins] = useState([]);
   const resource = '/super-admin';
   useEffect(async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
-      const superAdmins = await response.json();
-      saveSuperadmins(superAdmins.data);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
+    getSuperAdmins();
   }, []);
+
+  const getSuperAdmins = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const body = await response.json();
+      saveSuperadmins(body.data);
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   const deleteSuperadmin = async (id) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
         method: 'DELETE'
       });
-      // eslint-disable-next-line no-unused-vars
       const data = await response.json;
       alert(`Super admin with id ${id} is going to be deleted`);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
     }
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
