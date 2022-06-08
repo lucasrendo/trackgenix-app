@@ -142,12 +142,19 @@ const Form = ({ data, dbPath }) => {
             <Modal
               handleClose={() => {
                 setIsAdding(false);
-                goBack();
               }}
               isOpen={isAdding}
               isConfirmation={false}
             >
               <h2>{modal}</h2>
+              <Button
+                onClick={() => {
+                  setIsAdding(false);
+                  goBack();
+                }}
+              >
+                OK
+              </Button>
             </Modal>
           </div>
         );

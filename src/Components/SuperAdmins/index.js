@@ -13,7 +13,7 @@ function SuperAdmins() {
 
   const getSuperAdmins = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
       const body = await response.json();
       saveSuperadmins(body.data);
     } catch (error) {
