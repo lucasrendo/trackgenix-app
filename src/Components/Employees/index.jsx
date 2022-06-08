@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styles from './employees.module.css';
 import List from '../Shared/List/List';
 import Button from '../Shared/Button/Button';
-import Modal from '../Modal/Modal';
 
 const Employees = () => {
   const [employeesList, setEmployeesList] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
+    getEmployees();
+  }, []);
+
+  const getEmployees = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
       const jsonResponse = await response.json();
@@ -17,10 +19,6 @@ const Employees = () => {
       // eslint-disable-next-line no-console
       console.error(error);
     }
-  }, []);
-
-  const closeModal = () => {
-    setShowModal(false);
   };
 
   const deleteEmployee = (id) => {
@@ -68,7 +66,6 @@ const Employees = () => {
 
   return (
     <section className={styles.container}>
-      <Modal title={'Employee successfully added'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
       <Button>Form employee</Button>
       <List
