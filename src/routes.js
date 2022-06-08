@@ -21,6 +21,7 @@ const Routes = () => {
           <Route exact path={'/admins/form/:id'} component={Form} />
           <Route exact path={'/super-admins'} component={SuperAdmins} />
           <Route exact path={'/employees'} component={Employees} />
+          <Route exact path={'/employees/form'} component={Form} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/timesheets'} component={TimeSheets} />
           <Route exact path={'/timesheets/form/'} component={Form} />

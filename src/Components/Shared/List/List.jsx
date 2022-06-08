@@ -3,7 +3,7 @@ import styles from './list.module.css';
 import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
 
-const List = ({ fullList, data, headers, resource, deleteItem, linkData }) => {
+const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -21,7 +21,7 @@ const List = ({ fullList, data, headers, resource, deleteItem, linkData }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => {
+          {data.map((row) => {
             return (
               <tr key={row.id} className={styles.rows}>
                 {headers.map((header, index) => {
@@ -37,10 +37,10 @@ const List = ({ fullList, data, headers, resource, deleteItem, linkData }) => {
                       pathname: `${resource}/form/${row.id}`,
                       linkData: linkData,
                       DBPath: resource,
-                      itemData: fullList[index]
+                      itemData: row
                     }}
                   >
-                    <Button classes="edit" _id={row.id} resource={resource}>
+                    <Button classes="edit" editItem={editItem} _id={row.id} resource={resource}>
                       &#9998;
                     </Button>
                   </Link>
