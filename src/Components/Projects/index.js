@@ -10,7 +10,7 @@ function Projects() {
   const [employees, setEmployees] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const resource = '/projects';
   useEffect(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
@@ -93,65 +93,65 @@ function Projects() {
 
   const data = [
     {
-      title: 'Project Name',
+      header: 'Project Name',
       type: 'text',
-      id: 'projectName',
+      key: 'projectName',
       required: true
     },
     {
-      title: 'Description',
+      header: 'Description',
       type: 'text',
-      id: 'description',
+      key: 'description',
       required: false
     },
-    // {
-    //   title: 'Start Date',
-    //   type: 'date',
-    //   id: 'startDate',
-    //   required: true
-    // },
-    // {
-    //   title: 'End Date',
-    //   type: 'date',
-    //   id: 'endDate',
-    //   required: false
-    // },
     {
-      title: 'Admin',
+      header: 'Start Date',
+      type: 'date',
+      key: 'startDate',
+      required: true
+    },
+    {
+      header: 'End Date',
+      type: 'date',
+      key: 'endDate',
+      required: false
+    },
+    {
+      header: 'Admin',
       type: 'select',
-      id: 'admin',
+      key: 'admin',
       options: admins,
       required: true
     },
     {
-      title: 'Client',
+      header: 'Client',
       type: 'text',
-      id: 'client',
+      key: 'client',
       required: true
     },
     {
-      title: 'Employees',
+      header: 'Employees',
       type: 'select',
-      id: 'employees',
+      key: 'employees',
       options: employees,
       required: true
     },
     {
-      title: 'Role',
+      header: 'Role',
       type: 'text',
-      id: 'role',
+      key: 'role',
       required: true
     },
     {
-      title: 'Rate',
+      header: 'Rate',
       type: 'number',
-      id: 'rate',
+      key: 'rate',
       required: true
     },
     {
-      title: 'Is active',
+      header: 'Is active',
       type: 'checkbox',
-      id: 'isActive',
+      key: 'isActive',
       required: false
     }
   ];
@@ -168,7 +168,7 @@ function Projects() {
           to={{
             pathname: '/projects/form',
             linkData: data,
-            itemData: ''
+            DBPath: resource
           }}
         >
           <Button>Save Project</Button>
