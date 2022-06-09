@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import List from '../../Shared/List/List';
 import Form from '../../Shared/Form/Form';
-import Loading from '../../Shared/Loading/Loading';
-import Button from '../../Shared/Button/Button';
-import { Link } from 'react-router-dom';
+import Modal from '../../Shared/Modal/Modal';
 import styles from './index.module.css';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -14,7 +11,7 @@ const TimeSheets = () => {
   const [tasks, setTasks] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const { goBack } = useHistory;
+  const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const resource = '/timesheets';
   const { id } = useParams();
@@ -197,13 +194,16 @@ const TimeSheets = () => {
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Form
-        data={config}
-        dbPath={resource}
-        itemData={timeSheet}
-        submitHandler={submitHandler}
-        modalMessage={modalMessage}
-      />
+      <Form data={config} itemData={timeSheet} submitHandler={submitHandler} />
+      <Modal
+        handleClose={() => {
+          setIsAdding(false);
+        }}
+        isOpen={isAdding}
+        isConfirmation={false}
+      >
+        <h2>{modalMessage}</h2>
+      </Modal>
     </section>
   );
 };

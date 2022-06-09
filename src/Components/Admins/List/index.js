@@ -9,38 +9,6 @@ const Admins = () => {
   const [admins, setAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState([true]);
   const serverPath = '/admins';
-  const config = [
-    {
-      header: 'First Name',
-      type: 'text',
-      key: 'firstName',
-      required: true
-    },
-    {
-      header: 'Last Name',
-      type: 'text',
-      key: 'lastName',
-      required: true
-    },
-    {
-      header: 'Email',
-      type: 'email',
-      key: 'email',
-      required: true
-    },
-    {
-      header: 'Password',
-      type: 'password',
-      key: 'password',
-      required: true
-    },
-    {
-      header: 'Is Active?',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
-    }
-  ];
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -95,26 +63,18 @@ const Admins = () => {
   ) : (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <div>
-        <Link
-          to={{
-            pathname: '/admins/form',
-            linkData: config,
-            DBPath: serverPath
-          }}
-          className={styles.linkReset}
-        >
-          <Button classes="block">Create Admin</Button>
-        </Link>
-      </div>
       <List
         fullList={admins}
         data={formatListData(admins)}
         headers={headers}
         resource={serverPath}
         deleteItem={deleteAdmin}
-        linkData={config}
       />
+      <div>
+        <Link to={'/admins/form'} className={styles.LinkReset}>
+          <Button classes="block">Create Timesheet</Button>
+        </Link>
+      </div>
     </section>
   );
 };

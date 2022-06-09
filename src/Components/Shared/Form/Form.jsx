@@ -1,22 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useParams, useHistory, withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import style from './styles.module.css';
-import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 
-const Form = ({ dbPath, data, itemData, submitHandler, modalMessage }) => {
-  const { id } = useParams();
+const Form = ({ data, itemData, submitHandler }) => {
   const { goBack } = useHistory();
   const [inputValues, setInputValues] = useState({});
-  const [config, setConfig] = useState([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const url = dbPath;
 
   // === Create instance state on mount === //
   useEffect(() => {
     let template = {};
     if (data) {
-      setConfig(data);
       if (itemData) {
         let formattedItem = {};
         data.forEach((item) => {
@@ -48,7 +42,7 @@ const Form = ({ dbPath, data, itemData, submitHandler, modalMessage }) => {
 
   return (
     <form className={style.form} onSubmit={submitHandler}>
-      {config.map((item) => {
+      {data.map((item) => {
         return (
           <div
             key={item.key}
@@ -80,15 +74,6 @@ const Form = ({ dbPath, data, itemData, submitHandler, modalMessage }) => {
               />
             )}
             {item.type === 'checkbox' && <label htmlFor={item.key}>{item.header}</label>}
-            <Modal
-              handleClose={() => {
-                setIsAdding(false);
-              }}
-              isOpen={isAdding}
-              isConfirmation={false}
-            >
-              <h2>{modalMessage}</h2>
-            </Modal>
           </div>
         );
       })}
