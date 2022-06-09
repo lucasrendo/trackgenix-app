@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import List from '../Shared/List/List';
-import Form from '../Shared/Form/Form';
 import Button from '../Shared/Button/Button';
 import styles from '../Shared/List/list.module.css';
+import Loading from '../Shared/Loading/Loading';
 
-function SuperAdmins(props) {
+function SuperAdmins() {
   const [superAdminsList, setSuperAdmins] = useState([]);
-  const [showedScreen, setShowedScreen] = useState();
+  const [isLoading, setIsLoading] = useState([true]);
+  const serverPath = '/super-admin';
+
+  const fetchSuperAdmin = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${serverPath}`);
+      const jsonResponse = await response.json();
+      setSuperAdmins(jsonResponse.data);
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
-      .then((response) => response.json())
-      .then((superAdmins) => {
-        setSuperAdmins(superAdmins.data);
-      });
+    fetchSuperAdmin();
   }, []);
+
+  const headers = [
+    { header: 'First Name', key: 'firstName' },
+    { header: 'Last Name', key: 'lastName' },
+    { header: 'email', key: 'email' },
+    { header: 'Is Active?', key: 'isActive' }
+  ];
+
   const formatListData = (responseData) => {
     const data = responseData.map((superAdmins) => {
       return {
@@ -27,17 +45,10 @@ function SuperAdmins(props) {
     });
     return data;
   };
-  const headers = [
-    { header: 'First Name', key: 'firstName' },
-    { header: 'Last Name', key: 'lastName' },
-    { header: 'email', key: 'email' },
-    { header: 'Is Active?', key: 'isActive' }
-  ];
-  const resource = 'super-admins';
 
   const deleteSuperAdmin = (id) => {
     try {
-      const response = fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
+      const response = fetch(`${process.env.REACT_APP_API_URL}${serverPath}/${id}`, {
         method: 'DELETE'
       });
       // eslint-disable-next-line no-unused-vars
@@ -45,7 +56,7 @@ function SuperAdmins(props) {
       alert(`Super admin with id ${id} is going to be deleted`);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      alert(error);
     }
     setSuperAdmins([...superAdminsList.filter((ListItem) => ListItem._id !== id)]);
   };
@@ -83,24 +94,33 @@ function SuperAdmins(props) {
     }
   ];
 
-  return (
+  return isLoading ? (
+    <>
+      <h2>Employees</h2>
+      <Loading />
+    </>
+  ) : (
     <section className={styles.container}>
-      <h2>SuperAdmins</h2>
+      <h2>Employees</h2>
       <div>
-        <Button onClick={() => setShowedScreen(true)}>Add new Super Admin</Button>
+        <Link
+          to={{
+            pathname: '/super-admins/form',
+            linkData: data,
+            DBPath: serverPath
+          }}
+          className={styles.LinkReset}
+        >
+          <Button classes="block">Create new Employee</Button>
+        </Link>
       </div>
-      {showedScreen ? (
-        <Form data={data} props={props} />
-      ) : (
-        <div>
-          <List
-            data={formatListData(superAdminsList)}
-            headers={headers}
-            resource={resource}
-            deleteItem={deleteSuperAdmin}
-          />
-        </div>
-      )}
+      <List
+        data={formatListData(superAdminsList)}
+        headers={headers}
+        resource={serverPath}
+        deleteItem={deleteSuperAdmin}
+        linkData={data}
+      />
     </section>
   );
 }
