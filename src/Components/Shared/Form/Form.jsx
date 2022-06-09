@@ -4,31 +4,22 @@ import style from './styles.module.css';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 
-const Form = ({ data, dbPath }) => {
-  const { linkData, itemData, DBPath } = useLocation();
+const Form = ({ dbPath, data, itemData, submitHandler, modalMessage }) => {
   const { id } = useParams();
   const { goBack } = useHistory();
   const [inputValues, setInputValues] = useState({});
   const [config, setConfig] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
-  const [modal, setModal] = useState('');
-  const url = dbPath || DBPath;
+  const url = dbPath;
 
   // === Create instance state on mount === //
   useEffect(() => {
     let template = {};
     if (data) {
       setConfig(data);
-      data.forEach((item) => {
-        if (item.type === 'checkbox') template[item.key] = false;
-        else template[item.key] = '';
-      });
-      setInputValues(template);
-    } else if (linkData) {
-      setConfig(linkData);
       if (itemData) {
         let formattedItem = {};
-        linkData.forEach((item) => {
+        data.forEach((item) => {
           if (itemData[item.key] && typeof itemData[item.key] === 'object') {
             formattedItem[item.key] = itemData[item.key]._id;
           } else if (item.type === 'date') {
@@ -37,14 +28,14 @@ const Form = ({ data, dbPath }) => {
         });
         setInputValues(formattedItem);
       } else {
-        linkData.forEach((item) => {
+        data.forEach((item) => {
           if (item.type === 'checkbox') template[item.key] = false;
           else template[item.key] = '';
         });
         setInputValues(template);
       }
     }
-  }, []);
+  }, [itemData]);
 
   // === Handle value change for different input types === //
   const handleChange = (e, input) => {
@@ -53,55 +44,6 @@ const Form = ({ data, dbPath }) => {
     else if (input.type === 'date')
       setInputValues({ ...inputValues, [input.key]: e.target.value.substring(0, 10) });
     else setInputValues({ ...inputValues, [input.key]: e.target.value });
-  };
-
-  // === Fetch functions === key
-  const createInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${url}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      // alert(error);
-      setModal(error);
-      setIsAdding(true);
-    }
-  };
-
-  const updateInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${url}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModal(error);
-      setIsAdding(true);
-    }
-  };
-
-  // === Handle submit data and method === //
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    let result;
-
-    if (id) {
-      result = await updateInstance(inputValues);
-    } else {
-      result = await createInstance(inputValues);
-    }
-
-    if (result && result.error === false) setInputValues({});
-    setModal(result.message);
-    setIsAdding(true);
-    if (id) goBack();
   };
 
   return (
@@ -145,7 +87,7 @@ const Form = ({ data, dbPath }) => {
               isOpen={isAdding}
               isConfirmation={false}
             >
-              <h2>{modal}</h2>
+              <h2>{modalMessage}</h2>
             </Modal>
           </div>
         );

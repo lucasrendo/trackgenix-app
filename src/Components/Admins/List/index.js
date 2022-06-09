@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './admins.module.css';
-import List from '../Shared/List/List';
-import Button from '../Shared/Button/Button';
-import Loading from '../Shared/Loading/Loading';
+import List from '../../Shared/List/List';
+import Button from '../../Shared/Button/Button';
+import Loading from '../../Shared/Loading/Loading';
 
 const Admins = () => {
   const [admins, setAdmins] = useState([]);
