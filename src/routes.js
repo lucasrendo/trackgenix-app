@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Admins from './Components/Admins/index';
-import SuperAdmins from './Components/SuperAdmins/index';
+import SuperAdmins from './Components/SuperAdmins/List';
+import SuperAdminsForm from './Components/SuperAdmins/Form';
 import Home from './Components/Home/index';
 import Employees from './Components/Employees/index';
 import Projects from './Components/Projects';
@@ -20,8 +21,8 @@ const Routes = () => {
           <Route exact path={'/admins/form'} component={Form} />
           <Route exact path={'/admins/form/:id'} component={Form} />
           <Route exact path={'/super-admin'} component={SuperAdmins} />
-          <Route exact path={'/super-admin/form'} component={Form} />
-          <Route exact path={'/super-admin/form/:id'} component={Form} />
+          <Route exact path={'/super-admin/form'} component={SuperAdminsForm} />
+          <Route exact path={'/super-admin/form/:id'} component={SuperAdminsForm} />
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/timesheets'} component={TimeSheets} />

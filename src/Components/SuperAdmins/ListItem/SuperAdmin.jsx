@@ -18,20 +18,18 @@ const ListItem = ({ listItem, deleteItem, data }) => {
         <button onClick={() => handleDelete(listItem._id)}>X</button>
       </td>
       <td>
-        <Button>
-          <Link
-            to={{
-              pathname: `super-admin/form/${listItem._id}`,
-              state: {
-                from: '/super-admin'
-              },
-              linkData: data,
-              itemData: listItem
-            }}
-          >
-            Edit
-          </Link>
-        </Button>
+        <Link
+          to={{
+            pathname: `super-admin/form/${listItem._id}`,
+            state: {
+              from: '/super-admin'
+            },
+            linkData: data,
+            itemData: listItem
+          }}
+        >
+          <Button>Edit</Button>
+        </Link>
       </td>
     </tr>
   );

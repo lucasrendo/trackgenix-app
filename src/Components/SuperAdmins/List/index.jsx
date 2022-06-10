@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import List from '../SuperAdmins/List/superadmin-list';
-import Button from '../Shared/Button/Button';
+import List from './superadmin-list';
+import Button from '../../Shared/Button/Button';
 import styles from './super-admins.module.css';
 
 function SuperAdmins() {
   const [superadminsList, saveSuperadmins] = useState([]);
-  const resource = '/super-admin';
+  const serverPath = '/super-admin';
   useEffect(async () => {
     getSuperAdmins();
   }, []);
@@ -33,7 +33,6 @@ function SuperAdmins() {
     }
     saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
   };
-
   const config = [
     {
       header: 'First Name',
@@ -70,25 +69,17 @@ function SuperAdmins() {
   return (
     <section className={styles.container}>
       <h2>SuperAdmins</h2>
-      <div>
-        <Link
-          to={{
-            pathname: '/super-admin/form',
-            linkData: config,
-            itemData: '',
-            DBPath: resource
-          }}
-          className={styles.create}
-        >
-          <Button classes="block">Create Super Admin</Button>
-        </Link>
-      </div>
       <List
         list={superadminsList}
         setList={saveSuperadmins}
         deleteItem={deleteSuperadmin}
         data={config}
       />
+      <div>
+        <Link className={styles.linkReset} to={'/super-admin/form'}>
+          <Button classes="block">Create Timesheet</Button>
+        </Link>
+      </div>
     </section>
   );
 }
