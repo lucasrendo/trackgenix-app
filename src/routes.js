@@ -7,7 +7,8 @@ import Home from './Components/Home/index';
 import Employees from './Components/Employees/index';
 import Projects from './Components/Projects';
 import TimeSheets from './Components/TimeSheets/index';
-import Tasks from './Components/Tasks/index';
+import TasksForm from './Components/Tasks/Form';
+import TasksList from './Components/Tasks/List';
 import Form from './Components/Shared/Form/Form';
 
 const Routes = () => {
@@ -25,9 +26,9 @@ const Routes = () => {
           <Route exact path={'/timesheets'} component={TimeSheets} />
           <Route exact path={'/timesheets/form/'} component={Form} />
           <Route exact path={'/timesheets/form/:id'} component={Form} />
-          <Route exact path={'/tasks'} component={Tasks} />
-          <Route exact path={'/tasks/form/'} component={Form} />
-          <Route exact path={'/tasks/form/:id'} component={Form} />
+          <Route exact path={'/tasks'} component={TasksList} />
+          <Route exact path={'/tasks/form/'} component={TasksForm} />
+          <Route exact path={'/tasks/form/:id'} component={TasksForm} />
         </Switch>
       </Layout>
     </Router>
