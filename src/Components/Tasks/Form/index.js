@@ -3,18 +3,17 @@ import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './tasks.module.css';
 import { useParams, useHistory } from 'react-router-dom';
-import Loading from '../../Shared/Loading/Loading';
 
 function Tasks() {
-  const [tasksList, setTasksList] = useState([]);
+  const [tasksList, setTasksList] = useState();
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const { id } = useParams();
+  const [error, setError] = useState(true);
   const resource = '/tasks';
 
   useEffect(() => {
@@ -24,12 +23,14 @@ function Tasks() {
 
   const getTask = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
-      const jsonResponse = await response.json();
-      setTasksList(jsonResponse.data);
-      setLoading(false);
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const jsonResponse = await response.json();
+        setTasksList(jsonResponse.data);
+      }
     } catch (error) {
-      alert(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -39,7 +40,8 @@ function Tasks() {
       const jsonResponse = await reponse.json();
       return jsonResponse.data;
     } catch (error) {
-      alert(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -49,7 +51,8 @@ function Tasks() {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      alert(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -142,6 +145,14 @@ function Tasks() {
     }
   };
 
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
+
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -153,25 +164,22 @@ function Tasks() {
       result = await createInstance(inputValues);
     }
 
-    if (result && result.error === false) setInputValues({});
+    setError(result.err);
     setModalMessage(result.message);
     setIsAdding(true);
-    if (id) goBack();
+    if (result && result.error === false) setInputValues({});
   };
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      <Form data={config} itemData={tasksList} submitHandler={submitHandler} />
-      <Modal
-        handleClose={() => {
-          setIsAdding(false);
-        }}
-        isOpen={isAdding}
-        isConfirmation={false}
-      >
+      <Form
+        data={config}
+        itemData={tasksList}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
         <h2>{modalMessage}</h2>
       </Modal>
     </section>
