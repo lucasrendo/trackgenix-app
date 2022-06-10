@@ -13,7 +13,6 @@ function SuperAdminsForm() {
   const [modalMessage, setModalMessage] = useState('');
   const [error, setError] = useState(true);
   const resource = '/super-admin';
-
   useEffect(async () => {
     getSuperAdmin();
   }, []);
