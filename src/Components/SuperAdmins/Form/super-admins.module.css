@@ -11,6 +11,9 @@ h2 {
   flex-direction: column;
   align-content: center;
 }
+.linkReset {
+  text-decoration: none;
+}
 
 .create {
   text-decoration: none;

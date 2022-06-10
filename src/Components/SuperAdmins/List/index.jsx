@@ -39,6 +39,7 @@ function SuperAdmins() {
         'Content-type': 'application/json'
       }
     });
+    alert(`Super admin with id ${id} is going to be deleted`);
     saveSuperadmins([...superadminsList.filter((superAdmin) => superAdmin._id !== id)]);
   };
 
