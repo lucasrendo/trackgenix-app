@@ -1,4 +1,4 @@
-.modalOverlay{
+.modalOverlay {
   position: fixed;
   display: flex;
   top: 0;
@@ -12,7 +12,7 @@
   z-index: 10;
 }
 
-.modalWrapper{
+.modalWrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -23,13 +23,13 @@
   border: 2px solid black;
 }
 
-.childrenContainer{
+.childrenContainer {
   align-self: center;
 }
 
-.closeButton{
+.closeButton {
   position: absolute;
-  top:4px;
+  top: 4px;
   margin: 0;
   right: 16px;
   width: 2px;
@@ -40,11 +40,11 @@
   cursor: pointer;
 }
 
-.modalButton{
+.modalButton {
   border-radius: 4px;
   border: 1px solid black;
   font-family: 'Roboto', sans-serif;
   width: 100px;
   height: 30px;
   background-color: wheat;
-} 
+}

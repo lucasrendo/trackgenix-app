@@ -1,0 +1,15 @@
+.selectContainer{
+  display:flex;
+  flex-direction: column;
+}
+
+.labelSelect{
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+.selectBox{
+  border-radius: 4px;
+  height: 38px;
+  width: 260px;
+}

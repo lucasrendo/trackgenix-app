@@ -8,7 +8,6 @@ import Loading from '../Shared/Loading/Loading';
 function SuperAdmins() {
   const [superAdminsList, setSuperAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState([true]);
-  const [modal, setModal] = useState('');
   const serverPath = '/super-admin';
   const config = [
     {
@@ -62,8 +61,7 @@ function SuperAdmins() {
       setIsLoading(false);
     } catch (error) {
       // eslint-disable-next-line no-console
-      // console.log(error);
-      setModal(error);
+      console.log(error);
     }
   };
 
@@ -122,9 +120,6 @@ function SuperAdmins() {
         deleteItem={deleteSuperAdmin}
         linkData={config}
       />
-      {/* <Modal isConfirmation={false}>
-        <h2>{modal}</h2>
-      </Modal> */}
     </section>
   );
 }

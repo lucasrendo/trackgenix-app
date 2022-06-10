@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styles from './employees.module.css';
+import styles from './EmployeesList.module.css';
 import AddEmployee from './AddItem/AddEmployee';
-import EmployeesList from './EmployeesList';
-import Modal from '../Modal/Modal';
+// import EmployeesList from './EmployeesList';
+import Modal from '../Shared/Modal/Index';
 
 const Employees = () => {
   const [employeesList, saveEmployees] = useState([]);
@@ -44,12 +44,12 @@ const Employees = () => {
       <AddEmployee addEmployee={addEmployees} />
       <Modal title={'Employee successfully added'} show={showModal} close={closeModal} />
       <h2>Employees</h2>
-      <EmployeesList
+      {/* <EmployeesList
         list={employeesList}
         setList={saveEmployees}
         deleteItem={deleteEmployee}
         setShowModal={setShowModal}
-      />
+      /> */}
     </section>
   );
 };
