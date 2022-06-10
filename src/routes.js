@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
-import Admins from './Components/Admins/index';
+import Admins from './Components/Admins/List';
+import AdminsForm from './Components/Admins/Form';
 import SuperAdmins from './Components/SuperAdmins/index';
 import Home from './Components/Home/index';
 import Employees from './Components/Employees/index';
 import Projects from './Components/Projects';
-import TimeSheets from './Components/TimeSheets/index';
 import Tasks from './Components/Tasks/index';
-import Form from './Components/Shared/Form/Form';
+import TimeSheetsList from './Components/TimeSheets/List';
+import TimeSheetsForm from './Components/TimeSheets/Form';
 
 const Routes = () => {
   return (
@@ -17,14 +18,14 @@ const Routes = () => {
         <Switch>
           <Route exact path={'/'} component={Home} />
           <Route exact path={'/admins'} component={Admins} />
-          <Route exact path={'/admins/form'} component={Form} />
-          <Route exact path={'/admins/form/:id'} component={Form} />
+          <Route exact path={'/admins/form'} component={AdminsForm} />
+          <Route exact path={'/admins/form/:id'} component={AdminsForm} />
           <Route exact path={'/super-admins'} component={SuperAdmins} />
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
-          <Route exact path={'/timesheets'} component={TimeSheets} />
-          <Route exact path={'/timesheets/form/'} component={Form} />
-          <Route exact path={'/timesheets/form/:id'} component={Form} />
+          <Route exact path={'/timesheets'} component={TimeSheetsList} />
+          <Route exact path={'/timesheets/form/'} component={TimeSheetsForm} />
+          <Route exact path={'/timesheets/form/:id'} component={TimeSheetsForm} />
           <Route exact path={'/tasks'} component={Tasks} />
         </Switch>
       </Layout>
