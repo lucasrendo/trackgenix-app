@@ -3,31 +3,29 @@ import { useHistory, withRouter } from 'react-router-dom';
 import style from './styles.module.css';
 import Button from '../Button/Button';
 
-const Form = ({ data, itemData, submitHandler }) => {
+const Form = ({ data, itemData, submitHandler, userInput }) => {
   const { goBack } = useHistory();
-  const [inputValues, setInputValues] = useState({});
+  const [inputValues, setInputValues] = userInput;
 
   // === Create instance state on mount === //
   useEffect(() => {
     let template = {};
-    if (data) {
-      if (itemData) {
-        let formattedItem = {};
-        data.forEach((item) => {
-          if (itemData[item.key] && typeof itemData[item.key] === 'object') {
-            formattedItem[item.key] = itemData[item.key]._id;
-          } else if (item.type === 'date') {
-            formattedItem[item.key] = itemData[item.key];
-          } else formattedItem[item.key] = itemData[item.key];
-        });
-        setInputValues(formattedItem);
-      } else {
-        data.forEach((item) => {
-          if (item.type === 'checkbox') template[item.key] = false;
-          else template[item.key] = '';
-        });
-        setInputValues(template);
-      }
+    if (itemData) {
+      let formattedItem = {};
+      data.forEach((item) => {
+        if (itemData[item.key] && typeof itemData[item.key] === 'object') {
+          formattedItem[item.key] = itemData[item.key]._id;
+        } else if (item.type === 'date') {
+          formattedItem[item.key] = itemData[item.key].substring(0, 10);
+        } else formattedItem[item.key] = itemData[item.key];
+      });
+      setInputValues(formattedItem);
+    } else {
+      data.forEach((item) => {
+        if (item.type === 'checkbox') template[item.key] = false;
+        else template[item.key] = '';
+      });
+      setInputValues(template);
     }
   }, [itemData]);
 
