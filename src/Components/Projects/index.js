@@ -139,6 +139,12 @@ function Projects() {
       required: true
     },
     {
+      header: 'Hours in projects',
+      type: 'number',
+      key: 'hoursInProject',
+      required: true
+    },
+    {
       header: 'Is active',
       type: 'checkbox',
       key: 'isActive',
@@ -160,7 +166,7 @@ function Projects() {
             DBPath: resource
           }}
         >
-          <Button>Save Project</Button>
+          <Button>Create Project</Button>
         </Link>
       </div>
     </section>

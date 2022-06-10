@@ -149,14 +149,6 @@ const Form = ({ data, dbPath }) => {
               isConfirmation={false}
             >
               <h2>{modal}</h2>
-              <Button
-                onClick={() => {
-                  setIsAdding(false);
-                  goBack();
-                }}
-              >
-                OK
-              </Button>
             </Modal>
           </div>
         );
