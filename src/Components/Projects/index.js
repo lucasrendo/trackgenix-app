@@ -1,85 +1,20 @@
-import { useState, useEffect } from 'react';
-import styles from './projects.module.css';
-import List from './List/list';
-import { Link } from 'react-router-dom';
-import Button from '../Shared/Button/Button';
-import Loading from '../Shared/Loading/Loading';
+import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import Modal from '../Shared/Modal/Modal';
+import Form from '../Shared/Form/Form';
+import styles from './index.module.css';
 
 function Projects() {
-  const [projectsList, setProjectsList] = useState([]);
+  const { id } = useParams();
+  const { goBack } = useHistory();
+  const [project, setProject] = useState();
   const [employees, setEmployees] = useState([]);
   const [admins, setAdmins] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [inputValues, setInputValues] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [error, setError] = useState(true);
   const resource = '/projects';
-
-  const deleteItem = async (_id) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects/${_id}`, {
-        method: 'DELETE'
-      });
-      const data = await response.json();
-      alert(`Project "${data.data.projectName}" was deleted successfully`);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-
-    setProjectsList([...projectsList.filter((project) => project._id !== _id)]);
-  };
-
-  const getProjects = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const jsonResponse = await response.json();
-      setProjectsList(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-  };
-
-  const getEmployees = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const getAdmins = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const formatDataOptions = async () => {
-    const rawEmployees = await getEmployees();
-    const rawAdmins = await getAdmins();
-    let adminsData = [];
-    let employeesData = [];
-    rawAdmins.forEach((admin, index) => {
-      adminsData.push({ id: admin._id });
-      adminsData[index].text = `${admin.firstName} ${admin.lastName}`;
-      setAdmins(adminsData);
-    });
-    rawEmployees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
-      setEmployees(employeesData);
-    });
-  };
-
-  useEffect(() => {
-    formatDataOptions();
-    getProjects();
-  }, []);
 
   const data = [
     {
@@ -152,23 +87,132 @@ function Projects() {
     }
   ];
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  useEffect(() => {
+    formatDataOptions();
+    getProjects();
+  }, []);
+
+  const getProjects = async () => {
+    try {
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const body = await response.json();
+        setProject(body.data);
+      }
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const createInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const updateInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let result;
+    if (id) {
+      result = await updateInstance(inputValues);
+    } else {
+      result = await createInstance(inputValues);
+    }
+
+    setError(result.err);
+    setModalMessage(result.message);
+    setIsAdding(true);
+    if (result && !result.err) {
+      setInputValues({});
+      setModalMessage(result.message);
+      setIsAdding(true);
+    }
+  };
+
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
+
+  const getEmployees = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
+      const body = await res.json();
+      return body.data;
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const getAdmins = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const body = await res.json();
+      return body.data;
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const formatDataOptions = async () => {
+    const rawEmployees = await getEmployees();
+    const rawAdmins = await getAdmins();
+    let adminsData = [];
+    let employeesData = [];
+    rawAdmins.forEach((admin, index) => {
+      adminsData.push({ id: admin._id });
+      adminsData[index].text = `${admin.firstName} ${admin.lastName}`;
+      setAdmins(adminsData);
+    });
+    rawEmployees.forEach((employee, index) => {
+      employeesData.push({ id: employee._id });
+      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+      setEmployees(employeesData);
+    });
+  };
+
+  return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <List list={projectsList} setList={setProjectsList} deleteItem={deleteItem} data={data} />
-      <div>
-        <Link
-          to={{
-            pathname: '/projects/form',
-            linkData: data,
-            DBPath: resource
-          }}
-        >
-          <Button>Create Project</Button>
-        </Link>
-      </div>
+      <Form
+        data={data}
+        itemData={project}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+        <h2>{modalMessage}</h2>
+      </Modal>
     </section>
   );
 }
