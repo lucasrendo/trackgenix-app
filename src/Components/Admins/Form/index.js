@@ -1,114 +1,138 @@
-import { useState } from 'react';
-import styles from './Form.module.css';
+import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import styles from './admins.module.css';
+import Form from '../../Shared/Form/Form';
+import Modal from '../../Shared/Modal/Modal';
 
-const AddAdmin = ({ adminId, onAdd }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isActive, setIsActive] = useState(false);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    let url = `${process.env.REACT_APP_API_URL}/admins/`;
-    const create = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        isActive: isActive
-      })
-    };
-    if (adminId) {
-      create.method = 'PUT';
-      url = `${process.env.REACT_APP_API_URL}/admins/${adminId}`;
+const Admins = () => {
+  const { id } = useParams();
+  const { goBack } = useHistory();
+  const [admin, setAdmin] = useState();
+  const [inputValues, setInputValues] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const resource = '/admins';
+  const config = [
+    {
+      header: 'First Name',
+      type: 'text',
+      key: 'firstName',
+      required: true
+    },
+    {
+      header: 'Last Name',
+      type: 'text',
+      key: 'lastName',
+      required: true
+    },
+    {
+      header: 'Email',
+      type: 'email',
+      key: 'email',
+      required: true
+    },
+    {
+      header: 'Password',
+      type: 'password',
+      key: 'password',
+      required: true
+    },
+    {
+      header: 'Is Active?',
+      type: 'checkbox',
+      key: 'isActive',
+      required: false
     }
+  ];
+
+  useEffect(() => {
+    getAdmin();
+  }, []);
+
+  const getAdmin = async () => {
     try {
-      const response = await fetch(url, create);
-      const data = await response.json();
-      // eslint-disable-next-line no-console
-      console.log(data);
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const body = await response.json();
+        setAdmin(body.data);
+      }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  // === Fetch functions === key
+  const createInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const updateInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  // === Handle submit data and method === //
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let result;
+    if (id) {
+      result = await updateInstance(inputValues);
+    } else {
+      result = await createInstance(inputValues);
     }
 
-    onAdd({ firstName, lastName, email, password, isActive });
-
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
+    setModalMessage(result.message);
+    setIsAdding(true);
+    if (result && !result.err) {
+      setInputValues({});
+      setModalMessage(result.message);
+      setIsAdding(true);
+    }
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.h2}>
-        <h2>Add Admin</h2>
-      </div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="text"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.activeContainer}>
-          <label>Is Active</label>
-          <input
-            type="checkbox"
-            name="is active"
-            value={isActive}
-            onChange={(e) => setIsActive(e.currentTarget.checked)}
-            required
-          />
-        </div>
-        <div>
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
-    </div>
+    <section className={styles.container}>
+      <h2>Admins</h2>
+      <Form
+        data={config}
+        itemData={admin}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
+      <Modal
+        handleClose={() => {
+          setIsAdding(false);
+          id && goBack();
+        }}
+        isOpen={isAdding}
+        isConfirmation={false}
+      >
+        <h2>{modalMessage}</h2>
+      </Modal>
+    </section>
   );
 };
 
-export default AddAdmin;
+export default Admins;
