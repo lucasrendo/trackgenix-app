@@ -14,6 +14,7 @@ const TimeSheets = () => {
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [error, setError] = useState(true);
   const resource = '/timesheets';
   const config = [
     {
@@ -144,6 +145,7 @@ const TimeSheets = () => {
     setTasks(tasksData);
   };
 
+  // === Server requests === //
   const createInstance = async (obj) => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
@@ -174,6 +176,14 @@ const TimeSheets = () => {
     }
   };
 
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
+
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -184,13 +194,10 @@ const TimeSheets = () => {
       result = await createInstance(inputValues);
     }
 
+    setError(result.err);
     setModalMessage(result.message);
     setIsAdding(true);
-    if (result && !result.err) {
-      setInputValues({});
-      setModalMessage(result.message);
-      setIsAdding(true);
-    }
+    if (result && !result.err) setInputValues({});
   };
 
   return (
@@ -202,14 +209,7 @@ const TimeSheets = () => {
         submitHandler={submitHandler}
         userInput={[inputValues, setInputValues]}
       />
-      <Modal
-        handleClose={() => {
-          setIsAdding(false);
-          id && goBack();
-        }}
-        isOpen={isAdding}
-        isConfirmation={false}
-      >
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
         <h2>{modalMessage}</h2>
       </Modal>
     </section>

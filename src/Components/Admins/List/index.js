@@ -72,7 +72,7 @@ const Admins = () => {
       />
       <div>
         <Link to={'/admins/form'} className={styles.LinkReset}>
-          <Button classes="block">Create Timesheet</Button>
+          <Button classes="block">Create Admin</Button>
         </Link>
       </div>
     </section>
