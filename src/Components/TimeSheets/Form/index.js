@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './index.module.css';
-import { useParams, useHistory } from 'react-router-dom';
 
 const TimeSheets = () => {
+  const { id } = useParams();
+  const { goBack } = useHistory();
   const [timeSheet, setTimeSheet] = useState();
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const resource = '/timesheets';
-  const { id } = useParams();
-
   const config = [
     {
       header: 'Employee',
@@ -68,6 +67,12 @@ const TimeSheets = () => {
     }
   ];
 
+  useEffect(async () => {
+    fetchTimeSheet();
+    formatDataOptions();
+  }, []);
+
+  // === Fetch functions === //
   const fetchTimeSheet = async () => {
     try {
       if (id) {
@@ -76,15 +81,10 @@ const TimeSheets = () => {
         setTimeSheet(jsonResponse.data);
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
-
-  useEffect(async () => {
-    fetchTimeSheet();
-    formatDataOptions();
-  }, []);
 
   const getProjects = async () => {
     try {
@@ -92,8 +92,8 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -103,8 +103,8 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -114,11 +114,12 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
+  // === format option objects for the form config === //
   const formatDataOptions = async () => {
     const rawProjects = await getProjects();
     const rawEmployees = await getEmployees();
@@ -143,7 +144,6 @@ const TimeSheets = () => {
     setTasks(tasksData);
   };
 
-  // === Fetch functions === key
   const createInstance = async (obj) => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
@@ -178,26 +178,34 @@ const TimeSheets = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     let result;
-
     if (id) {
       result = await updateInstance(inputValues);
     } else {
       result = await createInstance(inputValues);
     }
 
-    if (result && result.error === false) setInputValues({});
     setModalMessage(result.message);
     setIsAdding(true);
-    if (id) goBack();
+    if (result && !result.err) {
+      setInputValues({});
+      setModalMessage(result.message);
+      setIsAdding(true);
+    }
   };
 
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Form data={config} itemData={timeSheet} submitHandler={submitHandler} />
+      <Form
+        data={config}
+        itemData={timeSheet}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
       <Modal
         handleClose={() => {
           setIsAdding(false);
+          id && goBack();
         }}
         isOpen={isAdding}
         isConfirmation={false}

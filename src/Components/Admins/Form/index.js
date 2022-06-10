@@ -5,11 +5,11 @@ import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 
 const Admins = () => {
-  const [admin, setAdmin] = useState();
   const { id } = useParams();
+  const { goBack } = useHistory();
+  const [admin, setAdmin] = useState();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const resource = '/admins';
   const config = [
@@ -57,7 +57,8 @@ const Admins = () => {
         setAdmin(body.data);
       }
     } catch (error) {
-      alert(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -96,26 +97,34 @@ const Admins = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     let result;
-
     if (id) {
       result = await updateInstance(inputValues);
     } else {
       result = await createInstance(inputValues);
     }
 
-    if (result && result.error === false) setInputValues({});
     setModalMessage(result.message);
     setIsAdding(true);
-    if (id) goBack();
+    if (result && !result.err) {
+      setInputValues({});
+      setModalMessage(result.message);
+      setIsAdding(true);
+    }
   };
 
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <Form data={config} itemData={admin} submitHandler={submitHandler} />
+      <Form
+        data={config}
+        itemData={admin}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
       <Modal
         handleClose={() => {
           setIsAdding(false);
+          id && goBack();
         }}
         isOpen={isAdding}
         isConfirmation={false}
