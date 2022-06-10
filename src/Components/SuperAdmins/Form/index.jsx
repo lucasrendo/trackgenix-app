@@ -5,7 +5,7 @@ import Modal from '../../Shared/Modal/Modal';
 import styles from './super-admins.module.css';
 
 function SuperAdminsForm() {
-  const [superadminsList, saveSuperadmins] = useState([]);
+  const [superadminsList, saveSuperadmins] = useState();
   const { id } = useParams();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
@@ -14,30 +14,20 @@ function SuperAdminsForm() {
   const resource = '/super-admin';
 
   useEffect(async () => {
-    getSuperAdmins();
+    getSuperAdmin();
   }, []);
 
-  const getSuperAdmins = async () => {
+  const getSuperAdmin = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
-      const body = await response.json();
-      saveSuperadmins(body.data);
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const body = await response.json();
+        saveSuperadmins(body.data);
+      }
     } catch (error) {
-      alert(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
-  };
-
-  const deleteSuperadmin = async (id) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
-        method: 'DELETE'
-      });
-      const data = await response.json;
-      alert(`Super admin with id ${id} is going to be deleted`);
-    } catch (error) {
-      console.error(error);
-    }
-    saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
   };
 
   const config = [
@@ -108,26 +98,34 @@ function SuperAdminsForm() {
   const submitHandler = async (e) => {
     e.preventDefault();
     let result;
-
     if (id) {
       result = await updateInstance(inputValues);
     } else {
       result = await createInstance(inputValues);
     }
 
-    if (result && result.error === false) setInputValues({});
     setModalMessage(result.message);
     setIsAdding(true);
-    if (id) goBack();
+    if (result && !result.err) {
+      setInputValues({});
+      setModalMessage(result.message);
+      setIsAdding(true);
+    }
   };
 
   return (
     <section className={styles.container}>
       <h2>Super Admins</h2>
-      <Form data={config} itemData={superadminsList} submitHandler={submitHandler} />
+      <Form
+        data={config}
+        itemData={superadminsList}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
       <Modal
         handleClose={() => {
           setIsAdding(false);
+          id && goBack();
         }}
         isOpen={isAdding}
         isConfirmation={false}

@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import List from './superadmin-list';
+import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
+import Loading from '../../Shared/Loading/Loading';
 import styles from './super-admins.module.css';
 
 function SuperAdmins() {
   const [superadminsList, saveSuperadmins] = useState([]);
+  const [isLoading, setIsLoading] = useState([true]);
   const serverPath = '/super-admin';
+
+  const headers = [
+    { header: 'First name', key: 'firstName' },
+    { header: 'Last name', key: 'lastName' },
+    { header: 'Email', key: 'email' },
+    { header: 'is Active?', key: 'isActive' }
+  ];
+
   useEffect(async () => {
     getSuperAdmins();
   }, []);
@@ -16,68 +26,53 @@ function SuperAdmins() {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
       const body = await response.json();
       saveSuperadmins(body.data);
+      setIsLoading(false);
     } catch (error) {
       alert(error);
     }
   };
 
-  const deleteSuperadmin = async (id) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
-        method: 'DELETE'
-      });
-      const data = await response.json;
-      alert(`Super admin with id ${id} is going to be deleted`);
-    } catch (error) {
-      console.error(error);
-    }
-    saveSuperadmins([...superadminsList.filter((ListItem) => ListItem._id !== id)]);
+  const deleteSuperAdmin = async (id) => {
+    await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    });
+    saveSuperadmins([...superadminsList.filter((superAdmin) => superAdmin._id !== id)]);
   };
-  const config = [
-    {
-      header: 'First Name',
-      type: 'text',
-      key: 'firstName',
-      required: true
-    },
-    {
-      header: 'Last Name',
-      type: 'text',
-      key: 'lastName',
-      required: true
-    },
-    {
-      header: 'Email',
-      type: 'email',
-      key: 'email',
-      required: true
-    },
-    {
-      header: 'Password',
-      type: 'password',
-      key: 'password',
-      required: true
-    },
-    {
-      header: 'Is active',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
-    }
-  ];
 
-  return (
+  const formatListData = (responseData) => {
+    const data = responseData.map((superAdmin) => {
+      return {
+        id: superAdmin._id,
+        firstName: superAdmin.firstName,
+        lastName: superAdmin.lastName,
+        email: superAdmin.email,
+        isActive: superAdmin.isActive.toString()
+      };
+    });
+    return data;
+  };
+
+  return isLoading ? (
+    <>
+      <h2> Super Admins</h2>
+      <Loading />
+    </>
+  ) : (
     <section className={styles.container}>
-      <h2>SuperAdmins</h2>
+      <h2>Super Admins</h2>
       <List
-        list={superadminsList}
-        setList={saveSuperadmins}
-        deleteItem={deleteSuperadmin}
-        data={config}
+        fullList={superadminsList}
+        data={formatListData(superadminsList)}
+        headers={headers}
+        resource={serverPath}
+        deleteItem={deleteSuperAdmin}
       />
       <div>
-        <Link className={styles.linkReset} to={'/super-admin/form'}>
-          <Button classes="block">Create Timesheet</Button>
+        <Link to={'/admins/form'} className={styles.linkReset}>
+          <Button classes="block">Create Super Admin</Button>
         </Link>
       </div>
     </section>
