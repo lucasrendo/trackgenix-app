@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import List from '../Shared/List/List';
-import Form from '../Shared/Form/Form';
-import Loading from '../Shared/Loading/Loading';
-import Button from '../Shared/Button/Button';
-import { Link } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import Form from '../../Shared/Form/Form';
+import Modal from '../../Shared/Modal/Modal';
 import styles from './index.module.css';
 
 const TimeSheets = () => {
-  const [timeSheetsList, setTimeSheets] = useState([]);
+  const { id } = useParams();
+  const { goBack } = useHistory();
+  const [timeSheet, setTimeSheet] = useState();
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [showedScreen, setShowedScreen] = useState();
-  const [method, setMethod] = useState('POST');
-  const [timeSheetId, setTimesheetId] = useState('');
-  const [modal, setModal] = useState(false);
-  const [isLoading, setIsLoading] = useState([true]);
+  const [inputValues, setInputValues] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [error, setError] = useState(true);
   const resource = '/timesheets';
-
   const config = [
     {
       header: 'Employee',
@@ -70,22 +68,24 @@ const TimeSheets = () => {
     }
   ];
 
-  const fetchTimeSheet = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
-      const jsonResponse = await response.json();
-      setTimeSheets(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-  };
-
   useEffect(async () => {
     fetchTimeSheet();
     formatDataOptions();
   }, []);
+
+  // === Fetch functions === //
+  const fetchTimeSheet = async () => {
+    try {
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const jsonResponse = await response.json();
+        setTimeSheet(jsonResponse.data);
+      }
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
 
   const getProjects = async () => {
     try {
@@ -93,8 +93,8 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -104,8 +104,8 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
@@ -115,11 +115,12 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setModalMessage(error);
+      setIsAdding(true);
     }
   };
 
+  // === format option objects for the form config === //
   const formatDataOptions = async () => {
     const rawProjects = await getProjects();
     const rawEmployees = await getEmployees();
@@ -144,78 +145,73 @@ const TimeSheets = () => {
     setTasks(tasksData);
   };
 
-  const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    setTimeSheets([...timeSheetsList.filter((timeSheet) => timeSheet._id !== id)]);
+  // === Server requests === //
+  const createInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
   };
 
-  const editTimeSheet = (id) => {
-    setMethod('PUT');
-    setShowedScreen(true);
-    setTimesheetId(id);
-    const closeModal = () => {
-      setModal(false);
-    };
+  const updateInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
   };
 
-  const closeModal = () => {
-    setModal(false);
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
   };
 
-  const formatListData = (responseData) => {
-    const data = responseData.map((timeSheet) => {
-      return {
-        id: timeSheet._id,
-        date: timeSheet.date.slice(0, 10),
-        employee: timeSheet.employee
-          ? timeSheet.employee.firstName + ' ' + timeSheet.employee.lastName
-          : '',
-        project: timeSheet.project ? timeSheet.project.projectName : '',
-        role: timeSheet.role,
-        task: timeSheet.task ? timeSheet.task.title : ''
-      };
-    });
-    return data;
+  // === Handle submit data and method === //
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let result;
+    if (id) {
+      result = await updateInstance(inputValues);
+    } else {
+      result = await createInstance(inputValues);
+    }
+
+    setError(result.err);
+    setModalMessage(result.message);
+    setIsAdding(true);
+    if (result && !result.err) setInputValues({});
   };
 
-  const headers = [
-    { header: 'Date', key: 'date' },
-    { header: 'Employee', key: 'employee' },
-    { header: 'Project', key: 'project' },
-    { header: 'Role', key: 'role' },
-    { header: 'Task', key: 'task' }
-  ];
-
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <List
-        fullList={timeSheetsList}
-        data={formatListData(timeSheetsList)}
-        headers={headers}
-        resource={resource}
-        deleteItem={deleteItem}
-        method={method}
+      <Form
+        data={config}
+        itemData={timeSheet}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
       />
-      <div>
-        <Link
-          to={{
-            pathname: '/timesheets/form',
-            linkData: config,
-            DBPath: resource
-          }}
-          className={styles.LinkReset}
-        >
-          <Button classes="block">Create Timesheet</Button>
-        </Link>
-      </div>
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+        <h2>{modalMessage}</h2>
+      </Modal>
     </section>
   );
 };
