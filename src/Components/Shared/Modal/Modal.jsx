@@ -1,9 +1,5 @@
 import React from 'react';
 import styles from './modal.module.css';
-<<<<<<< HEAD
-import Button from '../Button/Button';
-=======
->>>>>>> aa481c645d38869e93532789a9461170912926fd
 
 const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => {
   if (!isOpen) {
