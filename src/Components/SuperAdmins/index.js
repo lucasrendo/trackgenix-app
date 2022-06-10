@@ -8,60 +8,9 @@ import Loading from '../Shared/Loading/Loading';
 function SuperAdmins() {
   const [superAdminsList, setSuperAdmins] = useState([]);
   const [isLoading, setIsLoading] = useState([true]);
+  const [modal, setModal] = useState('');
   const serverPath = '/super-admin';
-
-  const fetchSuperAdmin = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${serverPath}`);
-      const jsonResponse = await response.json();
-      setSuperAdmins(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSuperAdmin();
-  }, []);
-
-  const headers = [
-    { header: 'First Name', key: 'firstName' },
-    { header: 'Last Name', key: 'lastName' },
-    { header: 'email', key: 'email' },
-    { header: 'Is Active?', key: 'isActive' }
-  ];
-
-  const formatListData = (responseData) => {
-    const data = responseData.map((superAdmins) => {
-      return {
-        id: superAdmins._id,
-        firstName: superAdmins.firstName,
-        lastName: superAdmins.lastName,
-        email: superAdmins.email,
-        isActive: superAdmins.isActive.toString()
-      };
-    });
-    return data;
-  };
-
-  const deleteSuperAdmin = (id) => {
-    try {
-      const response = fetch(`${process.env.REACT_APP_API_URL}${serverPath}/${id}`, {
-        method: 'DELETE'
-      });
-      // eslint-disable-next-line no-unused-vars
-      const data = response.json;
-      alert(`Super admin with id ${id} is going to be deleted`);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      alert(error);
-    }
-    setSuperAdmins([...superAdminsList.filter((ListItem) => ListItem._id !== id)]);
-  };
-
-  const data = [
+  const config = [
     {
       title: 'First Name',
       type: 'text',
@@ -94,22 +43,74 @@ function SuperAdmins() {
     }
   ];
 
+  const headers = [
+    { header: 'First Name', key: 'firstName' },
+    { header: 'Last Name', key: 'lastName' },
+    { header: 'email', key: 'email' },
+    { header: 'Is Active?', key: 'isActive' }
+  ];
+
+  useEffect(() => {
+    getSuperAdmin();
+  }, []);
+
+  const getSuperAdmin = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${serverPath}`);
+      const body = await response.json();
+      setSuperAdmins(body.data);
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      // console.log(error);
+      setModal(error);
+    }
+  };
+
+  const formatListData = (responseData) => {
+    const data = responseData.map((superAdmins) => {
+      return {
+        id: superAdmins._id,
+        firstName: superAdmins.firstName,
+        lastName: superAdmins.lastName,
+        email: superAdmins.email,
+        isActive: superAdmins.isActive.toString()
+      };
+    });
+    return data;
+  };
+
+  const deleteSuperAdmin = (id) => {
+    try {
+      const response = fetch(`${process.env.REACT_APP_API_URL}${serverPath}/${id}`, {
+        method: 'DELETE'
+      });
+      // eslint-disable-next-line no-unused-vars
+      const data = response.json;
+      alert(`Super admin with id ${id} is going to be deleted`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      alert(error);
+    }
+    setSuperAdmins([...superAdminsList.filter((ListItem) => ListItem._id !== id)]);
+  };
+
   return isLoading ? (
     <>
-      <h2>Employees</h2>
+      <h2>Super Admins</h2>
       <Loading />
     </>
   ) : (
     <section className={styles.container}>
-      <h2>Employees</h2>
+      <h2>Super Admins</h2>
       <div>
         <Link
           to={{
             pathname: '/super-admins/form',
-            linkData: data,
+            linkData: config,
             DBPath: serverPath
           }}
-          className={styles.LinkReset}
+          className={styles.linkReset}
         >
           <Button classes="block">Create new Employee</Button>
         </Link>
@@ -119,8 +120,11 @@ function SuperAdmins() {
         headers={headers}
         resource={serverPath}
         deleteItem={deleteSuperAdmin}
-        linkData={data}
+        linkData={config}
       />
+      {/* <Modal isConfirmation={false}>
+        <h2>{modal}</h2>
+      </Modal> */}
     </section>
   );
 }
