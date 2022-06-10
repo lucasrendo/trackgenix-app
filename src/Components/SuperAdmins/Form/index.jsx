@@ -11,6 +11,7 @@ function SuperAdminsForm() {
   const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
+  const [error, setError] = useState(true);
   const resource = '/super-admin';
 
   useEffect(async () => {
@@ -94,6 +95,14 @@ function SuperAdminsForm() {
     }
   };
 
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
+
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -104,13 +113,10 @@ function SuperAdminsForm() {
       result = await createInstance(inputValues);
     }
 
+    setError(result.err);
     setModalMessage(result.message);
     setIsAdding(true);
-    if (result && !result.err) {
-      setInputValues({});
-      setModalMessage(result.message);
-      setIsAdding(true);
-    }
+    if (result && !result.err) setInputValues({});
   };
 
   return (
@@ -122,14 +128,7 @@ function SuperAdminsForm() {
         submitHandler={submitHandler}
         userInput={[inputValues, setInputValues]}
       />
-      <Modal
-        handleClose={() => {
-          setIsAdding(false);
-          id && goBack();
-        }}
-        isOpen={isAdding}
-        isConfirmation={false}
-      >
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
         <h2>{modalMessage}</h2>
       </Modal>
     </section>

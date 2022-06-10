@@ -16,7 +16,7 @@ function Header() {
             <Link to={'/admins'}>admins</Link>
           </li>
           <li>
-            <Link to={'/super-admin'}>super admins</Link>
+            <Link to={'/super-admins'}>super admins</Link>
           </li>
           <li>
             <Link to={'/employees'}>employees</Link>

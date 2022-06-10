@@ -8,7 +8,7 @@ import styles from './super-admins.module.css';
 function SuperAdmins() {
   const [superadminsList, saveSuperadmins] = useState([]);
   const [isLoading, setIsLoading] = useState([true]);
-  const serverPath = '/super-admin';
+  const serverPath = '/super-admins';
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -71,7 +71,7 @@ function SuperAdmins() {
         deleteItem={deleteSuperAdmin}
       />
       <div>
-        <Link to={'/admins/form'} className={styles.linkReset}>
+        <Link to={'/super-admins/form'} className={styles.linkReset}>
           <Button classes="block">Create Super Admin</Button>
         </Link>
       </div>

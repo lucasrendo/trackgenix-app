@@ -21,9 +21,9 @@ const Routes = () => {
           <Route exact path={'/admins'} component={Admins} />
           <Route exact path={'/admins/form'} component={AdminsForm} />
           <Route exact path={'/admins/form/:id'} component={AdminsForm} />
-          <Route exact path={'/super-admin'} component={SuperAdmins} />
-          <Route exact path={'/super-admin/form'} component={SuperAdminsForm} />
-          <Route exact path={'/super-admin/form/:id'} component={SuperAdminsForm} />
+          <Route exact path={'/super-admins'} component={SuperAdmins} />
+          <Route exact path={'/super-admins/form'} component={SuperAdminsForm} />
+          <Route exact path={'/super-admins/form/:id'} component={SuperAdminsForm} />
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/timesheets'} component={TimeSheetsList} />
