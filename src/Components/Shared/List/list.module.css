@@ -41,6 +41,10 @@
   padding: 10px;
 }
 
+.linkReset{
+  text-decoration: none;
+}
+
 .rows:nth-child(odd) {background-color: white;}
 
 .rows:nth-child(even) {background-color: #AACE9B33;}
