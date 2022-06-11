@@ -1,18 +1,35 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import styles from './admins.module.css';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
+import styles from './super-admins.module.css';
 
-const Admins = () => {
+function SuperAdminsForm() {
+  const [superadminsList, saveSuperadmins] = useState();
   const { id } = useParams();
-  const { goBack } = useHistory();
-  const [admin, setAdmin] = useState();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const [error, setError] = useState(true);
+  const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
-  const resource = '/admins';
+  const [error, setError] = useState(true);
+  const resource = '/super-admin';
+  useEffect(async () => {
+    getSuperAdmin();
+  }, []);
+
+  const getSuperAdmin = async () => {
+    try {
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const body = await response.json();
+        saveSuperadmins(body.data);
+      }
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
   const config = [
     {
       header: 'First Name',
@@ -39,29 +56,12 @@ const Admins = () => {
       required: true
     },
     {
-      header: 'Is Active?',
+      header: 'Is active',
       type: 'checkbox',
       key: 'isActive',
       required: false
     }
   ];
-
-  useEffect(() => {
-    getAdmin();
-  }, []);
-
-  const getAdmin = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const body = await response.json();
-        setAdmin(body.data);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
 
   // === Fetch functions === key
   const createInstance = async (obj) => {
@@ -93,6 +93,7 @@ const Admins = () => {
       setIsAdding(true);
     }
   };
+
   const closeHandler = () => {
     if (error) setIsAdding(false);
     else {
@@ -110,22 +111,19 @@ const Admins = () => {
     } else {
       result = await createInstance(inputValues);
     }
+
     setError(result.err);
     setModalMessage(result.message);
     setIsAdding(true);
-    if (result && !result.err) {
-      setInputValues({});
-      setModalMessage(result.message);
-      setIsAdding(true);
-    }
+    if (result && !result.err) setInputValues({});
   };
 
   return (
     <section className={styles.container}>
-      <h2>Admins</h2>
+      <h2>Super Admins</h2>
       <Form
         data={config}
-        itemData={admin}
+        itemData={superadminsList}
         submitHandler={submitHandler}
         userInput={[inputValues, setInputValues]}
       />
@@ -134,6 +132,6 @@ const Admins = () => {
       </Modal>
     </section>
   );
-};
+}
 
-export default Admins;
+export default SuperAdminsForm;
