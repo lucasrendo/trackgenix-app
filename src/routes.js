@@ -7,6 +7,7 @@ import SuperAdmins from './Components/SuperAdmins/List';
 import SuperAdminsForm from './Components/SuperAdmins/Form';
 import Home from './Components/Home/index';
 import Employees from './Components/Employees/List';
+import EmployeesForm from './Components/Employees/Form';
 import Projects from './Components/Projects';
 import TasksForm from './Components/Tasks/Form';
 import TasksList from './Components/Tasks/List';
@@ -27,12 +28,8 @@ const Routes = () => {
           <Route exact path={'/super-admins/form'} component={SuperAdminsForm} />
           <Route exact path={'/super-admins/form/:id'} component={SuperAdminsForm} />
           <Route exact path={'/employees'} component={Employees} />
-<<<<<<< HEAD
-          <Route exact path={'/employees/form'} component={Form} />
-=======
-          <Route exact path={'/employees/form'} component={Employees} />
-          <Route exact path={'/employees/form/:id'} component={Employees} />
->>>>>>> 904e8ea404a15afd5a9da8b4f29394dc012dfe61
+          <Route exact path={'/employees/form'} component={EmployeesForm} />
+          <Route exact path={'/employees/form/:id'} component={EmployeesForm} />
           <Route exact path={'/projects'} component={Projects} />
           <Route exact path={'/tasks'} component={TasksList} />
           <Route exact path={'/tasks/form/'} component={TasksForm} />

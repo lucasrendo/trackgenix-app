@@ -1,121 +1,164 @@
-import React, { useState } from 'react';
-import styles from './EmployeesForm.module.css';
+import React, { useState, useEffect } from 'react';
+import Form from '../../Shared/Form/Form';
+import Modal from '../../Shared/Modal/Modal';
+import styles from './employee.module.css';
+import { useParams, useHistory } from 'react-router-dom';
 
-const EditEmployee = () => {
-  const [employeeInput, setEmployeeInput] = useState({
-    _id: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
+const EmployeesForm = () => {
+  const [employeeList, setEmployeeList] = useState();
+  const [projects, setProjects] = useState([]);
+  const [inputValues, setInputValues] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const { goBack } = useHistory();
+  const [modalMessage, setModalMessage] = useState('');
+  const { id } = useParams();
+  const [error, setError] = useState(true);
+  const resource = '/employees';
+
+  useEffect(() => {
+    getEmployee();
+    dataOptions();
   });
 
-  const [isActiveInput, setIsActiveInput] = useState({
-    isActive: false
-  });
-
-  const onChange = (e) => {
-    setEmployeeInput({ ...employeeInput, [e.target.name]: e.target.value });
+  const getEmployee = async () => {
+    try {
+      if (id) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+        const jsonResponse = await response.json();
+        setEmployeeList(jsonResponse.data);
+      }
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
   };
 
-  const onChangeBoolean = (e) => {
-    setIsActiveInput({ ...isActiveInput, [e.target.name]: e.currentTarget.checked });
+  const getProjects = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+      const jsonResponse = await response.json();
+      return jsonResponse.data;
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const putEmployee = {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: employeeInput.firstName,
-        lastName: employeeInput.lastName,
-        email: employeeInput.email,
-        password: employeeInput.password,
-        isActive: isActiveInput.isActive
-      })
-    };
-
-    const params = new URLSearchParams(window.location.search);
-    const employeeId = params.get('id');
-    const url = `${process.env.REACT_APP_API_URL}/employees/${employeeId}`;
-
-    fetch(url, putEmployee)
-      .then((response) => response.json())
-      // eslint-disable-next-line no-console
-      .then(() => alert('The employee was edited successfully'));
-
-    setEmployeeInput({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
+  const dataOptions = async () => {
+    const rawProjects = await getProjects();
+    let projectsData = [];
+    rawProjects.forEach((project, index) => {
+      projectsData.push({ id: project._id });
+      projectsData[index].text = project.projectName;
     });
+    setProjects(projectsData);
+  };
+  const config = [
+    {
+      header: 'First Name',
+      type: 'text',
+      key: 'firstName',
+      required: true
+    },
+    {
+      header: 'Last Name',
+      type: 'text',
+      key: 'lastName',
+      required: true
+    },
+    {
+      header: 'Email',
+      type: 'email',
+      key: 'email',
+      required: true
+    },
+    {
+      header: 'Password',
+      type: 'password',
+      key: 'password',
+      required: true
+    },
+    // {
+    //   header: 'Project',
+    //   type: 'select',
+    //   key: 'assignedProjects',
+    //   options: projects,
+    //   required: true
+    // },
+    {
+      header: 'Is active',
+      type: 'checkbox',
+      key: 'isActive',
+      required: false
+    }
+  ];
+
+  const createInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const updateInstance = async (obj) => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
+      const body = await res.json();
+      return { message: body.message, err: body.error };
+    } catch (error) {
+      setModalMessage(error);
+      setIsAdding(true);
+    }
+  };
+
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let result;
+    if (id) {
+      result = await updateInstance(inputValues);
+    } else {
+      result = await createInstance(inputValues);
+    }
+    setError(result.err);
+    setModalMessage(result.message);
+    setIsAdding(true);
+    if (result && !result.error) setInputValues({});
   };
 
   return (
-    <div className={styles.container}>
-      <div>
-        <h2>Edit employee</h2>
-      </div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            value={employeeInput.firstName}
-            onChange={onChange}
-            minLength={3}
-            required
-          />
-        </div>
-        <div>
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-            value={employeeInput.lastName}
-            onChange={onChange}
-            minLength={3}
-            required
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={employeeInput.email}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={employeeInput.password}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Is Active?</label>
-          <input
-            type="checkbox"
-            name="isActive"
-            value={isActiveInput.isActive}
-            onChange={onChangeBoolean}
-          />
-        </div>
-        <input type="submit" value="Edit Employee" href></input>
-      </form>
-    </div>
+    <section className={styles.container}>
+      <h2>Employees</h2>
+      <Form
+        data={config}
+        itemData={employeeList}
+        submitHandler={submitHandler}
+        userInput={[inputValues, setInputValues]}
+      />
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+        <h2>{modalMessage}</h2>
+      </Modal>
+    </section>
   );
 };
 
-export default EditEmployee;
+export default EmployeesForm;
