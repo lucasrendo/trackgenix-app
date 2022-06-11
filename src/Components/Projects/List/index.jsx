@@ -76,8 +76,8 @@ function Projects() {
         deleteItem={deleteItem}
       />
       <div>
-        <Link to={'/projects/form'} className={styles.LinkReset}>
-          <Button classes="block">Create Timesheet</Button>
+        <Link to={'/projects/form'} className={styles.linkReset}>
+          <Button classes="block">Create Project</Button>
         </Link>
       </div>
     </section>
