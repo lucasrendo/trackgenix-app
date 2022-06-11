@@ -76,7 +76,7 @@ function Tasks() {
         method={method}
       />
       <div>
-        <Link to={'/tasks/form'} className={styles.LinkReset}>
+        <Link to={'/tasks/form'} className={styles.linkReset}>
           <Button classes="block">Create Task</Button>
         </Link>
       </div>
