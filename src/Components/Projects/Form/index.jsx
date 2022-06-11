@@ -92,12 +92,29 @@ function Projects() {
     getProjects();
   }, []);
 
+  const formatProject = (project) => {
+    return {
+      projectName: project.projectName,
+      description: project.description,
+      admin: project.admin,
+      client: project.client,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      isActive: project.isActive,
+      employees: project.employees[0] ? project.employees[0]._id : '',
+      role: project.employees[0] ? project.employees[0].role : '',
+      rate: project.employees[0] ? project.employees[0].rate : '',
+      hoursInProject: project.employees[0] ? project.employees[0].hoursInProject : ''
+    };
+  };
+
   const getProjects = async () => {
     try {
       if (id) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const body = await response.json();
-        setProject(body.data);
+        const jasonResponse = await response.json();
+        const projectFormatted = formatProject(jasonResponse.data);
+        setProject(projectFormatted);
       }
     } catch (error) {
       setModalMessage(error);
