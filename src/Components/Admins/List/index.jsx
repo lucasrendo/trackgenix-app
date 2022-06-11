@@ -71,7 +71,7 @@ const Admins = () => {
         deleteItem={deleteAdmin}
       />
       <div>
-        <Link to={'/admins/form'} className={styles.LinkReset}>
+        <Link to={'/admins/form'} className={styles.linkReset}>
           <Button classes="block">Create Admin</Button>
         </Link>
       </div>
