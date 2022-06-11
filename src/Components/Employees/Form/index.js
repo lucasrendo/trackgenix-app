@@ -15,17 +15,28 @@ const EmployeesForm = () => {
   const [error, setError] = useState(true);
   const resource = '/employees';
 
-  useEffect(() => {
+  useEffect(async () => {
     getEmployee();
     dataOptions();
-  });
-
+  }, []);
+  const formatEmployee = (employee) => {
+    return {
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+      email: employee.email,
+      password: employee.password,
+      assignedProjects: employee.assignedProjects[0]._id,
+      isActive: employee.isActive
+    };
+  };
   const getEmployee = async () => {
     try {
       if (id) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
         const jsonResponse = await response.json();
-        setEmployeeList(jsonResponse.data);
+        const employeeFormated = formatEmployee(jsonResponse.data);
+        setEmployeeList(employeeFormated);
+        console.log(employeeList);
       }
     } catch (error) {
       setModalMessage(error);
@@ -37,6 +48,7 @@ const EmployeesForm = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
       const jsonResponse = await response.json();
+      console.log(jsonResponse.data);
       return jsonResponse.data;
     } catch (error) {
       setModalMessage(error);
@@ -104,6 +116,7 @@ const EmployeesForm = () => {
     };
     return data;
   };
+
   const createInstance = async (obj) => {
     try {
       const data = employeeArray(obj);
