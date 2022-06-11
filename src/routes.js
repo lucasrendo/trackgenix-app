@@ -6,11 +6,11 @@ import AdminsForm from './Components/Admins/Form';
 import SuperAdmins from './Components/SuperAdmins/index';
 import Home from './Components/Home/index';
 import Employees from './Components/Employees/index';
-import Projects from './Components/Projects/';
+import Projects from './Components/Projects/List';
+import ProjectsForm from './Components/Projects/Form';
 import Tasks from './Components/Tasks/index';
 import TimeSheetsList from './Components/TimeSheets/List';
 import TimeSheetsForm from './Components/TimeSheets/Form';
-import Form from './Components/Shared/Form/Form';
 
 const Routes = () => {
   return (
@@ -24,8 +24,8 @@ const Routes = () => {
           <Route exact path={'/super-admins'} component={SuperAdmins} />
           <Route exact path={'/employees'} component={Employees} />
           <Route exact path={'/projects'} component={Projects} />
-          <Route exact path={'/projects/form'} component={Form} />
-          <Route exact path={'/projects/form/:id'} component={Form} />
+          <Route exact path={'/projects/form'} component={ProjectsForm} />
+          <Route exact path={'/projects/form/:id'} component={ProjectsForm} />
           <Route exact path={'/timesheets'} component={TimeSheetsList} />
           <Route exact path={'/timesheets/form/'} component={TimeSheetsForm} />
           <Route exact path={'/timesheets/form/:id'} component={TimeSheetsForm} />

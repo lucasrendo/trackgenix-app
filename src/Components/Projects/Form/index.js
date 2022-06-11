@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import Modal from '../Shared/Modal/Modal';
-import Form from '../Shared/Form/Form';
+import Modal from '../../Shared/Modal/Modal';
+import Form from '../../Shared/Form/Form';
 import styles from './index.module.css';
 
 function Projects() {
@@ -105,6 +105,28 @@ function Projects() {
     }
   };
 
+  const projectArray = (responseData) => {
+    const data = responseData.map((project) => {
+      return {
+        projectName: project.projectName,
+        description: project.description,
+        admins: project.admin,
+        client: project.client,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        employees: [
+          {
+            employeeId: project.employeeId,
+            role: project.role,
+            rate: project.rate,
+            hoursInProject: project.hoursInProject
+          }
+        ]
+      };
+    });
+    return data;
+  };
+
   const createInstance = async (obj) => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
@@ -112,6 +134,7 @@ function Projects() {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
+      projectArray(obj);
       const body = await res.json();
       return { message: body.message, err: body.error };
     } catch (error) {
