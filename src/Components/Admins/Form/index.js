@@ -10,6 +10,7 @@ const Admins = () => {
   const [admin, setAdmin] = useState();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState(true);
   const [modalMessage, setModalMessage] = useState('');
   const resource = '/admins';
   const config = [
@@ -92,6 +93,13 @@ const Admins = () => {
       setIsAdding(true);
     }
   };
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+      goBack();
+    }
+  };
 
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
@@ -102,7 +110,7 @@ const Admins = () => {
     } else {
       result = await createInstance(inputValues);
     }
-
+    setError(result.err);
     setModalMessage(result.message);
     setIsAdding(true);
     if (result && !result.err) {
@@ -121,14 +129,7 @@ const Admins = () => {
         submitHandler={submitHandler}
         userInput={[inputValues, setInputValues]}
       />
-      <Modal
-        handleClose={() => {
-          setIsAdding(false);
-          id && goBack();
-        }}
-        isOpen={isAdding}
-        isConfirmation={false}
-      >
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
         <h2>{modalMessage}</h2>
       </Modal>
     </section>
