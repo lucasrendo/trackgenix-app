@@ -99,10 +99,9 @@ const EmployeesForm = () => {
       lastName: employee.lastName,
       email: employee.email,
       password: employee.password,
-      assignedProject: [],
+      assignedProjects: [employee.assignedProjects],
       isActive: employee.isActive
     };
-    data.push({ assignedProject: employee.assignedProject });
     return data;
   };
   const createInstance = async (obj) => {
@@ -123,10 +122,11 @@ const EmployeesForm = () => {
 
   const updateInstance = async (obj) => {
     try {
+      const data = employeeArray(obj);
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
+        body: JSON.stringify(data)
       });
       const body = await res.json();
       return { message: body.message, err: body.error };
