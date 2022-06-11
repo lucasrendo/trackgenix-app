@@ -11,7 +11,7 @@ function Projects() {
   const resource = '/projects';
 
   const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}${id}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json'
