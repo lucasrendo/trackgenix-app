@@ -24,6 +24,10 @@ function Projects() {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
       const jsonResponse = await response.json();
+      console.log(jsonResponse.data);
+      jsonResponse.data.forEach((project) => {
+        projectUpdate(project);
+      });
       setProjects(jsonResponse.data);
       setIsLoading(false);
     } catch (error) {
@@ -35,6 +39,23 @@ function Projects() {
   useEffect(async () => {
     fetchProject();
   }, []);
+
+  const projectUpdate = (project) => {
+    const data = {
+      projectName: project.projectName,
+      description: project.description,
+      admin: project.admin,
+      client: project.client,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      isActive: project.isActive,
+      employees: project.employees[0] ? project.employees[0]._id : '',
+      role: project.employees[0] ? project.employees[0].role : '',
+      rate: project.employees[0] ? project.employees[0].rate : '',
+      hoursInProject: project.employees[0] ? project.employees[0].hoursInProject : ''
+    };
+    return data;
+  };
 
   const formatListData = (responseData) => {
     const data = responseData.map((project) => {

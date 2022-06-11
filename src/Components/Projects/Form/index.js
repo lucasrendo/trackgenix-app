@@ -105,36 +105,34 @@ function Projects() {
     }
   };
 
-  const projectArray = (responseData) => {
-    const data = responseData.map((project) => {
-      return {
-        projectName: project.projectName,
-        description: project.description,
-        admins: project.admin,
-        client: project.client,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        employees: [
-          {
-            employeeId: project.employeeId,
-            role: project.role,
-            rate: project.rate,
-            hoursInProject: project.hoursInProject
-          }
-        ]
-      };
+  const projectArray = (project) => {
+    const data = {
+      projectName: project.projectName,
+      description: project.description,
+      admin: project.admin,
+      client: project.client,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      isActive: project.isActive,
+      employees: []
+    };
+    data.employees.push({
+      employeeId: project.employees,
+      role: project.role,
+      rate: project.rate,
+      hoursInProject: project.hoursInProject
     });
     return data;
   };
 
   const createInstance = async (obj) => {
     try {
+      const data = projectArray(obj);
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
+        body: JSON.stringify(data)
       });
-      projectArray(obj);
       const body = await res.json();
       return { message: body.message, err: body.error };
     } catch (error) {
@@ -145,10 +143,11 @@ function Projects() {
 
   const updateInstance = async (obj) => {
     try {
+      const data = projectArray(obj);
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
+        body: JSON.stringify(data)
       });
       const body = await res.json();
       return { message: body.message, err: body.error };
