@@ -5,7 +5,7 @@ import styles from './employee.module.css';
 import { useParams, useHistory } from 'react-router-dom';
 
 const EmployeesForm = () => {
-  const [employeeList, setEmployeeList] = useState();
+  const [employee, setEmployee] = useState();
   const [projects, setProjects] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
@@ -35,8 +35,7 @@ const EmployeesForm = () => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
         const jsonResponse = await response.json();
         const employeeFormated = formatEmployee(jsonResponse.data);
-        setEmployeeList(employeeFormated);
-        console.log(employeeList);
+        setEmployee(employeeFormated);
       }
     } catch (error) {
       setModalMessage(error);
@@ -48,7 +47,6 @@ const EmployeesForm = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
       const jsonResponse = await response.json();
-      console.log(jsonResponse.data);
       return jsonResponse.data;
     } catch (error) {
       setModalMessage(error);
@@ -176,7 +174,7 @@ const EmployeesForm = () => {
       <h2>Employees</h2>
       <Form
         data={config}
-        itemData={employeeList}
+        itemData={employee}
         submitHandler={submitHandler}
         userInput={[inputValues, setInputValues]}
       />
