@@ -1,16 +1,15 @@
 import { getAdminSuccess, getAdminError, getAdminPending } from './actions';
 
 export const getAdmins = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(getAdminPending());
-    return fetch(`${process.env.REACT_APP_API_URL}/admins`)
-      .then((response) => response.json())
-      .then((response) => {
-        dispatch(getAdminSuccess(response.data));
-        return response.data;
-      })
-      .catch((error) => {
-        dispatch(getAdminError(error.toString()));
-      });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const response_1 = await response.json();
+      dispatch(getAdminSuccess(response_1.data));
+      return response_1.data;
+    } catch (error) {
+      dispatch(getAdminError(error.toString()));
+    }
   };
 };
