@@ -78,13 +78,13 @@ const EmployeesForm = () => {
       key: 'password',
       required: true
     },
-    // {
-    //   header: 'Project',
-    //   type: 'select',
-    //   key: 'assignedProjects',
-    //   options: projects,
-    //   required: true
-    // },
+    {
+      header: 'Project',
+      type: 'select',
+      key: 'assignedProjects',
+      options: projects,
+      required: true
+    },
     {
       header: 'Is active',
       type: 'checkbox',
@@ -93,12 +93,25 @@ const EmployeesForm = () => {
     }
   ];
 
+  const employeeArray = (employee) => {
+    const data = {
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+      email: employee.email,
+      password: employee.password,
+      assignedProject: [],
+      isActive: employee.isActive
+    };
+    data.push({ assignedProject: employee.assignedProject });
+    return data;
+  };
   const createInstance = async (obj) => {
     try {
+      const data = employeeArray(obj);
       const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
+        body: JSON.stringify(data)
       });
       const body = await res.json();
       return { message: body.message, err: body.error };
