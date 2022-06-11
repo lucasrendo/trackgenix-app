@@ -10,11 +10,11 @@ function Tasks() {
   const [tasksList, setTasksList] = useState([]);
   const [method, setMethod] = useState('POST');
   const [isLoading, setIsLoading] = useState([true]);
-  const resourse = '/tasks';
+  const resource = '/tasks';
 
   const getTask = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resourse}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
       const jsonResponse = await response.json();
       setTasksList(jsonResponse.data);
       setIsLoading(false);
@@ -28,7 +28,7 @@ function Tasks() {
   }, []);
 
   const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resourse}/${id}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json'
@@ -71,7 +71,7 @@ function Tasks() {
         fullList={tasksList}
         data={formatTaskData(tasksList)}
         headers={headers}
-        resource={resourse}
+        resource={resource}
         deleteItem={deleteItem}
         method={method}
       />
