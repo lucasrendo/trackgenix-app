@@ -27,17 +27,6 @@ function Tasks() {
     getTask();
   }, []);
 
-  const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    window.alert('Task successfully deleted');
-    setTasksList([...tasksList.filter((task) => task._id !== id)]);
-  };
-
   const formatTaskData = (responseData) => {
     const data = responseData.map((task) => {
       return {
@@ -72,7 +61,6 @@ function Tasks() {
         data={formatTaskData(tasksList)}
         headers={headers}
         resource={resource}
-        deleteItem={deleteItem}
         method={method}
       />
       <div>
