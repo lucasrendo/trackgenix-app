@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './index.module.css';
+import {
+  addTimesheetError,
+  addTimesheetPending,
+  addTimesheetSuccess,
+  editTimesheetError,
+  editTimesheetPending,
+  editTimesheetSuccess
+} from '../../../redux/timesheets/actions';
 
 const TimeSheets = () => {
   const { id } = useParams();
@@ -16,6 +25,7 @@ const TimeSheets = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [error, setError] = useState(true);
   const resource = '/timesheets';
+  const dispatch = useDispatch();
   const config = [
     {
       header: 'Employee',
@@ -147,13 +157,15 @@ const TimeSheets = () => {
 
   // === Server requests === //
   const createInstance = async (obj) => {
+    const requestConfig = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(obj)
+    };
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, requestConfig);
+      const body = await response.json();
+      dispatch(addTimesheetSuccess(requestConfig.body));
       return { message: body.message, err: body.error };
     } catch (error) {
       setModalMessage(error);
@@ -162,13 +174,18 @@ const TimeSheets = () => {
   };
 
   const updateInstance = async (obj) => {
+    const requestConfig = {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(obj)
+    };
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}${resource}/${id}`,
+        requestConfig
+      );
+      const body = await response.json();
+      dispatch(editTimesheetSuccess(requestConfig.body));
       return { message: body.message, err: body.error };
     } catch (error) {
       setModalMessage(error);
