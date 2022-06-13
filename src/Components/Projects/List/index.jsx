@@ -1,38 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from './index.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProjects, deleteProject } from '../../../redux/projects/thunks';
 
 function Projects() {
-  const [projects, setProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const resource = '/projects';
+  const dispatch = useDispatch();
+  const projects = useSelector((state) => state.projects.list);
+  const isLoading = useSelector((state) => state.projects.isLoading);
 
-  const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    setProjects([...projects.filter((project) => project._id !== id)]);
-  };
-
-  const fetchProject = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
-      const jsonResponse = await response.json();
-      setProjects(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
+  const deleteItem = (id) => {
+    dispatch(deleteProject(id));
+    dispatch(getProjects());
   };
 
   useEffect(async () => {
-    fetchProject();
+    dispatch(getProjects());
   }, []);
 
   const formatListData = (responseData) => {
