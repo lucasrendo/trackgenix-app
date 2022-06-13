@@ -13,7 +13,8 @@ import {
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
   DELETE_TASK_FULFILLED,
-  DELETE_TASK_FAILED
+  DELETE_TASK_FAILED,
+  RESET_TASK
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -118,5 +119,12 @@ export const deleteTaskFailed = (message) => {
   return {
     type: DELETE_TASK_FAILED,
     payload: message
+  };
+};
+
+// === OTHER === //
+export const resetTask = () => {
+  return {
+    type: RESET_TASK
   };
 };

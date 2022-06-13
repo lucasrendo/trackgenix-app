@@ -13,12 +13,13 @@ import {
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
   DELETE_TASK_FULFILLED,
-  DELETE_TASK_FAILED
+  DELETE_TASK_FAILED,
+  RESET_TASK
 } from './constants';
 
 const initialState = {
   isLoading: false,
-  error: '',
+  error: false,
   message: '',
   task: {},
   list: []
@@ -32,13 +33,16 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        error: false,
+        task: action.payload.data,
+        message: action.payload.message
       };
     case GET_SINGLE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
     case CREATE_TASK_PENDING:
       return { ...state, isLoading: true };
@@ -46,13 +50,16 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        error: false,
+        task: action.payload.data,
+        message: action.payload.message
       };
     case CREATE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
     case UPDATE_TASK_PENDING:
       return { ...state, isLoading: true };
@@ -60,13 +67,21 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        error: false,
+        task: action.payload.data,
+        message: action.payload.message
       };
     case UPDATE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
+      };
+    case RESET_TASK:
+      return {
+        ...state,
+        task: {}
       };
   }
 };
