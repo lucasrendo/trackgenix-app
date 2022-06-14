@@ -11,36 +11,15 @@ import styles from './employee.module.css';
 const EmployeesForm = () => {
   const [projects, setProjects] = useState([]);
   const [inputValues, setInputValues] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const { id } = useParams();
   const dispatch = useDispatch();
-  const employee = useSelector((state) => state.employees.employee);
+  const list = useSelector((state) => state.employees.list);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const message = useSelector((state) => state.employees.message);
-
-  // const formatEmployee = (employee) => {
-  //   return {
-  //     firstName: employee.firstName,
-  //     lastName: employee.lastName,
-  //     email: employee.email,
-  //     password: employee.password,
-  //     assignedProjects: employee.assignedProjects[0]._id,
-  //     isActive: employee.isActive
-  //   };
-  // };
-  // const employeeArray = (employee) => {
-  //   const data = {
-  //     firstName: employee.firstName,
-  //     lastName: employee.lastName,
-  //     email: employee.email,
-  //     password: employee.password,
-  //     assignedProjects: [employee.assignedProjects],
-  //     isActive: employee.isActive
-  //   };
-  //   return data;
-  // };
 
   const getProjects = async () => {
     try {
@@ -48,8 +27,7 @@ const EmployeesForm = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setModalMessage(true);
-      alert(error);
+      setIsAdding(true);
     }
   };
 
@@ -110,16 +88,22 @@ const EmployeesForm = () => {
   ];
 
   const closeHandler = () => {
-    dispatch(resetMessage());
     setModalMessage(false);
+    dispatch(resetMessage());
+    setIsAdding(false);
     if (!error) {
       goBack();
     }
   };
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    id ? dispatch(editEmployees(inputValues, id)) : dispatch(createEmployee(inputValues));
+    if (id) {
+      dispatch(editEmployees(inputValues, id));
+    } else {
+      dispatch(createEmployee(inputValues));
+      setIsAdding(true);
+    }
   };
 
   return (
@@ -130,12 +114,12 @@ const EmployeesForm = () => {
       ) : (
         <Form
           data={config}
-          itemData={employee}
+          itemData={list}
           submitHandler={submitHandler}
           userInput={[inputValues, setInputValues]}
         />
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
     </section>

@@ -19,6 +19,28 @@ import {
 } from './actions.js';
 
 const resource = `${process.env.REACT_APP_API_URL}/employees`;
+const formatEmployee = (employee) => {
+  return {
+    firstName: employee.firstName,
+    lastName: employee.lastName,
+    email: employee.email,
+    password: employee.password,
+    assignedProjects: employee.assignedProjects[0]._id,
+    isActive: employee.isActive
+  };
+};
+
+const employeeArray = (employee) => {
+  const data = {
+    firstName: employee.firstName,
+    lastName: employee.lastName,
+    email: employee.email,
+    password: employee.password,
+    assignedProjects: [employee.assignedProjects],
+    isActive: employee.isActive
+  };
+  return data;
+};
 
 export const getUniqueEmployee = (id) => {
   return async (dispatch) => {
@@ -26,7 +48,8 @@ export const getUniqueEmployee = (id) => {
       dispatch(getUniqueEmployeesPending());
       const response = await fetch(`${resource}/${id}`);
       const data = await response.json();
-      if (!data.error) dispatch(getUniqueEmployeesSuccess(data.data));
+      const employeeFormate = formatEmployee(data.data);
+      if (!data.error) dispatch(getUniqueEmployeesSuccess(employeeFormate));
       else dispatch(getUniqueEmployeesError(data.message));
     } catch (error) {
       dispatch(getUniqueEmployeesError(error));
@@ -47,9 +70,10 @@ export const getEmployees = () => {
   };
 };
 
-export const createEmployee = (object) => {
+export const createEmployee = (obj) => {
   return async (dispatch) => {
     try {
+      const object = employeeArray(obj);
       const requestConfig = {
         method: 'POST',
         headers: {
@@ -70,9 +94,10 @@ export const createEmployee = (object) => {
   };
 };
 
-export const editEmployees = (object, id) => {
+export const editEmployees = (obj, id) => {
   return async (dispatch) => {
     try {
+      const object = employeeArray(obj);
       const requestConfig = {
         method: 'PUT',
         headers: {
@@ -80,8 +105,8 @@ export const editEmployees = (object, id) => {
         },
         body: JSON.stringify(object)
       };
-      dispatch(editEmployeesPending());
       dispatch(resetMessage());
+      dispatch(editEmployeesPending());
       const response = await fetch(`${resource}/${id}`, requestConfig);
       const data = await response.json();
       if (!data.error) {

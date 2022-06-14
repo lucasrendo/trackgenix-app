@@ -31,6 +31,7 @@ const Employees = () => {
         firstName: employee.firstName,
         lastName: employee.lastName,
         email: employee.email,
+        project: employee.projectId ? employee.projectId.projectName : '',
         password: employee.password,
         isActive: employee.isActive.toString()
       };
@@ -42,6 +43,7 @@ const Employees = () => {
     { header: 'First Name', key: 'firstName' },
     { header: 'Last Name', key: 'lastName' },
     { header: 'Mail', key: 'email' },
+    { header: 'Project', key: 'project' },
     { header: 'Active', key: 'isActive' }
   ];
 

@@ -15,7 +15,6 @@ import {
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
   FILL_EMPLOYEE,
-  FORMAT_EMPLOYEE_OBJECTS,
   SET_MODAL,
   UPDATE_LIST,
   RESET_MESSAGE
@@ -62,7 +61,8 @@ export const employeeReducer = (state = initialState, action) => {
           password: action.payload.data.password,
           projectId: action.payload.data.assignedProjects,
           isActive: action.payload.data.isActive
-        }
+        },
+        message: action.payload.message
       };
 
     case GET_UNIQUE_EMPLOYEES_PENDING:
@@ -81,7 +81,7 @@ export const employeeReducer = (state = initialState, action) => {
       };
 
     case CREATE_EMPLOYEES_PENDING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, message: 'Loading...' };
 
     case CREATE_EMPLOYEES_ERROR:
       return { ...state, isLoading: false, error: true, message: action.payload };
@@ -105,7 +105,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, message: action.payload, showModal: true, error: false };
 
     case DELETE_EMPLOYEES_PENDING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, message: 'Loading...' };
 
     case DELETE_EMPLOYEES_ERROR:
       return { ...state, isLoading: false, error: true, message: action.payload.message };
@@ -117,7 +117,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, showModal: action.payload };
 
     case RESET_MESSAGE:
-      return { ...state, message: '' };
+      return { ...state, message: action.payload };
 
     case UPDATE_LIST:
       return {
