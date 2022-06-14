@@ -14,7 +14,8 @@ import {
   deleteTaskPending,
   deleteTaskFulfilled,
   deleteTaskFailed,
-  resetTask
+  resetTask,
+  resetMessage
 } from './actions';
 
 const url = `${process.env.REACT_APP_API_URL}/tasks`;
@@ -81,6 +82,7 @@ export const updateTask = (object, id) => {
         body: JSON.stringify(object)
       };
 
+      dispatch(resetMessage());
       dispatch(updateTaskPending());
       const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();

@@ -31,7 +31,7 @@ const initialState = {
 export const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_SINGLE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, message: 'Fetching...' };
     case GET_SINGLE_TASK_FULFILLED:
       return {
         ...state,
@@ -55,7 +55,7 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload
       };
     case CREATE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, message: 'Fetching...' };
     case CREATE_TASK_FULFILLED:
       return {
         ...state,
@@ -72,7 +72,7 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload
       };
     case UPDATE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, message: 'Fetching...' };
     case UPDATE_TASK_FULFILLED:
       return {
         ...state,

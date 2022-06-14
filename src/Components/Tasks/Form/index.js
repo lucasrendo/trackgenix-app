@@ -16,9 +16,10 @@ function Tasks() {
   const isLoading = useSelector((state) => state.tasks.isLoading);
   const error = useSelector((state) => state.tasks.error);
   const message = useSelector((state) => state.tasks.message);
+  const [showModal, setShowModal] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [inputValues, setInputValues] = useState({});
   const CONFIG = [
     {
       header: 'Employee',
@@ -66,8 +67,6 @@ function Tasks() {
     return () => dispatch(resetTask());
   }, []);
 
-  useEffect(() => !showModal && dispatch(resetMessage()), [showModal]);
-
   const getProjects = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
@@ -109,13 +108,16 @@ function Tasks() {
 
   const closeHandler = () => {
     setShowModal(false);
-    if (!error) goBack();
+    dispatch(resetMessage());
+    if (!error) {
+      goBack();
+    }
   };
 
   // === Handle submit data and method === //
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    id ? dispatch(updateTask(task, id)) : dispatch(createTask(task));
+    id ? dispatch(updateTask(inputValues, id)) : dispatch(createTask(inputValues));
     setShowModal(true);
   };
 
@@ -129,7 +131,7 @@ function Tasks() {
           data={CONFIG}
           itemData={task}
           submitHandler={submitHandler}
-          action={(input) => fillTask(input)}
+          userInput={[inputValues, setInputValues]}
         />
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
