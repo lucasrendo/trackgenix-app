@@ -63,7 +63,7 @@ export const projectsReducer = (state = initialState, action) => {
     case DELETE_PROJECTS_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: false
       };
     case DELETE_PROJECTS_SUCCESS:
       return {

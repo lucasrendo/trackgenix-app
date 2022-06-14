@@ -50,10 +50,10 @@ export const getSingleProjectFailed = (message) => {
   };
 };
 
-export const deleteProjectsSuccess = (project) => {
+export const deleteProjectsSuccess = (id) => {
   return {
     type: DELETE_PROJECTS_SUCCESS,
-    payload: project
+    payload: id
   };
 };
 

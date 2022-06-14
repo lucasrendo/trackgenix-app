@@ -30,7 +30,7 @@ export const getSingleProject = (id) => {
       dispatch(getSingleProjectPending);
       const response = await fetch(`${url}/${id}`);
       const data = await response.json();
-      dispatch(getSingleProjectSuccess(data));
+      dispatch(getSingleProjectSuccess(data.data));
     } catch (error) {
       dispatch(getSingleProjectFailed(error.message));
     }

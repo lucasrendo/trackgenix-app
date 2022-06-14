@@ -1,21 +1,30 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
+import Modal from '../../Shared/Modal/Modal';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProjects, deleteProject } from '../../../redux/projects/thunks';
+import { getProjects, deleteProject, getSingleProject } from '../../../redux/projects/thunks';
 
 function Projects() {
+  const [isAdding, setIsAdding] = useState(false);
   const resource = '/projects';
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.list);
   const isLoading = useSelector((state) => state.projects.isLoading);
+  const project = useSelector((state) => state.projects.project);
 
   const deleteItem = (id) => {
-    dispatch(deleteProject(id));
+    dispatch(getSingleProject(id));
+    setIsAdding(true);
+  };
+
+  const sureToDelete = () => {
+    dispatch(deleteProject(project._id));
     dispatch(getProjects());
+    setIsAdding(false);
   };
 
   useEffect(async () => {
@@ -50,6 +59,10 @@ function Projects() {
     { header: 'Is Active?', key: 'isActive' }
   ];
 
+  const closeHandler = () => {
+    setIsAdding(false);
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -62,6 +75,14 @@ function Projects() {
         resource={resource}
         deleteItem={deleteItem}
       />
+      <Modal
+        handleClose={() => closeHandler()}
+        isOpen={isAdding}
+        isConfirmation={true}
+        confirmed={() => sureToDelete()}
+      >
+        <h2>Are you sure you want to delete this project?</h2>
+      </Modal>
       <div>
         <Link to={'/projects/form'} className={styles.linkReset}>
           <Button classes="block">Create Project</Button>
