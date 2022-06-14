@@ -2,8 +2,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { timesheetReducer } from './timesheets/reducer';
 import thunk from 'redux-thunk';
+import { tasksReducer } from './Task/reducer';
 
-const rootReducer = combineReducers({ timesheet: timesheetReducer });
+const rootReducer = combineReducers({
+  tasks: tasksReducer,
+  timesheet: timesheetReducer
+});
 
 const configureStore = () => {
   const enhancer = composeWithDevTools(applyMiddleware(thunk));
