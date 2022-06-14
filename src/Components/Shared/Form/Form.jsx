@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import Button from '../Button/Button';
 import style from './styles.module.css';
+import Button from '../Button/Button';
 
-const Form = ({ data, itemData, submitHandler, action }) => {
+const Form = ({ data, itemData, submitHandler, userInput }) => {
   const { goBack } = useHistory();
-  const dispatch = useDispatch();
+  const [inputValues, setInputValues] = userInput;
 
   // === Create instance state on mount === //
   useEffect(() => {
@@ -14,29 +13,29 @@ const Form = ({ data, itemData, submitHandler, action }) => {
     if (itemData) {
       let formattedItem = {};
       data.forEach((item) => {
-        if (itemData[item.key] && typeof itemData[item.key] === 'object')
+        if (itemData[item.key] && typeof itemData[item.key] === 'object') {
           formattedItem[item.key] = itemData[item.key]._id;
-        else if (itemData[item.key] && item.type === 'date')
+        } else if (item.type === 'date') {
           formattedItem[item.key] = itemData[item.key].substring(0, 10);
-        else formattedItem[item.key] = itemData[item.key];
+        } else formattedItem[item.key] = itemData[item.key];
       });
-      dispatch(action(formattedItem));
+      setInputValues(formattedItem);
     } else {
       data.forEach((item) => {
         if (item.type === 'checkbox') template[item.key] = false;
         else template[item.key] = '';
-        dispatch(action(template));
       });
+      setInputValues(template);
     }
-  }, []);
+  }, [itemData]);
 
   // === Handle value change for different input types === //
   const handleChange = (e, input) => {
     if (input.type === 'checkbox')
-      dispatch(action({ ...itemData, [input.key]: !itemData[input.key] }));
+      setInputValues({ ...inputValues, [input.key]: !inputValues[input.key] });
     else if (input.type === 'date')
-      dispatch(action({ ...itemData, [input.key]: e.target.value.substring(0, 10) }));
-    else dispatch(action({ ...itemData, [input.key]: e.target.value }));
+      setInputValues({ ...inputValues, [input.key]: e.target.value.substring(0, 10) });
+    else setInputValues({ ...inputValues, [input.key]: e.target.value });
   };
 
   return (
@@ -52,8 +51,8 @@ const Form = ({ data, itemData, submitHandler, action }) => {
               <select
                 id={item.key}
                 required={item.required}
-                value={itemData ? itemData[item.key] : ''}
-                onClick={(e) => handleChange(e, item)}
+                value={inputValues ? inputValues[item.key] : ''}
+                onChange={(e) => setInputValues({ ...inputValues, [item.key]: e.target.value })}
               >
                 <option selected disabled value="">{`select ${item.header}`}</option>
                 {item.options.map((option) => (
@@ -68,9 +67,9 @@ const Form = ({ data, itemData, submitHandler, action }) => {
                 id={item.key}
                 required={item.required}
                 {...(item.type === 'checkbox' && {
-                  checked: itemData ? itemData[item.key] : false
+                  checked: inputValues[item.key] ? inputValues[item.key] : false
                 })}
-                value={itemData ? itemData[item.key] : item.type === 'checkbox' ? true : ''}
+                value={inputValues ? inputValues[item.key] : item.type === 'checkbox' ? true : ''}
                 onChange={(e) => handleChange(e, item)}
               />
             )}
