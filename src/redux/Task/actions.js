@@ -1,18 +1,18 @@
 import {
   GET_TASKS_PENDING,
-  GET_TASKS_FULFILLED,
+  GET_TASKS_SUCCESS,
   GET_TASKS_FAILED,
   GET_SINGLE_TASK_PENDING,
-  GET_SINGLE_TASK_FULFILLED,
+  GET_SINGLE_TASK_SUCCESS,
   GET_SINGLE_TASK_FAILED,
   CREATE_TASK_PENDING,
-  CREATE_TASK_FULFILLED,
+  CREATE_TASK_SUCCESS,
   CREATE_TASK_FAILED,
   UPDATE_TASK_PENDING,
-  UPDATE_TASK_FULFILLED,
+  UPDATE_TASK_SUCCESS,
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
-  DELETE_TASK_FULFILLED,
+  DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_TASK,
   RESET_MESSAGE,
@@ -27,9 +27,9 @@ export const getTasksPending = () => {
   };
 };
 
-export const getTasksFulfilled = (data) => {
+export const getTasksSUCCESS = (data) => {
   return {
-    type: GET_TASKS_FULFILLED,
+    type: GET_TASKS_SUCCESS,
     payload: data
   };
 };
@@ -48,9 +48,9 @@ export const getSingleTaskPending = () => {
   };
 };
 
-export const getSingleTaskFulfilled = (data) => {
+export const getSingleTaskSUCCESS = (data) => {
   return {
-    type: GET_SINGLE_TASK_FULFILLED,
+    type: GET_SINGLE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -69,9 +69,9 @@ export const createTaskPending = () => {
   };
 };
 
-export const createTaskFulfilled = (data) => {
+export const createTaskSUCCESS = (data) => {
   return {
-    type: CREATE_TASK_FULFILLED,
+    type: CREATE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -90,9 +90,9 @@ export const updateTaskPending = () => {
   };
 };
 
-export const updateTaskFulfilled = (data) => {
+export const updateTaskSUCCESS = (data) => {
   return {
-    type: UPDATE_TASK_FULFILLED,
+    type: UPDATE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -111,9 +111,9 @@ export const deleteTaskPending = () => {
   };
 };
 
-export const deleteTaskFulfilled = (data) => {
+export const deleteTaskSUCCESS = (data) => {
   return {
-    type: DELETE_TASK_FULFILLED,
+    type: DELETE_TASK_SUCCESS,
     payload: data
   };
 };
