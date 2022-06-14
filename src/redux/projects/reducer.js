@@ -7,7 +7,8 @@ import {
   GET_SINGLE_PROJECT_PENDING,
   DELETE_PROJECTS_SUCCESS,
   DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_FAILED
+  DELETE_PROJECTS_FAILED,
+  SET_MODAL
 } from './constants';
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   error: false,
   message: '',
   project: {},
+  showModal: false,
   list: []
 };
 
@@ -29,16 +31,14 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: false,
-        list: action.payload,
-        message: action.payload
+        list: action.payload
       };
     case GET_PROJECTS_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: true,
-        message: action.payload
+        message: action.payload,
+        showModal: true
       };
     case GET_SINGLE_PROJECT_PENDING:
       return {
@@ -63,7 +63,7 @@ export const projectsReducer = (state = initialState, action) => {
     case DELETE_PROJECTS_PENDING:
       return {
         ...state,
-        isLoading: false
+        isLoading: true
       };
     case DELETE_PROJECTS_SUCCESS:
       return {
@@ -71,14 +71,21 @@ export const projectsReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         list: state.list.filter((project) => project._id !== action.payload),
-        message: action.payload
+        message: action.payload,
+        showModal: true
       };
     case DELETE_PROJECTS_FAILED:
       return {
         ...state,
         isLoading: false,
         error: true,
-        message: action.payload
+        message: action.payload,
+        showModal: true
+      };
+    case SET_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
       };
     default:
       return state;

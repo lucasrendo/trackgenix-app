@@ -7,7 +7,9 @@ import {
   GET_SINGLE_PROJECT_PENDING,
   DELETE_PROJECTS_SUCCESS,
   DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_FAILED
+  DELETE_PROJECTS_FAILED,
+  SET_MESSAGE,
+  SET_MODAL
 } from './constants';
 
 export const getProjectsSuccess = (projects) => {
@@ -67,5 +69,18 @@ export const deleteProjectsFailed = (message) => {
   return {
     type: DELETE_PROJECTS_FAILED,
     payload: message
+  };
+};
+
+export const setMessage = () => {
+  return {
+    type: SET_MESSAGE
+  };
+};
+
+export const setModal = (state) => {
+  return {
+    type: SET_MODAL,
+    payload: state
   };
 };

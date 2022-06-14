@@ -40,16 +40,16 @@ export const getSingleProject = (id) => {
 export const deleteProject = (id) => {
   return async (dispatch) => {
     try {
-      dispatch(deleteProjectsPending(id));
       const requestConfig = {
         method: 'DELETE',
         headers: {
           'content-type': 'application/json'
         }
       };
+      dispatch(deleteProjectsPending());
       const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
-      dispatch(deleteProjectsSuccess(data.data));
+      dispatch(deleteProjectsSuccess(data.message));
     } catch (error) {
       dispatch(deleteProjectsFailed(error.message));
     }

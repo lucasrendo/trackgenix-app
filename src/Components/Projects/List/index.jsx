@@ -7,24 +7,27 @@ import Modal from '../../Shared/Modal/Modal';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProjects, deleteProject, getSingleProject } from '../../../redux/projects/thunks';
+import { setMessage, setModal } from '../../../redux/projects/actions';
 
 function Projects() {
-  const [isAdding, setIsAdding] = useState(false);
+  const [isConfirmation, setIsConfirmation] = useState(true);
   const resource = '/projects';
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.list);
   const isLoading = useSelector((state) => state.projects.isLoading);
   const project = useSelector((state) => state.projects.project);
+  const message = useSelector((state) => state.projects.message);
+  const error = useSelector((state) => state.projects.error);
+  const showModal = useSelector((state) => state.projects.showModal);
 
   const deleteItem = (id) => {
     dispatch(getSingleProject(id));
-    setIsAdding(true);
+    dispatch(setModal(true));
   };
 
   const sureToDelete = () => {
+    setIsConfirmation(false);
     dispatch(deleteProject(project._id));
-    dispatch(getProjects());
-    setIsAdding(false);
   };
 
   useEffect(async () => {
@@ -60,7 +63,10 @@ function Projects() {
   ];
 
   const closeHandler = () => {
-    setIsAdding(false);
+    dispatch(getProjects());
+    dispatch(setModal(false));
+    dispatch(setMessage());
+    setIsConfirmation(true);
   };
 
   return isLoading ? (
@@ -76,12 +82,12 @@ function Projects() {
         deleteItem={deleteItem}
       />
       <Modal
-        handleClose={() => closeHandler()}
-        isOpen={isAdding}
-        isConfirmation={true}
+        handleClose={isConfirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
+        isOpen={showModal}
+        isConfirmation={isConfirmation}
         confirmed={() => sureToDelete()}
       >
-        <h2>Are you sure you want to delete this project?</h2>
+        <h2>{isConfirmation ? 'Are you sure you want to delete this task?' : message}</h2>
       </Modal>
       <div>
         <Link to={'/projects/form'} className={styles.linkReset}>
