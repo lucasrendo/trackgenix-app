@@ -1,41 +1,55 @@
+import {
+  getTimesheetPending,
+  getTimesheetSuccess,
+  getTimesheetError,
+  deleteTimesheetPending,
+  deleteTimesheetSuccess,
+  deleteTimesheetError,
+  resetMessage,
+  resetTimesheet
+} from './actions';
+
+const resource = '/timesheets';
 const url = `${process.env.REACT_APP_API_URL}/timesheets`;
 
-export const getTimeSheetsRequest = async () => {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+export const getTasks = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(getTimesheetPending());
+      const response = await fetch(url);
+      const data = await response.json();
 
-    return data;
-  } catch (error) {
-    return error;
-  }
+      if (!data.error) dispatch(getTimesheetSuccess(data.data));
+      else dispatch(getTimesheetError(data.message));
+    } catch (error) {
+      dispatch(getTimesheetError(error));
+    }
+  };
 };
 
-export const getSingleTimeSheetsRequest = async (id) => {
-  try {
-    const response = await fetch(`${url}/${id}`);
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const deleteTimeSheetsRequest = async (id) => {
-  try {
-    const requestConfig = {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
+export const deleteTimesheet = (timesheet, id) => {
+  return async (dispatch) => {
+    try {
+      const requestConfig = {
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(timesheet)
+      };
+      dispatch(resetMessage());
+      dispatch(deleteTimesheetPending());
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}${resource}/${id}`,
+        requestConfig
+      );
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(deleteTimesheetSuccess(data));
+        dispatch(resetTimesheet());
+      } else {
+        dispatch(deleteTimesheetError(data.message));
       }
-    };
-
-    const response = await fetch(`${url}/${id}`, requestConfig);
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    return error;
-  }
+    } catch (error) {
+      dispatch(deleteTimesheetError(error));
+    }
+  };
 };
