@@ -44,9 +44,6 @@ function Projects() {
         startDate: project.startDate.slice(0, 10),
         admin: project.admin ? project.admin.firstName + ' ' + project.admin.lastName : '',
         client: project.client,
-        employee: project.employeeId
-          ? project.employeeId.firstName + ' ' + project.employeeId.lastName
-          : '',
         isActive: project.isActive.toString()
       };
     });
@@ -59,7 +56,6 @@ function Projects() {
     { header: 'Start Date', key: 'startDate' },
     { header: 'Admin', key: 'admin' },
     { header: 'Client', key: 'client' },
-    { header: 'Employees', key: 'employee' },
     { header: 'Is Active?', key: 'isActive' }
   ];
 
