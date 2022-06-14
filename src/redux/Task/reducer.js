@@ -1,18 +1,18 @@
 import {
   GET_TASKS_PENDING,
-  GET_TASKS_FULFILLED,
+  GET_TASKS_SUCCESS,
   GET_TASKS_FAILED,
   GET_SINGLE_TASK_PENDING,
-  GET_SINGLE_TASK_FULFILLED,
+  GET_SINGLE_TASK_SUCCESS,
   GET_SINGLE_TASK_FAILED,
   CREATE_TASK_PENDING,
-  CREATE_TASK_FULFILLED,
+  CREATE_TASK_SUCCESS,
   CREATE_TASK_FAILED,
   UPDATE_TASK_PENDING,
-  UPDATE_TASK_FULFILLED,
+  UPDATE_TASK_SUCCESS,
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
-  DELETE_TASK_FULFILLED,
+  DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   SET_MODAL
 } from './constants';
@@ -30,7 +30,7 @@ export const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_TASK_PENDING:
       return { ...state, isLoading: true };
-    case CREATE_TASK_FULFILLED:
+    case CREATE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -44,7 +44,7 @@ export const tasksReducer = (state = initialState, action) => {
       };
     case UPDATE_TASK_PENDING:
       return { ...state, isLoading: true };
-    case UPDATE_TASK_FULFILLED:
+    case UPDATE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -61,7 +61,7 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         isLoading: true
       };
-    case GET_TASKS_FULFILLED:
+    case GET_TASKS_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -76,7 +76,7 @@ export const tasksReducer = (state = initialState, action) => {
       };
     case GET_SINGLE_TASK_PENDING:
       return { ...state, isLoading: true };
-    case GET_SINGLE_TASK_FULFILLED:
+    case GET_SINGLE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -94,7 +94,7 @@ export const tasksReducer = (state = initialState, action) => {
         isLoading: true,
         message: 'Deleting...'
       };
-    case DELETE_TASK_FULFILLED:
+    case DELETE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,

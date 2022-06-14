@@ -1,17 +1,17 @@
 import {
   GET_TASKS_PENDING,
-  GET_TASKS_FULFILLED,
+  GET_TASKS_SUCCESS,
   GET_TASKS_FAILED,
   GET_SINGLE_TASK_PENDING,
-  GET_SINGLE_TASK_FULFILLED,
+  GET_SINGLE_TASK_SUCCESS,
   GET_SINGLE_TASK_FAILED,
   CREATE_TASK_PENDING,
-  CREATE_TASK_FULFILLED,
+  CREATE_TASK_SUCCESS,
   CREATE_TASK_FAILED,
   UPDATE_TASK_PENDING,
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
-  DELETE_TASK_FULFILLED,
+  DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_MESSAGE,
   SET_MODAL
@@ -26,7 +26,7 @@ export const getTasksPending = () => {
 
 export const getTasksFulfilled = (data) => {
   return {
-    type: GET_TASKS_FULFILLED,
+    type: GET_TASKS_SUCCESS,
     payload: data
   };
 };
@@ -47,7 +47,7 @@ export const getSingleTaskPending = () => {
 
 export const getSingleTaskFulfilled = (data) => {
   return {
-    type: GET_SINGLE_TASK_FULFILLED,
+    type: GET_SINGLE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -68,7 +68,7 @@ export const createTaskPending = () => {
 
 export const createTaskFulfilled = (data) => {
   return {
-    type: CREATE_TASK_FULFILLED,
+    type: CREATE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -110,7 +110,7 @@ export const deleteTaskPending = () => {
 
 export const deleteTaskFulfilled = (message) => {
   return {
-    type: DELETE_TASK_FULFILLED,
+    type: DELETE_TASK_SUCCESS,
     payload: message
   };
 };
