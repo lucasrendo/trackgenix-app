@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTasks, deleteTask } from '../../../redux/Task/thunks';
-import { resetMessage, setModal } from '../../../redux/Task/actions';
+import { resetMessage, setModal, updateList } from '../../../redux/Task/actions';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
@@ -44,13 +44,13 @@ function Tasks() {
     return data;
   };
 
-  const confirmationHandler = async () => {
+  const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteTask(id));
+    !error && dispatch(updateList([...list.filter((task) => task._id !== id)]));
   };
 
   const closeHandler = () => {
-    !error && dispatch(getTasks());
     dispatch(setModal(false));
     dispatch(resetMessage());
     setConfirmation(true);

@@ -14,7 +14,8 @@ import {
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
-  SET_MODAL
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 const initialState = {
@@ -114,6 +115,11 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         showModal: action.payload
+      };
+    case UPDATE_LIST:
+      return {
+        ...state,
+        list: action.payload
       };
     default:
       return state;

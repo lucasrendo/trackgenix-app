@@ -14,7 +14,8 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_MESSAGE,
-  SET_MODAL
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -24,7 +25,7 @@ export const getTasksPending = () => {
   };
 };
 
-export const getTasksFulfilled = (data) => {
+export const getTasksSuccess = (data) => {
   return {
     type: GET_TASKS_SUCCESS,
     payload: data
@@ -45,7 +46,7 @@ export const getSingleTaskPending = () => {
   };
 };
 
-export const getSingleTaskFulfilled = (data) => {
+export const getSingleTaskSuccess = (data) => {
   return {
     type: GET_SINGLE_TASK_SUCCESS,
     payload: data
@@ -66,7 +67,7 @@ export const createTaskPending = () => {
   };
 };
 
-export const createTaskFulfilled = (data) => {
+export const createTaskSuccess = (data) => {
   return {
     type: CREATE_TASK_SUCCESS,
     payload: data
@@ -87,7 +88,7 @@ export const updateTaskPending = () => {
   };
 };
 
-export const updateTaskFulfilled = (data) => {
+export const updateTaskSuccess = (data) => {
   return {
     type: UPDATE_TASK_PENDING,
     payload: data
@@ -108,7 +109,7 @@ export const deleteTaskPending = () => {
   };
 };
 
-export const deleteTaskFulfilled = (message) => {
+export const deleteTaskSuccess = (message) => {
   return {
     type: DELETE_TASK_SUCCESS,
     payload: message
@@ -132,5 +133,12 @@ export const setModal = (state) => {
   return {
     type: SET_MODAL,
     payload: state
+  };
+};
+
+export const updateList = (newList) => {
+  return {
+    type: UPDATE_LIST,
+    payload: newList
   };
 };
