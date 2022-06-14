@@ -9,7 +9,6 @@ import {
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
   RESET_TIMESHEET,
-  FILL_TIMESHEET,
   RESET_MESSAGE
 } from './constants';
 
@@ -62,7 +61,6 @@ export const timesheetReducer = (state = initialState, action) => {
     case ADD_TIMESHEET_SUCCESS:
       return {
         ...state,
-        // list: [...state.list, action.payload.data],
         isLoading: false,
         error: false,
         message: action.payload.message,
@@ -100,11 +98,6 @@ export const timesheetReducer = (state = initialState, action) => {
       return {
         ...state,
         timesheet: undefined
-      };
-    case FILL_TIMESHEET:
-      return {
-        ...state,
-        timesheet: { ...state.timesheet, ...action.payload }
       };
     case RESET_MESSAGE:
       return {

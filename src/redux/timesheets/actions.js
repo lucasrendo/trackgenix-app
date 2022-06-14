@@ -9,7 +9,6 @@ import {
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
   RESET_TIMESHEET,
-  FILL_TIMESHEET,
   RESET_MESSAGE
 } from './constants';
 
@@ -82,12 +81,5 @@ export const resetTimesheet = () => {
 export const resetMessage = () => {
   return {
     type: RESET_MESSAGE
-  };
-};
-
-export const fillTimesheet = (userInput) => {
-  return {
-    type: FILL_TIMESHEET,
-    payload: userInput
   };
 };
