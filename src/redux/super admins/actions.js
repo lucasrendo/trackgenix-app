@@ -15,7 +15,10 @@ import {
   EDIT_SUPER_ADMIN_PENDING,
   EDIT_SUPER_ADMIN_ERROR,
   SUPER_ADMIN_MODAL,
-  SUPER_ADMIN_MESSAGE
+  SUPER_ADMIN_MESSAGE,
+  UPDATE_LIST,
+  RESET_MESSAGE,
+  RESET_SUPER_ADMIN
 } from './constants';
 
 export const getSuperAdminSuccess = (superAdmins) => ({
@@ -45,9 +48,9 @@ export const getSingleSuperAdminError = (error) => ({
   payload: error
 });
 
-export const deleteSuperAdminSuccess = (superAdminsId) => ({
+export const deleteSuperAdminSuccess = (id) => ({
   type: DELETE_SUPER_ADMIN_SUCCESS,
-  payload: superAdminsId
+  payload: id
 });
 
 export const deleteSuperAdminPending = () => ({
@@ -94,4 +97,17 @@ export const superAdminModal = (state) => ({
 
 export const superAdminMessage = () => ({
   type: SUPER_ADMIN_MESSAGE
+});
+
+export const updateList = (newList) => ({
+  type: UPDATE_LIST,
+  payload: newList
+});
+
+export const resetMessage = () => ({
+  type: RESET_MESSAGE
+});
+
+export const resetSuperAdmin = () => ({
+  type: RESET_SUPER_ADMIN
 });
