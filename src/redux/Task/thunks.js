@@ -13,7 +13,8 @@ import {
   updateTaskFailed,
   deleteTaskPending,
   deleteTaskFulfilled,
-  deleteTaskFailed
+  deleteTaskFailed,
+  resetTask
 } from './actions';
 
 const url = `${process.env.REACT_APP_API_URL}/tasks`;
@@ -33,7 +34,7 @@ export const getTasks = () => {
   };
 };
 
-export const getSingleTask = async (id) => {
+export const getSingleTask = (id) => {
   return async (dispatch) => {
     try {
       dispatch(getSingleTaskPending());
@@ -48,7 +49,7 @@ export const getSingleTask = async (id) => {
   };
 };
 
-export const createTask = async (object) => {
+export const createTask = (object) => {
   return async (dispatch) => {
     try {
       const requestConfig = {
@@ -61,15 +62,17 @@ export const createTask = async (object) => {
       const response = await fetch(`${url}`, requestConfig);
       const data = await response.json();
 
-      if (!data.error) dispatch(createTaskFulfilled(data));
-      else dispatch(createTaskFailed(data.message));
+      if (!data.error) {
+        dispatch(createTaskFulfilled(data));
+        dispatch(resetTask());
+      } else dispatch(createTaskFailed(data.message));
     } catch (error) {
       dispatch(createTaskFailed(error));
     }
   };
 };
 
-export const updateTask = async (object, id) => {
+export const updateTask = (object, id) => {
   return async (dispatch) => {
     try {
       const requestConfig = {
@@ -82,15 +85,17 @@ export const updateTask = async (object, id) => {
       const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
 
-      if (!data.error) dispatch(updateTaskFulfilled(data));
-      else dispatch(updateTaskFailed(data.message));
+      if (!data.error) {
+        dispatch(updateTaskFulfilled(data));
+        dispatch(resetTask());
+      } else dispatch(updateTaskFailed(data.message));
     } catch (error) {
       dispatch(createTaskFailed(error));
     }
   };
 };
 
-export const deleteTask = async (id) => {
+export const deleteTask = (id) => {
   return async (dispatch) => {
     try {
       const requestConfig = {

@@ -14,7 +14,10 @@ import {
   DELETE_TASK_PENDING,
   DELETE_TASK_FULFILLED,
   DELETE_TASK_FAILED,
-  RESET_TASK
+  RESET_TASK,
+  RESET_MESSAGE,
+  FILL_TASK,
+  FORMAT_TASK_OBJECTS
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -122,9 +125,29 @@ export const deleteTaskFailed = (message) => {
   };
 };
 
-// === OTHER === //
+// === FORM ACTIONS === //
 export const resetTask = () => {
   return {
     type: RESET_TASK
+  };
+};
+
+export const fillTask = (userInput) => {
+  return {
+    type: FILL_TASK,
+    payload: userInput
+  };
+};
+
+export const formatTaskObjects = (object) => {
+  return {
+    type: FORMAT_TASK_OBJECTS,
+    payload: object
+  };
+};
+
+export const resetMessage = () => {
+  return {
+    type: RESET_MESSAGE
   };
 };

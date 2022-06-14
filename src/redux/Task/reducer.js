@@ -14,14 +14,17 @@ import {
   DELETE_TASK_PENDING,
   DELETE_TASK_FULFILLED,
   DELETE_TASK_FAILED,
-  RESET_TASK
+  RESET_TASK,
+  RESET_MESSAGE,
+  FILL_TASK,
+  FORMAT_TASK_OBJECTS
 } from './constants';
 
 const initialState = {
   isLoading: false,
   error: false,
   message: '',
-  task: {},
+  task: undefined,
   list: []
 };
 
@@ -34,7 +37,14 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        task: action.payload.data,
+        task: {
+          employeeId: action.payload.data.employeeId,
+          projectId: action.payload.data.projectId,
+          title: action.payload.data.title,
+          description: action.payload.data.description,
+          date: action.payload.data.date,
+          done: action.payload.data.done
+        },
         message: action.payload.message
       };
     case GET_SINGLE_TASK_FAILED:
@@ -78,10 +88,22 @@ export const tasksReducer = (state = initialState, action) => {
         error: true,
         message: action.payload
       };
+    case FILL_TASK:
+      return {
+        ...state,
+        task: { ...state.task, ...action.payload }
+      };
     case RESET_TASK:
       return {
         ...state,
-        task: {}
+        task: undefined
       };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: ''
+      };
+    default:
+      return state;
   }
 };

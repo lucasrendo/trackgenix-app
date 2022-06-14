@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
-import style from './styles.module.css';
+import { useDispatch } from 'react-redux';
 import Button from '../Button/Button';
+import style from './styles.module.css';
 
-const Form = ({ data, itemData, submitHandler, userInput }) => {
+const Form = ({ data, itemData, submitHandler, action }) => {
   const { goBack } = useHistory();
-  const [inputValues, setInputValues] = userInput;
+  const dispatch = useDispatch();
 
   // === Create instance state on mount === //
   useEffect(() => {
@@ -13,29 +14,29 @@ const Form = ({ data, itemData, submitHandler, userInput }) => {
     if (itemData) {
       let formattedItem = {};
       data.forEach((item) => {
-        if (itemData[item.key] && typeof itemData[item.key] === 'object') {
+        if (itemData[item.key] && typeof itemData[item.key] === 'object')
           formattedItem[item.key] = itemData[item.key]._id;
-        } else if (item.type === 'date') {
+        else if (itemData[item.key] && item.type === 'date')
           formattedItem[item.key] = itemData[item.key].substring(0, 10);
-        } else formattedItem[item.key] = itemData[item.key];
+        else formattedItem[item.key] = itemData[item.key];
       });
-      setInputValues(formattedItem);
+      dispatch(action(formattedItem));
     } else {
       data.forEach((item) => {
         if (item.type === 'checkbox') template[item.key] = false;
         else template[item.key] = '';
+        dispatch(action(template));
       });
-      setInputValues(template);
     }
-  }, [itemData]);
+  }, []);
 
   // === Handle value change for different input types === //
   const handleChange = (e, input) => {
     if (input.type === 'checkbox')
-      setInputValues({ ...inputValues, [input.key]: !inputValues[input.key] });
+      dispatch(action({ ...itemData, [input.key]: !itemData[input.key] }));
     else if (input.type === 'date')
-      setInputValues({ ...inputValues, [input.key]: e.target.value.substring(0, 10) });
-    else setInputValues({ ...inputValues, [input.key]: e.target.value });
+      dispatch(action({ ...itemData, [input.key]: e.target.value.substring(0, 10) }));
+    else dispatch(action({ ...itemData, [input.key]: e.target.value }));
   };
 
   return (
@@ -50,9 +51,9 @@ const Form = ({ data, itemData, submitHandler, userInput }) => {
             {item.type === 'select' ? (
               <select
                 id={item.key}
-                required={item.required && item.required}
-                value={inputValues ? inputValues[item.key] : ''}
-                onChange={(e) => setInputValues({ ...inputValues, [item.key]: e.target.value })}
+                required={item.required}
+                value={itemData ? itemData[item.key] : ''}
+                onClick={(e) => handleChange(e, item)}
               >
                 <option selected disabled value="">{`select ${item.header}`}</option>
                 {item.options.map((option) => (
@@ -65,9 +66,11 @@ const Form = ({ data, itemData, submitHandler, userInput }) => {
               <input
                 type={item.type}
                 id={item.key}
-                required={item.required && item.required}
-                {...(item.type === 'checkbox' && { checked: inputValues[item.key] })}
-                value={inputValues ? inputValues[item.key] : item.type === 'checkbox' ? true : ''}
+                required={item.required}
+                {...(item.type === 'checkbox' && {
+                  checked: itemData ? itemData[item.key] : false
+                })}
+                value={itemData ? itemData[item.key] : item.type === 'checkbox' ? true : ''}
                 onChange={(e) => handleChange(e, item)}
               />
             )}

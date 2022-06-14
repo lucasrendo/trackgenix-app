@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunks';
-import { resetTask } from '../../../redux/Task/actions';
+import { fillTask, resetTask, resetMessage } from '../../../redux/Task/actions';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading/Loading';
@@ -12,14 +12,14 @@ function Tasks() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const task = useSelector((state) => state.task);
-  const isLoading = useSelector((state) => state.isLoading);
-  const error = useSelector((state) => state.error);
-  const message = useSelector((state) => state.error);
+  const task = useSelector((state) => state.tasks.task);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+  const error = useSelector((state) => state.tasks.error);
+  const message = useSelector((state) => state.tasks.message);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const config = [
+  const [showModal, setShowModal] = useState(false);
+  const CONFIG = [
     {
       header: 'Employee',
       type: 'select',
@@ -63,7 +63,10 @@ function Tasks() {
   useEffect(() => {
     id && dispatch(getSingleTask(id));
     dataOptions();
+    return () => dispatch(resetTask());
   }, []);
+
+  useEffect(() => !showModal && dispatch(resetMessage()), [showModal]);
 
   const getProjects = async () => {
     try {
@@ -72,7 +75,7 @@ function Tasks() {
       return jsonResponse.data;
     } catch (error) {
       alert(error);
-      setIsAdding(true);
+      setShowModal(true);
     }
   };
 
@@ -83,7 +86,7 @@ function Tasks() {
       return jsonResponse.data;
     } catch (error) {
       alert(error);
-      setIsAdding(true);
+      setShowModal(true);
     }
   };
 
@@ -105,7 +108,7 @@ function Tasks() {
   };
 
   const closeHandler = () => {
-    setIsAdding(false);
+    setShowModal(false);
     if (!error) goBack();
   };
 
@@ -113,9 +116,7 @@ function Tasks() {
   const submitHandler = (e) => {
     e.preventDefault();
     id ? dispatch(updateTask(task, id)) : dispatch(createTask(task));
-
-    setIsAdding(true);
-    if (error === false) dispatch(resetTask());
+    setShowModal(true);
   };
 
   return (
@@ -125,13 +126,13 @@ function Tasks() {
         <Loading />
       ) : (
         <Form
-          data={config}
+          data={CONFIG}
           itemData={task}
           submitHandler={submitHandler}
-          // userInput={[inputValues, setInputValues]}
+          action={(input) => fillTask(input)}
         />
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
     </section>
