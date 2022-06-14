@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunks';
-import { fillTask, resetTask, resetMessage } from '../../../redux/Task/actions';
+import { resetTask, resetMessage } from '../../../redux/Task/actions';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading/Loading';
@@ -92,18 +92,17 @@ function Tasks() {
   const dataOptions = async () => {
     const rawProjects = await getProjects();
     const rawEmployees = await getEmployees();
-    let projectsData = [];
-    let employeesData = [];
-    rawEmployees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+    rawEmployees.map((employee, index) => {
+      rawEmployees.splice(index, 1, {
+        id: employee._id,
+        text: `${employee.firstName} ${employee.lastName}`
+      });
     });
-    rawProjects.forEach((project, index) => {
-      projectsData.push({ id: project._id });
-      projectsData[index].text = `${project.projectName}`;
+    rawProjects.map((project, index) => {
+      rawProjects.splice(index, 1, { id: project._id, text: project.projectName });
     });
-    setEmployees(employeesData);
-    setProjects(projectsData);
+    setEmployees(rawEmployees);
+    setProjects(rawProjects);
   };
 
   const closeHandler = () => {
