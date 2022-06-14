@@ -1,13 +1,13 @@
 import {
   GET_PROJECTS_SUCCESS,
   GET_PROJECTS_PENDING,
-  GET_PROJECTS_FAILED,
+  GET_PROJECTS_ERROR,
   GET_SINGLE_PROJECT_SUCCESS,
-  GET_SINGLE_PROJECT_FAILED,
+  GET_SINGLE_PROJECT_ERROR,
   GET_SINGLE_PROJECT_PENDING,
   DELETE_PROJECTS_SUCCESS,
   DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_FAILED,
+  DELETE_PROJECTS_ERROR,
   SET_MODAL
 } from './constants';
 
@@ -33,7 +33,7 @@ export const projectsReducer = (state = initialState, action) => {
         isLoading: false,
         list: action.payload
       };
-    case GET_PROJECTS_FAILED:
+    case GET_PROJECTS_ERROR:
       return {
         ...state,
         isLoading: false,
@@ -53,7 +53,7 @@ export const projectsReducer = (state = initialState, action) => {
         project: action.payload,
         message: action.payload
       };
-    case GET_SINGLE_PROJECT_FAILED:
+    case GET_SINGLE_PROJECT_ERROR:
       return {
         ...state,
         isLoading: false,
@@ -74,7 +74,7 @@ export const projectsReducer = (state = initialState, action) => {
         message: action.payload,
         showModal: true
       };
-    case DELETE_PROJECTS_FAILED:
+    case DELETE_PROJECTS_ERROR:
       return {
         ...state,
         isLoading: false,

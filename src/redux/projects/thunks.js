@@ -1,13 +1,13 @@
 import {
   getProjectsSuccess,
   getProjectsPending,
-  getProjectsFailed,
+  getProjectsError,
   getSingleProjectSuccess,
   getSingleProjectPending,
-  getSingleProjectFailed,
+  getSingleProjectError,
   deleteProjectsSuccess,
   deleteProjectsPending,
-  deleteProjectsFailed
+  deleteProjectsError
 } from './actions';
 
 const url = `${process.env.REACT_APP_API_URL}/projects`;
@@ -19,7 +19,7 @@ export const getProjects = () => {
       const data = await response.json();
       dispatch(getProjectsSuccess(data.data));
     } catch (error) {
-      dispatch(getProjectsFailed(error.message));
+      dispatch(getProjectsError(error.message));
     }
   };
 };
@@ -32,7 +32,7 @@ export const getSingleProject = (id) => {
       const data = await response.json();
       dispatch(getSingleProjectSuccess(data.data));
     } catch (error) {
-      dispatch(getSingleProjectFailed(error.message));
+      dispatch(getSingleProjectError(error.message));
     }
   };
 };
@@ -51,7 +51,7 @@ export const deleteProject = (id) => {
       const data = await response.json();
       dispatch(deleteProjectsSuccess(data.message));
     } catch (error) {
-      dispatch(deleteProjectsFailed(error.message));
+      dispatch(deleteProjectsError(error.message));
     }
   };
 };

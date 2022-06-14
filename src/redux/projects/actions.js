@@ -1,13 +1,13 @@
 import {
   GET_PROJECTS_SUCCESS,
   GET_PROJECTS_PENDING,
-  GET_PROJECTS_FAILED,
+  GET_PROJECTS_ERROR,
   GET_SINGLE_PROJECT_SUCCESS,
-  GET_SINGLE_PROJECT_FAILED,
+  GET_SINGLE_PROJECT_ERROR,
   GET_SINGLE_PROJECT_PENDING,
   DELETE_PROJECTS_SUCCESS,
   DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_FAILED,
+  DELETE_PROJECTS_ERROR,
   SET_MESSAGE,
   SET_MODAL
 } from './constants';
@@ -25,9 +25,9 @@ export const getProjectsPending = () => {
   };
 };
 
-export const getProjectsFailed = (error) => {
+export const getProjectsError = (error) => {
   return {
-    type: GET_PROJECTS_FAILED,
+    type: GET_PROJECTS_ERROR,
     payload: error
   };
 };
@@ -45,9 +45,9 @@ export const getSingleProjectPending = () => {
   };
 };
 
-export const getSingleProjectFailed = (message) => {
+export const getSingleProjectError = (message) => {
   return {
-    type: GET_SINGLE_PROJECT_FAILED,
+    type: GET_SINGLE_PROJECT_ERROR,
     payload: message
   };
 };
@@ -65,9 +65,9 @@ export const deleteProjectsPending = () => {
   };
 };
 
-export const deleteProjectsFailed = (message) => {
+export const deleteProjectsError = (message) => {
   return {
-    type: DELETE_PROJECTS_FAILED,
+    type: DELETE_PROJECTS_ERROR,
     payload: message
   };
 };
