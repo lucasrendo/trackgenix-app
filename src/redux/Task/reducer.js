@@ -1,4 +1,3 @@
-import { getTasks, getSingleTask, createTask, updateTask, deleteTask } from './actions';
 import {
   GET_TASKS_PENDING,
   GET_TASKS_FULFILLED,
@@ -14,12 +13,14 @@ import {
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
   DELETE_TASK_FULFILLED,
-  DELETE_TASK_FAILED
+  DELETE_TASK_FAILED,
+  SET_MODAL
 } from './constants';
 
 const initialState = {
   isLoading: false,
-  error: '',
+  error: false,
+  showModal: false,
   message: '',
   task: {},
   list: []
@@ -56,17 +57,22 @@ export const tasksReducer = (state = initialState, action) => {
         error: action.payload
       };
     case GET_TASKS_PENDING:
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        isLoading: true
+      };
     case GET_TASKS_FULFILLED:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        list: action.payload
       };
     case GET_TASKS_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        message: action.payload,
+        showModal: true
       };
     case GET_SINGLE_TASK_PENDING:
       return { ...state, isLoading: true };
@@ -83,18 +89,32 @@ export const tasksReducer = (state = initialState, action) => {
         error: action.payload
       };
     case DELETE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        isLoading: true
+      };
     case DELETE_TASK_FULFILLED:
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        message: action.payload,
+        showModal: true,
+        error: false
       };
     case DELETE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        message: action.payload,
+        showModal: true,
+        error: true
       };
+    case SET_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
+      };
+    default:
+      return state;
   }
 };

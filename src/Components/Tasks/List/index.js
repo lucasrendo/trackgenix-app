@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import Form from '../../Shared/Form/Form';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTasks, deleteTask } from '../../../redux/Task/thunks';
+import { resetMessage, setModal } from '../../../redux/Task/actions';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
-import { Link } from 'react-router-dom';
+import Modal from '../../Shared/Modal/Modal';
 import styles from './tasks.module.css';
 
 function Tasks() {
-  const [tasksList, setTasksList] = useState([]);
-  const [method, setMethod] = useState('POST');
-  const [isLoading, setIsLoading] = useState([true]);
-  const resource = '/tasks';
+  const dispatch = useDispatch();
+  const list = useSelector((state) => state.tasks.list);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+  const message = useSelector((state) => state.tasks.message);
+  const error = useSelector((state) => state.tasks.error);
+  const showModal = useSelector((state) => state.tasks.showModal);
+  const HEADERS = [
+    { header: 'Employee', key: 'employee' },
+    { header: 'Project', key: 'project' },
+    { header: 'Title', key: 'title' },
+    { header: 'Description', key: 'description' },
+    { header: 'Date', key: 'date' },
+    { header: 'Done', key: 'done' }
+  ];
 
-  const getTask = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
-      const jsonResponse = await response.json();
-      setTasksList(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  useEffect(() => {
-    getTask();
-  }, []);
-
-  const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    window.alert('Task successfully deleted');
-    setTasksList([...tasksList.filter((task) => task._id !== id)]);
-  };
+  useEffect(() => dispatch(getTasks()), []);
 
   const formatTaskData = (responseData) => {
     const data = responseData.map((task) => {
@@ -53,33 +42,35 @@ function Tasks() {
     return data;
   };
 
-  const headers = [
-    { header: 'Employee', key: 'employee' },
-    { header: 'Project', key: 'project' },
-    { header: 'Title', key: 'title' },
-    { header: 'Description', key: 'description' },
-    { header: 'Date', key: 'date' },
-    { header: 'Done', key: 'done' }
-  ];
+  const closeHandler = () => {
+    !error && dispatch(getTasks());
+    dispatch(setModal(false));
+    dispatch(resetMessage());
+  };
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      <List
-        fullList={tasksList}
-        data={formatTaskData(tasksList)}
-        headers={headers}
-        resource={resource}
-        deleteItem={deleteItem}
-        method={method}
-      />
-      <div>
-        <Link to={'/tasks/form'} className={styles.linkReset}>
-          <Button classes="block">Create Task</Button>
-        </Link>
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <List
+            data={formatTaskData(list)}
+            headers={HEADERS}
+            resource="/tasks"
+            deleteItem={async (id) => dispatch(deleteTask(id))}
+          />
+          <div>
+            <Link to="/tasks/form" className={styles.linkReset}>
+              <Button classes="block">Create Task</Button>
+            </Link>
+          </div>
+        </>
+      )}
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+        <h2>{message}</h2>
+      </Modal>
     </section>
   );
 }
