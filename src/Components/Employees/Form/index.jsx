@@ -1,47 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
+import { getUniqueEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
+import Loading from '../../Shared/Loading/Loading';
 import styles from './employee.module.css';
-import { useParams, useHistory } from 'react-router-dom';
 
 const EmployeesForm = () => {
-  const [employee, setEmployee] = useState();
   const [projects, setProjects] = useState([]);
   const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
   const { id } = useParams();
-  const [error, setError] = useState(true);
-  const resource = '/employees';
+  const dispatch = useDispatch();
+  const employee = useSelector((state) => state.employees.employee);
+  const isLoading = useSelector((state) => state.employees.isLoading);
+  const error = useSelector((state) => state.employees.error);
+  const message = useSelector((state) => state.employees.message);
 
-  useEffect(async () => {
-    getEmployee();
-    dataOptions();
-  }, []);
-  const formatEmployee = (employee) => {
-    return {
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      email: employee.email,
-      password: employee.password,
-      assignedProjects: employee.assignedProjects[0]._id,
-      isActive: employee.isActive
-    };
-  };
-  const getEmployee = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const jsonResponse = await response.json();
-        const employeeFormated = formatEmployee(jsonResponse.data);
-        setEmployee(employeeFormated);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
+  // const formatEmployee = (employee) => {
+  //   return {
+  //     firstName: employee.firstName,
+  //     lastName: employee.lastName,
+  //     email: employee.email,
+  //     password: employee.password,
+  //     assignedProjects: employee.assignedProjects[0]._id,
+  //     isActive: employee.isActive
+  //   };
+  // };
+  // const employeeArray = (employee) => {
+  //   const data = {
+  //     firstName: employee.firstName,
+  //     lastName: employee.lastName,
+  //     email: employee.email,
+  //     password: employee.password,
+  //     assignedProjects: [employee.assignedProjects],
+  //     isActive: employee.isActive
+  //   };
+  //   return data;
+  // };
 
   const getProjects = async () => {
     try {
@@ -49,8 +48,8 @@ const EmployeesForm = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
+      setModalMessage(true);
+      alert(error);
     }
   };
 
@@ -63,6 +62,13 @@ const EmployeesForm = () => {
     });
     setProjects(projectsData);
   };
+
+  useEffect(() => {
+    id && dispatch(getUniqueEmployee(id));
+    dataOptions();
+    return () => dispatch(resetEmployee());
+  }, []);
+
   const config = [
     {
       header: 'First Name',
@@ -103,83 +109,34 @@ const EmployeesForm = () => {
     }
   ];
 
-  const employeeArray = (employee) => {
-    const data = {
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      email: employee.email,
-      password: employee.password,
-      assignedProjects: [employee.assignedProjects],
-      isActive: employee.isActive
-    };
-    return data;
-  };
-
-  const createInstance = async (obj) => {
-    try {
-      const data = employeeArray(obj);
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const updateInstance = async (obj) => {
-    try {
-      const data = employeeArray(obj);
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    dispatch(resetMessage());
+    setModalMessage(false);
+    if (!error) {
       goBack();
     }
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    let result;
-    if (id) {
-      result = await updateInstance(inputValues);
-    } else {
-      result = await createInstance(inputValues);
-    }
-    setError(result.err);
-    setModalMessage(result.message);
-    setIsAdding(true);
-    if (result && !result.error) setInputValues({});
+    id ? dispatch(editEmployees(inputValues, id)) : dispatch(createEmployee(inputValues));
   };
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <Form
-        data={config}
-        itemData={employee}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Form
+          data={config}
+          itemData={employee}
+          submitHandler={submitHandler}
+          userInput={[inputValues, setInputValues]}
+        />
+      )}
+      <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );

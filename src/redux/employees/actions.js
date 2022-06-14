@@ -1,11 +1,4 @@
 import {
-  getEmployeesRequest,
-  getUniqueEmployeesRequest,
-  createEmployeeRequest,
-  editEmployeesRequest,
-  deleteEmployeesRequest
-} from './thunks';
-import {
   GET_EMPLOYEES_SUCCESS,
   GET_EMPLOYEES_PENDING,
   GET_EMPLOYEES_ERROR,
@@ -20,114 +13,72 @@ import {
   EDIT_EMPLOYEES_ERROR,
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
-  DELETE_EMPLOYEES_ERROR
+  DELETE_EMPLOYEES_ERROR,
+  RESET_EMPLOYEE,
+  FILL_EMPLOYEE,
+  FORMAT_EMPLOYEE_OBJECTS,
+  RESET_MESSAGE
 } from './constants';
 
-const getEmployeesSuccess = (data) => {
+export const getEmployeesSuccess = (data) => {
   return { type: GET_EMPLOYEES_SUCCESS, payload: data };
 };
-const getEmployeesPending = () => {
+export const getEmployeesPending = () => {
   return { type: GET_EMPLOYEES_PENDING };
 };
-const getEmployeesError = (error) => {
+export const getEmployeesError = (error) => {
   return { type: GET_EMPLOYEES_ERROR, payload: error };
 };
 
-export const getEmployees = () => {
-  return async (dispatch) => {
-    dispatch(getEmployeesPending());
-    const data = await getEmployeesRequest();
-    if (!data.error) {
-      dispatch(getEmployeesSuccess(data));
-    } else {
-      dispatch(getEmployeesError(data.message));
-    }
-  };
-};
-
-const getUniqueEmployeesSuccess = (data) => {
+export const getUniqueEmployeesSuccess = (data) => {
   return { type: GET_UNIQUE_EMPLOYEES_SUCCESS, payload: data };
 };
-const getUniqueEmployeesPending = () => {
+export const getUniqueEmployeesPending = () => {
   return { type: GET_UNIQUE_EMPLOYEES_PENDING };
 };
-const getUniqueEmployeesError = (message) => {
+export const getUniqueEmployeesError = (message) => {
   return { type: GET_UNIQUE_EMPLOYEES_ERROR, payload: message };
 };
 
-export const getUniqueEmployees = () => {
-  return async (dispatch) => {
-    dispatch(getUniqueEmployeesPending());
-    const data = await getUniqueEmployeesRequest();
-    if (!data.error) {
-      dispatch(getUniqueEmployeesSuccess(data));
-    } else {
-      dispatch(getUniqueEmployeesError(data.message));
-    }
-  };
-};
-
-const createEmployeesSuccess = (data) => {
+export const createEmployeesSuccess = (data) => {
   return { type: CREATE_EMPLOYEES_SUCCESS, payload: data };
 };
-const createEmployeesPending = () => {
+export const createEmployeesPending = () => {
   return { type: CREATE_EMPLOYEES_PENDING };
 };
-const createEmployeesError = (message) => {
+export const createEmployeesError = (message) => {
   return { type: CREATE_EMPLOYEES_ERROR, payload: message };
 };
 
-export const createEmployees = () => {
-  return async (dispatch) => {
-    dispatch(createEmployeesPending());
-    const data = await createEmployeeRequest();
-    if (!data.error) {
-      dispatch(createEmployeesSuccess(data));
-    } else {
-      dispatch(createEmployeesError(data.message));
-    }
-  };
-};
-
-const editEmployeesSuccess = (data) => {
+export const editEmployeesSuccess = (data) => {
   return { type: EDIT_EMPLOYEES_SUCCESS, payload: data };
 };
-const editEmployeesPending = () => {
+export const editEmployeesPending = () => {
   return { type: EDIT_EMPLOYEES_PENDING };
 };
-const editEmployeesError = (message) => {
+export const editEmployeesError = (message) => {
   return { type: EDIT_EMPLOYEES_ERROR, payload: message };
 };
 
-export const editEmployees = () => {
-  return async (dispatch) => {
-    dispatch(editEmployeesPending());
-    const data = await editEmployeesRequest();
-    if (!data.error) {
-      dispatch(editEmployeesSuccess(data));
-    } else {
-      dispatch(editEmployeesError(data.message));
-    }
-  };
-};
-const deleteEmployeesSuccess = (data) => {
+export const deleteEmployeesSuccess = (data) => {
   return { type: DELETE_EMPLOYEES_SUCCESS, payload: data };
 };
-const deleteEmployeesPending = () => {
+export const deleteEmployeesPending = () => {
   return { type: DELETE_EMPLOYEES_PENDING };
 };
-const deleteEmployeesError = (message) => {
+export const deleteEmployeesError = (message) => {
   return { type: DELETE_EMPLOYEES_ERROR, payload: message };
 };
 
-export const deleteEmployees = () => {
-  return async (dispatch) => {
-    dispatch(deleteEmployeesPending());
-    const data = await deleteEmployeesRequest();
-    if (!data.error) {
-      dispatch(deleteEmployeesSuccess(data));
-    } else {
-      dispatch(deleteEmployeesError(data.message));
-    }
-  };
+export const resetEmployee = () => {
+  return { type: RESET_EMPLOYEE };
+};
+export const fillEmployee = (userInput) => {
+  return { type: FILL_EMPLOYEE, payload: userInput };
+};
+export const formatEmployeeObject = (object) => {
+  return { type: FORMAT_EMPLOYEE_OBJECTS, payload: object };
+};
+export const resetMessage = () => {
+  return { type: RESET_MESSAGE };
 };
