@@ -3,29 +3,24 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
+import Loading from '../../Shared/Loading/Loading';
 import styles from './index.module.css';
-import {
-  addTimesheetError,
-  addTimesheetPending,
-  addTimesheetSuccess,
-  editTimesheetError,
-  editTimesheetPending,
-  editTimesheetSuccess
-} from '../../../redux/timesheets/actions';
+import { addTimesheet, editTimesheet, getSingleTimesheet } from '../../../redux/timesheets/thunks';
+import { resetTimesheet, resetMessage } from '../../../redux/timesheets/actions';
 
 const TimeSheets = () => {
   const { id } = useParams();
   const { goBack } = useHistory();
-  const [timeSheet, setTimeSheet] = useState();
+  const dispatch = useDispatch();
+  const timesheet = useSelector((state) => state.timesheet.timesheet);
+  const isLoading = useSelector((state) => state.timesheet.isLoading);
+  const error = useSelector((state) => state.timesheet.error);
+  const message = useSelector((state) => state.timesheet.message);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [error, setError] = useState(true);
-  const resource = '/timesheets';
-  const dispatch = useDispatch();
   const config = [
     {
       header: 'Employee',
@@ -78,24 +73,13 @@ const TimeSheets = () => {
     }
   ];
 
-  useEffect(async () => {
-    fetchTimeSheet();
+  useEffect(() => {
+    id && dispatch(getSingleTimesheet(id));
     formatDataOptions();
+    return () => dispatch(resetTimesheet());
   }, []);
 
   // === Fetch functions === //
-  const fetchTimeSheet = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const jsonResponse = await response.json();
-        setTimeSheet(jsonResponse.data);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
 
   const getProjects = async () => {
     try {
@@ -103,7 +87,6 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setModalMessage(error);
       setIsAdding(true);
     }
   };
@@ -114,7 +97,6 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setModalMessage(error);
       setIsAdding(true);
     }
   };
@@ -125,7 +107,6 @@ const TimeSheets = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setModalMessage(error);
       setIsAdding(true);
     }
   };
@@ -155,79 +136,40 @@ const TimeSheets = () => {
     setTasks(tasksData);
   };
 
-  // === Server requests === //
-  const createInstance = async (obj) => {
-    const requestConfig = {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(obj)
-    };
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, requestConfig);
-      const body = await response.json();
-      dispatch(addTimesheetSuccess(requestConfig.body));
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const updateInstance = async (obj) => {
-    const requestConfig = {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(obj)
-    };
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}${resource}/${id}`,
-        requestConfig
-      );
-      const body = await response.json();
-      dispatch(editTimesheetSuccess(requestConfig.body));
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    setIsAdding(false);
+    dispatch(resetMessage());
+    if (!error) {
       goBack();
     }
   };
 
   // === Handle submit data and method === //
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    let result;
     if (id) {
-      result = await updateInstance(inputValues);
+      dispatch(editTimesheet(inputValues, id));
     } else {
-      result = await createInstance(inputValues);
+      dispatch(addTimesheet(inputValues));
     }
-
-    setError(result.err);
-    setModalMessage(result.message);
     setIsAdding(true);
-    if (result && !result.err) setInputValues({});
   };
 
   return (
     <section className={styles.container}>
       <h2>TimeSheets</h2>
-      <Form
-        data={config}
-        itemData={timeSheet}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Form
+          data={config}
+          itemData={timesheet}
+          submitHandler={submitHandler}
+          userInput={[inputValues, setInputValues]}
+        />
+      )}
       <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );
