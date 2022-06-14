@@ -1,69 +1,62 @@
-import { getTimeSheetsRequest, deleteTimeSheetsRequest } from './thunks';
 import {
-  GET_TIMESHEETS_PENDING,
-  GET_TIMESHEETS_SUCCESS,
-  GET_TIMESHEETS_ERROR,
-  DELETE_TIMESHEETS_PENDING,
-  DELETE_TIMESHEETS_SUCCESS,
-  DELETE_TIMESHEETS_ERROR
+  GET_TIMESHEET_PENDING,
+  GET_TIMESHEET_SUCCESS,
+  GET_TIMESHEET_ERROR,
+  DELETE_TIMESHEET_PENDING,
+  DELETE_TIMESHEET_SUCCESS,
+  DELETE_TIMESHEET_ERROR,
+  RESET_TIMESHEET,
+  RESET_MESSAGE
 } from './constants';
 
-const getTimeSheetsPending = () => {
+export const getTimesheetPending = () => {
   return {
-    type: GET_TIMESHEETS_PENDING
+    type: GET_TIMESHEET_PENDING
   };
 };
 
-const getTimeSheetsFulfilled = (data) => {
+export const getTimesheetSuccess = (data) => {
   return {
-    type: GET_TIMESHEETS_SUCCESS,
+    type: GET_TIMESHEET_SUCCESS,
     payload: data
   };
 };
 
-const getTimeSheetsFailed = (error) => {
+export const getTimesheetError = (error) => {
   return {
-    type: GET_TIMESHEETS_ERROR,
+    type: GET_TIMESHEET_ERROR,
     payload: error
   };
 };
 
-export const getTimeSheets = () => {
-  return async (dispatch) => {
-    dispatch(getTimeSheetsPending());
-    const data = await getTimeSheetsRequest();
-
-    if (!data.error) dispatch(getTimeSheetsFulfilled(data));
-    else dispatch(getTimeSheetsFailed(data.message));
+export const deleteTimesheetPending = () => {
+  return {
+    type: DELETE_TIMESHEET_PENDING
   };
 };
 
-const deleteTimeSheetsPending = () => {
+export const deleteTimesheetSuccess = (data) => {
   return {
-    type: DELETE_TIMESHEETS_PENDING
-  };
-};
-
-const deleteTimeSheetsFulfilled = (data) => {
-  return {
-    type: DELETE_TIMESHEETS_SUCCESS,
+    type: DELETE_TIMESHEET_SUCCESS,
     payload: data
   };
 };
 
-const deleteTimeSheetsFailed = (message) => {
+export const deleteTimesheetError = (error) => {
   return {
-    type: DELETE_TIMESHEETS_ERROR,
-    payload: message
+    type: DELETE_TIMESHEET_ERROR,
+    payload: error
   };
 };
 
-export const deleteTimeSheets = () => {
-  return async (dispatch) => {
-    dispatch(deleteTimeSheetsPending());
-    const data = await deleteTimeSheetsRequest();
+export const resetTimesheet = () => {
+  return {
+    type: RESET_TIMESHEET
+  };
+};
 
-    if (!data.error) dispatch(deleteTimeSheetsFulfilled(data));
-    else dispatch(deleteTimeSheetsFailed(data.message));
+export const resetMessage = () => {
+  return {
+    type: RESET_MESSAGE
   };
 };
