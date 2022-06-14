@@ -1,66 +1,77 @@
-import { getTimeSheets, getSingleTimeSheets, deleteTimeSheets } from './actions';
 import {
-  GET_TIMESHEETS_PENDING,
-  GET_TIMESHEETS_FULFILLED,
-  GET_TIMESHEETS_FAILED,
-  GET_SINGLE_TIMESHEETS_PENDING,
-  GET_SINGLE_TIMESHEETS_FULFILLED,
-  GET_SINGLE_TIMESHEETS_FAILED,
-  DELETE_TIMESHEETS_PENDING,
-  DELETE_TIMESHEETS_FULFILLED,
-  DELETE_TIMESHEETS_FAILED
+  GET_TIMESHEET_PENDING,
+  GET_TIMESHEET_SUCCESS,
+  GET_TIMESHEET_ERROR,
+  DELETE_TIMESHEET_PENDING,
+  DELETE_TIMESHEET_SUCCESS,
+  DELETE_TIMESHEET_ERROR,
+  RESET_TIMESHEET,
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
+  list: [],
   isLoading: false,
-  error: '',
+  error: false,
   message: '',
-  task: {},
-  list: []
+  timesheet: undefined
 };
 
-export const timesheetsReducer = (state = initialState, action) => {
+export const timesheetReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_TIMESHEETS_PENDING:
-      return { ...state, isLoading: true };
-    case GET_TIMESHEETS_FULFILLED:
+    case GET_TIMESHEET_PENDING:
       return {
         ...state,
-        isLoading: false
+        isLoading: true,
+        message: 'Loading...'
       };
-    case GET_TIMESHEETS_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        error: action.payload
-      };
-    case GET_SINGLE_TIMESHEETS_PENDING:
-      return { ...state, isLoading: true };
-    case GET_SINGLE_TIMESHEETS_FULFILLED:
+    case GET_TIMESHEET_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        timesheets: action.payload
+        error: false,
+        message: action.payload.message,
+        timesheet: action.payload.data
       };
-    case GET_SINGLE_TIMESHEETS_FAILED:
+    case GET_TIMESHEET_ERROR:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
-    case DELETE_TIMESHEETS_PENDING:
-      return { ...state, isLoading: true };
-    case DELETE_TIMESHEETS_FULFILLED:
+    case DELETE_TIMESHEET_PENDING:
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Loading...'
+      };
+    case DELETE_TIMESHEET_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        timesheets: action.payload
+        error: false,
+        message: action.payload.message,
+        timesheet: action.payload.data
       };
-    case DELETE_TIMESHEETS_FAILED:
+    case DELETE_TIMESHEET_ERROR:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
+    case RESET_TIMESHEET:
+      return {
+        ...state,
+        timesheet: undefined
+      };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: ''
+      };
+    default:
+      return state;
   }
 };
