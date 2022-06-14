@@ -6,27 +6,28 @@ import Loading from '../../Shared/Loading/Loading';
 import Modal from '../../Shared/Modal/Modal';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProjects, deleteProject, getSingleProject } from '../../../redux/projects/thunks';
+import { getProjects, deleteProject } from '../../../redux/projects/thunks';
 import { setMessage, setModal } from '../../../redux/projects/actions';
 
 function Projects() {
   const [isConfirmation, setIsConfirmation] = useState(true);
+  const [id, setId] = useState('');
   const resource = '/projects';
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.list);
   const isLoading = useSelector((state) => state.projects.isLoading);
-  const project = useSelector((state) => state.projects.project);
   const message = useSelector((state) => state.projects.message);
   const showModal = useSelector((state) => state.projects.showModal);
 
   const deleteItem = (id) => {
-    dispatch(getSingleProject(id));
+    setId(id);
     dispatch(setModal(true));
   };
 
-  const sureToDelete = () => {
+  const sureToDelete = async () => {
     setIsConfirmation(false);
-    dispatch(deleteProject(project._id));
+    dispatch(deleteProject(id));
+    dispatch(getProjects());
   };
 
   useEffect(async () => {
@@ -42,9 +43,6 @@ function Projects() {
         startDate: project.startDate.slice(0, 10),
         admin: project.admin ? project.admin.firstName + ' ' + project.admin.lastName : '',
         client: project.client,
-        employee: project.employeeId
-          ? project.employeeId.firstName + ' ' + project.employeeId.lastName
-          : '',
         isActive: project.isActive.toString()
       };
     });
@@ -57,12 +55,10 @@ function Projects() {
     { header: 'Start Date', key: 'startDate' },
     { header: 'Admin', key: 'admin' },
     { header: 'Client', key: 'client' },
-    { header: 'Employees', key: 'employee' },
     { header: 'Is Active?', key: 'isActive' }
   ];
 
   const closeHandler = () => {
-    dispatch(getProjects());
     dispatch(setModal(false));
     dispatch(setMessage());
     setIsConfirmation(true);
