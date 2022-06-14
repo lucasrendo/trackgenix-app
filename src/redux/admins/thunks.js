@@ -10,7 +10,10 @@ import {
   updateAdminSuccess,
   deleteAdminError,
   deleteAdminPending,
-  deleteAdminSuccess
+  deleteAdminSuccess,
+  getSingleAdminError,
+  getSingleAdminPending,
+  getSingleAdminSuccess
 } from './actions';
 
 export const getAdmins = () => {
@@ -23,6 +26,20 @@ export const getAdmins = () => {
       return response_1.data;
     } catch (error) {
       dispatch(getAdminsError(error.toString()));
+    }
+  };
+};
+
+export const getSingleAdmin = (id) => {
+  return async (dispatch) => {
+    dispatch(getSingleAdminPending());
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`);
+      const response_1 = await response.json();
+      dispatch(getSingleAdminSuccess(response_1.data));
+      return response_1.data;
+    } catch (error) {
+      dispatch(getSingleAdminError(error.toString()));
     }
   };
 };

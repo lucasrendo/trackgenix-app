@@ -14,7 +14,6 @@ const Admins = () => {
   const serverPath = '/admins';
   const admins = useSelector((state) => state.admins.list);
   const pending = useSelector((state) => state.admins.pending);
-  const admin = useSelector((state) => state.admins.admin);
   const error = useSelector((state) => state.admins.error);
 
   const headers = [

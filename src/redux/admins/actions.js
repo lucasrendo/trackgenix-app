@@ -10,7 +10,10 @@ import {
   UPDATE_ADMIN_SUCCESS,
   DELETE_ADMIN_ERROR,
   DELETE_ADMIN_PENDING,
-  DELETE_ADMIN_SUCCESS
+  DELETE_ADMIN_SUCCESS,
+  GET_SINGLE_ADMIN_ERROR,
+  GET_SINGLE_ADMIN_PENDING,
+  GET_SINGLE_ADMIN_SUCCESS
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -22,49 +25,63 @@ export const getAdminsPending = () => ({
   type: GET_ADMINS_PENDING
 });
 
-export const getAdminsError = (error) => ({
+export const getAdminsError = (message) => ({
   type: GET_ADMINS_ERROR,
-  payload: error
+  payload: message
 });
 
-export const addAdminSuccess = (admins) => ({
+export const getSingleAdminSuccess = (admin) => ({
+  type: GET_SINGLE_ADMIN_SUCCESS,
+  payload: admin
+});
+
+export const getSingleAdminPending = () => ({
+  type: GET_SINGLE_ADMIN_PENDING
+});
+
+export const getSingleAdminError = (message) => ({
+  type: GET_SINGLE_ADMIN_ERROR,
+  payload: message
+});
+
+export const addAdminSuccess = (admin) => ({
   type: ADD_ADMIN_SUCCESS,
-  payload: admins
+  payload: admin
 });
 
 export const addAdminPending = () => ({
   type: ADD_ADMIN_PENDING
 });
 
-export const addAdminError = (error) => ({
+export const addAdminError = (message) => ({
   type: ADD_ADMIN_ERROR,
-  payload: error
+  payload: message
 });
 
-export const updateAdminSuccess = (admins) => ({
+export const updateAdminSuccess = (admin) => ({
   type: UPDATE_ADMIN_SUCCESS,
-  payload: admins
+  payload: admin
 });
 
 export const updateAdminPending = () => ({
   type: UPDATE_ADMIN_PENDING
 });
 
-export const updateAdminError = (error) => ({
+export const updateAdminError = (message) => ({
   type: UPDATE_ADMIN_ERROR,
-  payload: error
+  payload: message
 });
 
-export const deleteAdminSuccess = (admins) => ({
+export const deleteAdminSuccess = (message) => ({
   type: DELETE_ADMIN_SUCCESS,
-  payload: admins
+  payload: message
 });
 
 export const deleteAdminPending = () => ({
   type: DELETE_ADMIN_PENDING
 });
 
-export const deleteAdminError = (error) => ({
+export const deleteAdminError = (message) => ({
   type: DELETE_ADMIN_ERROR,
-  payload: error
+  payload: message
 });
