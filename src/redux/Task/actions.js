@@ -15,9 +15,7 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_TASK,
-  RESET_MESSAGE,
-  FILL_TASK,
-  FORMAT_TASK_OBJECTS
+  RESET_MESSAGE
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -27,7 +25,7 @@ export const getTasksPending = () => {
   };
 };
 
-export const getTasksFulfilled = (data) => {
+export const getTasksSuccess = (data) => {
   return {
     type: GET_TASKS_SUCCESS,
     payload: data
@@ -48,7 +46,7 @@ export const getSingleTaskPending = () => {
   };
 };
 
-export const getSingleTaskFulfilled = (data) => {
+export const getSingleTaskSuccess = (data) => {
   return {
     type: GET_SINGLE_TASK_SUCCESS,
     payload: data
@@ -69,7 +67,7 @@ export const createTaskPending = () => {
   };
 };
 
-export const createTaskFulfilled = (data) => {
+export const createTaskSuccess = (data) => {
   return {
     type: CREATE_TASK_SUCCESS,
     payload: data
@@ -90,7 +88,7 @@ export const updateTaskPending = () => {
   };
 };
 
-export const updateTaskFulfilled = (data) => {
+export const updateTaskSuccess = (data) => {
   return {
     type: UPDATE_TASK_SUCCESS,
     payload: data
@@ -111,7 +109,7 @@ export const deleteTaskPending = () => {
   };
 };
 
-export const deleteTaskFulfilled = (data) => {
+export const deleteTaskSuccess = (data) => {
   return {
     type: DELETE_TASK_SUCCESS,
     payload: data
@@ -129,20 +127,6 @@ export const deleteTaskFailed = (message) => {
 export const resetTask = () => {
   return {
     type: RESET_TASK
-  };
-};
-
-export const fillTask = (userInput) => {
-  return {
-    type: FILL_TASK,
-    payload: userInput
-  };
-};
-
-export const formatTaskObjects = (object) => {
-  return {
-    type: FORMAT_TASK_OBJECTS,
-    payload: object
   };
 };
 

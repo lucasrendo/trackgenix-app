@@ -15,9 +15,7 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_TASK,
-  RESET_MESSAGE,
-  FILL_TASK,
-  FORMAT_TASK_OBJECTS
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
@@ -87,11 +85,6 @@ export const tasksReducer = (state = initialState, action) => {
         isLoading: false,
         error: true,
         message: action.payload
-      };
-    case FILL_TASK:
-      return {
-        ...state,
-        task: { ...state.task, ...action.payload }
       };
     case RESET_TASK:
       return {

@@ -1,18 +1,18 @@
 import {
   getTasksPending,
-  getTasksFulfilled,
+  getTasksSuccess,
   getTasksFailed,
   getSingleTaskPending,
-  getSingleTaskFulfilled,
+  getSingleTaskSuccess,
   getSingleTaskFailed,
   createTaskPending,
-  createTaskFulfilled,
+  createTaskSuccess,
   createTaskFailed,
   updateTaskPending,
-  updateTaskFulfilled,
+  updateTaskSuccess,
   updateTaskFailed,
   deleteTaskPending,
-  deleteTaskFulfilled,
+  deleteTaskSuccess,
   deleteTaskFailed,
   resetTask,
   resetMessage
@@ -27,7 +27,7 @@ export const getTasks = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      if (!data.error) dispatch(getTasksFulfilled(data));
+      if (!data.error) dispatch(getTasksSuccess(data));
       else dispatch(getTasksFailed(data.message));
     } catch (error) {
       dispatch(getTasksFailed(error));
@@ -42,7 +42,7 @@ export const getSingleTask = (id) => {
       const response = await fetch(`${url}/${id}`);
       const data = await response.json();
 
-      if (!data.error) dispatch(getSingleTaskFulfilled(data));
+      if (!data.error) dispatch(getSingleTaskSuccess(data));
       else dispatch(getSingleTaskFailed(data.message));
     } catch (error) {
       dispatch(getSingleTaskFailed(error));
@@ -64,7 +64,7 @@ export const createTask = (object) => {
       const data = await response.json();
 
       if (!data.error) {
-        dispatch(createTaskFulfilled(data));
+        dispatch(createTaskSuccess(data));
         dispatch(resetTask());
       } else dispatch(createTaskFailed(data.message));
     } catch (error) {
@@ -88,7 +88,7 @@ export const updateTask = (object, id) => {
       const data = await response.json();
 
       if (!data.error) {
-        dispatch(updateTaskFulfilled(data));
+        dispatch(updateTaskSuccess(data));
         dispatch(resetTask());
       } else dispatch(updateTaskFailed(data.message));
     } catch (error) {
@@ -111,7 +111,7 @@ export const deleteTask = (id) => {
       const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
 
-      if (!data.error) dispatch(deleteTaskFulfilled(data));
+      if (!data.error) dispatch(deleteTaskSuccess(data));
       else dispatch(deleteTaskFailed(data.message));
     } catch (error) {
       dispatch(deleteTaskFailed(error));
