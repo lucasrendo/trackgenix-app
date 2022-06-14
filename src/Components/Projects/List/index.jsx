@@ -17,7 +17,6 @@ function Projects() {
   const isLoading = useSelector((state) => state.projects.isLoading);
   const project = useSelector((state) => state.projects.project);
   const message = useSelector((state) => state.projects.message);
-  const error = useSelector((state) => state.projects.error);
   const showModal = useSelector((state) => state.projects.showModal);
 
   const deleteItem = (id) => {
@@ -87,7 +86,7 @@ function Projects() {
         isConfirmation={isConfirmation}
         confirmed={() => sureToDelete()}
       >
-        <h2>{isConfirmation ? 'Are you sure you want to delete this task?' : message}</h2>
+        <h2>{isConfirmation ? 'Are you sure you want to delete this Project?' : message}</h2>
       </Modal>
       <div>
         <Link to={'/projects/form'} className={styles.linkReset}>
