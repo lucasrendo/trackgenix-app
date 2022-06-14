@@ -4,11 +4,18 @@ import styles from './admins.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
 
 const Admins = () => {
-  const [admins, setAdmins] = useState([]);
-  const [isLoading, setIsLoading] = useState([true]);
+  const dispatch = useDispatch();
+  // const [admins, setAdmins] = useState([]);
+  // const [isLoading, setIsLoading] = useState([true]);
   const serverPath = '/admins';
+  const admins = useSelector((state) => state.admins.list);
+  const pending = useSelector((state) => state.admins.pending);
+  const admin = useSelector((state) => state.admins.admin);
+  const error = useSelector((state) => state.admins.error);
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -18,29 +25,29 @@ const Admins = () => {
   ];
 
   useEffect(() => {
-    getAdmins();
+    dispatch(getAdmins());
   }, []);
 
-  const getAdmins = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const body = await response.json();
-      setAdmins(body.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  // const getAdmins = async () => {
+  //   try {
+  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+  //     const body = await response.json();
+  //     setAdmins(body.data);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
 
-  const deleteAdmin = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    setAdmins([...admins.filter((admin) => admin._id !== id)]);
-  };
+  // const deleteAdmin = async (id) => {
+  //   await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       'Content-type': 'application/json'
+  //     }
+  //   });
+  //   setAdmins([...admins.filter((admin) => admin._id !== id)]);
+  // };
 
   const formatListData = (responseData) => {
     const data = responseData.map((admin) => {
@@ -55,7 +62,7 @@ const Admins = () => {
     return data;
   };
 
-  return isLoading ? (
+  return pending ? (
     <>
       <h2>Admins</h2>
       <Loading />
@@ -68,7 +75,7 @@ const Admins = () => {
         data={formatListData(admins)}
         headers={headers}
         resource={serverPath}
-        deleteItem={deleteAdmin}
+        deleteItem={async (id) => dispatch(deleteAdmin(id))}
       />
       <div>
         <Link to={'/admins/form'} className={styles.linkReset}>
