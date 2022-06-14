@@ -2,6 +2,9 @@ import {
   GET_SUPER_ADMIN_SUCCESS,
   GET_SUPER_ADMIN_PENDING,
   GET_SUPER_ADMIN_ERROR,
+  GET_SINGLE_SUPER_ADMIN_SUCCESS,
+  GET_SINGLE_SUPER_ADMIN_PENDING,
+  GET_SINGLE_SUPER_ADMIN_ERROR,
   DELETE_SUPER_ADMIN_SUCCESS,
   DELETE_SUPER_ADMIN_PENDING,
   DELETE_SUPER_ADMIN_ERROR,
@@ -10,7 +13,9 @@ import {
   ADD_SUPER_ADMIN_ERROR,
   EDIT_SUPER_ADMIN_SUCCESS,
   EDIT_SUPER_ADMIN_PENDING,
-  EDIT_SUPER_ADMIN_ERROR
+  EDIT_SUPER_ADMIN_ERROR,
+  SUPER_ADMIN_MODAL,
+  SUPER_ADMIN_MESSAGE
 } from './constants';
 
 export const getSuperAdminSuccess = (superAdmins) => ({
@@ -26,10 +31,23 @@ export const getSuperAdminError = (error) => ({
   type: GET_SUPER_ADMIN_ERROR,
   payload: error
 });
+export const getSingleSuperAdminSuccess = (id) => ({
+  type: GET_SINGLE_SUPER_ADMIN_SUCCESS,
+  payload: id
+});
 
-export const deleteSuperAdminSuccess = (superAdmins) => ({
+export const getSingleSuperAdminPending = () => ({
+  type: GET_SINGLE_SUPER_ADMIN_PENDING
+});
+
+export const getSingleSuperAdminError = (error) => ({
+  type: GET_SINGLE_SUPER_ADMIN_ERROR,
+  payload: error
+});
+
+export const deleteSuperAdminSuccess = (superAdminsId) => ({
   type: DELETE_SUPER_ADMIN_SUCCESS,
-  payload: superAdmins
+  payload: superAdminsId
 });
 
 export const deleteSuperAdminPending = () => ({
@@ -67,4 +85,13 @@ export const editSuperAdminPending = () => ({
 export const editSuperAdminError = (error) => ({
   type: EDIT_SUPER_ADMIN_ERROR,
   payload: error
+});
+
+export const superAdminModal = (state) => ({
+  type: SUPER_ADMIN_MODAL,
+  payload: state
+});
+
+export const superAdminMessage = () => ({
+  type: SUPER_ADMIN_MESSAGE
 });

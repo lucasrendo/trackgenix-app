@@ -4,10 +4,16 @@ import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
 import styles from './super-admins.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSuperAdmins } from '../../../redux/super admins/thunks';
 
 function SuperAdmins() {
+  const dispatch = useDispatch();
+
+  const superAdmins = useSelector((state) => state.superAdmins.list);
+  const isLoading = useSelector((state) => state.superAdmins.isLoading);
+
   const [superadminsList, saveSuperadmins] = useState([]);
-  const [isLoading, setIsLoading] = useState([true]);
   const serverPath = '/super-admins';
 
   const headers = [
@@ -18,19 +24,8 @@ function SuperAdmins() {
   ];
 
   useEffect(async () => {
-    getSuperAdmins();
+    dispatch(getSuperAdmins());
   }, []);
-
-  const getSuperAdmins = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
-      const body = await response.json();
-      saveSuperadmins(body.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
-  };
 
   const deleteSuperAdmin = async (id) => {
     await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
@@ -65,8 +60,8 @@ function SuperAdmins() {
     <section className={styles.container}>
       <h2>Super Admins</h2>
       <List
-        fullList={superadminsList}
-        data={formatListData(superadminsList)}
+        fullList={superAdmins}
+        data={formatListData(superAdmins)}
         headers={headers}
         resource={serverPath}
         deleteItem={deleteSuperAdmin}
