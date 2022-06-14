@@ -1,21 +1,11 @@
+import { getTimeSheetsRequest, deleteTimeSheetsRequest } from './thunks';
 import {
-  getTimeSheetsRequest,
-  getSingleTimeSheetsRequest,
-  deleteTimeSheetsRequest
-} from './thunks';
-import {
-  GET_TIMESHEETS,
   GET_TIMESHEETS_PENDING,
-  GET_TIMESHEETS_FULFILLED,
-  GET_TIMESHEETS_FAILED,
-  GET_SINGLE_TIMESHEETS,
-  GET_SINGLE_TIMESHEETS_PENDING,
-  GET_SINGLE_TIMESHEETS_FULFILLED,
-  GET_SINGLE_TIMESHEETS_FAILED,
-  DELETE_TIMESHEETS,
+  GET_TIMESHEETS_SUCCESS,
+  GET_TIMESHEETS_ERROR,
   DELETE_TIMESHEETS_PENDING,
-  DELETE_TIMESHEETS_FULFILLED,
-  DELETE_TIMESHEETS_FAILED
+  DELETE_TIMESHEETS_SUCCESS,
+  DELETE_TIMESHEETS_ERROR
 } from './constants';
 
 const getTimeSheetsPending = () => {
@@ -26,14 +16,14 @@ const getTimeSheetsPending = () => {
 
 const getTimeSheetsFulfilled = (data) => {
   return {
-    type: GET_TIMESHEETS_FULFILLED,
+    type: GET_TIMESHEETS_SUCCESS,
     payload: data
   };
 };
 
 const getTimeSheetsFailed = (error) => {
   return {
-    type: GET_TIMESHEETS_FAILED,
+    type: GET_TIMESHEETS_ERROR,
     payload: error
   };
 };
@@ -48,36 +38,6 @@ export const getTimeSheets = () => {
   };
 };
 
-const getSingleTimeSheetsPending = () => {
-  return {
-    type: GET_SINGLE_TIMESHEETS_PENDING
-  };
-};
-
-const getSingleTimeSheetsFulfilled = (data) => {
-  return {
-    type: GET_SINGLE_TIMESHEETS_FULFILLED,
-    payload: data
-  };
-};
-
-const getSingleTimeSheetsFailed = (message) => {
-  return {
-    type: GET_SINGLE_TIMESHEETS_FAILED,
-    payload: message
-  };
-};
-
-export const getSingleTimeSheets = () => {
-  return async (dispatch) => {
-    dispatch(getSingleTimeSheetsPending());
-    const data = await getSingleTimeSheetsRequest();
-
-    if (!data.error) dispatch(getSingleTimeSheetsFulfilled(data));
-    else dispatch(getSingleTimeSheetsFailed(data.message));
-  };
-};
-
 const deleteTimeSheetsPending = () => {
   return {
     type: DELETE_TIMESHEETS_PENDING
@@ -86,14 +46,14 @@ const deleteTimeSheetsPending = () => {
 
 const deleteTimeSheetsFulfilled = (data) => {
   return {
-    type: DELETE_TIMESHEETS_FULFILLED,
+    type: DELETE_TIMESHEETS_SUCCESS,
     payload: data
   };
 };
 
 const deleteTimeSheetsFailed = (message) => {
   return {
-    type: DELETE_TIMESHEETS_FAILED,
+    type: DELETE_TIMESHEETS_ERROR,
     payload: message
   };
 };
