@@ -16,6 +16,8 @@ function Tasks() {
   const message = useSelector((state) => state.tasks.message);
   const error = useSelector((state) => state.tasks.error);
   const showModal = useSelector((state) => state.tasks.showModal);
+  const [confirmation, setConfirmation] = useState(true);
+  const [id, setId] = useState('');
   const HEADERS = [
     { header: 'Employee', key: 'employee' },
     { header: 'Project', key: 'project' },
@@ -42,10 +44,16 @@ function Tasks() {
     return data;
   };
 
+  const confirmationHandler = async () => {
+    setConfirmation(false);
+    dispatch(deleteTask(id));
+  };
+
   const closeHandler = () => {
     !error && dispatch(getTasks());
     dispatch(setModal(false));
     dispatch(resetMessage());
+    setConfirmation(true);
   };
 
   return (
@@ -59,7 +67,10 @@ function Tasks() {
             data={formatTaskData(list)}
             headers={HEADERS}
             resource="/tasks"
-            deleteItem={async (id) => dispatch(deleteTask(id))}
+            deleteItem={(id) => {
+              setId(id);
+              dispatch(setModal(true));
+            }}
           />
           <div>
             <Link to="/tasks/form" className={styles.linkReset}>
@@ -68,8 +79,13 @@ function Tasks() {
           </div>
         </>
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>{message}</h2>
+      <Modal
+        isOpen={showModal}
+        isConfirmation={confirmation}
+        handleClose={confirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
+        confirmed={() => confirmationHandler()}
+      >
+        <h2>{confirmation ? 'Are you sure you want to delete this task?' : message}</h2>
       </Modal>
     </section>
   );

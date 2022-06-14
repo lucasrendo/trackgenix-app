@@ -91,7 +91,8 @@ export const tasksReducer = (state = initialState, action) => {
     case DELETE_TASK_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        message: 'Deleting...'
       };
     case DELETE_TASK_FULFILLED:
       return {
