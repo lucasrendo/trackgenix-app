@@ -16,6 +16,8 @@ import {
   DELETE_EMPLOYEES_ERROR,
   FILL_EMPLOYEE,
   FORMAT_EMPLOYEE_OBJECTS,
+  SET_MODAL,
+  UPDATE_LIST,
   RESET_MESSAGE
 } from './constants';
 
@@ -100,23 +102,28 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, error: true, message: action.payload };
 
     case DELETE_EMPLOYEES_SUCCESS:
-      return {};
+      return { ...state, isLoading: false, message: action.payload, showModal: true, error: false };
 
     case DELETE_EMPLOYEES_PENDING:
       return { ...state, isLoading: true };
 
     case DELETE_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, isLoading: false, error: true, message: action.payload.message };
 
     case FILL_EMPLOYEE:
       return { ...state, employee: { ...state.employee, ...action.payload } };
 
-    case FORMAT_EMPLOYEE_OBJECTS:
-      return {};
+    case SET_MODAL:
+      return { ...state, showModal: action.payload };
 
     case RESET_MESSAGE:
       return { ...state, message: '' };
 
+    case UPDATE_LIST:
+      return {
+        ...state,
+        list: action.payload
+      };
     default:
       return state;
   }

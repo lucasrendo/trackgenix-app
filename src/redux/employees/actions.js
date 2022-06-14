@@ -17,7 +17,9 @@ import {
   RESET_EMPLOYEE,
   FILL_EMPLOYEE,
   FORMAT_EMPLOYEE_OBJECTS,
-  RESET_MESSAGE
+  SET_MODAL,
+  RESET_MESSAGE,
+  UPDATE_LIST
 } from './constants';
 
 export const getEmployeesSuccess = (data) => {
@@ -81,4 +83,12 @@ export const formatEmployeeObject = (object) => {
 };
 export const resetMessage = () => {
   return { type: RESET_MESSAGE };
+};
+
+export const setModal = (state) => {
+  return { type: SET_MODAL, payload: state };
+};
+
+export const updateList = (newList) => {
+  return { type: UPDATE_LIST, payload: newList };
 };

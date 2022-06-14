@@ -94,15 +94,14 @@ export const editEmployees = (object, id) => {
   };
 };
 
-export const deleteEmployees = (object, id) => {
+export const deleteEmployees = (id) => {
   return async (dispatch) => {
     try {
       const requestConfig = {
         method: 'DELETE',
         headers: {
           'Content-type': 'application/json'
-        },
-        body: JSON.stringify(object)
+        }
       };
       dispatch(deleteEmployeesPending());
       dispatch(resetMessage());
