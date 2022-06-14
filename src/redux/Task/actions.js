@@ -27,7 +27,7 @@ export const getTasksPending = () => {
   };
 };
 
-export const getTasksSuccess = (data) => {
+export const getTasksFulfilled = (data) => {
   return {
     type: GET_TASKS_SUCCESS,
     payload: data
@@ -48,7 +48,7 @@ export const getSingleTaskPending = () => {
   };
 };
 
-export const getSingleTaskSuccess = (data) => {
+export const getSingleTaskFulfilled = (data) => {
   return {
     type: GET_SINGLE_TASK_SUCCESS,
     payload: data
@@ -69,7 +69,7 @@ export const createTaskPending = () => {
   };
 };
 
-export const createTaskSuccess = (data) => {
+export const createTaskFulfilled = (data) => {
   return {
     type: CREATE_TASK_SUCCESS,
     payload: data
@@ -90,7 +90,7 @@ export const updateTaskPending = () => {
   };
 };
 
-export const updateTaskSuccess = (data) => {
+export const updateTaskFulfilled = (data) => {
   return {
     type: UPDATE_TASK_SUCCESS,
     payload: data
@@ -111,7 +111,7 @@ export const deleteTaskPending = () => {
   };
 };
 
-export const deleteTaskSuccess = (data) => {
+export const deleteTaskFulfilled = (data) => {
   return {
     type: DELETE_TASK_SUCCESS,
     payload: data
