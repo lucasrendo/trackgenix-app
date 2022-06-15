@@ -112,7 +112,7 @@ export const editSuperAdmins = (obj, id) => {
         dispatch(resetSuperAdmin());
       } else dispatch(editSuperAdminError(data.message));
     } catch (error) {
-      dispatch(editSuperAdminError(error));
+      dispatch(editSuperAdminError(error.toString()));
     }
   };
 };

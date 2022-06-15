@@ -28,19 +28,6 @@ function SuperAdminsForm() {
     return () => dispatch(resetSuperAdmin);
   }, []);
 
-  // const getSuperAdmin = async () => {
-  //   try {
-  //     if (id) {
-  //       const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-  //       const body = await response.json();
-  //       saveSuperadmins(body.data);
-  //     }
-  //   } catch (error) {
-  //     setModalMessage(error);
-  //     setIsAdding(true);
-  //   }
-  // };
-
   const config = [
     {
       header: 'First Name',
@@ -73,37 +60,6 @@ function SuperAdminsForm() {
       required: false
     }
   ];
-
-  // === Fetch functions === key
-  // const createInstance = async (obj) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-  //       method: 'POST',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(obj)
-  //     });
-  //     const body = await res.json();
-  //     return { message: body.message, err: body.error };
-  //   } catch (error) {
-  //     setModalMessage(error);
-  //     setIsAdding(true);
-  //   }
-  // };
-
-  // const updateInstance = async (obj) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-  //       method: 'PUT',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(obj)
-  //     });
-  //     const body = await res.json();
-  //     return { message: body.message, err: body.error };
-  //   } catch (error) {
-  //     setModalMessage(error);
-  //     setIsAdding(true);
-  //   }
-  // };
 
   const closeHandler = () => {
     setModalMessage(false);
