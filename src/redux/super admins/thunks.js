@@ -60,7 +60,7 @@ export const deleteSuperAdmins = (id) => {
       const response = await fetch(`${url}/${id}`, reqConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(deleteSuperAdminSuccess());
+        dispatch(deleteSuperAdminSuccess(data.message));
         dispatch(resetSuperAdmin());
       }
     } catch (error) {
