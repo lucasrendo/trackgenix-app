@@ -3,14 +3,14 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './admins.module.css';
 import Form from '../../Shared/Form/Form';
-import { addAdmin, updateAdmin, getSingleAdmin } from '../../../redux/admins/thunks';
+import { addAdmin, updateAdmin, getSingleAdmin, getAdmins } from '../../../redux/admins/thunks';
 import Modal from '../../Shared/Modal/Modal';
 
 const Admins = () => {
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin.admin);
-  const pending = useSelector((state) => state.admin.pending);
-  const error = useSelector((state) => state.admin.error);
+  const admin = useSelector((state) => state.admins.admin);
+  const pending = useSelector((state) => state.admins.pending);
+  const error = useSelector((state) => state.admins.error);
   const { id } = useParams();
   const { goBack } = useHistory();
   // const [admin, setAdmin] = useState();
@@ -53,7 +53,7 @@ const Admins = () => {
   ];
 
   useEffect(() => {
-    getAdmin();
+    getAdmins();
   }, []);
 
   const getAdmin = async () => {

@@ -10,14 +10,17 @@ import {
   UPDATE_ADMIN_SUCCESS,
   DELETE_ADMIN_ERROR,
   DELETE_ADMIN_PENDING,
-  DELETE_ADMIN_SUCCESS
+  DELETE_ADMIN_SUCCESS,
+  GET_SINGLE_ADMIN_ERROR,
+  GET_SINGLE_ADMIN_PENDING,
+  GET_SINGLE_ADMIN_SUCCESS
 } from './constants';
 
 const initialState = {
   list: [],
   pending: false,
-  error: '',
-  admin: {}
+  admin: {},
+  error: ''
 };
 
 export const adminsReducer = (state = initialState, action) => {
@@ -34,6 +37,23 @@ export const adminsReducer = (state = initialState, action) => {
         list: action.payload
       };
     case GET_ADMINS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case GET_SINGLE_ADMIN_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case GET_SINGLE_ADMIN_SUCCESS:
+      return {
+        ...state,
+        pending: false,
+        admin: action.payload
+      };
+    case GET_SINGLE_ADMIN_ERROR:
       return {
         ...state,
         error: action.payload,
