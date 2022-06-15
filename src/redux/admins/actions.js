@@ -13,7 +13,8 @@ import {
   DELETE_ADMIN_SUCCESS,
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
-  GET_SINGLE_ADMIN_SUCCESS
+  GET_SINGLE_ADMIN_SUCCESS,
+  UPDATE_LIST
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -85,3 +86,10 @@ export const deleteAdminError = (message) => ({
   type: DELETE_ADMIN_ERROR,
   payload: message
 });
+
+export const updateList = (newList) => {
+  return {
+    type: UPDATE_LIST,
+    payload: newList
+  };
+};

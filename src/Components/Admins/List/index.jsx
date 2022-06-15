@@ -6,6 +6,7 @@ import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
+import { updateList } from '../../../redux/admins/actions';
 
 const Admins = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,11 @@ const Admins = () => {
   useEffect(() => {
     dispatch(getAdmins());
   }, []);
+
+  const deleteItem = (id) => {
+    dispatch(deleteAdmin(id));
+    !error && dispatch(updateList([...admins.filter((admin) => admin._id !== id)]));
+  };
 
   const formatListData = (responseData) => {
     const data = responseData.map((admin) => {
@@ -51,7 +57,7 @@ const Admins = () => {
         data={formatListData(admins)}
         headers={headers}
         resource={serverPath}
-        deleteItem={async (id) => dispatch(deleteAdmin(id))}
+        deleteItem={deleteItem}
       />
       <div>
         <Link to={'/admins/form'} className={styles.linkReset}>
