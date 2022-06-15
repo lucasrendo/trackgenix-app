@@ -107,20 +107,13 @@ const Admins = () => {
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
     e.preventDefault();
-    let result;
     if (id) {
       dispatch(updateAdmin(inputValues, id));
     } else {
       dispatch(addAdmin(inputValues));
     }
-    error(result.err);
-    setModalMessage(result.message);
+    setModalMessage('Success');
     setIsAdding(true);
-    if (result && !result.err) {
-      setInputValues({});
-      setModalMessage(result.message);
-      setIsAdding(true);
-    }
   };
 
   return (
