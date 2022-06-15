@@ -92,7 +92,7 @@ export const editProject = (obj, id) => {
         dispatch(resetProject());
       } else dispatch(editProjectError(data.message));
     } catch (error) {
-      dispatch(editProjectError(error));
+      dispatch(editProjectError(error.toString()));
     }
   };
 };

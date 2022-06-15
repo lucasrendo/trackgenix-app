@@ -10,7 +10,6 @@ import {
   GET_SINGLE_PROJECT_ERROR,
   RESET_PROJECT,
   RESET_MESSAGE
-  //FORMATED_PROJECT
 } from './constants';
 
 const initialState = {
@@ -95,7 +94,7 @@ export const projectReducer = (state = initialState, action) => {
           client: action.payload.data.client,
           employees: [
             {
-              employeeId: action.payload.employees[0].employeeId,
+              employeeId: action.payload.data.employees[0].employeeId,
               role: action.payload.data.employees[0].role,
               rate: action.payload.data.employees[0].rate,
               hoursInProject: action.payload.data.employees[0].hoursInProject
@@ -124,23 +123,6 @@ export const projectReducer = (state = initialState, action) => {
         ...state,
         message: ''
       };
-    // case FORMATED_PROJECT:
-    //   return {
-    //     ...state,
-    //     project: {
-    //       projectName: action.payload.data.projectName,
-    //       description: action.payload.data.description,
-    //       startDate: action.payload.data.startDate,
-    //       endDate: action.payload.data.endDate,
-    //       admin: action.payload.data.admin,
-    //       client: action.payload.data.client,
-    //       employees: action.payload.data.employees,
-    //       role: action.payload.data.role,
-    //       rate: action.payload.data.rate,
-    //       hoursInProject: action.payload.data.hoursInProject,
-    //       isActive: action.payload.data.isActive
-    //     }
-    //   };
     default:
       return state;
   }
