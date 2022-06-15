@@ -38,8 +38,8 @@ export const getSingleSuperAdmins = (id) => {
       dispatch(getSingleSuperAdminPending());
       const response = await fetch(`${url}/${id}`);
       const data = await response.json();
-      if (!data.error) dispatch(getSingleSuperAdminSuccess());
-      else dispatch(getSingleSuperAdminError());
+      if (!data.error) dispatch(getSingleSuperAdminSuccess(data));
+      else dispatch(getSingleSuperAdminError(data.message));
     } catch (error) {
       dispatch(getSingleSuperAdminError(error.message));
     }

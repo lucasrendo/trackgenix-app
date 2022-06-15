@@ -25,7 +25,7 @@ const initialState = {
   isLoading: false,
   message: '',
   error: false,
-  superAdmin: {}
+  superAdmin: undefined
 };
 
 export const superAdminsReducer = (state = initialState, action) => {
@@ -52,8 +52,9 @@ export const superAdminsReducer = (state = initialState, action) => {
     case GET_SINGLE_SUPER_ADMIN_SUCCESS:
       return {
         ...state,
-        superAdmin: action.payload,
-        isLoading: false
+        superAdmin: action.payload.data,
+        isLoading: false,
+        message: action.payload.message
       };
     case GET_SINGLE_SUPER_ADMIN_PENDING:
       return {
@@ -121,7 +122,7 @@ export const superAdminsReducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.payload,
-        pending: false,
+        isLoading: false,
         error: true,
         modal: true
       };

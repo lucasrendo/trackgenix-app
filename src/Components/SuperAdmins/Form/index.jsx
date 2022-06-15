@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  superAdminModal,
-  updateList,
-  resetMessage,
-  resetSuperAdmin
-} from '../../../redux/super admins/actions';
+import { resetMessage, resetSuperAdmin } from '../../../redux/super admins/actions';
 import {
   createSuperAdmins,
   editSuperAdmins,
@@ -20,15 +15,14 @@ import styles from './super-admins.module.css';
 function SuperAdminsForm() {
   const { id } = useParams();
   const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
-  const [modalMessage, setModalMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState(false);
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.superAdmins.isLoading);
   const message = useSelector((state) => state.superAdmins.message);
   const error = useSelector((state) => state.superAdmins.error);
-  const superAdminList = useSelector((state) => state.superAdmins.list);
-  const resource = '/super-admin';
+  const superAdmin = useSelector((state) => state.superAdmins.superAdmin);
+  // const resource = '/super-admin';
   useEffect(async () => {
     id && dispatch(getSingleSuperAdmins(id));
     return () => dispatch(resetSuperAdmin);
@@ -133,13 +127,13 @@ function SuperAdminsForm() {
       ) : (
         <Form
           data={config}
-          itemData={superAdminList}
+          itemData={superAdmin}
           submitHandler={submitHandler}
           userInput={[inputValues, setInputValues]}
         />
       )}
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );
