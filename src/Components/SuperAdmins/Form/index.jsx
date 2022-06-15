@@ -1,34 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  superAdminModal,
+  updateList,
+  resetMessage,
+  resetSuperAdmin
+} from '../../../redux/super admins/actions';
+import {
+  createSuperAdmins,
+  editSuperAdmins,
+  getSingleSuperAdmins
+} from '../../../redux/super admins/thunks';
+import Loading from '../../Shared/Loading/Loading';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './super-admins.module.css';
 
 function SuperAdminsForm() {
-  const [superadminsList, saveSuperadmins] = useState();
   const { id } = useParams();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState('');
-  const [error, setError] = useState(true);
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.superAdmins.isLoading);
+  const message = useSelector((state) => state.superAdmins.message);
+  const error = useSelector((state) => state.superAdmins.error);
+  const superAdminList = useSelector((state) => state.superAdmins.list);
   const resource = '/super-admin';
   useEffect(async () => {
-    getSuperAdmin();
+    id && dispatch(getSingleSuperAdmins(id));
+    return () => dispatch(resetSuperAdmin);
   }, []);
 
-  const getSuperAdmin = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const body = await response.json();
-        saveSuperadmins(body.data);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
+  // const getSuperAdmin = async () => {
+  //   try {
+  //     if (id) {
+  //       const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+  //       const body = await response.json();
+  //       saveSuperadmins(body.data);
+  //     }
+  //   } catch (error) {
+  //     setModalMessage(error);
+  //     setIsAdding(true);
+  //   }
+  // };
 
   const config = [
     {
@@ -64,70 +81,64 @@ function SuperAdminsForm() {
   ];
 
   // === Fetch functions === key
-  const createInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
+  // const createInstance = async (obj) => {
+  //   try {
+  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
+  //       method: 'POST',
+  //       headers: { 'content-type': 'application/json' },
+  //       body: JSON.stringify(obj)
+  //     });
+  //     const body = await res.json();
+  //     return { message: body.message, err: body.error };
+  //   } catch (error) {
+  //     setModalMessage(error);
+  //     setIsAdding(true);
+  //   }
+  // };
 
-  const updateInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
+  // const updateInstance = async (obj) => {
+  //   try {
+  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
+  //       method: 'PUT',
+  //       headers: { 'content-type': 'application/json' },
+  //       body: JSON.stringify(obj)
+  //     });
+  //     const body = await res.json();
+  //     return { message: body.message, err: body.error };
+  //   } catch (error) {
+  //     setModalMessage(error);
+  //     setIsAdding(true);
+  //   }
+  // };
 
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    setModalMessage(false);
+    dispatch(resetMessage());
+    if (!error) {
       goBack();
     }
   };
 
   // === Handle submit data and method === //
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    let result;
-    if (id) {
-      result = await updateInstance(inputValues);
-    } else {
-      result = await createInstance(inputValues);
-    }
-
-    setError(result.err);
-    setModalMessage(result.message);
-    setIsAdding(true);
-    if (result && !result.err) setInputValues({});
+    id ? dispatch(editSuperAdmins(inputValues, id)) : dispatch(createSuperAdmins(inputValues));
   };
 
   return (
     <section className={styles.container}>
       <h2>Super Admins</h2>
-      <Form
-        data={config}
-        itemData={superadminsList}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Form
+          data={config}
+          itemData={superAdminList}
+          submitHandler={submitHandler}
+          userInput={[inputValues, setInputValues]}
+        />
+      )}
+      <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{modalMessage}</h2>
       </Modal>
     </section>

@@ -8,6 +8,12 @@ import {
   deleteSuperAdminSuccess,
   deleteSuperAdminPending,
   deleteSuperAdminError,
+  addSuperAdminSuccess,
+  addSuperAdminPending,
+  addSuperAdminError,
+  editSuperAdminSuccess,
+  editSuperAdminPending,
+  editSuperAdminError,
   resetMessage,
   resetSuperAdmin
 } from './actions';
@@ -30,9 +36,10 @@ export const getSingleSuperAdmins = (id) => {
   return async (dispatch) => {
     try {
       dispatch(getSingleSuperAdminPending());
-      const response = await fetch(`${url}/super-admin/${id}`);
+      const response = await fetch(`${url}/${id}`);
       const data = await response.json();
-      dispatch(getSingleSuperAdminSuccess(data.data));
+      if (!data.error) dispatch(getSingleSuperAdminSuccess());
+      else dispatch(getSingleSuperAdminError());
     } catch (error) {
       dispatch(getSingleSuperAdminError(error.message));
     }
@@ -58,6 +65,54 @@ export const deleteSuperAdmins = (id) => {
       }
     } catch (error) {
       dispatch(deleteSuperAdminError(error));
+    }
+  };
+};
+
+export const createSuperAdmins = (obj) => {
+  return async (dispatch) => {
+    try {
+      const reqConfig = {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      };
+      dispatch(addSuperAdminPending());
+      dispatch(resetMessage());
+      const response = await fetch(`${url}`, reqConfig);
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(addSuperAdminSuccess(data.data));
+        dispatch(resetSuperAdmin());
+      } else dispatch(addSuperAdminError(data.message));
+    } catch (error) {
+      dispatch(addSuperAdminError(error));
+    }
+  };
+};
+
+export const editSuperAdmins = (obj, id) => {
+  return async (dispatch) => {
+    try {
+      const reqConfig = {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      };
+      dispatch(editSuperAdminPending());
+      dispatch(resetMessage());
+      const response = await fetch(`${url}${id}`, reqConfig);
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(editSuperAdminSuccess(data.data));
+        dispatch(resetSuperAdmin());
+      } else dispatch(editSuperAdminError(data.message));
+    } catch (error) {
+      dispatch(editSuperAdminError(error));
     }
   };
 };
