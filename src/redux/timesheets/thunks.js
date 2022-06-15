@@ -4,15 +4,13 @@ import {
   getTimesheetError,
   deleteTimesheetPending,
   deleteTimesheetSuccess,
-  deleteTimesheetError,
-  resetMessage,
-  resetTimesheet
+  deleteTimesheetError
 } from './actions';
 
 const resource = '/timesheets';
 const url = `${process.env.REACT_APP_API_URL}/timesheets`;
 
-export const getTasks = () => {
+export const getTimesheet = () => {
   return async (dispatch) => {
     try {
       dispatch(getTimesheetPending());
@@ -27,29 +25,22 @@ export const getTasks = () => {
   };
 };
 
-export const deleteTimesheet = (timesheet, id) => {
+export const deleteTimesheet = (id) => {
   return async (dispatch) => {
     try {
       const requestConfig = {
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(timesheet)
+        headers: { 'content-type': 'application/json' }
       };
-      dispatch(resetMessage());
       dispatch(deleteTimesheetPending());
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}${resource}/${id}`,
         requestConfig
       );
       const data = await response.json();
-      if (!data.error) {
-        dispatch(deleteTimesheetSuccess(data));
-        dispatch(resetTimesheet());
-      } else {
-        dispatch(deleteTimesheetError(data.message));
-      }
+      dispatch(deleteTimesheetSuccess(data.message));
     } catch (error) {
-      dispatch(deleteTimesheetError(error));
+      dispatch(deleteTimesheetError(error.message));
     }
   };
 };

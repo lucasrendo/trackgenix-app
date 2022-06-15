@@ -5,14 +5,16 @@ import {
   DELETE_TIMESHEET_PENDING,
   DELETE_TIMESHEET_SUCCESS,
   DELETE_TIMESHEET_ERROR,
-  RESET_TIMESHEET,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 const initialState = {
   list: [],
   isLoading: false,
   error: false,
+  showModal: false,
   message: '',
   timesheet: undefined
 };
@@ -30,14 +32,14 @@ export const timesheetReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        message: action.payload.message,
-        timesheet: action.payload.data
+        list: action.payload
       };
     case GET_TIMESHEET_ERROR:
       return {
         ...state,
         isLoading: false,
         error: true,
+        showModal: true,
         message: action.payload
       };
     case DELETE_TIMESHEET_PENDING:
@@ -51,25 +53,31 @@ export const timesheetReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        message: action.payload.message,
-        timesheet: action.payload.data
+        showModal: true,
+        message: action.payload
       };
     case DELETE_TIMESHEET_ERROR:
       return {
         ...state,
         isLoading: false,
         error: true,
+        showModal: true,
         message: action.payload
-      };
-    case RESET_TIMESHEET:
-      return {
-        ...state,
-        timesheet: undefined
       };
     case RESET_MESSAGE:
       return {
         ...state,
         message: ''
+      };
+    case SET_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
+      };
+    case UPDATE_LIST:
+      return {
+        ...state,
+        list: action.payload
       };
     default:
       return state;
