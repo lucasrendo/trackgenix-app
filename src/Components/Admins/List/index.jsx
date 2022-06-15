@@ -4,6 +4,7 @@ import styles from './admins.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
+import Modal from '../../Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
 import { updateList } from '../../../redux/admins/actions';
@@ -14,6 +15,8 @@ const Admins = () => {
   const admins = useSelector((state) => state.admins.list);
   const pending = useSelector((state) => state.admins.pending);
   const error = useSelector((state) => state.admins.error);
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -28,7 +31,16 @@ const Admins = () => {
 
   const deleteItem = (id) => {
     dispatch(deleteAdmin(id));
+    setModalMessage('Admin deleted');
+    setIsAdding(true);
     !error && dispatch(updateList([...admins.filter((admin) => admin._id !== id)]));
+  };
+
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+    }
   };
 
   const formatListData = (responseData) => {
@@ -64,6 +76,9 @@ const Admins = () => {
           <Button classes="block">Create Admin</Button>
         </Link>
       </div>
+      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+        <h2>{modalMessage}</h2>
+      </Modal>
     </section>
   );
 };
