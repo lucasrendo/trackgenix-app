@@ -2,9 +2,9 @@ import {
   GET_EMPLOYEES_SUCCESS,
   GET_EMPLOYEES_PENDING,
   GET_EMPLOYEES_ERROR,
-  GET_UNIQUE_EMPLOYEES_SUCCESS,
-  GET_UNIQUE_EMPLOYEES_PENDING,
-  GET_UNIQUE_EMPLOYEES_ERROR,
+  GET_SINGLE_EMPLOYEES_SUCCESS,
+  GET_SINGLE_EMPLOYEES_PENDING,
+  GET_SINGLE_EMPLOYEES_ERROR,
   CREATE_EMPLOYEES_SUCCESS,
   CREATE_EMPLOYEES_PENDING,
   CREATE_EMPLOYEES_ERROR,
@@ -34,16 +34,16 @@ export const getEmployeesError = (error) => {
   return { type: GET_EMPLOYEES_ERROR, payload: error };
 };
 
-export const getUniqueEmployeesSuccess = (data) => {
-  return { type: GET_UNIQUE_EMPLOYEES_SUCCESS, payload: data };
+export const getSingleEmployeesSuccess = (data) => {
+  return { type: GET_SINGLE_EMPLOYEES_SUCCESS, payload: data };
 };
 
-export const getUniqueEmployeesPending = () => {
-  return { type: GET_UNIQUE_EMPLOYEES_PENDING };
+export const getSingleEmployeesPending = () => {
+  return { type: GET_SINGLE_EMPLOYEES_PENDING };
 };
 
-export const getUniqueEmployeesError = (message) => {
-  return { type: GET_UNIQUE_EMPLOYEES_ERROR, payload: message };
+export const getSingleEmployeesError = (message) => {
+  return { type: GET_SINGLE_EMPLOYEES_ERROR, payload: message };
 };
 
 export const createEmployeesSuccess = (data) => {
@@ -54,8 +54,8 @@ export const createEmployeesPending = () => {
   return { type: CREATE_EMPLOYEES_PENDING };
 };
 
-export const createEmployeesError = (message) => {
-  return { type: CREATE_EMPLOYEES_ERROR, payload: message };
+export const createEmployeesError = (error) => {
+  return { type: CREATE_EMPLOYEES_ERROR, payload: error };
 };
 
 export const editEmployeesSuccess = (data) => {
@@ -66,8 +66,8 @@ export const editEmployeesPending = () => {
   return { type: EDIT_EMPLOYEES_PENDING };
 };
 
-export const editEmployeesError = (message) => {
-  return { type: EDIT_EMPLOYEES_ERROR, payload: message };
+export const editEmployeesError = (error) => {
+  return { type: EDIT_EMPLOYEES_ERROR, payload: error };
 };
 
 export const deleteEmployeesSuccess = (data) => {
@@ -90,8 +90,8 @@ export const fillEmployee = (userInput) => {
   return { type: FILL_EMPLOYEE, payload: userInput };
 };
 
-export const formatEmployeeObject = (object) => {
-  return { type: FORMAT_EMPLOYEE_OBJECTS, payload: object };
+export const formatEmployeeObject = (data) => {
+  return { type: FORMAT_EMPLOYEE_OBJECTS, payload: data };
 };
 
 export const resetMessage = () => {

@@ -43,7 +43,6 @@ const Employees = () => {
     { header: 'First Name', key: 'firstName' },
     { header: 'Last Name', key: 'lastName' },
     { header: 'Mail', key: 'email' },
-    { header: 'Project', key: 'project' },
     { header: 'Active', key: 'isActive' }
   ];
 

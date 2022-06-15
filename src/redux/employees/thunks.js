@@ -2,9 +2,9 @@ import {
   getEmployeesSuccess,
   getEmployeesPending,
   getEmployeesError,
-  getUniqueEmployeesSuccess,
-  getUniqueEmployeesPending,
-  getUniqueEmployeesError,
+  getSingleEmployeesSuccess,
+  getSingleEmployeesPending,
+  getSingleEmployeesError,
   createEmployeesSuccess,
   createEmployeesPending,
   createEmployeesError,
@@ -15,6 +15,7 @@ import {
   deleteEmployeesPending,
   deleteEmployeesError,
   resetEmployee,
+  fillEmployee,
   resetMessage
 } from './actions.js';
 
@@ -42,20 +43,24 @@ const employeeArray = (employee) => {
   return data;
 };
 
-export const getUniqueEmployee = (id) => {
+export const getSingleEmployee = (id) => {
   return async (dispatch) => {
     try {
-      dispatch(getUniqueEmployeesPending());
+      dispatch(getSingleEmployeesPending());
       const response = await fetch(`${resource}/${id}`);
       const data = await response.json();
       const employeeFormate = formatEmployee(data.data);
-      if (!data.error) dispatch(getUniqueEmployeesSuccess(employeeFormate));
-      else dispatch(getUniqueEmployeesError(data.message));
+      if (!data.error) {
+        dispatch(getSingleEmployeesSuccess(employeeFormate));
+      } else {
+        dispatch(getSingleEmployeesError(data.message));
+      }
     } catch (error) {
-      dispatch(getUniqueEmployeesError(error));
+      dispatch(getSingleEmployeesError(error));
     }
   };
 };
+
 export const getEmployees = () => {
   return async (dispatch) => {
     try {
@@ -65,7 +70,7 @@ export const getEmployees = () => {
       if (!data.error) dispatch(getEmployeesSuccess(data.data));
       else dispatch(getEmployeesError(data.message));
     } catch (error) {
-      dispatch(getUniqueEmployeesError(error));
+      dispatch(getSingleEmployeesError(error));
     }
   };
 };
@@ -85,7 +90,7 @@ export const createEmployee = (obj) => {
       const response = await fetch(`${resource}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(createEmployeesSuccess(data.data));
+        dispatch(createEmployeesSuccess(data));
         dispatch(resetEmployee());
       } else dispatch(createEmployeesError(data.message));
     } catch (error) {
@@ -110,11 +115,11 @@ export const editEmployees = (obj, id) => {
       const response = await fetch(`${resource}/${id}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(editEmployeesSuccess());
+        dispatch(editEmployeesSuccess(data));
         dispatch(resetEmployee());
       } else dispatch(editEmployeesError(data.message));
     } catch (error) {
-      dispatch(editEmployeesError(error));
+      dispatch(editEmployeesError(error.toString()));
     }
   };
 };

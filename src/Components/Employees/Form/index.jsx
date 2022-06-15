@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
-import { getUniqueEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
+import { resetEmployee } from '../../../redux/employees/actions';
+import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading/Loading';
@@ -11,12 +11,11 @@ import styles from './employee.module.css';
 const EmployeesForm = () => {
   const [projects, setProjects] = useState([]);
   const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
   const { goBack } = useHistory();
-  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const list = useSelector((state) => state.employees.list);
+  const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const message = useSelector((state) => state.employees.message);
@@ -27,7 +26,8 @@ const EmployeesForm = () => {
       const jsonResponse = await response.json();
       return jsonResponse.data;
     } catch (error) {
-      setIsAdding(true);
+      alert(error);
+      setShowModal(true);
     }
   };
 
@@ -42,9 +42,9 @@ const EmployeesForm = () => {
   };
 
   useEffect(() => {
-    id && dispatch(getUniqueEmployee(id));
+    id && dispatch(getSingleEmployee(id));
     dataOptions();
-    return () => dispatch(resetEmployee());
+    return () => dispatch(resetEmployee);
   }, []);
 
   const config = [
@@ -88,9 +88,7 @@ const EmployeesForm = () => {
   ];
 
   const closeHandler = () => {
-    setModalMessage(false);
-    dispatch(resetMessage());
-    setIsAdding(false);
+    setShowModal(false);
     if (!error) {
       goBack();
     }
@@ -102,8 +100,8 @@ const EmployeesForm = () => {
       dispatch(editEmployees(inputValues, id));
     } else {
       dispatch(createEmployee(inputValues));
-      setIsAdding(true);
     }
+    setShowModal(true);
   };
 
   return (
@@ -114,12 +112,12 @@ const EmployeesForm = () => {
       ) : (
         <Form
           data={config}
-          itemData={list}
+          itemData={employee}
           submitHandler={submitHandler}
           userInput={[inputValues, setInputValues]}
         />
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
     </section>
