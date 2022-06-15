@@ -117,6 +117,7 @@ function SuperAdminsForm() {
   const submitHandler = (e) => {
     e.preventDefault();
     id ? dispatch(editSuperAdmins(inputValues, id)) : dispatch(createSuperAdmins(inputValues));
+    setModalMessage(true);
   };
 
   return (

@@ -84,7 +84,7 @@ export const createSuperAdmins = (obj) => {
       const response = await fetch(`${url}`, reqConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(addSuperAdminSuccess(data.data));
+        dispatch(addSuperAdminSuccess(data));
         dispatch(resetSuperAdmin());
       } else dispatch(addSuperAdminError(data.message));
     } catch (error) {
@@ -105,10 +105,10 @@ export const editSuperAdmins = (obj, id) => {
       };
       dispatch(editSuperAdminPending());
       dispatch(resetMessage());
-      const response = await fetch(`${url}${id}`, reqConfig);
+      const response = await fetch(`${url}/${id}`, reqConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(editSuperAdminSuccess(data.data));
+        dispatch(editSuperAdminSuccess(data));
         dispatch(resetSuperAdmin());
       } else dispatch(editSuperAdminError(data.message));
     } catch (error) {

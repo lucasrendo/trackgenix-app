@@ -91,8 +91,9 @@ export const superAdminsReducer = (state = initialState, action) => {
     case ADD_SUPER_ADMIN_SUCCESS:
       return {
         ...state,
-        superAdmin: action.payload,
-        isLoading: false
+        superAdmin: action.payload.data,
+        isLoading: false,
+        message: action.payload.message
       };
     case ADD_SUPER_ADMIN_PENDING:
       return {
@@ -111,7 +112,9 @@ export const superAdminsReducer = (state = initialState, action) => {
       return {
         ...state,
         list: action.payload,
-        isLoading: false
+        superAdmin: action.payload.data,
+        isLoading: false,
+        message: action.payload.message
       };
     case EDIT_SUPER_ADMIN_PENDING:
       return {
