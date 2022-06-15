@@ -13,10 +13,8 @@ const Admins = () => {
   const error = useSelector((state) => state.admins.error);
   const { id } = useParams();
   const { goBack } = useHistory();
-  // const [admin, setAdmin] = useState();
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  // const [error, setError] = useState(true);
   const [modalMessage, setModalMessage] = useState('');
   const resource = '/admins';
   const config = [
@@ -66,36 +64,6 @@ const Admins = () => {
     }
   };
 
-  // === Fetch functions === key
-  // const createInstance = async (obj) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-  //       method: 'POST',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(obj)
-  //     });
-  //     const body = await res.json();
-  //     return { message: body.message, err: body.error };
-  //   } catch (error) {
-  //     setModalMessage(error);
-  //     setIsAdding(true);
-  //   }
-  // };
-
-  // const updateInstance = async (obj) => {
-  //   try {
-  //     const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-  //       method: 'PUT',
-  //       headers: { 'content-type': 'application/json' },
-  //       body: JSON.stringify(obj)
-  //     });
-  //     const body = await res.json();
-  //     return { message: body.message, err: body.error };
-  //   } catch (error) {
-  //     setModalMessage(error);
-  //     setIsAdding(true);
-  //   }
-  // };
   const closeHandler = () => {
     if (error) setIsAdding(false);
     else {
@@ -109,10 +77,11 @@ const Admins = () => {
     e.preventDefault();
     if (id) {
       dispatch(updateAdmin(inputValues, id));
+      setModalMessage('Edit successful');
     } else {
       dispatch(addAdmin(inputValues));
+      setModalMessage('Creation successful');
     }
-    setModalMessage('Success');
     setIsAdding(true);
   };
 

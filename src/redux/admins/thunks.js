@@ -62,15 +62,14 @@ export const addAdmin = (obj) => {
   };
 };
 
-export const updateAdmin = (id) => {
+export const updateAdmin = (obj, id) => {
   return async (dispatch) => {
     dispatch(updateAdminPending());
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
         method: 'PUT',
-        headers: {
-          'Content-type': 'application/json'
-        }
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(obj)
       });
       const response_1 = await response.json();
       dispatch(updateAdminSuccess(response_1.data));
