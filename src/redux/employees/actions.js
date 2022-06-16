@@ -5,9 +5,9 @@ import {
   GET_SINGLE_EMPLOYEES_SUCCESS,
   GET_SINGLE_EMPLOYEES_PENDING,
   GET_SINGLE_EMPLOYEES_ERROR,
-  CREATE_EMPLOYEES_SUCCESS,
-  CREATE_EMPLOYEES_PENDING,
-  CREATE_EMPLOYEES_ERROR,
+  ADD_EMPLOYEES_SUCCESS,
+  ADD_EMPLOYEES_PENDING,
+  ADD_EMPLOYEES_ERROR,
   EDIT_EMPLOYEES_SUCCESS,
   EDIT_EMPLOYEES_PENDING,
   EDIT_EMPLOYEES_ERROR,
@@ -47,15 +47,15 @@ export const getSingleEmployeesError = (message) => {
 };
 
 export const createEmployeesSuccess = (data) => {
-  return { type: CREATE_EMPLOYEES_SUCCESS, payload: data };
+  return { type: ADD_EMPLOYEES_SUCCESS, payload: data };
 };
 
 export const createEmployeesPending = () => {
-  return { type: CREATE_EMPLOYEES_PENDING };
+  return { type: ADD_EMPLOYEES_PENDING };
 };
 
 export const createEmployeesError = (error) => {
-  return { type: CREATE_EMPLOYEES_ERROR, payload: error };
+  return { type: ADD_EMPLOYEES_ERROR, payload: error };
 };
 
 export const editEmployeesSuccess = (data) => {

@@ -94,7 +94,7 @@ const EmployeesForm = () => {
     }
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (id) {
       dispatch(editEmployees(inputValues, id));

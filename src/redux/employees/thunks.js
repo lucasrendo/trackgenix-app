@@ -15,21 +15,10 @@ import {
   deleteEmployeesPending,
   deleteEmployeesError,
   resetEmployee,
-  fillEmployee,
   resetMessage
 } from './actions.js';
 
 const resource = `${process.env.REACT_APP_API_URL}/employees`;
-const formatEmployee = (employee) => {
-  return {
-    firstName: employee.firstName,
-    lastName: employee.lastName,
-    email: employee.email,
-    password: employee.password,
-    assignedProjects: employee.assignedProjects[0]._id,
-    isActive: employee.isActive
-  };
-};
 
 const employeeArray = (employee) => {
   const data = {
@@ -49,9 +38,8 @@ export const getSingleEmployee = (id) => {
       dispatch(getSingleEmployeesPending());
       const response = await fetch(`${resource}/${id}`);
       const data = await response.json();
-      const employeeFormate = formatEmployee(data.data);
       if (!data.error) {
-        dispatch(getSingleEmployeesSuccess(employeeFormate));
+        dispatch(getSingleEmployeesSuccess(data));
       } else {
         dispatch(getSingleEmployeesError(data.message));
       }
@@ -105,9 +93,7 @@ export const editEmployees = (obj, id) => {
       const object = employeeArray(obj);
       const requestConfig = {
         method: 'PUT',
-        headers: {
-          'Content-type': 'application/json'
-        },
+        headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(object)
       };
       dispatch(resetMessage());
