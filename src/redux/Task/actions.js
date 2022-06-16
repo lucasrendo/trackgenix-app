@@ -15,7 +15,9 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_TASK,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -109,10 +111,10 @@ export const deleteTaskPending = () => {
   };
 };
 
-export const deleteTaskSuccess = (data) => {
+export const deleteTaskSuccess = (message) => {
   return {
     type: DELETE_TASK_SUCCESS,
-    payload: data
+    payload: message
   };
 };
 
@@ -133,5 +135,19 @@ export const resetTask = () => {
 export const resetMessage = () => {
   return {
     type: RESET_MESSAGE
+  };
+};
+
+export const setModal = (state) => {
+  return {
+    type: SET_MODAL,
+    payload: state
+  };
+};
+
+export const updateList = (newList) => {
+  return {
+    type: UPDATE_LIST,
+    payload: newList
   };
 };

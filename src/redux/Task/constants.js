@@ -20,3 +20,5 @@ export const DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
 export const DELETE_TASK = 'DELETE_TASK';
 export const RESET_TASK = 'RESET_TASK';
 export const RESET_MESSAGE = 'RESET_MESSAGE';
+export const SET_MODAL = 'SET_MODAL';
+export const UPDATE_LIST = 'UPDATE_LIST';

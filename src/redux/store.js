@@ -1,15 +1,19 @@
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { legacy_createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { timesheetReducer } from './timesheets/reducer';
 import thunk from 'redux-thunk';
+import { projectsReducer } from './projects/reducer';
 import { tasksReducer } from './Task/reducer';
 
 const rootReducer = combineReducers({
-  tasks: tasksReducer
+  tasks: tasksReducer,
+  projects: projectsReducer,
+  timesheet: timesheetReducer
 });
 
 const configureStore = () => {
   const enhancer = composeWithDevTools(applyMiddleware(thunk));
-  return legacy_createStore(rootReducer, enhancer);
+  return createStore(rootReducer, enhancer);
 };
 
 const store = configureStore();

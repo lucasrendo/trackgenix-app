@@ -27,7 +27,7 @@ export const getTasks = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      if (!data.error) dispatch(getTasksSuccess(data));
+      if (!data.error) dispatch(getTasksSuccess(data.data));
       else dispatch(getTasksFailed(data.message));
     } catch (error) {
       dispatch(getTasksFailed(error));
@@ -111,7 +111,7 @@ export const deleteTask = (id) => {
       const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
 
-      if (!data.error) dispatch(deleteTaskSuccess(data));
+      if (!data.error) dispatch(deleteTaskSuccess(data.message));
       else dispatch(deleteTaskFailed(data.message));
     } catch (error) {
       dispatch(deleteTaskFailed(error));

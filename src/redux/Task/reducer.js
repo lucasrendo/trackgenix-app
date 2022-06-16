@@ -15,7 +15,9 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
   RESET_TASK,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 const initialState = {
@@ -23,6 +25,7 @@ const initialState = {
   error: false,
   message: '',
   task: undefined,
+  showModal: false,
   list: []
 };
 
@@ -85,6 +88,56 @@ export const tasksReducer = (state = initialState, action) => {
         isLoading: false,
         error: true,
         message: action.payload
+      };
+    case GET_TASKS_PENDING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_TASKS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        list: action.payload
+      };
+    case GET_TASKS_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload,
+        showModal: true
+      };
+    case DELETE_TASK_PENDING:
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Deleting...'
+      };
+    case DELETE_TASK_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload,
+        showModal: true,
+        error: false
+      };
+    case DELETE_TASK_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload,
+        showModal: true,
+        error: true
+      };
+    case SET_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
+      };
+    case UPDATE_LIST:
+      return {
+        ...state,
+        list: action.payload
       };
     case RESET_TASK:
       return {
