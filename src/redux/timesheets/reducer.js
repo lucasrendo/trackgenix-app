@@ -9,7 +9,15 @@ import {
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
   RESET_TIMESHEET,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  GET_TIMESHEET_PENDING,
+  GET_TIMESHEET_SUCCESS,
+  GET_TIMESHEET_ERROR,
+  DELETE_TIMESHEET_PENDING,
+  DELETE_TIMESHEET_SUCCESS,
+  DELETE_TIMESHEET_ERROR,
+  SET_MODAL,
+  UPDATE_LIST
 } from './constants';
 
 const initialState = {
@@ -22,6 +30,49 @@ const initialState = {
 
 export const timesheetReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_TIMESHEET_PENDING:
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Loading...'
+      };
+    case GET_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        list: action.payload
+      };
+    case GET_TIMESHEET_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+        showModal: true,
+        message: action.payload
+      };
+    case DELETE_TIMESHEET_PENDING:
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Loading...'
+      };
+    case DELETE_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        showModal: true,
+        message: action.payload
+      };
+    case DELETE_TIMESHEET_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+        showModal: true,
+        message: action.payload
+      };
     case GET_SINGLE_TIMESHEET_PENDING:
       return {
         ...state,
@@ -103,6 +154,16 @@ export const timesheetReducer = (state = initialState, action) => {
       return {
         ...state,
         message: ''
+      };
+    case SET_MODAL:
+      return {
+        ...state,
+        showModal: action.payload
+      };
+    case UPDATE_LIST:
+      return {
+        ...state,
+        list: action.payload
       };
     default:
       return state;
