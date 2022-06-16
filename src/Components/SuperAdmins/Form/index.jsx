@@ -25,7 +25,7 @@ function SuperAdminsForm() {
   // const resource = '/super-admin';
   useEffect(async () => {
     id && dispatch(getSingleSuperAdmins(id));
-    return () => dispatch(resetSuperAdmin);
+    return () => dispatch(resetSuperAdmin());
   }, []);
 
   const config = [

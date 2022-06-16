@@ -17,7 +17,8 @@ import {
   SUPER_ADMIN_MODAL,
   SUPER_ADMIN_MESSAGE,
   UPDATE_LIST,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  RESET_SUPER_ADMIN
 } from './constants';
 
 const initialState = {
@@ -93,7 +94,8 @@ export const superAdminsReducer = (state = initialState, action) => {
         ...state,
         superAdmin: action.payload.data,
         isLoading: false,
-        message: action.payload.message
+        message: action.payload.message,
+        error: false
       };
     case ADD_SUPER_ADMIN_PENDING:
       return {
@@ -149,7 +151,12 @@ export const superAdminsReducer = (state = initialState, action) => {
     case RESET_MESSAGE:
       return {
         ...state,
-        message: action.payload
+        message: ''
+      };
+    case RESET_SUPER_ADMIN:
+      return {
+        ...state,
+        superAdmin: undefined
       };
     default:
       return state;

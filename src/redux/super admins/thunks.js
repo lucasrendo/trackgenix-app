@@ -102,6 +102,7 @@ export const editSuperAdmins = (obj, id) => {
         },
         body: JSON.stringify(obj)
       };
+      dispatch(resetMessage());
       dispatch(editSuperAdminPending());
       const response = await fetch(`${url}/${id}`, reqConfig);
       const data = await response.json();
