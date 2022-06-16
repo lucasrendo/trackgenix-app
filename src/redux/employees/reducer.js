@@ -17,7 +17,8 @@ import {
   FILL_EMPLOYEE,
   SET_MODAL,
   UPDATE_LIST,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  RESET_EMPLOYEE
 } from './constants';
 
 const initialState = {
@@ -54,11 +55,12 @@ export const employeeReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        employees: {
+        employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
           email: action.payload.data.email,
           password: action.payload.data.password,
+          assignedProjects: action.payload.data.assignedProjects[0]._id,
           isActive: action.payload.data.isActive
         },
         message: action.payload.message
@@ -75,7 +77,7 @@ export const employeeReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        employees: {
+        employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
           email: action.payload.data.email,
@@ -97,7 +99,7 @@ export const employeeReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        employees: {
+        employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
           email: action.payload.data.email,
@@ -116,7 +118,7 @@ export const employeeReducer = (state = initialState, action) => {
       };
 
     case EDIT_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload.message };
+      return { ...state, isLoading: false, error: true, message: action.payload };
 
     case DELETE_EMPLOYEES_SUCCESS:
       return {
@@ -133,14 +135,15 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, error: true, message: action.payload.message };
 
     case FILL_EMPLOYEE:
-      return { ...state, employees: { ...state.employee, ...action.payload } };
+      return { ...state, employee: { ...state.employee, ...action.payload } };
 
     case SET_MODAL:
       return { ...state, showModal: action.payload };
 
     case RESET_MESSAGE:
-      return { ...state, employees: action.payload };
-
+      return { ...state, message: '' };
+    case RESET_EMPLOYEE:
+      return { ...state, employee: undefined };
     case UPDATE_LIST:
       return {
         ...state,

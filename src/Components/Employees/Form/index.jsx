@@ -44,7 +44,7 @@ const EmployeesForm = () => {
   useEffect(() => {
     id && dispatch(getSingleEmployee(id));
     dataOptions();
-    return () => dispatch(resetEmployee);
+    return () => dispatch(resetEmployee());
   }, []);
 
   const config = [
