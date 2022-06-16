@@ -15,7 +15,8 @@ import {
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
   UPDATE_LIST,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  RESET_ADMIN
 } from './constants';
 
 const initialState = {
@@ -126,6 +127,11 @@ export const adminsReducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.payload
+      };
+    case RESET_ADMIN:
+      return {
+        ...state,
+        admin: undefined
       };
     default:
       return state;

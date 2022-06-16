@@ -15,7 +15,8 @@ import {
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
   UPDATE_LIST,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  RESET_ADMIN
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -97,4 +98,8 @@ export const updateList = (newList) => {
 
 export const resetMessage = () => ({
   type: RESET_MESSAGE
+});
+
+export const resetAdmin = () => ({
+  type: RESET_ADMIN
 });
