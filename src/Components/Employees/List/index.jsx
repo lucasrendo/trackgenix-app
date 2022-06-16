@@ -60,7 +60,7 @@ const Employees = () => {
 
   return (
     <section className={styles.container}>
-      <h2>employees</h2>
+      <h2>Employees</h2>
       {isLoading ? (
         <Loading />
       ) : (
