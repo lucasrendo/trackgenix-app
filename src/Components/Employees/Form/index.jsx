@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetEmployee } from '../../../redux/employees/actions';
+import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
 import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
@@ -89,6 +89,7 @@ const EmployeesForm = () => {
 
   const closeHandler = () => {
     setShowModal(false);
+    dispatch(resetMessage());
     if (!error) {
       goBack();
     }

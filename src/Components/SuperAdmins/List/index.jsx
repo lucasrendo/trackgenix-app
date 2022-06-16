@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import List from '../../Shared/List/List';
+import Modal from '../../Shared/Modal/Modal';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
 import styles from './super-admins.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSuperAdmins, deleteSuperAdmins } from '../../../redux/super admins/thunks';
+import { superAdminModal, updateList, resetMessage } from '../../../redux/super admins/actions';
 
 function SuperAdmins() {
-  const [superadminsList, saveSuperadmins] = useState([]);
-  const [isLoading, setIsLoading] = useState([true]);
+  const dispatch = useDispatch();
+  const superAdminList = useSelector((state) => state.superAdmins.list);
+  const isLoading = useSelector((state) => state.superAdmins.isLoading);
+  const message = useSelector((state) => state.superAdmins.message);
+  const error = useSelector((state) => state.superAdmins.error);
+  const modal = useSelector((state) => state.superAdmins.showModal);
+  const [confirmation, setConfirmation] = useState(true);
+  const [id, setId] = useState('');
   const serverPath = '/super-admins';
 
   const headers = [
@@ -18,29 +28,20 @@ function SuperAdmins() {
   ];
 
   useEffect(async () => {
-    getSuperAdmins();
+    dispatch(getSuperAdmins());
   }, []);
 
-  const getSuperAdmins = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin`);
-      const body = await response.json();
-      saveSuperadmins(body.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
+  const confirmationHandler = () => {
+    setConfirmation(false);
+    dispatch(deleteSuperAdmins(id));
+    !error &&
+      dispatch(updateList([...superAdminList.filter((superAdmins) => superAdmins._id !== id)]));
   };
 
-  const deleteSuperAdmin = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    alert(`Super admin with id ${id} is going to be deleted`);
-    saveSuperadmins([...superadminsList.filter((superAdmin) => superAdmin._id !== id)]);
+  const closeHandler = () => {
+    dispatch(superAdminModal(false));
+    dispatch(resetMessage());
+    setConfirmation(true);
   };
 
   const formatListData = (responseData) => {
@@ -65,17 +66,28 @@ function SuperAdmins() {
     <section className={styles.container}>
       <h2>Super Admins</h2>
       <List
-        fullList={superadminsList}
-        data={formatListData(superadminsList)}
+        fullList={superAdminList}
+        data={formatListData(superAdminList)}
         headers={headers}
         resource={serverPath}
-        deleteItem={deleteSuperAdmin}
+        deleteItem={(id) => {
+          setId(id);
+          dispatch(superAdminModal(true));
+        }}
       />
       <div>
         <Link to={'/super-admins/form'} className={styles.linkReset}>
           <Button classes="block">Create Super Admin</Button>
         </Link>
       </div>
+      <Modal
+        isOpen={modal}
+        isConfirmation={confirmation}
+        handleClose={confirmation ? () => dispatch(superAdminModal(false)) : () => closeHandler()}
+        confirmed={() => confirmationHandler()}
+      >
+        <h2>{confirmation ? 'Are you sure you want to delete this super admin?' : message}</h2>
+      </Modal>
     </section>
   );
 }
