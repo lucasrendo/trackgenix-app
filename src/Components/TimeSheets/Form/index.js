@@ -7,6 +7,9 @@ import Loading from '../../Shared/Loading/Loading';
 import styles from './index.module.css';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from '../../../redux/timesheets/thunks';
 import { resetTimesheet, resetMessage } from '../../../redux/timesheets/actions';
+import { getEmployees } from '../../../redux/employees/thunks';
+import { getProjects } from '../../../redux/projects/thunks';
+import { getTasks } from '../../../redux/Task/thunks';
 
 const TimeSheets = () => {
   const { id } = useParams();
@@ -16,24 +19,27 @@ const TimeSheets = () => {
   const isLoading = useSelector((state) => state.timesheet.isLoading);
   const error = useSelector((state) => state.timesheet.error);
   const message = useSelector((state) => state.timesheet.message);
-  const [projects, setProjects] = useState([]);
-  const [employees, setEmployees] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const projects = useSelector((state) => state.projects.list);
+  const employees = useSelector((state) => state.employees.list);
+  const tasks = useSelector((state) => state.tasks.list);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
+  let projectsData = projects;
+  let employeesData = employees;
+  let tasksData = tasks;
   const config = [
     {
       header: 'Employee',
       type: 'select',
       key: 'employee',
-      options: employees,
+      options: employeesData,
       required: true
     },
     {
       header: 'Project',
       type: 'select',
       key: 'project',
-      options: projects,
+      options: projectsData,
       required: true
     },
     {
@@ -69,71 +75,33 @@ const TimeSheets = () => {
       header: 'Tasks',
       type: 'select',
       key: 'task',
-      options: tasks
+      options: tasksData
     }
   ];
 
   useEffect(() => {
+    dispatch(getEmployees());
+    dispatch(getProjects());
+    dispatch(getTasks());
     id && dispatch(getSingleTimesheet(id));
     formatDataOptions();
     return () => dispatch(resetTimesheet());
   }, []);
 
-  // === Fetch functions === //
-
-  const getProjects = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setIsAdding(true);
-    }
-  };
-
-  const getEmployees = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setIsAdding(true);
-    }
-  };
-
-  const getTasks = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setIsAdding(true);
-    }
-  };
-
   // === format option objects for the form config === //
-  const formatDataOptions = async () => {
-    const rawProjects = await getProjects();
-    const rawEmployees = await getEmployees();
-    const rawTasks = await getTasks();
-    let projectsData = [];
-    let employeesData = [];
-    let tasksData = [];
-    rawProjects.forEach((project, index) => {
+  const formatDataOptions = () => {
+    projects.forEach((project, index) => {
       projectsData.push({ id: project._id });
       projectsData[index].text = project.projectName;
     });
-    rawEmployees.forEach((employee, index) => {
+    employees.forEach((employee, index) => {
       employeesData.push({ id: employee._id });
       employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
     });
-    rawTasks.forEach((task, index) => {
+    tasks.forEach((task, index) => {
       tasksData.push({ id: task._id });
       tasksData[index].text = task.title;
     });
-    setProjects(projectsData);
-    setEmployees(employeesData);
-    setTasks(tasksData);
   };
 
   const closeHandler = () => {
