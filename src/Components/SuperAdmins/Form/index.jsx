@@ -23,7 +23,7 @@ function SuperAdminsForm() {
   const error = useSelector((state) => state.superAdmins.error);
   const superAdmin = useSelector((state) => state.superAdmins.superAdmin);
   // const resource = '/super-admin';
-  useEffect(async () => {
+  useEffect(() => {
     id && dispatch(getSingleSuperAdmins(id));
     return () => dispatch(resetSuperAdmin());
   }, []);
