@@ -98,7 +98,8 @@ export const superAdminsReducer = (state = initialState, action) => {
     case ADD_SUPER_ADMIN_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        message: 'Loading...'
       };
     case ADD_SUPER_ADMIN_ERROR:
       return {
@@ -119,7 +120,8 @@ export const superAdminsReducer = (state = initialState, action) => {
     case EDIT_SUPER_ADMIN_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        message: 'Loading...'
       };
     case EDIT_SUPER_ADMIN_ERROR:
       return {

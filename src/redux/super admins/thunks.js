@@ -80,7 +80,6 @@ export const createSuperAdmins = (obj) => {
         body: JSON.stringify(obj)
       };
       dispatch(addSuperAdminPending());
-      dispatch(resetMessage());
       const response = await fetch(`${url}`, reqConfig);
       const data = await response.json();
       if (!data.error) {
@@ -104,7 +103,6 @@ export const editSuperAdmins = (obj, id) => {
         body: JSON.stringify(obj)
       };
       dispatch(editSuperAdminPending());
-      dispatch(resetMessage());
       const response = await fetch(`${url}/${id}`, reqConfig);
       const data = await response.json();
       if (!data.error) {
