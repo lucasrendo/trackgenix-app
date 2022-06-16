@@ -14,14 +14,16 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  UPDATE_LIST
+  UPDATE_LIST,
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
   list: [],
   pending: false,
   admin: undefined,
-  error: ''
+  error: false,
+  message: ''
 };
 
 export const adminsReducer = (state = initialState, action) => {
@@ -40,7 +42,8 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_ADMINS_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
+        message: action.payload,
         pending: false
       };
     case GET_SINGLE_ADMIN_PENDING:
@@ -57,7 +60,8 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_SINGLE_ADMIN_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
+        message: action.payload,
         pending: false
       };
     case ADD_ADMIN_PENDING:
@@ -74,7 +78,8 @@ export const adminsReducer = (state = initialState, action) => {
     case ADD_ADMIN_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
+        message: action.payload,
         pending: false
       };
     case UPDATE_ADMIN_PENDING:
@@ -91,7 +96,8 @@ export const adminsReducer = (state = initialState, action) => {
     case UPDATE_ADMIN_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
+        message: action.payload,
         pending: false
       };
     case DELETE_ADMIN_PENDING:
@@ -107,13 +113,19 @@ export const adminsReducer = (state = initialState, action) => {
     case DELETE_ADMIN_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
+        message: action.payload,
         pending: false
       };
     case UPDATE_LIST:
       return {
         ...state,
         list: action.payload
+      };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: action.payload
       };
     default:
       return state;

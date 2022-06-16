@@ -14,7 +14,8 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  UPDATE_LIST
+  UPDATE_LIST,
+  RESET_MESSAGE
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -93,3 +94,7 @@ export const updateList = (newList) => {
     payload: newList
   };
 };
+
+export const resetMessage = () => ({
+  type: RESET_MESSAGE
+});
