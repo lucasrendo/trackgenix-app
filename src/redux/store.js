@@ -1,6 +1,7 @@
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+import { employeeReducer } from './employees/reducer';
 import { adminsReducer } from './admins/reducer';
 import { timesheetReducer } from './timesheets/reducer';
 import { superAdminsReducer } from './super admins/reducer';
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   projects: projectsReducer,
   timesheet: timesheetReducer,
-  superAdmins: superAdminsReducer
+  superAdmins: superAdminsReducer,
+  employees: employeeReducer
 });
 
 const configureStore = () => {
