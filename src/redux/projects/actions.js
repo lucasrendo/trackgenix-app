@@ -1,4 +1,7 @@
 import {
+  GET_PROJECTS_SUCCESS,
+  GET_PROJECTS_PENDING,
+  GET_PROJECTS_ERROR,
   ADD_PROJECT_PENDING,
   ADD_PROJECT_SUCCESS,
   ADD_PROJECT_ERROR,
@@ -10,8 +13,33 @@ import {
   GET_SINGLE_PROJECT_SUCCESS,
   RESET_PROJECT,
   RESET_MESSAGE,
-  FORMATED_PROJECT
+  FORMATED_PROJECT,
+  DELETE_PROJECTS_SUCCESS,
+  DELETE_PROJECTS_PENDING,
+  DELETE_PROJECTS_ERROR,
+  SET_MESSAGE,
+  SET_MODAL
 } from './constants';
+
+export const getProjectsSuccess = (projects) => {
+  return {
+    type: GET_PROJECTS_SUCCESS,
+    payload: projects
+  };
+};
+
+export const getProjectsPending = () => {
+  return {
+    type: GET_PROJECTS_PENDING
+  };
+};
+
+export const getProjectsError = (error) => {
+  return {
+    type: GET_PROJECTS_ERROR,
+    payload: error
+  };
+};
 
 export const getSingleProjectPending = () => {
   return {
@@ -89,5 +117,38 @@ export const formatedProject = (data) => {
   return {
     type: FORMATED_PROJECT,
     payload: data
+  };
+};
+
+export const deleteProjectsSuccess = (id) => {
+  return {
+    type: DELETE_PROJECTS_SUCCESS,
+    payload: id
+  };
+};
+
+export const deleteProjectsPending = () => {
+  return {
+    type: DELETE_PROJECTS_PENDING
+  };
+};
+
+export const deleteProjectsError = (message) => {
+  return {
+    type: DELETE_PROJECTS_ERROR,
+    payload: message
+  };
+};
+
+export const setMessage = () => {
+  return {
+    type: SET_MESSAGE
+  };
+};
+
+export const setModal = (state) => {
+  return {
+    type: SET_MODAL,
+    payload: state
   };
 };

@@ -1,4 +1,7 @@
 import {
+  getProjectsSuccess,
+  getProjectsPending,
+  getProjectsError,
   addProjectPending,
   addProjectSuccess,
   addProjectError,
@@ -8,6 +11,9 @@ import {
   getSingleProjectPending,
   getSingleProjectSuccess,
   getSingleProjectError,
+  deleteProjectsSuccess,
+  deleteProjectsPending,
+  deleteProjectsError,
   resetMessage,
   resetProject
 } from './actions';
@@ -32,6 +38,19 @@ const projectArray = (project) => {
     hoursInProject: project.hoursInProject
   });
   return body;
+};
+
+export const getProjects = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(getProjectsPending());
+      const response = await fetch(url);
+      const data = await response.json();
+      dispatch(getProjectsSuccess(data.data));
+    } catch (error) {
+      dispatch(getProjectsError(error.message));
+    }
+  };
 };
 
 export const getSingleProject = (id) => {
@@ -93,6 +112,25 @@ export const editProject = (obj, id) => {
       } else dispatch(editProjectError(data.message));
     } catch (error) {
       dispatch(editProjectError(error.toString()));
+    }
+  };
+};
+
+export const deleteProject = (id) => {
+  return async (dispatch) => {
+    try {
+      const requestConfig = {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json'
+        }
+      };
+      dispatch(deleteProjectsPending());
+      const response = await fetch(`${url}/${id}`, requestConfig);
+      const data = await response.json();
+      dispatch(deleteProjectsSuccess(data.message));
+    } catch (error) {
+      dispatch(deleteProjectsError(error.message));
     }
   };
 };

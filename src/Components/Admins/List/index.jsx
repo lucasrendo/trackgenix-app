@@ -4,11 +4,22 @@ import styles from './admins.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
+import Modal from '../../Shared/Modal/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
+import { updateList } from '../../../redux/admins/actions';
 
 const Admins = () => {
-  const [admins, setAdmins] = useState([]);
-  const [isLoading, setIsLoading] = useState([true]);
+  const dispatch = useDispatch();
   const serverPath = '/admins';
+  const admins = useSelector((state) => state.admins.list);
+  const pending = useSelector((state) => state.admins.pending);
+  const error = useSelector((state) => state.admins.error);
+  const message = useSelector((state) => state.admins.message);
+  const [confirmation, setConfirmation] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [id, setId] = useState('');
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -18,28 +29,22 @@ const Admins = () => {
   ];
 
   useEffect(() => {
-    getAdmins();
+    dispatch(getAdmins());
   }, []);
 
-  const getAdmins = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const body = await response.json();
-      setAdmins(body.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
+  const deleteItem = () => {
+    setConfirmation(false);
+    dispatch(deleteAdmin(id));
+    setModalMessage('Admin deleted');
+    setIsAdding(true);
+    !error && dispatch(updateList([...admins.filter((admin) => admin._id !== id)]));
   };
 
-  const deleteAdmin = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    setAdmins([...admins.filter((admin) => admin._id !== id)]);
+  const closeHandler = () => {
+    if (error) setIsAdding(false);
+    else {
+      setIsAdding(false);
+    }
   };
 
   const formatListData = (responseData) => {
@@ -55,7 +60,7 @@ const Admins = () => {
     return data;
   };
 
-  return isLoading ? (
+  return pending ? (
     <>
       <h2>Admins</h2>
       <Loading />
@@ -68,13 +73,25 @@ const Admins = () => {
         data={formatListData(admins)}
         headers={headers}
         resource={serverPath}
-        deleteItem={deleteAdmin}
+        deleteItem={(id) => {
+          setId(id);
+          setConfirmation(true);
+          setIsAdding(true);
+        }}
       />
       <div>
         <Link to={'/admins/form'} className={styles.linkReset}>
           <Button classes="block">Create Admin</Button>
         </Link>
       </div>
+      <Modal
+        handleClose={() => closeHandler()}
+        isOpen={isAdding}
+        isConfirmation={confirmation}
+        confirmed={deleteItem}
+      >
+        <h2>{confirmation ? 'Are you sure you want to delete this admin?' : modalMessage}</h2>
+      </Modal>
     </section>
   );
 };

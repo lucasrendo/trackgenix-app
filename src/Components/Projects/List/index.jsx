@@ -1,38 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 import List from '../../Shared/List/List';
 import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
+import Modal from '../../Shared/Modal/Modal';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProjects, deleteProject } from '../../../redux/projects/thunks';
+import { setMessage, setModal } from '../../../redux/projects/actions';
 
 function Projects() {
-  const [projects, setProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isConfirmation, setIsConfirmation] = useState(true);
+  const [id, setId] = useState('');
   const resource = '/projects';
+  const dispatch = useDispatch();
+  const projects = useSelector((state) => state.projects.list);
+  const isLoading = useSelector((state) => state.projects.isLoading);
+  const message = useSelector((state) => state.projects.message);
+  const showModal = useSelector((state) => state.projects.showModal);
 
-  const deleteItem = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json'
-      }
-    });
-    setProjects([...projects.filter((project) => project._id !== id)]);
+  const deleteItem = (id) => {
+    setId(id);
+    dispatch(setModal(true));
   };
 
-  const fetchProject = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`);
-      const jsonResponse = await response.json();
-      setProjects(jsonResponse.data);
-      setIsLoading(false);
-    } catch (error) {
-      alert(error);
-    }
+  const sureToDelete = async () => {
+    setIsConfirmation(false);
+    dispatch(deleteProject(id));
+    dispatch(getProjects());
   };
 
   useEffect(async () => {
-    fetchProject();
+    dispatch(getProjects());
   }, []);
 
   const formatListData = (responseData) => {
@@ -59,6 +58,12 @@ function Projects() {
     { header: 'Is Active?', key: 'isActive' }
   ];
 
+  const closeHandler = () => {
+    dispatch(setModal(false));
+    dispatch(setMessage());
+    setIsConfirmation(true);
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -71,6 +76,14 @@ function Projects() {
         resource={resource}
         deleteItem={deleteItem}
       />
+      <Modal
+        handleClose={isConfirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
+        isOpen={showModal}
+        isConfirmation={isConfirmation}
+        confirmed={() => sureToDelete()}
+      >
+        <h2>{isConfirmation ? 'Are you sure you want to delete this Project?' : message}</h2>
+      </Modal>
       <div>
         <Link to={'/projects/form'} className={styles.linkReset}>
           <Button classes="block">Create Project</Button>
