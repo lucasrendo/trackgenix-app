@@ -24,84 +24,81 @@ const TimeSheets = () => {
   const tasks = useSelector((state) => state.tasks.list);
   const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  let projectsData = projects;
-  let employeesData = employees;
-  let tasksData = tasks;
-  const config = [
-    {
-      header: 'Employee',
-      type: 'select',
-      key: 'employee',
-      options: employeesData,
-      required: true
-    },
-    {
-      header: 'Project',
-      type: 'select',
-      key: 'project',
-      options: projectsData,
-      required: true
-    },
-    {
-      header: 'Role',
-      type: 'text',
-      key: 'role',
-      required: true
-    },
-    {
-      header: 'Date',
-      type: 'date',
-      key: 'date',
-      required: true
-    },
-    {
-      header: 'Rate',
-      type: 'number',
-      key: 'rate',
-      required: true
-    },
-    {
-      header: 'Worked Hours',
-      type: 'number',
-      key: 'workedHours',
-      required: true
-    },
-    {
-      header: 'Description',
-      type: 'text',
-      key: 'description'
-    },
-    {
-      header: 'Tasks',
-      type: 'select',
-      key: 'task',
-      options: tasksData
-    }
-  ];
 
   useEffect(() => {
+    id && dispatch(getSingleTimesheet(id));
     dispatch(getEmployees());
     dispatch(getProjects());
     dispatch(getTasks());
-    id && dispatch(getSingleTimesheet(id));
-    formatDataOptions();
     return () => dispatch(resetTimesheet());
   }, []);
 
   // === format option objects for the form config === //
   const formatDataOptions = () => {
-    projects.forEach((project, index) => {
-      projectsData.push({ id: project._id });
-      projectsData[index].text = project.projectName;
+    let projectsData = [];
+    let employeesData = [];
+    let tasksData = [];
+    projects.forEach((project) => {
+      projectsData.push({ id: project._id, text: project.projectName });
     });
-    employees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+    employees.forEach((employee) => {
+      employeesData.push({ id: employee._id, text: `${employee.firstName} ${employee.lastName}` });
     });
-    tasks.forEach((task, index) => {
-      tasksData.push({ id: task._id });
-      tasksData[index].text = task.title;
+    tasks.forEach((task) => {
+      tasksData.push({ id: task._id, text: task.title });
     });
+    const config = [
+      {
+        header: 'Employee',
+        type: 'select',
+        key: 'employee',
+        options: employeesData,
+        required: true
+      },
+      {
+        header: 'Project',
+        type: 'select',
+        key: 'project',
+        options: projectsData,
+        required: true
+      },
+      {
+        header: 'Role',
+        type: 'text',
+        key: 'role',
+        required: true
+      },
+      {
+        header: 'Date',
+        type: 'date',
+        key: 'date',
+        required: true
+      },
+      {
+        header: 'Rate',
+        type: 'number',
+        key: 'rate',
+        required: true
+      },
+      {
+        header: 'Worked Hours',
+        type: 'number',
+        key: 'workedHours',
+        required: true
+      },
+      {
+        header: 'Description',
+        type: 'text',
+        key: 'description'
+      },
+      {
+        header: 'Tasks',
+        type: 'select',
+        key: 'task',
+        options: tasksData
+      }
+    ];
+    return config;
   };
 
   const closeHandler = () => {
@@ -130,7 +127,7 @@ const TimeSheets = () => {
         <Loading />
       ) : (
         <Form
-          data={config}
+          data={formatDataOptions()}
           itemData={timesheet}
           submitHandler={submitHandler}
           userInput={[inputValues, setInputValues]}
