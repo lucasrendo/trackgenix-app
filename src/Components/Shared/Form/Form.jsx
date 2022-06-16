@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import style from './styles.module.css';
 import Button from '../Button/Button';
@@ -65,8 +65,10 @@ const Form = ({ data, itemData, submitHandler, userInput }) => {
               <input
                 type={item.type}
                 id={item.key}
-                required={item.required && item.required}
-                {...(item.type === 'checkbox' && { checked: inputValues[item.key] })}
+                required={item.required}
+                {...(item.type === 'checkbox' && {
+                  checked: inputValues[item.key] ? inputValues[item.key] : false
+                })}
                 value={inputValues ? inputValues[item.key] : item.type === 'checkbox' ? true : ''}
                 onChange={(e) => handleChange(e, item)}
               />

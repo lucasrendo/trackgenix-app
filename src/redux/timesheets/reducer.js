@@ -24,6 +24,7 @@ const initialState = {
   list: [],
   isLoading: false,
   error: false,
+  showModal: false,
   message: '',
   timesheet: undefined
 };
