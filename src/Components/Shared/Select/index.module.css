@@ -12,4 +12,13 @@
     border-radius: 4px;
     height: 38px;
     width: 260px;
-} 
+}
+
+.error{
+  font-size: 11px;
+  color: #FF0303;
+}
+
+.selectBoxError{
+  border-color: #FF0303;
+}
