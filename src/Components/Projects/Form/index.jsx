@@ -27,7 +27,7 @@ function Projects() {
     id && dispatch(getSingleProject(id));
     dispatch(getAdmins());
     dispatch(getEmployees());
-    return () => dispatch(resetProject);
+    return () => dispatch(resetProject());
   }, []);
 
   const formatDataOptions = () => {

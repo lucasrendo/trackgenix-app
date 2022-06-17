@@ -82,6 +82,7 @@ export const addProject = (obj) => {
       dispatch(addProjectPending());
       const response = await fetch(url, requestConfig);
       const data = await response.json();
+      dispatch(resetProject());
 
       if (!data.error) {
         dispatch(addProjectSuccess(data));

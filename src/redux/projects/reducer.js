@@ -98,7 +98,7 @@ export const projectsReducer = (state = initialState, action) => {
     case ADD_PROJECT_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         message: 'Loading...'
       };
     case ADD_PROJECT_SUCCESS:
@@ -119,7 +119,7 @@ export const projectsReducer = (state = initialState, action) => {
     case EDIT_PROJECT_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         message: 'Loading...'
       };
     case EDIT_PROJECT_SUCCESS:
