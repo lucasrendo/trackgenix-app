@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addProject, editProject, getSingleProject } from '../../../redux/projects/thunks';
 import Loading from '../../Shared/Loading/Loading';
 import { resetProject } from '../../../redux/projects/actions';
+import { getEmployees } from '../../../redux/employees/thunks';
+import { getAdmins } from '../../../redux/admins/thunks';
 
 function Projects() {
   const { id } = useParams();
   const { goBack } = useHistory();
-  const [employees, setEmployees] = useState([]);
-  const [admins, setAdmins] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
@@ -20,121 +20,97 @@ function Projects() {
   const isLoading = useSelector((state) => state.projects.isLoading);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
-
-  const config = [
-    {
-      header: 'Project Name',
-      type: 'text',
-      key: 'projectName',
-      required: true
-    },
-    {
-      header: 'Description',
-      type: 'text',
-      key: 'description',
-      required: false
-    },
-    {
-      header: 'Start Date',
-      type: 'date',
-      key: 'startDate',
-      required: true
-    },
-    {
-      header: 'End Date',
-      type: 'date',
-      key: 'endDate',
-      required: false
-    },
-    {
-      header: 'Admin',
-      type: 'select',
-      key: 'admin',
-      options: admins,
-      required: true
-    },
-    {
-      header: 'Client',
-      type: 'text',
-      key: 'client',
-      required: true
-    },
-    {
-      header: 'Employees',
-      type: 'select',
-      key: 'employees',
-      options: employees,
-      required: true
-    },
-    {
-      header: 'Role',
-      type: 'text',
-      key: 'role',
-      required: true
-    },
-    {
-      header: 'Rate',
-      type: 'number',
-      key: 'rate',
-      required: true
-    },
-    {
-      header: 'Hours in projects',
-      type: 'number',
-      key: 'hoursInProject',
-      required: true
-    },
-    {
-      header: 'Is active',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
-    }
-  ];
+  const employees = useSelector((state) => state.employees.list);
+  const admins = useSelector((state) => state.admins.list);
 
   useEffect(() => {
+    dispatch(getAdmins());
+    dispatch(getEmployees());
     id && dispatch(getSingleProject(id));
     formatDataOptions();
     return () => dispatch(resetProject);
   }, []);
 
-  const getEmployees = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      alert(error);
-      setShowModal(true);
-    }
-  };
-
-  const getAdmins = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      alert(error);
-      setShowModal(true);
-    }
-  };
-
-  const formatDataOptions = async () => {
-    const rawEmployees = await getEmployees();
-    const rawAdmins = await getAdmins();
-    let adminsData = [];
+  const formatDataOptions = () => {
     let employeesData = [];
-    rawAdmins.forEach((admin, index) => {
-      adminsData.push({ id: admin._id });
-      adminsData[index].text = `${admin.firstName} ${admin.lastName}`;
+    let adminsData = [];
+    admins.forEach((admin) => {
+      adminsData.push({ id: admin._id, text: `${admin.firstName} ${admin.lastName}` });
     });
-    rawEmployees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
+    employees.forEach((employee) => {
+      employeesData.push({ id: employee._id, text: `${employee.firstName} ${employee.lastName}` });
     });
-    setAdmins(adminsData);
-    setEmployees(employeesData);
+    const config = [
+      {
+        header: 'Project Name',
+        type: 'text',
+        key: 'projectName',
+        required: true
+      },
+      {
+        header: 'Description',
+        type: 'text',
+        key: 'description',
+        required: false
+      },
+      {
+        header: 'Start Date',
+        type: 'date',
+        key: 'startDate',
+        required: true
+      },
+      {
+        header: 'End Date',
+        type: 'date',
+        key: 'endDate',
+        required: false
+      },
+      {
+        header: 'Admin',
+        type: 'select',
+        key: 'admin',
+        options: adminsData,
+        required: true
+      },
+      {
+        header: 'Client',
+        type: 'text',
+        key: 'client',
+        required: true
+      },
+      {
+        header: 'Employees',
+        type: 'select',
+        key: 'employees',
+        options: employeesData,
+        required: true
+      },
+      {
+        header: 'Role',
+        type: 'text',
+        key: 'role',
+        required: true
+      },
+      {
+        header: 'Rate',
+        type: 'number',
+        key: 'rate',
+        required: true
+      },
+      {
+        header: 'Hours in projects',
+        type: 'number',
+        key: 'hoursInProject',
+        required: true
+      },
+      {
+        header: 'Is active',
+        type: 'checkbox',
+        key: 'isActive',
+        required: false
+      }
+    ];
+    return config;
   };
 
   const submitHandler = async (e) => {
@@ -161,7 +137,7 @@ function Projects() {
         <Loading />
       ) : (
         <Form
-          data={config}
+          data={formatDataOptions()}
           itemData={project}
           submitHandler={submitHandler}
           userInput={[inputValues, setInputValues]}
