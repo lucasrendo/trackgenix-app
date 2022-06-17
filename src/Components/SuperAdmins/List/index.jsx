@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import List from '../../Shared/List/List';
+import List from '../../Shared/List';
 import Modal from '../../Shared/Modal/Modal';
-import Button from '../../Shared/Button/Button';
-import Loading from '../../Shared/Loading/Loading';
+import Button from '../../Shared/Button';
+import Loading from '../../Shared/Loading';
 import styles from './super-admins.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSuperAdmins, deleteSuperAdmins } from '../../../redux/super admins/thunks';

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './index.module.css';
-import List from '../../Shared/List/List';
-import Button from '../../Shared/Button/Button';
-import Loading from '../../Shared/Loading/Loading';
+import List from '../../Shared/List';
+import Button from '../../Shared/Button';
+import Loading from '../../Shared/Loading';
 import Modal from '../../Shared/Modal/Modal';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

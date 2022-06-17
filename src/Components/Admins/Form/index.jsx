@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './admins.module.css';
-import Form from '../../Shared/Form/Form';
+import Form from '../../Shared/Form';
 import { addAdmin, updateAdmin, getSingleAdmin, getAdmins } from '../../../redux/admins/thunks';
 import { resetAdmin } from '../../../redux/admins/actions';
 import Modal from '../../Shared/Modal/Modal';

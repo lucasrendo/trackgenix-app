@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from '../../Shared/Form/Form';
+import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
-import Loading from '../../Shared/Loading/Loading';
+import Loading from '../../Shared/Loading';
 import styles from './index.module.css';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from '../../../redux/timesheets/thunks';
 import { resetTimesheet, resetMessage } from '../../../redux/timesheets/actions';
