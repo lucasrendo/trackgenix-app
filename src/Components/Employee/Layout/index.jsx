@@ -1,19 +1,21 @@
+import { useParams } from 'react-router-dom';
 import Header from 'Components/Shared/Header';
 import Footer from 'Components/Shared/Footer';
 import Sidebar from 'Components/Shared/Sidebar';
 import styles from './layout.module.css';
 
-const Layout = ({ children }) => {
-  const links = ['/', '#', '#', '#', '#', '#'];
-  const linkTitles = [
-    'Homepage',
-    'What is Trackgenix?',
-    'Why choose Trackgenix?',
-    'About us',
-    'Get in touch',
-    'Log in'
+const EmployeeLayout = ({ children }) => {
+  const { id } = useParams();
+  const links = [
+    `/employee/${id}`,
+    `/employee/${id}/projects`,
+    `/employee/${id}/profile`,
+    `/employee/${id}/workedhours`,
+    '#',
+    '#'
   ];
-  const title = 'Shorcuts';
+  const linkTitles = ['Home', 'My Projects', 'Work Hours', 'User Profile', 'About us', 'Help'];
+  const title = 'Employee';
   return (
     <div className={styles.container}>
       <Header />
@@ -26,4 +28,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default EmployeeLayout;
