@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './list.module.css';
 import { Link } from 'react-router-dom';
-import Button from '../Button/Button';
+import Button from '../Button';
 
 const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
   return (

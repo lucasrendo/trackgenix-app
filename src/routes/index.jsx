@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from 'Components/Layout';
+import Loading from 'Components/Shared/Loading';
 const Admins = lazy(() => import('Components/Admins/List'));
 const AdminsForm = lazy(() => import('Components/Admins/Form'));
 const SuperAdmins = lazy(() => import('Components/SuperAdmins/List'));
@@ -12,9 +13,8 @@ const Employees = lazy(() => import('Components/Employees/List'));
 const EmployeesForm = lazy(() => import('Components/Employees/Form'));
 const TasksForm = lazy(() => import('Components/Tasks/Form'));
 const TasksList = lazy(() => import('Components/Tasks/List'));
-const TimeSheetsList = lazy(() => import('/Components/TimeSheets/List'));
+const TimeSheetsList = lazy(() => import('Components/TimeSheets/List'));
 const TimeSheetsForm = lazy(() => import('Components/TimeSheets/Form'));
-const Loading = lazy(() => import('Components/Shared/Loading'));
 
 const Routes = () => {
   return (

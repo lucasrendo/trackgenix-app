@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import Modal from '../../Shared/Modal/Modal';
-import Form from '../../Shared/Form/Form';
+import Form from '../../Shared/Form';
 import styles from './index.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProject, editProject, getSingleProject } from '../../../redux/projects/thunks';
-import Loading from '../../Shared/Loading/Loading';
+import Loading from '../../Shared/Loading';
 import { resetProject } from '../../../redux/projects/actions';
 import { getEmployees } from '../../../redux/employees/thunks';
 import { getAdmins } from '../../../redux/admins/thunks';
