@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunks';
+import { getProjects } from '../../../redux/projects/thunks';
+import { getEmployees } from '../../../redux/employees/thunks';
 import { resetTask, resetMessage } from '../../../redux/Task/actions';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
@@ -12,13 +14,15 @@ function Tasks() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
+  const employeeList = useSelector((state) => state.employees.list);
+  const projectList = useSelector((state) => state.projects.list);
   const task = useSelector((state) => state.tasks.task);
   const isLoading = useSelector((state) => state.tasks.isLoading);
   const error = useSelector((state) => state.tasks.error);
   const message = useSelector((state) => state.tasks.message);
-  const [showModal, setShowModal] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [inputValues, setInputValues] = useState({});
   const CONFIG = [
     {
@@ -63,46 +67,27 @@ function Tasks() {
 
   useEffect(() => {
     id && dispatch(getSingleTask(id));
+    dispatch(getProjects());
+    dispatch(getEmployees());
     dataOptions();
     return () => dispatch(resetTask());
   }, []);
+  console.log(projectList);
 
-  const getProjects = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      alert(error);
-      setShowModal(true);
-    }
-  };
-
-  const getEmployees = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      alert(error);
-      setShowModal(true);
-    }
-  };
-
-  const dataOptions = async () => {
-    const rawProjects = await getProjects();
-    const rawEmployees = await getEmployees();
-    rawEmployees.map((employee, index) => {
-      rawEmployees.splice(index, 1, {
+  const dataOptions = () => {
+    let projectsFormat = [];
+    let employeesFormat = [];
+    projectList.forEach((project) =>
+      projectsFormat.push({ id: project._id, text: project.projectName })
+    );
+    employeeList.forEach((employee) => {
+      employeesFormat.push({
         id: employee._id,
         text: `${employee.firstName} ${employee.lastName}`
       });
     });
-    rawProjects.map((project, index) => {
-      rawProjects.splice(index, 1, { id: project._id, text: project.projectName });
-    });
-    setEmployees(rawEmployees);
-    setProjects(rawProjects);
+    setEmployees(employeesFormat);
+    setProjects(projectsFormat);
   };
 
   const closeHandler = () => {
