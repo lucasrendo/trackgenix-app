@@ -5,9 +5,9 @@ import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunk
 import { getProjects } from '../../../redux/projects/thunks';
 import { getEmployees } from '../../../redux/employees/thunks';
 import { resetTask, resetMessage, setModal } from '../../../redux/Task/actions';
-import Form from '../../Shared/Form/Form';
+import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
-import Loading from '../../Shared/Loading/Loading';
+import Loading from '../../Shared/Loading';
 import styles from './tasks.module.css';
 
 function Tasks() {

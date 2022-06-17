@@ -3,9 +3,9 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
 import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
-import Form from '../../Shared/Form/Form';
+import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
-import Loading from '../../Shared/Loading/Loading';
+import Loading from '../../Shared/Loading';
 import styles from './employee.module.css';
 
 const EmployeesForm = () => {

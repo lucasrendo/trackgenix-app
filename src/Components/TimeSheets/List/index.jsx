@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheet, deleteTimesheet } from '../../../redux/timesheets/thunks';
 import { resetMessage, setModal, updateList } from '../../../redux/timesheets/actions';
-import List from '../../Shared/List/List';
-import Loading from '../../Shared/Loading/Loading';
+import List from '../../Shared/List';
+import Loading from '../../Shared/Loading';
 import Modal from '../../Shared/Modal/Modal';
-import Button from '../../Shared/Button/Button';
+import Button from '../../Shared/Button';
 import styles from './index.module.css';
 
 const TimeSheets = () => {

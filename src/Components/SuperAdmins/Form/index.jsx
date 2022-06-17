@@ -7,8 +7,8 @@ import {
   editSuperAdmins,
   getSingleSuperAdmins
 } from '../../../redux/super admins/thunks';
-import Loading from '../../Shared/Loading/Loading';
-import Form from '../../Shared/Form/Form';
+import Loading from '../../Shared/Loading';
+import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './super-admins.module.css';
 

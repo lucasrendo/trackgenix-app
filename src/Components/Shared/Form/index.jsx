@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import style from './styles.module.css';
-import Button from '../Button/Button';
+import Button from '../Button';
 
 const Form = ({ data, itemData, submitHandler, userInput }) => {
   const { goBack } = useHistory();

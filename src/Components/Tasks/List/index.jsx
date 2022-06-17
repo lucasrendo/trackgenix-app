@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTasks, deleteTask } from '../../../redux/Task/thunks';
 import { resetMessage, setModal, updateList } from '../../../redux/Task/actions';
-import List from '../../Shared/List/List';
-import Button from '../../Shared/Button/Button';
-import Loading from '../../Shared/Loading/Loading';
+import List from '../../Shared/List';
+import Button from '../../Shared/Button';
+import Loading from '../../Shared/Loading';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './tasks.module.css';
 
