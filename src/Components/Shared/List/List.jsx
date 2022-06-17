@@ -46,11 +46,9 @@ const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
                   </Link>
                 </td>
                 <td className={styles.td}>
-                  <Button classes="close">
-                    <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
-                      X
-                    </span>
-                  </Button>
+                  <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
+                    <Button classes="close">X</Button>
+                  </span>
                 </td>
               </tr>
             );

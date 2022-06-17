@@ -32,7 +32,12 @@ const initialState = {
 export const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_SINGLE_TASK_PENDING:
-      return { ...state, isLoading: true, message: 'Fetching...' };
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Fetching...',
+        showModal: false
+      };
     case GET_SINGLE_TASK_SUCCESS:
       return {
         ...state,
@@ -56,7 +61,11 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload
       };
     case CREATE_TASK_PENDING:
-      return { ...state, isLoading: true, message: 'Fetching...' };
+      return {
+        ...state,
+        message: 'Fetching...',
+        showModal: false
+      };
     case CREATE_TASK_SUCCESS:
       return {
         ...state,
@@ -73,7 +82,11 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload
       };
     case UPDATE_TASK_PENDING:
-      return { ...state, isLoading: true, message: 'Fetching...' };
+      return {
+        ...state,
+        message: 'Fetching...',
+        showModal: false
+      };
     case UPDATE_TASK_SUCCESS:
       return {
         ...state,
@@ -92,7 +105,8 @@ export const tasksReducer = (state = initialState, action) => {
     case GET_TASKS_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        showModal: false
       };
     case GET_TASKS_SUCCESS:
       return {
@@ -111,7 +125,8 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        message: 'Deleting...'
+        message: 'Deleting...',
+        showModal: false
       };
     case DELETE_TASK_SUCCESS:
       return {

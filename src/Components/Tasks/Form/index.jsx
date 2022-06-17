@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunks';
 import { getProjects } from '../../../redux/projects/thunks';
 import { getEmployees } from '../../../redux/employees/thunks';
-import { resetTask, resetMessage } from '../../../redux/Task/actions';
+import { resetTask, resetMessage, setModal } from '../../../redux/Task/actions';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading/Loading';
@@ -18,11 +18,13 @@ function Tasks() {
   const projectList = useSelector((state) => state.projects.list);
   const task = useSelector((state) => state.tasks.task);
   const isLoading = useSelector((state) => state.tasks.isLoading);
+  const projectsLoading = useSelector((state) => state.projects.isLoading);
+  const employeesLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.tasks.error);
   const message = useSelector((state) => state.tasks.message);
+  const showModal = useSelector((state) => state.tasks.showModal);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [inputValues, setInputValues] = useState({});
   const CONFIG = [
     {
@@ -69,9 +71,10 @@ function Tasks() {
     id && dispatch(getSingleTask(id));
     dispatch(getProjects());
     dispatch(getEmployees());
-    dataOptions();
     return () => dispatch(resetTask());
   }, []);
+
+  useEffect(() => dataOptions(), [projectList, employeeList]);
 
   const dataOptions = () => {
     let projectsFormat = [];
@@ -90,7 +93,7 @@ function Tasks() {
   };
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
       goBack();
@@ -101,13 +104,13 @@ function Tasks() {
   const submitHandler = async (e) => {
     e.preventDefault();
     id ? dispatch(updateTask(inputValues, id)) : dispatch(createTask(inputValues));
-    setShowModal(true);
+    dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      {isLoading ? (
+      {isLoading || projectsLoading || employeesLoading ? (
         <Loading />
       ) : (
         <Form
