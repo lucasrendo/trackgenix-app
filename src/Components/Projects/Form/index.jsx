@@ -24,10 +24,9 @@ function Projects() {
   const admins = useSelector((state) => state.admins.list);
 
   useEffect(() => {
+    id && dispatch(getSingleProject(id));
     dispatch(getAdmins());
     dispatch(getEmployees());
-    id && dispatch(getSingleProject(id));
-    formatDataOptions();
     return () => dispatch(resetProject);
   }, []);
 
