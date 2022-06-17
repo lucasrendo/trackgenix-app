@@ -107,7 +107,7 @@ export const timesheetReducer = (state = initialState, action) => {
     case ADD_TIMESHEET_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         message: 'Loading...'
       };
     case ADD_TIMESHEET_SUCCESS:
@@ -128,7 +128,7 @@ export const timesheetReducer = (state = initialState, action) => {
     case EDIT_TIMESHEET_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         message: 'Loading...'
       };
     case EDIT_TIMESHEET_SUCCESS:
