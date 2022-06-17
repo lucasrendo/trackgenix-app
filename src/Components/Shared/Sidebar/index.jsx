@@ -2,31 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './sidebar.module.css';
 
-const Sidebar = () => {
+const Sidebar = ({ links, linkTitles, title }) => {
   return (
     <aside className={styles.aside}>
       <nav>
-        <span className={styles.shortcuts}>Shortcuts</span>
+        <span className={styles.shortcuts}>{title}</span>
         <div className={styles.horizontalLine}></div>
         <ul>
-          <li>
-            <Link to={'/'}>Homepage</Link>
-          </li>
-          <li>
-            <Link to={'#'}>What is Trackgenix?</Link>
-          </li>
-          <li>
-            <Link to={'#'}>Why choose Trackgenix?</Link>
-          </li>
-          <li>
-            <Link to={'#'}>About us</Link>
-          </li>
-          <li>
-            <Link to={'#'}>Get in touch</Link>
-          </li>
-          <li>
-            <Link to={'#'}>Log in</Link>
-          </li>
+          {linkTitles.map((link, index) => {
+            return (
+              <li key={index}>
+                <Link to={links[index]}>{linkTitles[index]}</Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </aside>
