@@ -6,14 +6,14 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
     return null;
   }
 
-  if (isConfirmation) {
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalWrapper}>
-          <button onClick={handleClose} className={styles.closeButton}>
-            X
-          </button>
-          <div className={styles.childrenContainer}>{children}</div>
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalWrapper}>
+        <button onClick={handleClose} className={styles.closeButton}>
+          X
+        </button>
+        <div className={styles.childrenContainer}>{children}</div>
+        {isConfirmation ? (
           <div className={styles.buttonwrapper}>
             <button className={styles.modalButton} onClick={confirmed}>
               Accept
@@ -22,28 +22,16 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
               Cancel
             </button>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isConfirmation) {
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalWrapper}>
-          <button onClick={handleClose} className={styles.closeButton}>
-            X
-          </button>
-          {children}
+        ) : (
           <div className={styles.buttonwrapper}>
             <button className={styles.modalButton} onClick={handleClose}>
               OK
             </button>
           </div>
-        </div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default Modal;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.css';
 
-const Select = ({ text, id, value, required, onChange, item, type }) => {
+const Select = ({ text, id, value, required, onChange, item, type, error }) => {
   return (
     <div className={styles.selectContainer}>
       <label className={styles.labelSelect}>{text}</label>
@@ -20,6 +20,7 @@ const Select = ({ text, id, value, required, onChange, item, type }) => {
           </option>
         ))}
       </select>
+      {error && <p className={styles.error}>{error.message}</p>}
     </div>
   );
 };
