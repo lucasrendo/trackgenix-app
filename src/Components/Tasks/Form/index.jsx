@@ -72,7 +72,6 @@ function Tasks() {
     dataOptions();
     return () => dispatch(resetTask());
   }, []);
-  console.log(projectList);
 
   const dataOptions = () => {
     let projectsFormat = [];
