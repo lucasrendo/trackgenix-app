@@ -41,23 +41,23 @@ export const getProjectsError = (error) => {
   };
 };
 
-export const getSingleProjectSuccess = (id) => {
-  return {
-    type: GET_SINGLE_PROJECT_SUCCESS,
-    payload: id
-  };
-};
-
 export const getSingleProjectPending = () => {
   return {
     type: GET_SINGLE_PROJECT_PENDING
   };
 };
 
-export const getSingleProjectError = (message) => {
+export const getSingleProjectSuccess = (data) => {
+  return {
+    type: GET_SINGLE_PROJECT_SUCCESS,
+    payload: data
+  };
+};
+
+export const getSingleProjectError = (error) => {
   return {
     type: GET_SINGLE_PROJECT_ERROR,
-    payload: message
+    payload: error
   };
 };
 
@@ -119,6 +119,7 @@ export const formatedProject = (data) => {
     payload: data
   };
 };
+
 export const deleteProjectsSuccess = (id) => {
   return {
     type: DELETE_PROJECTS_SUCCESS,

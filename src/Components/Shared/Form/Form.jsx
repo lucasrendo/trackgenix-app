@@ -50,7 +50,7 @@ const Form = ({ data, itemData, submitHandler, userInput }) => {
             {item.type === 'select' ? (
               <select
                 id={item.key}
-                required={item.required && item.required}
+                required={item.required}
                 value={inputValues ? inputValues[item.key] : ''}
                 onChange={(e) => setInputValues({ ...inputValues, [item.key]: e.target.value })}
               >

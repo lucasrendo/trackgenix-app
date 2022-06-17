@@ -3,254 +3,147 @@ import { useParams, useHistory } from 'react-router-dom';
 import Modal from '../../Shared/Modal/Modal';
 import Form from '../../Shared/Form/Form';
 import styles from './index.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProject, editProject, getSingleProject } from '../../../redux/projects/thunks';
+import Loading from '../../Shared/Loading/Loading';
+import { resetProject } from '../../../redux/projects/actions';
+import { getEmployees } from '../../../redux/employees/thunks';
+import { getAdmins } from '../../../redux/admins/thunks';
 
 function Projects() {
   const { id } = useParams();
   const { goBack } = useHistory();
-  const [project, setProject] = useState();
-  const [employees, setEmployees] = useState([]);
-  const [admins, setAdmins] = useState([]);
   const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [error, setError] = useState(true);
-  const resource = '/projects';
-
-  const data = [
-    {
-      header: 'Project Name',
-      type: 'text',
-      key: 'projectName',
-      required: true
-    },
-    {
-      header: 'Description',
-      type: 'text',
-      key: 'description',
-      required: false
-    },
-    {
-      header: 'Start Date',
-      type: 'date',
-      key: 'startDate',
-      required: true
-    },
-    {
-      header: 'End Date',
-      type: 'date',
-      key: 'endDate',
-      required: false
-    },
-    {
-      header: 'Admin',
-      type: 'select',
-      key: 'admin',
-      options: admins,
-      required: true
-    },
-    {
-      header: 'Client',
-      type: 'text',
-      key: 'client',
-      required: true
-    },
-    {
-      header: 'Employees',
-      type: 'select',
-      key: 'employees',
-      options: employees,
-      required: true
-    },
-    {
-      header: 'Role',
-      type: 'text',
-      key: 'role',
-      required: true
-    },
-    {
-      header: 'Rate',
-      type: 'number',
-      key: 'rate',
-      required: true
-    },
-    {
-      header: 'Hours in projects',
-      type: 'number',
-      key: 'hoursInProject',
-      required: true
-    },
-    {
-      header: 'Is active',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
-    }
-  ];
+  const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  const project = useSelector((state) => state.projects.project);
+  const isLoading = useSelector((state) => state.projects.isLoading);
+  const error = useSelector((state) => state.projects.error);
+  const message = useSelector((state) => state.projects.message);
+  const employees = useSelector((state) => state.employees.list);
+  const admins = useSelector((state) => state.admins.list);
 
   useEffect(() => {
-    formatDataOptions();
-    getProjects();
+    id && dispatch(getSingleProject(id));
+    dispatch(getAdmins());
+    dispatch(getEmployees());
+    return () => dispatch(resetProject());
   }, []);
 
-  const formatProject = (project) => {
-    return {
-      projectName: project.projectName,
-      description: project.description,
-      admin: project.admin,
-      client: project.client,
-      startDate: project.startDate,
-      endDate: project.endDate,
-      isActive: project.isActive,
-      employees: project.employees[0] ? project.employees[0]._id : '',
-      role: project.employees[0] ? project.employees[0].role : '',
-      rate: project.employees[0] ? project.employees[0].rate : '',
-      hoursInProject: project.employees[0] ? project.employees[0].hoursInProject : ''
-    };
-  };
-
-  const getProjects = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const jasonResponse = await response.json();
-        const projectFormatted = formatProject(jasonResponse.data);
-        setProject(projectFormatted);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const projectArray = (project) => {
-    const data = {
-      projectName: project.projectName,
-      description: project.description,
-      admin: project.admin,
-      client: project.client,
-      startDate: project.startDate,
-      endDate: project.endDate,
-      isActive: project.isActive,
-      employees: []
-    };
-    data.employees.push({
-      employeeId: project.employees,
-      role: project.role,
-      rate: project.rate,
-      hoursInProject: project.hoursInProject
+  const formatDataOptions = () => {
+    let employeesData = [];
+    let adminsData = [];
+    admins.forEach((admin) => {
+      adminsData.push({ id: admin._id, text: `${admin.firstName} ${admin.lastName}` });
     });
-    return data;
-  };
-
-  const createInstance = async (obj) => {
-    try {
-      const data = projectArray(obj);
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const updateInstance = async (obj) => {
-    try {
-      const data = projectArray(obj);
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
+    employees.forEach((employee) => {
+      employeesData.push({ id: employee._id, text: `${employee.firstName} ${employee.lastName}` });
+    });
+    const config = [
+      {
+        header: 'Project Name',
+        type: 'text',
+        key: 'projectName',
+        required: true
+      },
+      {
+        header: 'Description',
+        type: 'text',
+        key: 'description',
+        required: false
+      },
+      {
+        header: 'Start Date',
+        type: 'date',
+        key: 'startDate',
+        required: true
+      },
+      {
+        header: 'End Date',
+        type: 'date',
+        key: 'endDate',
+        required: false
+      },
+      {
+        header: 'Admin',
+        type: 'select',
+        key: 'admin',
+        options: adminsData,
+        required: true
+      },
+      {
+        header: 'Client',
+        type: 'text',
+        key: 'client',
+        required: true
+      },
+      {
+        header: 'Employees',
+        type: 'select',
+        key: 'employees',
+        options: employeesData,
+        required: true
+      },
+      {
+        header: 'Role',
+        type: 'text',
+        key: 'role',
+        required: true
+      },
+      {
+        header: 'Rate',
+        type: 'number',
+        key: 'rate',
+        required: true
+      },
+      {
+        header: 'Hours in projects',
+        type: 'number',
+        key: 'hoursInProject',
+        required: true
+      },
+      {
+        header: 'Is active',
+        type: 'checkbox',
+        key: 'isActive',
+        required: false
+      }
+    ];
+    return config;
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    let result;
     if (id) {
-      result = await updateInstance(inputValues);
+      dispatch(editProject(inputValues, id));
     } else {
-      result = await createInstance(inputValues);
+      dispatch(addProject(inputValues));
     }
-
-    setError(result.err);
-    setModalMessage(result.message);
-    setIsAdding(true);
-    if (result && !result.err) {
-      setInputValues({});
-      setModalMessage(result.message);
-      setIsAdding(true);
-    }
+    setShowModal(true);
   };
 
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    setShowModal(false);
+    if (!error) {
       goBack();
     }
-  };
-
-  const getEmployees = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const getAdmins = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const body = await res.json();
-      return body.data;
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const formatDataOptions = async () => {
-    const rawEmployees = await getEmployees();
-    const rawAdmins = await getAdmins();
-    let adminsData = [];
-    let employeesData = [];
-    rawAdmins.forEach((admin, index) => {
-      adminsData.push({ id: admin._id });
-      adminsData[index].text = `${admin.firstName} ${admin.lastName}`;
-      setAdmins(adminsData);
-    });
-    rawEmployees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
-      setEmployees(employeesData);
-    });
   };
 
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <Form
-        data={data}
-        itemData={project}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Form
+          data={formatDataOptions()}
+          itemData={project}
+          submitHandler={submitHandler}
+          userInput={[inputValues, setInputValues]}
+        />
+      )}
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );
