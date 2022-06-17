@@ -9,8 +9,8 @@ import EmployeeRoutes from 'routes/employees';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Routes />
       <EmployeeRoutes />
+      {/* <Routes /> */}
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

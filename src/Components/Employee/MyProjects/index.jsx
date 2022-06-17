@@ -10,28 +10,41 @@ import styles from './index.module.css';
 const EmployeeProjects = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const message = useSelector((state) => state.employees.message);
   const error = useSelector((state) => state.employees.error);
   const showModal = useSelector((state) => state.employees.showModal);
   const [confirmation, setConfirmation] = useState(true);
   const headers = [
-    { header: 'First Name', key: 'firstName' },
-    { header: 'Last Name', key: 'lastName' },
-    { header: 'Mail', key: 'email' },
-    { header: 'Active', key: 'isActive' }
+    { header: 'Project Name', key: 'projectName' },
+    { header: 'Role', key: 'role' },
+    { header: 'Rate', key: 'rate' }
   ];
+
   useEffect(() => {
     dispatch(getSingleEmployee(id));
+    console.log(employee);
   }, []);
+
+  const formatListData = (responseData) => {
+    const data = responseData.map((project) => {
+      return {
+        project
+      };
+    });
+    return data;
+  };
 
   return (
     <section className={styles.container}>
-      <h2>Employees</h2>
+      <h2>My Projects</h2>
       {isLoading ? (
         <Loading />
       ) : (
-        <>{/* <List data={formatListData(list)} headers={headers} /> */}</>
+        <>
+          <List data={[]} headers={headers} />
+        </>
       )}
       {/* <Modal
         isOpen={showModal}
