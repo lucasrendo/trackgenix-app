@@ -13,7 +13,9 @@ import {
   updateTaskFailed,
   deleteTaskPending,
   deleteTaskSuccess,
-  deleteTaskFailed
+  deleteTaskFailed,
+  resetTask,
+  resetMessage
 } from './actions';
 
 const url = `${process.env.REACT_APP_API_URL}/tasks`;
@@ -29,6 +31,68 @@ export const getTasks = () => {
       else dispatch(getTasksFailed(data.message));
     } catch (error) {
       dispatch(getTasksFailed(error));
+    }
+  };
+};
+
+export const getSingleTask = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch(getSingleTaskPending());
+      const response = await fetch(`${url}/${id}`);
+      const data = await response.json();
+
+      if (!data.error) dispatch(getSingleTaskSuccess(data));
+      else dispatch(getSingleTaskFailed(data.message));
+    } catch (error) {
+      dispatch(getSingleTaskFailed(error));
+    }
+  };
+};
+
+export const createTask = (object) => {
+  return async (dispatch) => {
+    try {
+      const requestConfig = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(object)
+      };
+
+      dispatch(createTaskPending());
+      const response = await fetch(`${url}`, requestConfig);
+      const data = await response.json();
+
+      if (!data.error) {
+        dispatch(createTaskSuccess(data));
+        dispatch(resetTask());
+      } else dispatch(createTaskFailed(data.message));
+    } catch (error) {
+      dispatch(createTaskFailed(error));
+    }
+  };
+};
+
+export const updateTask = (object, id) => {
+  return async (dispatch) => {
+    try {
+      const requestConfig = {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(object)
+      };
+
+      dispatch(resetMessage());
+      dispatch(updateTaskPending());
+      const response = await fetch(`${url}/${id}`, requestConfig);
+      const data = await response.json();
+
+      if (!data.error) {
+        dispatch(updateTaskSuccess(data));
+        dispatch(resetTask());
+      } else dispatch(updateTaskFailed(data.message));
+    } catch (error) {
+      dispatch(createTaskFailed(error));
     }
   };
 };

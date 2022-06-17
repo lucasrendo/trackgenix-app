@@ -14,6 +14,8 @@ import {
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
+  RESET_TASK,
+  RESET_MESSAGE,
   SET_MODAL,
   UPDATE_LIST
 } from './constants';
@@ -21,46 +23,90 @@ import {
 const initialState = {
   isLoading: false,
   error: false,
-  showModal: false,
   message: '',
-  task: {},
+  task: undefined,
+  showModal: false,
   list: []
 };
 
 export const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_SINGLE_TASK_PENDING:
+      return {
+        ...state,
+        isLoading: true,
+        message: 'Fetching...',
+        showModal: false
+      };
+    case GET_SINGLE_TASK_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        task: {
+          employeeId: action.payload.data.employeeId,
+          projectId: action.payload.data.projectId,
+          title: action.payload.data.title,
+          description: action.payload.data.description,
+          date: action.payload.data.date,
+          done: action.payload.data.done
+        },
+        message: action.payload.message
+      };
+    case GET_SINGLE_TASK_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+        message: action.payload
+      };
     case CREATE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        message: 'Fetching...',
+        showModal: false
+      };
     case CREATE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        error: false,
+        task: action.payload.data,
+        message: action.payload.message
       };
     case CREATE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
     case UPDATE_TASK_PENDING:
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        message: 'Fetching...',
+        showModal: false
+      };
     case UPDATE_TASK_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        task: action.payload
+        error: false,
+        task: action.payload.data,
+        message: action.payload.message
       };
     case UPDATE_TASK_FAILED:
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: true,
+        message: action.payload
       };
     case GET_TASKS_PENDING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        showModal: false
       };
     case GET_TASKS_SUCCESS:
       return {
@@ -75,25 +121,12 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload,
         showModal: true
       };
-    case GET_SINGLE_TASK_PENDING:
-      return { ...state, isLoading: true };
-    case GET_SINGLE_TASK_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        task: action.payload
-      };
-    case GET_SINGLE_TASK_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        error: action.payload
-      };
     case DELETE_TASK_PENDING:
       return {
         ...state,
         isLoading: true,
-        message: 'Deleting...'
+        message: 'Deleting...',
+        showModal: false
       };
     case DELETE_TASK_SUCCESS:
       return {
@@ -120,6 +153,16 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         list: action.payload
+      };
+    case RESET_TASK:
+      return {
+        ...state,
+        task: undefined
+      };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: ''
       };
     default:
       return state;

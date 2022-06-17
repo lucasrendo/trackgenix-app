@@ -1,79 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSingleTask, createTask, updateTask } from '../../../redux/Task/thunks';
+import { getProjects } from '../../../redux/projects/thunks';
+import { getEmployees } from '../../../redux/employees/thunks';
+import { resetTask, resetMessage, setModal } from '../../../redux/Task/actions';
 import Form from '../../Shared/Form/Form';
 import Modal from '../../Shared/Modal/Modal';
+import Loading from '../../Shared/Loading/Loading';
 import styles from './tasks.module.css';
-import { useParams, useHistory } from 'react-router-dom';
 
 function Tasks() {
-  const [tasksList, setTasksList] = useState();
+  const { id } = useParams();
+  const { goBack } = useHistory();
+  const dispatch = useDispatch();
+  const employeeList = useSelector((state) => state.employees.list);
+  const projectList = useSelector((state) => state.projects.list);
+  const task = useSelector((state) => state.tasks.task);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+  const projectsLoading = useSelector((state) => state.projects.isLoading);
+  const employeesLoading = useSelector((state) => state.employees.isLoading);
+  const error = useSelector((state) => state.tasks.error);
+  const message = useSelector((state) => state.tasks.message);
+  const showModal = useSelector((state) => state.tasks.showModal);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
   const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
-  const { goBack } = useHistory();
-  const [modalMessage, setModalMessage] = useState('');
-  const { id } = useParams();
-  const [error, setError] = useState(true);
-  const resource = '/tasks';
-
-  useEffect(() => {
-    getTask();
-    dataOptions();
-  }, []);
-
-  const getTask = async () => {
-    try {
-      if (id) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
-        const jsonResponse = await response.json();
-        setTasksList(jsonResponse.data);
-      }
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const getProjects = async () => {
-    try {
-      const reponse = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const jsonResponse = await reponse.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const getEmployees = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/employees`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
-
-  const dataOptions = async () => {
-    const rawProjects = await getProjects();
-    const rawEmployees = await getEmployees();
-    let projectsData = [];
-    let employeesData = [];
-    rawEmployees.forEach((employee, index) => {
-      employeesData.push({ id: employee._id });
-      employeesData[index].text = `${employee.firstName} ${employee.lastName}`;
-    });
-    rawProjects.forEach((project, index) => {
-      projectsData.push({ id: project._id });
-      projectsData[index].text = `${project.projectName}`;
-    });
-    setEmployees(employeesData);
-    setProjects(projectsData);
-  };
-
-  const config = [
+  const CONFIG = [
     {
       header: 'Employee',
       type: 'select',
@@ -114,41 +67,35 @@ function Tasks() {
     }
   ];
 
-  // === Fetch functions === key
-  const createInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
-      });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
-  };
+  useEffect(() => {
+    id && dispatch(getSingleTask(id));
+    dispatch(getProjects());
+    dispatch(getEmployees());
+    return () => dispatch(resetTask());
+  }, []);
 
-  const updateInstance = async (obj) => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(obj)
+  useEffect(() => dataOptions(), [projectList, employeeList]);
+
+  const dataOptions = () => {
+    let projectsFormat = [];
+    let employeesFormat = [];
+    projectList.forEach((project) =>
+      projectsFormat.push({ id: project._id, text: project.projectName })
+    );
+    employeeList.forEach((employee) => {
+      employeesFormat.push({
+        id: employee._id,
+        text: `${employee.firstName} ${employee.lastName}`
       });
-      const body = await res.json();
-      return { message: body.message, err: body.error };
-    } catch (error) {
-      setModalMessage(error);
-      setIsAdding(true);
-    }
+    });
+    setEmployees(employeesFormat);
+    setProjects(projectsFormat);
   };
 
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    dispatch(setModal(false));
+    dispatch(resetMessage());
+    if (!error) {
       goBack();
     }
   };
@@ -156,31 +103,25 @@ function Tasks() {
   // === Handle submit data and method === //
   const submitHandler = async (e) => {
     e.preventDefault();
-    let result;
-
-    if (id) {
-      result = await updateInstance(inputValues);
-    } else {
-      result = await createInstance(inputValues);
-    }
-
-    setError(result.err);
-    setModalMessage(result.message);
-    setIsAdding(true);
-    if (result && result.error === false) setInputValues({});
+    id ? dispatch(updateTask(inputValues, id)) : dispatch(createTask(inputValues));
+    dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      <Form
-        data={config}
-        itemData={tasksList}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+      {isLoading || projectsLoading || employeesLoading ? (
+        <Loading />
+      ) : (
+        <Form
+          data={CONFIG}
+          itemData={task}
+          submitHandler={submitHandler}
+          userInput={[inputValues, setInputValues]}
+        />
+      )}
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );

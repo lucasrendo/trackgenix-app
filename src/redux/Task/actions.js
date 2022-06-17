@@ -9,10 +9,12 @@ import {
   CREATE_TASK_SUCCESS,
   CREATE_TASK_FAILED,
   UPDATE_TASK_PENDING,
+  UPDATE_TASK_SUCCESS,
   UPDATE_TASK_FAILED,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILED,
+  RESET_TASK,
   RESET_MESSAGE,
   SET_MODAL,
   UPDATE_LIST
@@ -90,7 +92,7 @@ export const updateTaskPending = () => {
 
 export const updateTaskSuccess = (data) => {
   return {
-    type: UPDATE_TASK_PENDING,
+    type: UPDATE_TASK_SUCCESS,
     payload: data
   };
 };
@@ -120,6 +122,13 @@ export const deleteTaskFailed = (message) => {
   return {
     type: DELETE_TASK_FAILED,
     payload: message
+  };
+};
+
+// === FORM ACTIONS === //
+export const resetTask = () => {
+  return {
+    type: RESET_TASK
   };
 };
 
