@@ -6,7 +6,7 @@ const Select = ({ text, id, value, required, onChange, item, type, error, regist
     <div className={styles.inputContainer}>
       <label>{text}</label>
       <select
-        className={styles.selectBox}
+        className={error ? styles.inputError : styles.inputOk}
         id={id}
         value={value}
         required={required}

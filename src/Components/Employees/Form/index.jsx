@@ -16,12 +16,10 @@ import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
 
 const employeeValidate = Joi.object({
-  firstName: Joi.string().min(3).max(10).required()
-  //lastName: Joi.string().min(3).max(10).required(),
-  //email: Joi.string().email().required(),
-  //password: Joi.string().min(8).required(),
-  //assignedProjects: Joi.array(),
-  //isActive: Joi.boolean().required()
+  firstName: Joi.string().min(3).max(10).required(),
+  lastName: Joi.string().min(3).max(10).required(),
+  password: Joi.string().min(8).required(),
+  assignedProjects: Joi.string().required()
 });
 
 const EmployeesForm = () => {
@@ -115,15 +113,34 @@ const EmployeesForm = () => {
             type={'text'}
             error={errors.firstName}
           />
-          <Input id={'lastName'} text={'Last Name'} type={'text'} register={register} />
-          <Input id={'email'} text={'Email'} type={'email'} register={register} />
-          <Input id={'password'} text={'Password'} type={'password'} register={register} />
+          <Input
+            id={'lastName'}
+            text={'Last Name'}
+            type={'text'}
+            register={register}
+            error={errors.lastName}
+          />
+          <Input
+            id={'email'}
+            text={'Email'}
+            type={'email'}
+            register={register}
+            error={errors.email}
+          />
+          <Input
+            id={'password'}
+            text={'Password'}
+            type={'password'}
+            register={register}
+            error={errors.password}
+          />
           <Select
             id={'assignedProjects'}
             type={'select'}
             text={'Projects'}
             item={config}
             register={register}
+            error={errors.assignedProjects}
           />
           <Input
             id={'isActive'}
