@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './index.module.css';
 
-const Select = ({ text, id, value, required, onChange, item, type, error }) => {
+const Select = ({ text, id, value, required, onChange, item, type, error, register }) => {
   return (
-    <div className={styles.selectContainer}>
-      <label className={styles.labelSelect}>{text}</label>
+    <div className={styles.inputContainer}>
+      <label>{text}</label>
       <select
         className={styles.selectBox}
         id={id}
@@ -12,9 +12,10 @@ const Select = ({ text, id, value, required, onChange, item, type, error }) => {
         required={required}
         onChange={onChange}
         type={type}
+        {...register(id)}
       >
         <option selected disabled value="">{`select ${item.title}`}</option>
-        {item.options.map((option) => (
+        {item.options?.map((option) => (
           <option key={option.id} value={option.id}>
             {option.text}
           </option>

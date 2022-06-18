@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
 import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
 import { getProjects } from '../../../redux/projects/thunks';
+import Joi from 'joi';
 
 import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading';
@@ -12,6 +14,15 @@ import styles from './employee.module.css';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
+
+const employeeValidate = Joi.object({
+  firstName: Joi.string().min(3).max(10).required()
+  //lastName: Joi.string().min(3).max(10).required(),
+  //email: Joi.string().email().required(),
+  //password: Joi.string().min(8).required(),
+  //assignedProjects: Joi.array(),
+  //isActive: Joi.boolean().required()
+});
 
 const EmployeesForm = () => {
   //const [projects, setProjects] = useState([]);
@@ -27,9 +38,14 @@ const EmployeesForm = () => {
   const message = useSelector((state) => state.employees.message);
   const projects = useSelector((state) => state.projects.list);
   const projectsLoading = useSelector((state) => state.projects.isLoading);
-  const { handleSubmit } = useForm();
-
-  console.log(projects);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors }
+  } = useForm({
+    mode: 'onBlur',
+    resolver: joiResolver(employeeValidate)
+  });
 
   // const getProjects = async () => {
   //   try {
@@ -75,12 +91,12 @@ const EmployeesForm = () => {
     }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const submitHandler = (data) => {
+    console.log(data);
     if (id) {
       dispatch(editEmployees(inputValues, id));
     } else {
-      dispatch(createEmployee(inputValues));
+      dispatch(createEmployee(data));
     }
     setShowModal(true);
   };
@@ -91,13 +107,31 @@ const EmployeesForm = () => {
       {isLoading || projectsLoading ? (
         <Loading />
       ) : (
-        <form onSubmit={handleSubmit(submitHandler())} className={styles.form}>
-          <Input text={'First Name'} type={'text'} />
-          <Input text={'Last Name'} type={'text'} />
-          <Input text={'Email'} type={'email'} />
-          <Input text={'Password'} type={'password'} />
-          <Select type={'select'} text={'Projects'} item={config}></Select>
-          <Input type={'checkbox'} text={'Is Active?'} />
+        <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
+          <Input id={'lastName'} text={'Last Name'} type={'text'} register={register} />
+          <Input id={'email'} text={'Email'} type={'email'} register={register} />
+          <Input id={'password'} text={'Password'} type={'password'} register={register} />
+          <Select
+            id={'assignedProjects'}
+            type={'select'}
+            text={'Projects'}
+            item={config}
+            register={register}
+          />
+          <Input
+            id={'isActive'}
+            type={'checkbox'}
+            text={'Is Active?'}
+            required={false}
+            register={register}
+          />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
               Back
