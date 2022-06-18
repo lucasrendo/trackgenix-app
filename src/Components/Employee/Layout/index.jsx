@@ -21,8 +21,8 @@ const EmployeeLayout = ({ children }) => {
   const employeeLinkTitles = [
     'Home',
     'My Projects',
-    'Work Hours',
     'User Profile',
+    'Work Hours',
     'About us',
     'Help'
   ];
