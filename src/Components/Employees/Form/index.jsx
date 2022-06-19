@@ -16,10 +16,14 @@ import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
 
 const employeeValidate = Joi.object({
-  firstName: Joi.string().min(3).max(10).required(),
-  lastName: Joi.string().min(3).max(10).required(),
-  password: Joi.string().min(8).required(),
-  assignedProjects: Joi.string().required()
+  firstName: Joi.string().label('First Name').min(3).max(10).required(),
+  lastName: Joi.string().label('Last Name').min(3).max(10).required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required('Email is required'),
+  password: Joi.string().label('Password').min(8).required(),
+  assignedProjects: Joi.string().label('Project').required(),
+  isActive: Joi.boolean()
 });
 
 const EmployeesForm = () => {
@@ -39,9 +43,10 @@ const EmployeesForm = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: joiResolver(employeeValidate)
   });
 
@@ -63,8 +68,11 @@ const EmployeesForm = () => {
 
   useEffect(() => {
     dataOptions();
-    console.log(config);
   }, [projects]);
+
+  useEffect(() => {
+    reset(employee);
+  }, [employee]);
 
   const dataOptions = () => {
     let projectsData = [];
@@ -89,10 +97,10 @@ const EmployeesForm = () => {
     }
   };
 
-  const submitHandler = (data) => {
+  const submitHandler = async (data) => {
     console.log(data);
     if (id) {
-      dispatch(editEmployees(inputValues, id));
+      dispatch(editEmployees(data, id));
     } else {
       dispatch(createEmployee(data));
     }
@@ -148,6 +156,7 @@ const EmployeesForm = () => {
             text={'Is Active?'}
             required={false}
             register={register}
+            error={errors.isActive}
           />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
