@@ -19,16 +19,14 @@ function Tasks() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const [employees, setEmployees] = useState([]);
-  const [projects, setProjects] = useState([]);
   const task = useSelector((state) => state.tasks.task);
-  const isLoading = useSelector((state) => state.tasks.isLoading);
   const fetchError = useSelector((state) => state.tasks.error);
   const message = useSelector((state) => state.tasks.message);
   const showModal = useSelector((state) => state.tasks.showModal);
   const employeeList = useSelector((state) => state.employees.list);
-  const employeesLoading = useSelector((state) => state.employees.isLoading);
   const projectList = useSelector((state) => state.projects.list);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+  const employeesLoading = useSelector((state) => state.employees.isLoading);
   const projectsLoading = useSelector((state) => state.projects.isLoading);
 
   const validationSchema = joi.object({
@@ -36,7 +34,7 @@ function Tasks() {
     projectId: joi.string().required(),
     title: joi.string().max(30).required(),
     description: joi.string().max(100),
-    date: joi.date(),
+    date: joi.date().max(),
     done: joi.boolean().required()
   });
   const {
@@ -64,9 +62,6 @@ function Tasks() {
     return () => dispatch(resetTask());
   }, []);
 
-  useEffect(() => formatProjects(), [projectList]);
-  useEffect(() => formatEmployees(), [employeeList]);
-
   useEffect(() => {
     task &&
       reset({
@@ -79,23 +74,19 @@ function Tasks() {
       });
   }, [task]);
 
+  useEffect(() => formatProjects(), [projectList]);
+  useEffect(() => formatEmployees(), [employeeList]);
+
   const formatProjects = () => {
-    let formattedProjects = [];
-    projectList.forEach((project) =>
-      formattedProjects.push({ id: project._id, text: project.projectName })
-    );
-    return formattedProjects;
+    return projectList.map((project) => {
+      return { id: project._id, text: project.projectName };
+    });
   };
 
   const formatEmployees = () => {
-    let formattedEmployees = [];
-    employeeList.forEach((employee) => {
-      formattedEmployees.push({
-        id: employee._id,
-        text: `${employee.firstName} ${employee.lastName}`
-      });
+    return employeeList.map((employee) => {
+      return { id: employee._id, text: `${employee.firstName} ${employee.lastName}` };
     });
-    return formattedEmployees;
   };
 
   const closeHandler = () => {
