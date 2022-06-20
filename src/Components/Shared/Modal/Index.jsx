@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button';
 import styles from './index.module.css';
 
 const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => {
@@ -14,19 +15,19 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
         </button>
         <div className={styles.childrenContainer}>{children}</div>
         {isConfirmation ? (
-          <div className={styles.buttonwrapper}>
-            <button className={styles.modalButton} onClick={confirmed}>
+          <div className={styles.buttonWrapper}>
+            <Button className={styles.modalButton} onClick={confirmed}>
               Accept
-            </button>
-            <button className={styles.modalButton} onClick={handleClose}>
+            </Button>
+            <Button classes={'red'} onClick={handleClose}>
               Cancel
-            </button>
+            </Button>
           </div>
         ) : (
-          <div className={styles.buttonwrapper}>
-            <button className={styles.modalButton} onClick={handleClose}>
+          <div className={styles.buttonWrapper}>
+            <Button className={styles.modalButton} onClick={handleClose}>
               OK
-            </button>
+            </Button>
           </div>
         )}
       </div>
