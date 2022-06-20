@@ -8,6 +8,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import Loading from 'Components/Shared/Loading';
 import Modal from 'Components/Shared/Modal/Modal';
 import Input from 'Components/Shared/Input';
+import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 import Joi from 'joi';
 
@@ -26,12 +27,12 @@ const EmployeeProfile = () => {
     lastName: Joi.string().label('Last Name').min(3).max(10).required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-      .required('Email is required'),
+      .required(),
     repeatEmail: Joi.string().label('Repeat Email').required().valid(Joi.ref('email')),
     password: Joi.string().label('Password').min(8).required(),
     repeatPassword: Joi.string().label('Repeat Password').required().valid(Joi.ref('password')),
     secretWord: Joi.string().label('Secret Word').min(8).required(),
-    repeatSecreteWord: Joi.string()
+    repeatSecretWord: Joi.string()
       .label('Repeat Secret Word')
       .required()
       .valid(Joi.ref('secretWord')),
@@ -45,7 +46,19 @@ const EmployeeProfile = () => {
     formState: { errors },
     reset
   } = useForm({
-    // defaultValues,
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      repeatEmail: '',
+      password: '',
+      repeatPassword: '',
+      secretWord: '',
+      repeatSecretWord: '',
+      address: '',
+      birthDate: ''
+    },
+    reValidateMode: 'onblur',
     resolver: joiResolver(validationSchema)
   });
 
@@ -129,9 +142,9 @@ const EmployeeProfile = () => {
     }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    dispatch(createEmployee(inputValues));
+  const submitHandler = async (data) => {
+    console.log(data);
+    dispatch(createEmployee(data));
     setShowModal(true);
   };
 
@@ -146,22 +159,22 @@ const EmployeeProfile = () => {
             id={'firstName'}
             register={register}
             text={'First Name'}
-            type="text"
-            error={errors.firstName?.message}
+            type={'text'}
+            error={errors.firstName}
           />
           <Input
             id={'lastName'}
             text={'Last Name'}
-            type="text"
+            type={'text'}
             register={register}
-            error={errors.lastName?.message}
+            error={errors.lastName}
           />
           <Input
             id={'email'}
             text={'Email'}
             type={'email'}
             register={register}
-            error={errors.email?.message}
+            error={errors.email}
           />
           <Input
             id={'repeatEmail'}
@@ -196,7 +209,7 @@ const EmployeeProfile = () => {
             text={'Repeat Secret Word'}
             type={'password'}
             register={register}
-            error={errors.repeatSecreteWord}
+            error={errors.repeatSecretWord}
           />
           <Input
             id={'address'}
@@ -212,6 +225,12 @@ const EmployeeProfile = () => {
             type={'date'}
             error={errors.birthDate}
           />
+          <div className={styles.btnsContainer}>
+            <Button classes={'red'} onClick={() => goBack()}>
+              Back
+            </Button>
+            <Button>Save</Button>
+          </div>
         </form>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>

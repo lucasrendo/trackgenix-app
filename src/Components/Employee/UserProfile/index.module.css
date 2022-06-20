@@ -102,3 +102,7 @@
   max-width: 768px;
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.5);
 }
+
+.btnsContainer {
+  text-align: right;
+}
