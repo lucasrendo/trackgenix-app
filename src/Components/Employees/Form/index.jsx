@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
+import { resetEmployee, resetMessage, setModal } from '../../../redux/employees/actions';
 import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
 import { getProjects } from '../../../redux/projects/thunks';
 import Joi from 'joi';
@@ -16,50 +16,76 @@ import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
 
 const employeeValidate = Joi.object({
-  firstName: Joi.string().label('First Name').min(3).max(10).required(),
-  lastName: Joi.string().label('Last Name').min(3).max(10).required(),
+  firstName: Joi.string()
+    .pattern(/^[a-zA-Z]+$/)
+    .label('First Name')
+    .min(3)
+    .max(10)
+    .required()
+    .messages({
+      'string.pattern.base': `First Name" should only have letters`,
+      'string.empty': `First Name cannot be an empty field`,
+      'string.max': `First name should have a maximum length of 10`,
+      'string.min': `First name should have a minimum length of 3`
+    }),
+  lastName: Joi.string()
+    .pattern(/^[a-zA-Z]+$/)
+    .label('Last Name')
+    .min(3)
+    .max(10)
+    .required()
+    .messages({
+      'string.pattern.base': `Last Name" should only have letters`,
+      'string.empty': `Last Name cannot be an empty field`,
+      'string.max': `Last name should have a maximum length of 10`,
+      'string.min': `Last name should have a minimum length of 3`
+    }),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required('Email is required'),
-  password: Joi.string().label('Password').min(8).required(),
-  assignedProjects: Joi.string().label('Project').required(),
+    .required()
+    .messages({
+      'string.empty': `Email cannot be an empty field`
+    }),
+  password: Joi.string().label('Password').min(8).required().messages({
+    'string.empty': `Password cannot be an empty field`,
+    'string.min': `Password should have a minimum length of 8`
+  }),
+  assignedProjects: Joi.string().label('Project').required().messages({
+    'string.empty': `Project cannot be an empty field`
+  }),
   isActive: Joi.boolean()
 });
 
 const EmployeesForm = () => {
-  //const [projects, setProjects] = useState([]);
-  const [inputValues, setInputValues] = useState({});
   const { goBack } = useHistory();
-  const [showModal, setShowModal] = useState(false);
+  //const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
-  const [formattedProjects, setFormattedProjects] = useState();
   const dispatch = useDispatch();
   const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const message = useSelector((state) => state.employees.message);
-  const projects = useSelector((state) => state.projects.list);
+  const projectList = useSelector((state) => state.projects.list);
   const projectsLoading = useSelector((state) => state.projects.isLoading);
+  const showModal = useSelector((state) => state.tasks.showModal);
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset
   } = useForm({
-    mode: 'onSubmit',
-    resolver: joiResolver(employeeValidate)
+    reValidateMode: 'onBlur',
+    resolver: joiResolver(employeeValidate),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      assignedProjects: [],
+      isActive: false
+    }
   });
 
-  // const getProjects = async () => {
-  //   try {
-  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-  //     const jsonResponse = await response.json();
-  //     return jsonResponse.data;
-  //   } catch (error) {
-  //     alert(error);
-  //     setShowModal(true);
-  //   }
-  // };
   useEffect(() => {
     id && dispatch(getSingleEmployee(id));
     dispatch(getProjects());
@@ -67,30 +93,17 @@ const EmployeesForm = () => {
   }, []);
 
   useEffect(() => {
-    dataOptions();
-  }, [projects]);
-
-  useEffect(() => {
     reset(employee);
   }, [employee]);
 
-  const dataOptions = () => {
-    let projectsData = [];
-    projects.forEach((project) => {
-      projectsData.push({ id: project._id, text: project.projectName });
+  const formatProjects = () => {
+    return projectList.map((project) => {
+      return { id: project._id, text: project.projectName };
     });
-    setFormattedProjects(projectsData);
   };
 
-  const config = {
-    title: 'Project',
-    type: 'select',
-    key: 'assignedProjects',
-    options: formattedProjects,
-    required: true
-  };
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
       goBack();
@@ -98,19 +111,18 @@ const EmployeesForm = () => {
   };
 
   const submitHandler = async (data) => {
-    console.log(data);
     if (id) {
       dispatch(editEmployees(data, id));
     } else {
       dispatch(createEmployee(data));
     }
-    setShowModal(true);
+    dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      {isLoading || projectsLoading ? (
+      {isLoading ? (
         <Loading />
       ) : (
         <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
@@ -146,7 +158,7 @@ const EmployeesForm = () => {
             id={'assignedProjects'}
             type={'select'}
             text={'Projects'}
-            item={config}
+            options={formatProjects()}
             register={register}
             error={errors.assignedProjects}
           />

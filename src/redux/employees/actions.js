@@ -15,7 +15,6 @@ import {
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
   RESET_EMPLOYEE,
-  FILL_EMPLOYEE,
   FORMAT_EMPLOYEE_OBJECTS,
   SET_MODAL,
   RESET_MESSAGE,
@@ -70,8 +69,8 @@ export const editEmployeesError = (error) => {
   return { type: EDIT_EMPLOYEES_ERROR, payload: error };
 };
 
-export const deleteEmployeesSuccess = (data) => {
-  return { type: DELETE_EMPLOYEES_SUCCESS, payload: data };
+export const deleteEmployeesSuccess = (id) => {
+  return { type: DELETE_EMPLOYEES_SUCCESS, payload: id };
 };
 
 export const deleteEmployeesPending = () => {
@@ -84,10 +83,6 @@ export const deleteEmployeesError = (message) => {
 
 export const resetEmployee = () => {
   return { type: RESET_EMPLOYEE };
-};
-
-export const fillEmployee = (userInput) => {
-  return { type: FILL_EMPLOYEE, payload: userInput };
 };
 
 export const formatEmployeeObject = (data) => {

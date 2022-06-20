@@ -14,7 +14,6 @@ import {
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
-  FILL_EMPLOYEE,
   SET_MODAL,
   UPDATE_LIST,
   RESET_MESSAGE,
@@ -75,21 +74,13 @@ export const employeeReducer = (state = initialState, action) => {
     case ADD_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        employee: action.payload.data,
         error: false,
-        employee: {
-          firstName: action.payload.data.firstName,
-          lastName: action.payload.data.lastName,
-          email: action.payload.data.email,
-          password: action.payload.data.password,
-          projectId: action.payload.data.projectId,
-          isActive: action.payload.data.isActive
-        },
         message: action.payload.message
       };
 
     case ADD_EMPLOYEES_PENDING:
-      return { ...state, isLoading: true, message: 'Loading...' };
+      return { ...state, isLoading: false, message: 'Loading...' };
 
     case ADD_EMPLOYEES_ERROR:
       return { ...state, isLoading: false, error: true, message: action.payload };
@@ -113,7 +104,7 @@ export const employeeReducer = (state = initialState, action) => {
     case EDIT_EMPLOYEES_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         message: 'Loading...'
       };
 
@@ -124,6 +115,7 @@ export const employeeReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        list: state.list.filter((employee) => employee._id !== action.payload),
         message: 'The employee was successfully deleted',
         error: false
       };
@@ -133,9 +125,6 @@ export const employeeReducer = (state = initialState, action) => {
 
     case DELETE_EMPLOYEES_ERROR:
       return { ...state, isLoading: false, error: true, message: action.payload.message };
-
-    case FILL_EMPLOYEE:
-      return { ...state, employee: { ...state.employee, ...action.payload } };
 
     case SET_MODAL:
       return { ...state, showModal: action.payload };

@@ -20,7 +20,7 @@ import {
 
 const resource = `${process.env.REACT_APP_API_URL}/employees`;
 
-const employeeArray = (employee) => {
+const formatEmployee = (employee) => {
   const data = {
     firstName: employee.firstName,
     lastName: employee.lastName,
@@ -66,7 +66,7 @@ export const getEmployees = () => {
 export const createEmployee = (obj) => {
   return async (dispatch) => {
     try {
-      const object = employeeArray(obj);
+      const object = formatEmployee(obj);
       const requestConfig = {
         method: 'POST',
         headers: {
@@ -90,7 +90,7 @@ export const createEmployee = (obj) => {
 export const editEmployees = (obj, id) => {
   return async (dispatch) => {
     try {
-      const object = employeeArray(obj);
+      const object = formatEmployee(obj);
       const requestConfig = {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
@@ -124,7 +124,7 @@ export const deleteEmployees = (id) => {
       const response = await fetch(`${resource}/${id}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(deleteEmployeesSuccess());
+        dispatch(deleteEmployeesSuccess(id));
         dispatch(resetEmployee());
       } else dispatch(deleteEmployeesError(data.message));
     } catch (error) {

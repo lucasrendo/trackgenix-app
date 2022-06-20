@@ -49,7 +49,6 @@ const Employees = () => {
   const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteEmployees(id));
-    !error && dispatch(updateList([...list.filter((employee) => employee._id !== id)]));
   };
 
   const closeHandler = () => {
