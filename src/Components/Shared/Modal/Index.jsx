@@ -16,7 +16,7 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
         <div className={styles.childrenContainer}>{children}</div>
         {isConfirmation ? (
           <div className={styles.buttonWrapper}>
-            <Button className={styles.modalButton} onClick={confirmed}>
+            <Button classes="block" onClick={confirmed}>
               Accept
             </Button>
             <Button classes={'red'} onClick={handleClose}>
