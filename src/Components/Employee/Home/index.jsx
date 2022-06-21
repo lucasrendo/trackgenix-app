@@ -11,9 +11,6 @@ function Home() {
         {/*{employee.firstName}&nbsp;
         {employee.lastName}*/}
       </h2>
-      <div className={styles.image}>
-        <img src="../../../public/home-img.png" />
-      </div>
     </section>
   );
 }

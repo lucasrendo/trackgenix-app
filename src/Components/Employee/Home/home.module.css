@@ -1,15 +1,12 @@
-.container {
-  flex: 8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+h2 {
+  color: rgba(255, 255, 255, 1);
+  font-size: 72px;
 }
 
-.image {
-  width: 280px;
-  height: 200px;
-  margin: 10px;
-  display: flex;
-  flex-direction: row;
+body   {
+  background-image: url(assets/home-img.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
