@@ -21,8 +21,18 @@ const Admins = () => {
   const message = useSelector((state) => state.admins.message);
   const showModal = useSelector((state) => state.admins.showModal);
   const adminValidate = Joi.object({
-    firstName: Joi.string().label('First Name').min(4).max(15).required(),
-    lastName: Joi.string().label('Last Name').min(4).max(15).required(),
+    firstName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('First Name')
+      .min(4)
+      .max(15)
+      .required(),
+    lastName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('Last Name')
+      .min(4)
+      .max(15)
+      .required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required(),
