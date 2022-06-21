@@ -110,31 +110,31 @@ function SuperAdminsForm() {
     <section className={styles.container}>
       <h2>Super Admins</h2>
       <form onSubmit={handleSubmit(submitHandler)}>
-        <div className='aaa'>
+        <div className={styles.textContainer}>
           <label htmlFor='firstName'>First Name</label>
           <input type='text' {...register('firstName', {required: {value: true, message: ''} })} />
           {errors.firstName && <p className='asdasd'>{errors.type}</p>}
         </div>        
         
-        <div className='aaa'>
+        <div className={styles.textContainer}>
           <label htmlFor='lastName'>Last Name</label>
           <input type='text' {...register('lastName', {required: {value: true, message: ''} })} />
           {errors.lastName && <p className='asdasd'>{errors.type}</p>}
         </div>
         
-        <div className='aaa'>
+        <div className={styles.textContainer}>
           <label htmlFor='email'>E-mail</label>
           <input type='email' {...register('email', {required: {value: true, message: ''} })} />
           {errors.email && <p className='asdasd'>{errors.type}</p>}
         </div>
         
-        <div className='aaa'>
+        <div className={styles.textContainer}>
           <label htmlFor='password'>Password</label>
           <input type='password' {...register('password', {required: {value: true, message: ''} })} />
           {errors.password && <p className='asdasd'>{errors.type}</p>}
         </div>
         
-        <div className='bbb'>
+        <div className={styles.checkContainer}>
           <label htmlFor='isActive'>Is active?</label>
           <input type='checkbox' {...register('isActive', {required: {value: true, message: ''} })} />
           {errors.isActive && <p className='asdasd'>{errors.type}</p>}
