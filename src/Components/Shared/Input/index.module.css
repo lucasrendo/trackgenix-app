@@ -8,7 +8,7 @@
   color: #373867;
 }
 
-.inputOk {
+.inputContainer input {
   width: 98%;
   height: 25px;
   margin: 5px;
@@ -50,17 +50,11 @@
 }
 
 .error{
+  margin: 0px;
   font-size: 14px;
   color: #FF0303;
 }
 
 .inputError{
-  width: 98%;
-  height: 25px;
-  margin: 5px;
-  padding: 3px 7px;
   border: 2px solid #FF0303;;
-  background-color: white;
-  font-size: 17px;
-  color: #373867
 }
