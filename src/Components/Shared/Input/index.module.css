@@ -55,6 +55,6 @@
   color: #FF0303;
 }
 
-.inputError{
+.inputContainer .inputError{
   border: 2px solid #FF0303;;
 }
