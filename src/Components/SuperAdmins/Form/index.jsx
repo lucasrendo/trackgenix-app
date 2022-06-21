@@ -11,6 +11,7 @@ import Loading from '../../Shared/Loading';
 import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './super-admins.module.css';
+import { appendErrors, useForm } from 'react-hook-form';
 
 function SuperAdminsForm() {
   const { id } = useParams();
@@ -22,7 +23,17 @@ function SuperAdminsForm() {
   const message = useSelector((state) => state.superAdmins.message);
   const error = useSelector((state) => state.superAdmins.error);
   const superAdmin = useSelector((state) => state.superAdmins.superAdmin);
+  const {
+    handleSubmit,
+    register,
+    formState: {
+      errors
+    }
+  } = useForm({
+    mode: 'onchange'
+  });
   // const resource = '/super-admin';
+
   useEffect(() => {
     id && dispatch(getSingleSuperAdmins(id));
     return () => dispatch(resetSuperAdmin());
@@ -89,6 +100,46 @@ function SuperAdminsForm() {
           userInput={[inputValues, setInputValues]}
         />
       )}
+      <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
+        <h2>{message}</h2>
+      </Modal>
+    </section>
+  );
+  
+  return (
+    <section className={styles.container}>
+      <h2>Super Admins</h2>
+      <form onSubmit={handleSubmit(submitHandler)}>
+        <div className='aaa'>
+          <label htmlFor='firstName'>First Name</label>
+          <input type='text' {...register('firstName', {required: {value: true, message: ''} })} />
+          {errors.firstName && <p className='asdasd'>{errors.type}</p>}
+        </div>        
+        
+        <div className='aaa'>
+          <label htmlFor='lastName'>Last Name</label>
+          <input type='text' {...register('lastName', {required: {value: true, message: ''} })} />
+          {errors.lastName && <p className='asdasd'>{errors.type}</p>}
+        </div>
+        
+        <div className='aaa'>
+          <label htmlFor='email'>E-mail</label>
+          <input type='email' {...register('email', {required: {value: true, message: ''} })} />
+          {errors.email && <p className='asdasd'>{errors.type}</p>}
+        </div>
+        
+        <div className='aaa'>
+          <label htmlFor='password'>Password</label>
+          <input type='password' {...register('password', {required: {value: true, message: ''} })} />
+          {errors.password && <p className='asdasd'>{errors.type}</p>}
+        </div>
+        
+        <div className='bbb'>
+          <label htmlFor='isActive'>Is active?</label>
+          <input type='checkbox' {...register('isActive', {required: {value: true, message: ''} })} />
+          {errors.isActive && <p className='asdasd'>{errors.type}</p>}
+        </div>
+      </form>
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
