@@ -1,13 +1,13 @@
 import joi from 'joi';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { getSingleTask, createTask, updateTask } from 'redux/Task/thunks';
+import { getSingleTask, addTask, editTask } from 'redux/tasks/thunks';
 import { getProjects } from 'redux/projects/thunks';
 import { getEmployees } from 'redux/employees/thunks';
-import { resetTask, resetMessage, setModal } from 'redux/Task/actions';
+import { resetTask, resetMessage, setModal } from 'redux/tasks/actions';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
@@ -30,12 +30,12 @@ function Tasks() {
   const projectsLoading = useSelector((state) => state.projects.isLoading);
 
   const validationSchema = joi.object({
-    employeeId: joi.string(),
-    projectId: joi.string().required(),
-    title: joi.string().max(30).required(),
-    description: joi.string().max(100),
-    date: joi.date().max(),
-    done: joi.boolean().required()
+    employeeId: joi.string().label('Employee ID'),
+    projectId: joi.string().required().label('Project ID'),
+    title: joi.string().max(30).required().label('Title'),
+    description: joi.string().max(100).label('Description'),
+    date: joi.date().max().label('Date'),
+    done: joi.boolean().required().label('Done')
   });
   const {
     register,
@@ -43,7 +43,7 @@ function Tasks() {
     formState: { errors },
     reset
   } = useForm({
-    reValidateMode: 'onBlur',
+    mode: 'onBlur',
     resolver: joiResolver(validationSchema),
     defaultValues: {
       employeeId: '',
@@ -74,15 +74,11 @@ function Tasks() {
       });
   }, [task]);
 
-  useEffect(() => formatProjects(), [projectList]);
-  useEffect(() => formatEmployees(), [employeeList]);
-
   const formatProjects = () => {
     return projectList.map((project) => {
       return { id: project._id, text: project.projectName };
     });
   };
-
   const formatEmployees = () => {
     return employeeList.map((employee) => {
       return { id: employee._id, text: `${employee.firstName} ${employee.lastName}` };
@@ -99,7 +95,7 @@ function Tasks() {
 
   // === Handle submit data and method === //
   const submitHandler = (data) => {
-    id ? dispatch(updateTask(data, id)) : dispatch(createTask(data));
+    id ? dispatch(editTask(data, id)) : dispatch(addTask(data));
     dispatch(setModal(true));
   };
 
@@ -114,44 +110,26 @@ function Tasks() {
             text="Employee"
             id="employeeId"
             options={formatEmployees()}
-            error={errors.employeeId?.message}
+            error={errors.employeeId}
             register={register}
           />
           <Select
             text="Project"
             id="projectId"
             options={formatProjects()}
-            error={errors.projectId?.message}
+            error={errors.projectId}
             register={register}
           />
-          <Input
-            type="text"
-            id="title"
-            text="Title"
-            error={errors.title?.message}
-            register={register}
-          />
+          <Input type="text" id="title" text="Title" error={errors.title} register={register} />
           <Input
             type="text"
             id="description"
             text="Description"
-            error={errors.description?.message}
+            error={errors.description}
             register={register}
           />
-          <Input
-            type="date"
-            id="date"
-            text="Date"
-            error={errors.date?.message}
-            register={register}
-          />
-          <Input
-            type="checkbox"
-            id="done"
-            text="Done"
-            error={errors.done?.message}
-            register={register}
-          />
+          <Input type="date" id="date" text="Date" error={errors.date} register={register} />
+          <Input type="checkbox" id="done" text="Done" error={errors.done} register={register} />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
               Back
