@@ -19,10 +19,10 @@ import { joiResolver } from '@hookform/resolvers/joi';
 
 const superAdminValidate = Joi.object({
   firstName: Joi.string()
-    .pattern(/^[a-zA-Z]+$/)
+    .pattern(/^[a-zA-Z ]+$/)
     .label('First Name')
     .min(3)
-    .max(10)
+    .max(20)
     .required()
     .messages({
       'string.pattern.base': `First Name must only have letters`,
@@ -31,10 +31,10 @@ const superAdminValidate = Joi.object({
       'string.min': `First name must have at least 3 characters`
     }),
   lastName: Joi.string()
-    .pattern(/^[a-zA-Z]+$/)
+    .pattern(/^[a-zA-Z ]+$/)
     .label('Last Name')
     .min(3)
-    .max(10)
+    .max(20)
     .required()
     .messages({
       'string.pattern.base': `Last Name must only have letters`,
@@ -73,7 +73,13 @@ function SuperAdminsForm() {
   } = useForm({
     reValidateMode: 'onChange',
     resolver: joiResolver(superAdminValidate),
-    mode: 'onchange'
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      isActive: false
+    }
   });
   // const resource = '/super-admin';
 
@@ -85,39 +91,6 @@ function SuperAdminsForm() {
   useEffect(() => {
     reset(superAdmin);
   }, [superAdmin]);
-
-  // const config = [
-  //   {
-  //     header: 'First Name',
-  //     type: 'text',
-  //     key: 'firstName',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Last Name',
-  //     type: 'text',
-  //     key: 'lastName',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Email',
-  //     type: 'email',
-  //     key: 'email',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Password',
-  //     type: 'password',
-  //     key: 'password',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Is active',
-  //     type: 'checkbox',
-  //     key: 'isActive',
-  //     required: false
-  //   }
-  // ];
 
   const closeHandler = () => {
     setModalMessage(false);
@@ -131,26 +104,8 @@ function SuperAdminsForm() {
   const submitHandler = async (data) => {
     id ? dispatch(editSuperAdmins(data, id)) : dispatch(createSuperAdmins(data));
     setModalMessage(true);
+    console.log(data);
   };
-
-  // return (
-  //   <section className={styles.container}>
-  //     <h2>Super Admins</h2>
-  //     {isLoading ? (
-  //       <Loading />
-  //     ) : (
-  //       <Form
-  //         data={config}
-  //         itemData={superAdmin}
-  //         submitHandler={submitHandler}
-  //         userInput={[inputValues, setInputValues]}
-  //       />
-  //     )}
-  //     <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
-  //       <h2>{message}</h2>
-  //     </Modal>
-  //   </section>
-  // );
 
   return (
     <section className={styles.container}>
@@ -164,7 +119,6 @@ function SuperAdminsForm() {
             type={'text'}
             error={errors.firstName}
           />
-          {/* {errors.firstName && <p className={styles.errorMessage}>{errors.firstName.message}</p>} */}
         </div>
 
         <div className={styles.textContainer}>

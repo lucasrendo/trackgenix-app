@@ -53,7 +53,13 @@ export const superAdminsReducer = (state = initialState, action) => {
     case GET_SINGLE_SUPER_ADMIN_SUCCESS:
       return {
         ...state,
-        superAdmin: action.payload.data,
+        superAdmin: {
+          firstName: action.payload.data.firstName,
+          lastName: action.payload.data.lastName,
+          email: action.payload.data.email,
+          password: action.payload.data.password,
+          isActive: action.payload.data.isActive
+        },
         isLoading: false,
         message: action.payload.message,
         error: false
