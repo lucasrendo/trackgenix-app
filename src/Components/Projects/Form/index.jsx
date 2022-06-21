@@ -34,7 +34,7 @@ function Projects() {
       .string()
       .min(1)
       .max(30)
-      .pattern(/^[A-Za-z0-9 ]$/)
+      .pattern(/^[A-Za-z0-9 ]+$/)
       .required()
       .label('Project name'),
     description: joi.string().min(10).max(140).allow('').label('Description'),
@@ -44,7 +44,7 @@ function Projects() {
       .string()
       .min(1)
       .max(20)
-      .pattern(/^[A-Za-z0-9 ]$/)
+      .pattern(/^[A-Za-z0-9 ]+$/)
       .required()
       .label('Client'),
     startDate: joi.date().required().label('Start Date'),
