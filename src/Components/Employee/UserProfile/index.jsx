@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
 import { getSingleEmployee, createEmployee } from 'redux/employees/thunks';
@@ -14,7 +14,6 @@ import Joi from 'joi';
 
 const EmployeeProfile = () => {
   const { id } = useParams();
-  const [inputValues, setInputValues] = useState({});
   const { goBack } = useHistory();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
@@ -23,21 +22,23 @@ const EmployeeProfile = () => {
   const error = useSelector((state) => state.employees.error);
   const message = useSelector((state) => state.employees.message);
   const validationSchema = Joi.object({
-    firstName: Joi.string().label('First Name').min(3).max(10).required(),
-    lastName: Joi.string().label('Last Name').min(3).max(10).required(),
+    firstName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('First Name')
+      .min(3)
+      .max(20)
+      .required(),
+    lastName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('Last Name')
+      .min(3)
+      .max(20)
+      .required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required(),
-    repeatEmail: Joi.string().label('Repeat Email').required().valid(Joi.ref('email')),
     password: Joi.string().label('Password').min(8).required(),
-    repeatPassword: Joi.string().label('Repeat Password').required().valid(Joi.ref('password')),
-    secretWord: Joi.string().label('Secret Word').min(8).required(),
-    repeatSecretWord: Joi.string()
-      .label('Repeat Secret Word')
-      .required()
-      .valid(Joi.ref('secretWord')),
-    address: Joi.string().label('Address').min(3).max(10).required(),
-    birthDate: Joi.date().label('Birth Date').required().max(Date.now())
+    isActive: Joi.boolean()
   });
 
   const {
@@ -50,15 +51,10 @@ const EmployeeProfile = () => {
       firstName: '',
       lastName: '',
       email: '',
-      repeatEmail: '',
       password: '',
-      repeatPassword: '',
-      secretWord: '',
-      repeatSecretWord: '',
-      address: '',
-      birthDate: ''
+      isActive: false
     },
-    reValidateMode: 'onblur',
+    reValidateMode: 'onBlur',
     resolver: joiResolver(validationSchema)
   });
 
@@ -66,69 +62,6 @@ const EmployeeProfile = () => {
     id && dispatch(getSingleEmployee(id));
     return () => dispatch(resetEmployee());
   }, []);
-
-  // const config = [
-  //   {
-  //     header: 'First Name',
-  //     type: 'text',
-  //     key: 'firstName',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Last Name',
-  //     type: 'text',
-  //     key: 'lastName',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Email',
-  //     type: 'email',
-  //     key: 'email',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Repeat Email',
-  //     type: 'email',
-  //     key: 'email',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Password',
-  //     type: 'password',
-  //     key: 'password',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Repeat Password',
-  //     type: 'password',
-  //     key: 'password',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Secret Word',
-  //     type: 'password',
-  //     key: 'password',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Repeat Secret Word',
-  //     type: 'password',
-  //     key: 'password',
-  //     required: true
-  //   },
-  //   {
-  //     header: 'Address',
-  //     type: 'text',
-  //     key: 'address',
-  //     required: false
-  //   },
-  //   {
-  //     header: 'Birth Date',
-  //     type: 'date',
-  //     key: 'birthDate',
-  //     required: true
-  //   }
-  // ];
 
   useEffect(() => {
     reset(employee);
@@ -143,7 +76,6 @@ const EmployeeProfile = () => {
   };
 
   const submitHandler = async (data) => {
-    console.log(data);
     dispatch(createEmployee(data));
     setShowModal(true);
   };
@@ -177,13 +109,6 @@ const EmployeeProfile = () => {
             error={errors.email}
           />
           <Input
-            id={'repeatEmail'}
-            text={'Repeat Email'}
-            type={'email'}
-            register={register}
-            error={errors.repeatEmail}
-          />
-          <Input
             id={'password'}
             text={'Password'}
             type={'password'}
@@ -191,39 +116,11 @@ const EmployeeProfile = () => {
             error={errors.password}
           />
           <Input
-            id={'repeatPassword'}
-            text={'Repeat Password'}
-            type={'password'}
+            id={'isActive'}
+            text={'Is active'}
+            type={'checkbox'}
             register={register}
-            error={errors.repeatPassword}
-          />
-          <Input
-            id={'secretWord'}
-            text={'Secret Word'}
-            type={'password'}
-            register={register}
-            error={errors.secretWord}
-          />
-          <Input
-            id={'repeatSecretWord'}
-            text={'Repeat Secret Word'}
-            type={'password'}
-            register={register}
-            error={errors.repeatSecretWord}
-          />
-          <Input
-            id={'address'}
-            register={register}
-            text={'Address'}
-            type={'text'}
-            error={errors.address}
-          />
-          <Input
-            id={'birthDate'}
-            register={register}
-            text={'Birth Date'}
-            type={'date'}
-            error={errors.birthDate}
+            error={errors.isActive}
           />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>

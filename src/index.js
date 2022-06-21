@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <EmployeesRoutes />
-      {/* <Routes /> */}
+      <Routes />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
