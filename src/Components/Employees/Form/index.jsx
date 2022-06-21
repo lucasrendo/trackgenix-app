@@ -8,7 +8,7 @@ import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux
 import { getProjects } from '../../../redux/projects/thunks';
 import Joi from 'joi';
 
-import Modal from '../../Shared/Modal';
+import Modal from '../../Shared/Modal/Modal';
 import Loading from '../../Shared/Loading';
 import styles from './employee.module.css';
 import Input from 'Components/Shared/Input';
