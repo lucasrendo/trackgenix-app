@@ -11,9 +11,9 @@ const employeeRoutes = () => {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={'/employee/:id'} />
-            <Route exact path={'/employee/:id/projects'} component={EmployeeWorkedHours} />
-            <Route exact path={'/employee/:id/profile'} />
-            <Route exact path={'/employee/:id/workedhours'} />
+            <Route exact path={'/employee/projects/:id'} />
+            <Route exact path={'/employee/profile/:id'} />
+            <Route exact path={'/employee/workedhours/:id'} component={EmployeeWorkedHours} />
           </Switch>
         </Suspense>
       </EmployeeLayout>
