@@ -16,3 +16,4 @@ export const DELETE_ADMIN_ERROR = 'DELETE_ADMIN_ERROR';
 export const UPDATE_LIST = 'UPDATE_LIST';
 export const RESET_MESSAGE = 'RESET_MESSAGE';
 export const RESET_ADMIN = 'RESET_ADMIN';
+export const SET_MODAL = 'SET_MODAL';

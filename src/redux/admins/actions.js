@@ -16,21 +16,26 @@ import {
   GET_SINGLE_ADMIN_SUCCESS,
   UPDATE_LIST,
   RESET_MESSAGE,
-  RESET_ADMIN
+  RESET_ADMIN,
+  SET_MODAL
 } from './constants';
-
-export const getAdminsSuccess = (admins) => ({
-  type: GET_ADMINS_SUCCESS,
-  payload: admins
-});
 
 export const getAdminsPending = () => ({
   type: GET_ADMINS_PENDING
 });
 
-export const getAdminsError = (message) => ({
+export const getAdminsSuccess = (data) => ({
+  type: GET_ADMINS_SUCCESS,
+  payload: data
+});
+
+export const getAdminsError = (error) => ({
   type: GET_ADMINS_ERROR,
-  payload: message
+  payload: error
+});
+
+export const getSingleAdminPending = () => ({
+  type: GET_SINGLE_ADMIN_PENDING
 });
 
 export const getSingleAdminSuccess = (admin) => ({
@@ -38,27 +43,23 @@ export const getSingleAdminSuccess = (admin) => ({
   payload: admin
 });
 
-export const getSingleAdminPending = () => ({
-  type: GET_SINGLE_ADMIN_PENDING
-});
-
-export const getSingleAdminError = (message) => ({
+export const getSingleAdminError = (error) => ({
   type: GET_SINGLE_ADMIN_ERROR,
-  payload: message
-});
-
-export const addAdminSuccess = (admin) => ({
-  type: ADD_ADMIN_SUCCESS,
-  payload: admin
+  payload: error
 });
 
 export const addAdminPending = () => ({
   type: ADD_ADMIN_PENDING
 });
 
-export const addAdminError = (message) => ({
+export const addAdminSuccess = (data) => ({
+  type: ADD_ADMIN_SUCCESS,
+  payload: data
+});
+
+export const addAdminError = (error) => ({
   type: ADD_ADMIN_ERROR,
-  payload: message
+  payload: error
 });
 
 export const updateAdminSuccess = (admin) => ({
@@ -70,9 +71,9 @@ export const updateAdminPending = () => ({
   type: UPDATE_ADMIN_PENDING
 });
 
-export const updateAdminError = (message) => ({
+export const updateAdminError = (error) => ({
   type: UPDATE_ADMIN_ERROR,
-  payload: message
+  payload: error
 });
 
 export const deleteAdminSuccess = (message) => ({
@@ -84,9 +85,9 @@ export const deleteAdminPending = () => ({
   type: DELETE_ADMIN_PENDING
 });
 
-export const deleteAdminError = (message) => ({
+export const deleteAdminError = (error) => ({
   type: DELETE_ADMIN_ERROR,
-  payload: message
+  payload: error
 });
 
 export const updateList = (newList) => {
@@ -103,3 +104,10 @@ export const resetMessage = () => ({
 export const resetAdmin = () => ({
   type: RESET_ADMIN
 });
+
+export const setModal = (state) => {
+  return {
+    type: SET_MODAL,
+    payload: state
+  };
+};

@@ -13,17 +13,19 @@ import {
   deleteAdminSuccess,
   getSingleAdminError,
   getSingleAdminPending,
-  getSingleAdminSuccess
+  getSingleAdminSuccess,
+  resetMessage,
+  resetAdmin
 } from './actions';
 
 export const getAdmins = () => {
   return async (dispatch) => {
-    dispatch(getAdminsPending());
     try {
+      dispatch(getAdminsPending());
       const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const response_1 = await response.json();
-      dispatch(getAdminsSuccess(response_1.data));
-      return response_1.data;
+      const data = await response.json();
+      if (!data.error) dispatch(getAdminsSuccess(data.data));
+      else dispatch(getAdminsError(data.message));
     } catch (error) {
       dispatch(getAdminsError(error.toString()));
     }
@@ -32,12 +34,15 @@ export const getAdmins = () => {
 
 export const getSingleAdmin = (id) => {
   return async (dispatch) => {
-    dispatch(getSingleAdminPending());
     try {
+      dispatch(getSingleAdminPending());
       const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`);
-      const response_1 = await response.json();
-      dispatch(getSingleAdminSuccess(response_1.data));
-      return response_1.data;
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(getSingleAdminSuccess(data));
+      } else {
+        dispatch(getSingleAdminError(data.message));
+      }
     } catch (error) {
       dispatch(getSingleAdminError(error.toString()));
     }
@@ -53,9 +58,14 @@ export const addAdmin = (obj) => {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
-      const response_1 = await response.json();
-      dispatch(addAdminSuccess(response_1.data));
-      return response_1.data;
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(addAdminSuccess(data));
+        dispatch(resetAdmin());
+        return data.data;
+      } else {
+        dispatch(addAdminError(data.message));
+      }
     } catch (error) {
       dispatch(addAdminError(error.toString()));
     }
@@ -64,16 +74,21 @@ export const addAdmin = (obj) => {
 
 export const updateAdmin = (obj, id) => {
   return async (dispatch) => {
-    dispatch(updateAdminPending());
     try {
+      dispatch(resetMessage());
+      dispatch(updateAdminPending());
       const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(obj)
       });
-      const response_1 = await response.json();
-      dispatch(updateAdminSuccess(response_1.data));
-      return response_1.data;
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(updateAdminSuccess(data));
+        dispatch(resetAdmin());
+      } else {
+        dispatch(updateAdminError(data.message));
+      }
     } catch (error) {
       dispatch(updateAdminError(error.toString()));
     }
@@ -90,9 +105,13 @@ export const deleteAdmin = (id) => {
           'Content-type': 'application/json'
         }
       });
-      const response_1 = await response.json();
-      dispatch(deleteAdminSuccess(response_1.data));
-      return response_1.data;
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(deleteAdminSuccess());
+        return data.data;
+      } else {
+        dispatch(deleteAdminError(data.message));
+      }
     } catch (error) {
       dispatch(deleteAdminError(error.toString()));
     }
