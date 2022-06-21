@@ -30,11 +30,11 @@ function Tasks() {
   const projectsLoading = useSelector((state) => state.projects.isLoading);
 
   const validationSchema = joi.object({
-    employeeId: joi.string().optional().label('Employee ID'),
+    employeeId: joi.string().allow('').label('Employee ID'),
     projectId: joi.string().required().label('Project ID'),
     title: joi.string().max(30).required().label('Title'),
-    description: joi.string().max(100).optional().label('Description'),
-    date: joi.date().optional().label('Date'),
+    description: joi.string().max(100).allow('').label('Description'),
+    date: joi.date().allow('').label('Date'),
     done: joi.boolean().required().label('Done')
   });
 
