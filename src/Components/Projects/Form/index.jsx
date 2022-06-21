@@ -30,15 +30,27 @@ function Projects() {
   const adminList = useSelector((state) => state.admins.list);
 
   const validationSchema = joi.object({
-    projectName: joi.string().min(1).max(20).required().label('Project name'),
-    description: joi.string().min(10).max(140).label('Description'),
+    projectName: joi
+      .string()
+      .min(1)
+      .max(30)
+      .pattern(/^[A-Za-z0-9 ]$/)
+      .required()
+      .label('Project name'),
+    description: joi.string().min(10).max(140).allow('').label('Description'),
     isActive: joi.boolean(),
     admin: joi.string().required().label('Admin'),
-    client: joi.string().min(1).max(20).required().label('Client'),
+    client: joi
+      .string()
+      .min(1)
+      .max(20)
+      .pattern(/^[A-Za-z0-9 ]$/)
+      .required()
+      .label('Client'),
     startDate: joi.date().required().label('Start Date'),
-    endDate: joi.date().min(joi.ref('startDate')).label('End Date'),
+    endDate: joi.date().min(joi.ref('startDate')).allow('').label('End Date'),
     employeeId: joi.string().required().label('Employee'),
-    role: joi.string().valid('DEV', 'QA', 'PM', 'TL').required().label('Role'),
+    role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
     rate: joi.number().min(0).precision(2).required().label('Rate'),
     hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
   });
