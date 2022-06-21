@@ -16,7 +16,7 @@ import {
   deleteEmployeesError,
   resetEmployee,
   resetMessage
-} from './actions.js';
+} from './actions';
 
 const resource = `${process.env.REACT_APP_API_URL}/employees`;
 
@@ -44,7 +44,7 @@ export const getSingleEmployee = (id) => {
         dispatch(getSingleEmployeesError(data.message));
       }
     } catch (error) {
-      dispatch(getSingleEmployeesError(error));
+      dispatch(getSingleEmployeesError(error.message));
     }
   };
 };

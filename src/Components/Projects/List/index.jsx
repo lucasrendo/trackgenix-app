@@ -75,6 +75,7 @@ function Projects() {
         headers={headers}
         resource={resource}
         deleteItem={deleteItem}
+        showButtons={true}
       />
       <Modal
         handleClose={isConfirmation ? () => dispatch(setModal(false)) : () => closeHandler()}

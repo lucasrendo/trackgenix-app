@@ -78,6 +78,7 @@ const Admins = () => {
           setConfirmation(true);
           setIsAdding(true);
         }}
+        showButtons={true}
       />
       <div>
         <Link to={'/admins/form'} className={styles.linkReset}>
