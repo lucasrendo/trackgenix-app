@@ -50,7 +50,7 @@ const employeeValidate = Joi.object({
     'string.empty': `Password cannot be an empty field`,
     'string.min': `Password should have a minimum length of 8`
   }),
-  assignedProjects: Joi.string().label('Project').allow(''),
+  assignedProjects: Joi.string().allow('').label('Project'),
   isActive: Joi.boolean()
 });
 
