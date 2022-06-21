@@ -107,8 +107,9 @@ export const deleteAdmin = (id) => {
       });
       const data = await response.json();
       if (!data.error) {
-        dispatch(deleteAdminSuccess());
-        return data.data;
+        dispatch(deleteAdminSuccess(id));
+        dispatch(resetAdmin());
+        //return data.data;
       } else {
         dispatch(deleteAdminError(data.message));
       }

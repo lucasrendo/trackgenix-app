@@ -76,9 +76,9 @@ export const updateAdminError = (error) => ({
   payload: error
 });
 
-export const deleteAdminSuccess = (message) => ({
+export const deleteAdminSuccess = (id) => ({
   type: DELETE_ADMIN_SUCCESS,
-  payload: message
+  payload: id
 });
 
 export const deleteAdminPending = () => ({

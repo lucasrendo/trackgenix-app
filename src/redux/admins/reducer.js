@@ -129,7 +129,9 @@ export const adminsReducer = (state = initialState, action) => {
       return {
         ...state,
         pending: false,
-        error: false
+        error: false,
+        list: state.list.filter((admin) => admin._id !== action.payload),
+        message: 'The admin was successfully deleted'
       };
     case DELETE_ADMIN_ERROR:
       return {
