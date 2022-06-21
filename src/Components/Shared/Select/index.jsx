@@ -6,7 +6,9 @@ const Select = ({ text, id, options, error, register }) => {
     <div className={styles.inputContainer}>
       <label>{text}</label>
       <select className={error ? styles.inputError : styles.inputOk} name={id} {...register(id)}>
-        <option selected readOnly value="">{`select ${text}`}</option>
+        <option selected disabled value="" className={styles.readOnly}>
+          {`select ${text}`}
+        </option>
         {options?.map((option, index) => (
           <option key={index} value={option.id}>
             {option.text}

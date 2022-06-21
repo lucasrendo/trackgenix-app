@@ -48,3 +48,7 @@
   height: 30px;
   background-color: wheat;
 }
+
+.buttonWrapper{
+  display: flex;
+}
