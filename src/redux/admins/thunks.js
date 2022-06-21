@@ -109,7 +109,6 @@ export const deleteAdmin = (id) => {
       if (!data.error) {
         dispatch(deleteAdminSuccess(id));
         dispatch(resetAdmin());
-        //return data.data;
       } else {
         dispatch(deleteAdminError(data.message));
       }

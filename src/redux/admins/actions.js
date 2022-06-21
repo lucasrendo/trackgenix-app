@@ -14,7 +14,6 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  UPDATE_LIST,
   RESET_MESSAGE,
   RESET_ADMIN,
   SET_MODAL
@@ -89,13 +88,6 @@ export const deleteAdminError = (error) => ({
   type: DELETE_ADMIN_ERROR,
   payload: error
 });
-
-export const updateList = (newList) => {
-  return {
-    type: UPDATE_LIST,
-    payload: newList
-  };
-};
 
 export const resetMessage = () => ({
   type: RESET_MESSAGE

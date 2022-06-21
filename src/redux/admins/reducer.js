@@ -14,7 +14,6 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  UPDATE_LIST,
   RESET_MESSAGE,
   RESET_ADMIN,
   SET_MODAL
@@ -22,7 +21,7 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isLoading: false,
   admin: undefined,
   error: false,
   message: '',
@@ -34,12 +33,12 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_ADMINS_PENDING:
       return {
         ...state,
-        pending: true
+        isLoading: true
       };
     case GET_ADMINS_SUCCESS:
       return {
         ...state,
-        pending: false,
+        isLoading: false,
         list: action.payload
       };
     case GET_ADMINS_ERROR:
@@ -51,12 +50,12 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_SINGLE_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isLoading: true
       };
     case GET_SINGLE_ADMIN_SUCCESS:
       return {
         ...state,
-        pending: false,
+        isLoading: false,
         error: false,
         admin: {
           firstName: action.payload.data.firstName,
@@ -72,18 +71,18 @@ export const adminsReducer = (state = initialState, action) => {
         ...state,
         error: true,
         message: action.payload,
-        pending: false
+        isLoading: false
       };
     case ADD_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isLoading: true
       };
     case ADD_ADMIN_SUCCESS:
       return {
         ...state,
         admin: action.payload.data,
-        pending: false,
+        isLoading: false,
         error: false,
         message: action.payload.message
       };
@@ -92,12 +91,12 @@ export const adminsReducer = (state = initialState, action) => {
         ...state,
         error: true,
         message: action.payload,
-        pending: false
+        isLoading: false
       };
     case UPDATE_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isLoading: true
       };
     case UPDATE_ADMIN_SUCCESS:
       return {
@@ -110,7 +109,7 @@ export const adminsReducer = (state = initialState, action) => {
           password: action.payload.data.password,
           isActive: action.payload.data.isActive
         },
-        pending: false,
+        isLoading: false,
         message: action.payload.message
       };
     case UPDATE_ADMIN_ERROR:
@@ -118,17 +117,17 @@ export const adminsReducer = (state = initialState, action) => {
         ...state,
         error: true,
         message: action.payload,
-        pending: false
+        isLoading: false
       };
     case DELETE_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isLoading: true
       };
     case DELETE_ADMIN_SUCCESS:
       return {
         ...state,
-        pending: false,
+        isLoading: false,
         error: false,
         list: state.list.filter((admin) => admin._id !== action.payload),
         message: 'The admin was successfully deleted'
@@ -138,12 +137,7 @@ export const adminsReducer = (state = initialState, action) => {
         ...state,
         error: true,
         message: action.payload,
-        pending: false
-      };
-    case UPDATE_LIST:
-      return {
-        ...state,
-        list: action.payload
+        isLoading: false
       };
     case RESET_MESSAGE:
       return {

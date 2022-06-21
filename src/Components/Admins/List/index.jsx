@@ -7,20 +7,16 @@ import Loading from '../../Shared/Loading';
 import Modal from '../../Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
-//import { updateList } from '../../../redux/admins/actions';
 import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Admins = () => {
   const dispatch = useDispatch();
   const serverPath = '/admins';
   const list = useSelector((state) => state.admins.list);
-  const pending = useSelector((state) => state.admins.pending);
-  //const error = useSelector((state) => state.admins.error);
+  const pending = useSelector((state) => state.admins.isLoading);
   const message = useSelector((state) => state.admins.message);
   const [confirmation, setConfirmation] = useState(true);
   const showModal = useSelector((state) => state.admins.showModal);
-  //const [isAdding, setIsAdding] = useState(false);
-  //const [modalMessage, setModalMessage] = useState('');
   const [id, setId] = useState('');
 
   const headers = [
@@ -67,7 +63,6 @@ const Admins = () => {
     <section className={styles.container}>
       <h2>Admins</h2>
       <List
-        //fullList={admins}
         data={formatListData(list)}
         headers={headers}
         resource={serverPath}
