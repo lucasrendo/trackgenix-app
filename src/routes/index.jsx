@@ -42,10 +42,10 @@ const Routes = () => {
             <Route exact path={'/timesheets'} component={TimeSheetsList} />
             <Route exact path={'/timesheets/form/'} component={TimeSheetsForm} />
             <Route exact path={'/timesheets/form/:id'} component={TimeSheetsForm} />
-            <Route exact path={'/employee/:id'} />
-            <Route exact path={'/employee/projects/:id'} component={EmployeeProjects} />
-            <Route exact path={'/employee/profile/:id'} />
-            <Route exact path={'/employee/workedhours/:id'} />
+            <Route exact path={'/employee'} />
+            <Route exact path={'/employee/projects'} component={EmployeeProjects} />
+            <Route exact path={'/employee/profile'} />
+            <Route exact path={'/employee/workedhours'} />
           </Switch>
         </Suspense>
       </Layout>

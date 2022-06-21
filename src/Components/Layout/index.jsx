@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Header from 'Components/Shared/Header';
 import Footer from 'Components/Shared/Footer';
 import Sidebar from 'Components/Shared/Sidebar';
 import styles from './layout.module.css';
 
 const Layout = ({ children }) => {
-  const { id } = useParams();
   const history = useHistory();
   const [links, setLinks] = useState([]);
   const [title, setTitle] = useState('');
@@ -19,10 +18,10 @@ const Layout = ({ children }) => {
     { link: '#', title: 'Log in' }
   ];
   const employeeLinks = [
-    { link: `/employee/${id}`, title: 'Home' },
-    { link: `/employee/projects/${id}`, title: 'My Projects' },
-    { link: `/employee/profile/${id}`, title: 'User Profile' },
-    { link: `/employee/workedhours/${id}`, title: 'Work Hours' },
+    { link: `/employee`, title: 'Home' },
+    { link: `/employee/projects`, title: 'My Projects' },
+    { link: `/employee/profile`, title: 'User Profile' },
+    { link: `/employee/workedhours`, title: 'Work Hours' },
     { link: '#', title: 'About us' },
     { link: '#', title: 'Help' }
   ];

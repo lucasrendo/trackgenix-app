@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import List from 'Components/Shared/List';
@@ -7,7 +6,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 
 const EmployeeProjects = () => {
-  const { id } = useParams();
+  const id = '62b1122165165c996de858ec';
   const dispatch = useDispatch();
   const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
