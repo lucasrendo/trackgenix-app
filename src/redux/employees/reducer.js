@@ -44,7 +44,6 @@ export const employeeReducer = (state = initialState, action) => {
     case GET_EMPLOYEES_ERROR:
       return {
         ...state,
-        isLoading: false,
         error: true,
         message: action.payload
       };
@@ -52,8 +51,8 @@ export const employeeReducer = (state = initialState, action) => {
     case GET_SINGLE_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
         error: false,
+        isLoading: false,
         employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
@@ -69,7 +68,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, message: 'Loading...' };
 
     case GET_SINGLE_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case ADD_EMPLOYEES_SUCCESS:
       return {
@@ -80,16 +79,16 @@ export const employeeReducer = (state = initialState, action) => {
       };
 
     case ADD_EMPLOYEES_PENDING:
-      return { ...state, isLoading: false, message: 'Loading...' };
+      return { ...state, message: 'Loading...' };
 
     case ADD_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case EDIT_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
         error: false,
+        isLoading: false,
         employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
@@ -104,12 +103,11 @@ export const employeeReducer = (state = initialState, action) => {
     case EDIT_EMPLOYEES_PENDING:
       return {
         ...state,
-        isLoading: false,
         message: 'Loading...'
       };
 
     case EDIT_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case DELETE_EMPLOYEES_SUCCESS:
       return {
@@ -124,7 +122,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, message: 'Loading...' };
 
     case DELETE_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload.message };
+      return { ...state, error: true, message: action.payload.message };
 
     case SET_MODAL:
       return { ...state, showModal: action.payload };

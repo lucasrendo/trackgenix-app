@@ -41,19 +41,19 @@ export const getSingleEmployeesPending = () => {
   return { type: GET_SINGLE_EMPLOYEES_PENDING };
 };
 
-export const getSingleEmployeesError = (message) => {
-  return { type: GET_SINGLE_EMPLOYEES_ERROR, payload: message };
+export const getSingleEmployeesError = (error) => {
+  return { type: GET_SINGLE_EMPLOYEES_ERROR, payload: error };
 };
 
-export const createEmployeesSuccess = (data) => {
+export const addEmployeesSuccess = (data) => {
   return { type: ADD_EMPLOYEES_SUCCESS, payload: data };
 };
 
-export const createEmployeesPending = () => {
+export const addEmployeesPending = () => {
   return { type: ADD_EMPLOYEES_PENDING };
 };
 
-export const createEmployeesError = (error) => {
+export const addEmployeesError = (error) => {
   return { type: ADD_EMPLOYEES_ERROR, payload: error };
 };
 
@@ -77,8 +77,8 @@ export const deleteEmployeesPending = () => {
   return { type: DELETE_EMPLOYEES_PENDING };
 };
 
-export const deleteEmployeesError = (message) => {
-  return { type: DELETE_EMPLOYEES_ERROR, payload: message };
+export const deleteEmployeesError = (error) => {
+  return { type: DELETE_EMPLOYEES_ERROR, payload: error };
 };
 
 export const resetEmployee = () => {

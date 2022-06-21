@@ -5,9 +5,9 @@ import {
   getSingleEmployeesSuccess,
   getSingleEmployeesPending,
   getSingleEmployeesError,
-  createEmployeesSuccess,
-  createEmployeesPending,
-  createEmployeesError,
+  addEmployeesSuccess,
+  addEmployeesPending,
+  addEmployeesError,
   editEmployeesSuccess,
   editEmployeesPending,
   editEmployeesError,
@@ -18,7 +18,7 @@ import {
   resetMessage
 } from './actions.js';
 
-const resource = `${process.env.REACT_APP_API_URL}/employees`;
+const url = `${process.env.REACT_APP_API_URL}/employees`;
 
 const formatEmployee = (employee) => {
   const data = {
@@ -36,7 +36,7 @@ export const getSingleEmployee = (id) => {
   return async (dispatch) => {
     try {
       dispatch(getSingleEmployeesPending());
-      const response = await fetch(`${resource}/${id}`);
+      const response = await fetch(`${url}/${id}`);
       const data = await response.json();
       if (!data.error) {
         dispatch(getSingleEmployeesSuccess(data));
@@ -53,7 +53,7 @@ export const getEmployees = () => {
   return async (dispatch) => {
     try {
       dispatch(getEmployeesPending());
-      const response = await fetch(`${resource}`);
+      const response = await fetch(`${url}`);
       const data = await response.json();
       if (!data.error) dispatch(getEmployeesSuccess(data.data));
       else dispatch(getEmployeesError(data.message));
@@ -63,7 +63,7 @@ export const getEmployees = () => {
   };
 };
 
-export const createEmployee = (obj) => {
+export const addEmployee = (obj) => {
   return async (dispatch) => {
     try {
       const object = formatEmployee(obj);
@@ -74,15 +74,15 @@ export const createEmployee = (obj) => {
         },
         body: JSON.stringify(object)
       };
-      dispatch(createEmployeesPending());
-      const response = await fetch(`${resource}`, requestConfig);
+      dispatch(addEmployeesPending());
+      const response = await fetch(`${url}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
-        dispatch(createEmployeesSuccess(data));
+        dispatch(addEmployeesSuccess(data));
         dispatch(resetEmployee());
-      } else dispatch(createEmployeesError(data.message));
+      } else dispatch(addEmployeesError(data.message));
     } catch (error) {
-      dispatch(createEmployeesError(error));
+      dispatch(addEmployeesError(error));
     }
   };
 };
@@ -98,14 +98,14 @@ export const editEmployees = (obj, id) => {
       };
       dispatch(resetMessage());
       dispatch(editEmployeesPending());
-      const response = await fetch(`${resource}/${id}`, requestConfig);
+      const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
         dispatch(editEmployeesSuccess(data));
         dispatch(resetEmployee());
       } else dispatch(editEmployeesError(data.message));
     } catch (error) {
-      dispatch(editEmployeesError(error.toString()));
+      dispatch(editEmployeesError(error));
     }
   };
 };
@@ -120,8 +120,7 @@ export const deleteEmployees = (id) => {
         }
       };
       dispatch(deleteEmployeesPending());
-      dispatch(resetMessage());
-      const response = await fetch(`${resource}/${id}`, requestConfig);
+      const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
       if (!data.error) {
         dispatch(deleteEmployeesSuccess(id));
