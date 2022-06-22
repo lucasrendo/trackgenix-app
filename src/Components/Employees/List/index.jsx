@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployees, deleteEmployees } from '../../../redux/employees/thunks';
+import { getEmployees, deleteEmployees } from 'redux/employees/thunks';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
