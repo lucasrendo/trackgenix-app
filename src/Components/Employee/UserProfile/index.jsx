@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
+import { resetEmployee, resetMessage } from 'redux/employees/actions';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -17,7 +17,6 @@ const EmployeeProfile = () => {
   const { goBack } = useHistory();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-  const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const validationSchema = Joi.object({
@@ -51,8 +50,7 @@ const EmployeeProfile = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors },
-    reset
+    formState: { errors }
   } = useForm({
     defaultValues: {
       firstName: '',
@@ -74,10 +72,6 @@ const EmployeeProfile = () => {
     id && dispatch(getSingleEmployee(id));
     return () => dispatch(resetEmployee());
   }, []);
-
-  useEffect(() => {
-    reset(employee);
-  }, [employee]);
 
   const closeHandler = () => {
     setShowModal(false);
