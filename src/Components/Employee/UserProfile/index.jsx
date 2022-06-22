@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory, Switch } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
-import { getSingleEmployee, createEmployee } from 'redux/employees/thunks';
+import { getSingleEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Loading from 'Components/Shared/Loading';
@@ -20,7 +20,6 @@ const EmployeeProfile = () => {
   const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
-  const message = useSelector((state) => state.employees.message);
   const validationSchema = Joi.object({
     firstName: Joi.string()
       .pattern(/^[a-zA-Z ]+$/)
@@ -37,8 +36,16 @@ const EmployeeProfile = () => {
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required(),
+    repeatEmail: Joi.string().label('Repeat Email').required().valid(Joi.ref('email')),
     password: Joi.string().label('Password').min(8).required(),
-    isActive: Joi.boolean()
+    repeatPassword: Joi.string().label('Repeat Password').required().valid(Joi.ref('password')),
+    secretWord: Joi.string().label('Secret Word').min(8).required(),
+    repeatSecretWord: Joi.string()
+      .label('Repeat Secret Word')
+      .required()
+      .valid(Joi.ref('secretWord')),
+    address: Joi.string().label('Address').min(8).required(),
+    birthDate: Joi.date().label('Birth Date').required().max(Date.now())
   });
 
   const {
@@ -51,10 +58,15 @@ const EmployeeProfile = () => {
       firstName: '',
       lastName: '',
       email: '',
+      repeatEmail: '',
       password: '',
-      isActive: false
+      repeatPassword: '',
+      secretWord: '',
+      repeatSecretWord: '',
+      address: '',
+      birthDate: ''
     },
-    reValidateMode: 'onBlur',
+    mode: 'onblur',
     resolver: joiResolver(validationSchema)
   });
 
@@ -75,9 +87,8 @@ const EmployeeProfile = () => {
     }
   };
 
-  const submitHandler = async (data) => {
-    dispatch(createEmployee(data));
-    setShowModal(true);
+  const submitHandler = (data) => {
+    if (data) setShowModal(true);
   };
 
   return (
@@ -109,6 +120,13 @@ const EmployeeProfile = () => {
             error={errors.email}
           />
           <Input
+            id={'repeatEmail'}
+            text={'Repeat Email'}
+            type={'email'}
+            register={register}
+            error={errors.repeatEmail}
+          />
+          <Input
             id={'password'}
             text={'Password'}
             type={'password'}
@@ -116,11 +134,39 @@ const EmployeeProfile = () => {
             error={errors.password}
           />
           <Input
-            id={'isActive'}
-            text={'Is active'}
-            type={'checkbox'}
+            id={'repeatPassword'}
+            text={'Repeat Password'}
+            type={'password'}
             register={register}
-            error={errors.isActive}
+            error={errors.repeatPassword}
+          />
+          <Input
+            id={'secretWord'}
+            text={'Secret Word'}
+            type={'password'}
+            register={register}
+            error={errors.secretWord}
+          />
+          <Input
+            id={'repeatSecretWord'}
+            text={'Repeat Secret Word'}
+            type={'password'}
+            register={register}
+            error={errors.repeatSecretWord}
+          />
+          <Input
+            id={'address'}
+            text={'Address'}
+            type={'text'}
+            register={register}
+            error={errors.address}
+          />
+          <Input
+            id={'birthDate'}
+            text={'Birth Date'}
+            type={'date'}
+            register={register}
+            error={errors.birthDate}
           />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
@@ -131,7 +177,7 @@ const EmployeeProfile = () => {
         </form>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>{message}</h2>
+        <h2>User Profile successfully created</h2>
       </Modal>
     </section>
   );
