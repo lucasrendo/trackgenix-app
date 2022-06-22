@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetMessage } from '../../../redux/employees/actions';
+import { resetMessage } from 'redux/employees/actions';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Loading from 'Components/Shared/Loading';
