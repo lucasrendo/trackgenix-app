@@ -86,8 +86,7 @@ const TimeSheets = () => {
       role: '',
       rate: 0,
       workedHours: 0,
-      description: '',
-      date: ''
+      description: ''
     }
   });
 
@@ -132,7 +131,7 @@ const TimeSheets = () => {
   };
 
   // === Handle submit data and method === //
-  const submitHandler = async (data) => {
+  const submitHandler = (data) => {
     if (id) {
       dispatch(editTimesheet(data, id));
     } else {
