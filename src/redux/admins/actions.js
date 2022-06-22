@@ -37,9 +37,9 @@ export const getSingleAdminPending = () => ({
   type: GET_SINGLE_ADMIN_PENDING
 });
 
-export const getSingleAdminSuccess = (admin) => ({
+export const getSingleAdminSuccess = (data) => ({
   type: GET_SINGLE_ADMIN_SUCCESS,
-  payload: admin
+  payload: data
 });
 
 export const getSingleAdminError = (error) => ({
@@ -61,9 +61,9 @@ export const addAdminError = (error) => ({
   payload: error
 });
 
-export const editAdminSuccess = (admin) => ({
+export const editAdminSuccess = (data) => ({
   type: EDIT_ADMIN_SUCCESS,
-  payload: admin
+  payload: data
 });
 
 export const editAdminPending = () => ({

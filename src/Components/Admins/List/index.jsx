@@ -13,7 +13,7 @@ const Admins = () => {
   const dispatch = useDispatch();
   const serverPath = '/admins';
   const list = useSelector((state) => state.admins.list);
-  const pending = useSelector((state) => state.admins.isLoading);
+  const isLoading = useSelector((state) => state.admins.isLoading);
   const message = useSelector((state) => state.admins.message);
   const [confirmation, setConfirmation] = useState(true);
   const showModal = useSelector((state) => state.admins.showModal);
@@ -54,7 +54,7 @@ const Admins = () => {
     return data;
   };
 
-  return pending ? (
+  return isLoading ? (
     <>
       <h2>Admins</h2>
       <Loading />
