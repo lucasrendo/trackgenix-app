@@ -70,7 +70,6 @@ const TimeSheets = () => {
   const projects = useSelector((state) => state.projects.list);
   const employees = useSelector((state) => state.employees.list);
   const tasks = useSelector((state) => state.tasks.list);
-  const [inputValues, setInputValues] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const {
     handleSubmit,
@@ -79,7 +78,17 @@ const TimeSheets = () => {
     reset
   } = useForm({
     reValidateMode: 'onChange',
-    resolver: joiResolver(timeSheetValidate)
+    resolver: joiResolver(timeSheetValidate),
+    defaultValues: {
+      employee: '',
+      project: '',
+      task: '',
+      role: '',
+      rate: 0,
+      workedHours: 0,
+      description: '',
+      date: ''
+    }
   });
 
   useEffect(() => {
@@ -92,6 +101,7 @@ const TimeSheets = () => {
 
   useEffect(() => {
     reset(timesheet);
+    console.log(timesheet);
   }, [timesheet]);
 
   // === format option objects for the form config === //
@@ -224,10 +234,10 @@ const TimeSheets = () => {
             />
           </div>
           <div className={styles.buttonContainer}>
-            <Button>Okay</Button>
             <Button classes={'red'} onClick={() => goBack()}>
               Cancel
             </Button>
+            <Button>Save</Button>
           </div>
         </form>
       )}
