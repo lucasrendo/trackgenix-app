@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetMessage, resetSuperAdmin } from '../../../redux/SuperAdmins/actions';
-import {
-  createSuperAdmins,
-  editSuperAdmins,
-  getSingleSuperAdmins
-} from '../../../redux/SuperAdmins/thunks';
+import { resetMessage, resetSuperAdmin } from 'redux/SuperAdmins/actions';
+import { createSuperAdmins, editSuperAdmins, getSingleSuperAdmins } from 'redux/SuperAdmins/thunks';
 import Loading from '../../Shared/Loading';
-import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
 import styles from './super-admins.module.css';
 import { appendErrors, useForm } from 'react-hook-form';
@@ -70,7 +65,7 @@ function SuperAdminsForm() {
     formState: { errors },
     reset
   } = useForm({
-    reValidateMode: 'onBlur',
+    mode: 'onBlur',
     resolver: joiResolver(superAdminValidate),
     defaultValues: {
       firstName: '',
@@ -102,7 +97,6 @@ function SuperAdminsForm() {
   const submitHandler = (data) => {
     id ? dispatch(editSuperAdmins(data, id)) : dispatch(createSuperAdmins(data));
     setModalMessage(true);
-    console.log(data);
   };
 
   return (
