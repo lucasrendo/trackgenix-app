@@ -71,6 +71,7 @@ function Projects() {
         fullList={projects}
         data={formatListData(projects)}
         headers={headers}
+        showButtons={true}
         resource="/projects"
         deleteItem={(id) => deleteItem(id)}
       />
