@@ -34,7 +34,7 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        message: 'Fetching...',
+        message: 'Loading...',
         showModal: false
       };
     case GET_SINGLE_TASK_SUCCESS:
@@ -62,7 +62,7 @@ export const tasksReducer = (state = initialState, action) => {
     case ADD_TASK_PENDING:
       return {
         ...state,
-        message: 'Fetching...',
+        message: 'Loading...',
         showModal: false
       };
     case ADD_TASK_SUCCESS:
@@ -83,7 +83,7 @@ export const tasksReducer = (state = initialState, action) => {
     case EDIT_TASK_PENDING:
       return {
         ...state,
-        message: 'Fetching...',
+        message: 'Loading...',
         showModal: false
       };
     case EDIT_TASK_SUCCESS:
