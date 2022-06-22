@@ -13,9 +13,9 @@ import {
   GET_SINGLE_PROJECT_ERROR,
   RESET_PROJECT,
   RESET_MESSAGE,
-  DELETE_PROJECTS_SUCCESS,
-  DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_ERROR,
+  DELETE_PROJECT_SUCCESS,
+  DELETE_PROJECT_PENDING,
+  DELETE_PROJECT_ERROR,
   SET_MODAL
 } from './constants';
 
@@ -60,19 +60,18 @@ export const projectsReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         project: {
-          projectName: action.payload.data.projectName,
-          description: action.payload.data.description,
-          startDate: action.payload.data.startDate,
-          endDate: action.payload.data.endDate,
-          admin: action.payload.data.admin,
-          client: action.payload.data.client,
-          employees: action.payload.data.employees[0].employeeId,
-          role: action.payload.data.employees[0].role,
-          rate: action.payload.data.employees[0].rate,
-          hoursInProject: action.payload.data.employees[0].hoursInProject,
-          isActive: action.payload.data.isActive
-        },
-        message: action.payload.message
+          projectName: action.payload.projectName,
+          description: action.payload.description,
+          startDate: action.payload.startDate.substring(0, 10),
+          endDate: action.payload.endDate.substring(0, 10),
+          admin: action.payload.admin?._id,
+          client: action.payload.client,
+          role: action.payload.employees[0].role,
+          employeeId: action.payload.employees[0].employeeId?._id,
+          rate: action.payload.employees[0].rate,
+          hoursInProject: action.payload.employees[0].hoursInProject,
+          isActive: action.payload.isActive
+        }
       };
     case GET_SINGLE_PROJECT_ERROR:
       return {
@@ -81,33 +80,40 @@ export const projectsReducer = (state = initialState, action) => {
         error: true,
         message: action.payload
       };
-    case DELETE_PROJECTS_PENDING:
+    case DELETE_PROJECT_PENDING:
       return {
         ...state,
         isLoading: true
       };
-    case DELETE_PROJECTS_SUCCESS:
+    case DELETE_PROJECT_SUCCESS:
       return {
         ...state,
         isLoading: false,
         error: false,
-        list: state.list.filter((project) => project._id !== action.payload),
+        list: [...state.list.filter((project) => project._id !== action.payload)],
+        message: 'Project deleted Successfully',
+        showModal: true
+      };
+    case DELETE_PROJECT_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
         message: action.payload,
         showModal: true
       };
     case ADD_PROJECT_PENDING:
       return {
         ...state,
-        isLoading: false,
+        isLoading: true,
         message: 'Loading...'
       };
     case ADD_PROJECT_SUCCESS:
       return {
         ...state,
-        project: action.payload.data,
         isLoading: false,
         error: false,
-        message: action.payload.message
+        message: action.payload
       };
     case ADD_PROJECT_ERROR:
       return {
@@ -125,26 +131,9 @@ export const projectsReducer = (state = initialState, action) => {
     case EDIT_PROJECT_SUCCESS:
       return {
         ...state,
-        project: {
-          projectName: action.payload.data.projectName,
-          description: action.payload.data.description,
-          startDate: action.payload.data.startDate,
-          endDate: action.payload.data.endDate,
-          admin: action.payload.data.admin,
-          client: action.payload.data.client,
-          employees: [
-            {
-              employeeId: action.payload.data.employees[0].employeeId,
-              role: action.payload.data.employees[0].role,
-              rate: action.payload.data.employees[0].rate,
-              hoursInProject: action.payload.data.employees[0].hoursInProject
-            }
-          ],
-          isActive: action.payload.data.isActive
-        },
         isLoading: false,
         error: false,
-        message: action.payload.message
+        message: action.payload
       };
     case EDIT_PROJECT_ERROR:
       return {
@@ -162,14 +151,6 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         message: ''
-      };
-    case DELETE_PROJECTS_ERROR:
-      return {
-        ...state,
-        isLoading: false,
-        error: true,
-        message: action.payload,
-        showModal: true
       };
     case SET_MODAL:
       return {

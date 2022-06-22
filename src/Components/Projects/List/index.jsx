@@ -12,25 +12,13 @@ import { setMessage, setModal } from '../../../redux/projects/actions';
 function Projects() {
   const [isConfirmation, setIsConfirmation] = useState(true);
   const [id, setId] = useState('');
-  const resource = '/projects';
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.list);
   const isLoading = useSelector((state) => state.projects.isLoading);
   const message = useSelector((state) => state.projects.message);
   const showModal = useSelector((state) => state.projects.showModal);
 
-  const deleteItem = (id) => {
-    setId(id);
-    dispatch(setModal(true));
-  };
-
-  const sureToDelete = async () => {
-    setIsConfirmation(false);
-    dispatch(deleteProject(id));
-    dispatch(getProjects());
-  };
-
-  useEffect(async () => {
+  useEffect(() => {
     dispatch(getProjects());
   }, []);
 
@@ -58,6 +46,16 @@ function Projects() {
     { header: 'Is Active?', key: 'isActive' }
   ];
 
+  const deleteItem = (id) => {
+    setId(id);
+    dispatch(setModal(true));
+  };
+
+  const confirmationHandler = () => {
+    setIsConfirmation(false);
+    dispatch(deleteProject(id));
+  };
+
   const closeHandler = () => {
     dispatch(setModal(false));
     dispatch(setMessage());
@@ -73,14 +71,14 @@ function Projects() {
         fullList={projects}
         data={formatListData(projects)}
         headers={headers}
-        resource={resource}
-        deleteItem={deleteItem}
+        resource="/projects"
+        deleteItem={(id) => deleteItem(id)}
       />
       <Modal
         handleClose={isConfirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
         isOpen={showModal}
         isConfirmation={isConfirmation}
-        confirmed={() => sureToDelete()}
+        confirmed={() => confirmationHandler()}
       >
         <h2>{isConfirmation ? 'Are you sure you want to delete this Project?' : message}</h2>
       </Modal>
