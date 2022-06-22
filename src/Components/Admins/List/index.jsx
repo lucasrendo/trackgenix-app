@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './admins.module.css';
-import List from '../../Shared/List';
-import Button from '../../Shared/Button';
-import Loading from '../../Shared/Loading';
-import Modal from '../../Shared/Modal/Modal';
+import List from 'Components/Shared/List';
+import Button from 'Components/Shared/Button';
+import Loading from 'Components/Shared/Loading';
+import Modal from 'Components/Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
+import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
 import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Admins = () => {
