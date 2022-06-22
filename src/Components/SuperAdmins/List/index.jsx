@@ -6,8 +6,8 @@ import Button from '../../Shared/Button';
 import Loading from '../../Shared/Loading';
 import styles from './super-admins.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSuperAdmins, deleteSuperAdmins } from '../../../redux/super admins/thunks';
-import { superAdminModal, updateList, resetMessage } from '../../../redux/super admins/actions';
+import { getSuperAdmins, deleteSuperAdmins } from '../../../redux/SuperAdmins/thunks';
+import { superAdminModal, updateList, resetMessage } from '../../../redux/SuperAdmins/actions';
 
 function SuperAdmins() {
   const dispatch = useDispatch();

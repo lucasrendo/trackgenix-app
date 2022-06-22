@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetMessage, resetSuperAdmin } from '../../../redux/super admins/actions';
+import { resetMessage, resetSuperAdmin } from '../../../redux/SuperAdmins/actions';
 import {
   createSuperAdmins,
   editSuperAdmins,
   getSingleSuperAdmins
-} from '../../../redux/super admins/thunks';
+} from '../../../redux/SuperAdmins/thunks';
 import Loading from '../../Shared/Loading';
 import Form from '../../Shared/Form';
 import Modal from '../../Shared/Modal/Modal';
@@ -57,7 +57,6 @@ const superAdminValidate = Joi.object({
 
 function SuperAdminsForm() {
   const { id } = useParams();
-  const [inputValues, setInputValues] = useState({});
   const { goBack } = useHistory();
   const [modalMessage, setModalMessage] = useState(false);
   const dispatch = useDispatch();
@@ -71,7 +70,7 @@ function SuperAdminsForm() {
     formState: { errors },
     reset
   } = useForm({
-    reValidateMode: 'onChange',
+    reValidateMode: 'onBlur',
     resolver: joiResolver(superAdminValidate),
     defaultValues: {
       firstName: '',
@@ -81,7 +80,6 @@ function SuperAdminsForm() {
       isActive: false
     }
   });
-  // const resource = '/super-admin';
 
   useEffect(() => {
     id && dispatch(getSingleSuperAdmins(id));
@@ -101,7 +99,7 @@ function SuperAdminsForm() {
   };
 
   // === Handle submit data and method === //
-  const submitHandler = async (data) => {
+  const submitHandler = (data) => {
     id ? dispatch(editSuperAdmins(data, id)) : dispatch(createSuperAdmins(data));
     setModalMessage(true);
     console.log(data);
@@ -110,64 +108,67 @@ function SuperAdminsForm() {
   return (
     <section className={styles.container}>
       <h2>Super Admins</h2>
-      <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-        <div className={styles.textContainer}>
-          <Input
-            id={'firstName'}
-            register={register}
-            text={'First Name'}
-            type={'text'}
-            error={errors.firstName}
-          />
-        </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+          <div className={styles.textContainer}>
+            <Input
+              id={'firstName'}
+              register={register}
+              text={'First Name'}
+              type={'text'}
+              error={errors.firstName}
+            />
+          </div>
 
-        <div className={styles.textContainer}>
-          <Input
-            id={'lastName'}
-            text={'Last Name'}
-            type={'text'}
-            register={register}
-            error={errors.lastName}
-          />
-        </div>
+          <div className={styles.textContainer}>
+            <Input
+              id={'lastName'}
+              text={'Last Name'}
+              type={'text'}
+              register={register}
+              error={errors.lastName}
+            />
+          </div>
 
-        <div className={styles.textContainer}>
-          <Input
-            id={'email'}
-            text={'Email'}
-            type={'email'}
-            register={register}
-            error={errors.email}
-          />
-        </div>
+          <div className={styles.textContainer}>
+            <Input
+              id={'email'}
+              text={'Email'}
+              type={'email'}
+              register={register}
+              error={errors.email}
+            />
+          </div>
 
-        <div className={styles.textContainer}>
-          <Input
-            id={'password'}
-            text={'Password'}
-            type={'password'}
-            register={register}
-            error={errors.password}
-          />
-        </div>
+          <div className={styles.textContainer}>
+            <Input
+              id={'password'}
+              text={'Password'}
+              type={'password'}
+              register={register}
+              error={errors.password}
+            />
+          </div>
 
-        <div className={styles.checkContainer}>
-          <Input
-            id={'isActive'}
-            type={'checkbox'}
-            text={'Is Active?'}
-            required={false}
-            register={register}
-            error={errors.isActive}
-          />
-        </div>
-        <div className={styles.buttonContainer}>
-          <Button>Okay</Button>
-          <Button classes={'red'} onClick={() => goBack()}>
-            Cancel
-          </Button>
-        </div>
-      </form>
+          <div className={styles.checkContainer}>
+            <Input
+              id={'isActive'}
+              type={'checkbox'}
+              text={'Is Active?'}
+              register={register}
+              error={errors.isActive}
+            />
+          </div>
+          <div className={styles.buttonContainer}>
+            <Button classes={'red'} onClick={() => goBack()}>
+              Cancel
+            </Button>
+            <Button>Save</Button>
+          </div>
+        </form>
+      )}
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
