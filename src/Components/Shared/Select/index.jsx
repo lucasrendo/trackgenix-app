@@ -1,25 +1,21 @@
 import React from 'react';
 import styles from './index.module.css';
 
-const Select = ({ text, id, value, required, onChange, item, type }) => {
+const Select = ({ text, id, options, error, register }) => {
   return (
-    <div className={styles.selectContainer}>
-      <label className={styles.labelSelect}>{text}</label>
-      <select
-        className={styles.selectBox}
-        id={id}
-        value={value}
-        required={required}
-        onChange={onChange}
-        type={type}
-      >
-        <option selected disabled value="">{`select ${item.title}`}</option>
-        {item.options.map((option) => (
-          <option key={option.id} value={option.id}>
+    <div className={styles.inputContainer}>
+      <label>{text}</label>
+      <select className={error ? styles.inputError : styles.inputOk} name={id} {...register(id)}>
+        <option selected disabled value="" className={styles.readOnly}>
+          {`select ${text}`}
+        </option>
+        {options?.map((option, index) => (
+          <option key={index} value={option.id}>
             {option.text}
           </option>
         ))}
       </select>
+      {error && <p className={styles.error}>{error.message}</p>}
     </div>
   );
 };

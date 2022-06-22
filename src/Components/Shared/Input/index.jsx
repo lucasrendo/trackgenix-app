@@ -1,18 +1,12 @@
 import React from 'react';
 import styles from './index.module.css';
 
-const Input = ({ text, type, id, required, value, onChange }) => {
+const Input = ({ text, type, id, error, register }) => {
   return (
-    <div className={styles.inputContainer}>
-      <label className={styles.labelInput}>{text}</label>
-      <input
-        className={styles.inputBox}
-        type={type}
-        id={id}
-        required={required}
-        value={value}
-        onChange={onChange}
-      />
+    <div className={type === 'checkbox' ? styles.check : styles.inputContainer}>
+      <label htmlFor={id}>{text}</label>
+      <input type={type} name={id} {...register(id)} className={error && styles.inputError} />
+      {error && <p className={styles.error}>{error.message}</p>}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button';
 import styles from './index.module.css';
 
 const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => {
@@ -6,44 +7,32 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
     return null;
   }
 
-  if (isConfirmation) {
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalWrapper}>
-          <button onClick={handleClose} className={styles.closeButton}>
-            X
-          </button>
-          <div className={styles.childrenContainer}>{children}</div>
-          <div className={styles.buttonwrapper}>
-            <button className={styles.modalButton} onClick={confirmed}>
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalWrapper}>
+        <button onClick={handleClose} className={styles.closeButton}>
+          X
+        </button>
+        <div className={styles.childrenContainer}>{children}</div>
+        {isConfirmation ? (
+          <div className={styles.buttonWrapper}>
+            <Button classes="block" onClick={confirmed}>
               Accept
-            </button>
-            <button className={styles.modalButton} onClick={handleClose}>
+            </Button>
+            <Button classes={'red'} onClick={handleClose}>
               Cancel
-            </button>
+            </Button>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isConfirmation) {
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalWrapper}>
-          <button onClick={handleClose} className={styles.closeButton}>
-            X
-          </button>
-          {children}
-          <div className={styles.buttonwrapper}>
-            <button className={styles.modalButton} onClick={handleClose}>
+        ) : (
+          <div className={styles.buttonWrapper}>
+            <Button className={styles.modalButton} onClick={handleClose}>
               OK
-            </button>
+            </Button>
           </div>
-        </div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default Modal;
