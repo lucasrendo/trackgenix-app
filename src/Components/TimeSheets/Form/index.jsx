@@ -76,7 +76,7 @@ const TimeSheets = () => {
     formState: { errors },
     reset
   } = useForm({
-    reValidateMode: 'onChange',
+    mode: 'onChange',
     resolver: joiResolver(timeSheetValidate),
     defaultValues: {
       employee: '',
@@ -109,7 +109,6 @@ const TimeSheets = () => {
       workedHours: timesheet.workedHours,
       description: timesheet.description
     });
-    console.log(timesheet);
   }, [timesheet]);
 
   // === format option objects for the form config === //
@@ -144,10 +143,8 @@ const TimeSheets = () => {
     if (id) {
       dispatch(editTimesheet(data, id));
     } else {
-      console.log(data);
       dispatch(addTimesheet(data));
     }
-    console.log(data);
     setIsAdding(true);
   };
 
