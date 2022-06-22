@@ -86,7 +86,8 @@ const TimeSheets = () => {
       role: '',
       rate: 0,
       workedHours: 0,
-      description: ''
+      description: '',
+      date: ''
     }
   });
 
@@ -99,7 +100,16 @@ const TimeSheets = () => {
   }, []);
 
   useEffect(() => {
-    reset(timesheet);
+    reset({
+      employee: timesheet.employee?._id,
+      project: timesheet.project?._id,
+      task: timesheet.task?._id,
+      date: timesheet.date.substring(0, 10),
+      role: timesheet.role,
+      rate: timesheet.rate,
+      workedHours: timesheet.workedHours,
+      description: timesheet.description
+    });
     console.log(timesheet);
   }, [timesheet]);
 
