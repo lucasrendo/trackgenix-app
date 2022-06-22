@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Modal from '../../Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal/Modal';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
-import Loading from '../../Shared/Loading';
+import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheets/thunks';
 import { resetTimesheet, resetMessage } from 'redux/timesheets/actions';
