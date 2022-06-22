@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetEmployee, resetMessage } from 'redux/employees/actions';
-import { getSingleEmployee } from 'redux/employees/thunks';
+import { resetMessage } from '../../../redux/employees/actions';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Loading from 'Components/Shared/Loading';
@@ -13,7 +12,6 @@ import styles from './index.module.css';
 import Joi from 'joi';
 
 const EmployeeProfile = () => {
-  const { id } = useParams();
   const { goBack } = useHistory();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
@@ -64,14 +62,9 @@ const EmployeeProfile = () => {
       address: '',
       birthDate: ''
     },
-    mode: 'onblur',
+    mode: 'onBlur',
     resolver: joiResolver(validationSchema)
   });
-
-  useEffect(() => {
-    id && dispatch(getSingleEmployee(id));
-    return () => dispatch(resetEmployee());
-  }, []);
 
   const closeHandler = () => {
     setShowModal(false);
