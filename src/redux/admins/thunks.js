@@ -5,9 +5,9 @@ import {
   addAdminError,
   addAdminPending,
   addAdminSuccess,
-  updateAdminError,
-  updateAdminPending,
-  updateAdminSuccess,
+  editAdminError,
+  editAdminPending,
+  editAdminSuccess,
   deleteAdminError,
   deleteAdminPending,
   deleteAdminSuccess,
@@ -27,7 +27,7 @@ export const getAdmins = () => {
       if (!data.error) dispatch(getAdminsSuccess(data.data));
       else dispatch(getAdminsError(data.message));
     } catch (error) {
-      dispatch(getAdminsError(error.toString()));
+      dispatch(getAdminsError(error));
     }
   };
 };
@@ -44,7 +44,7 @@ export const getSingleAdmin = (id) => {
         dispatch(getSingleAdminError(data.message));
       }
     } catch (error) {
-      dispatch(getSingleAdminError(error.toString()));
+      dispatch(getSingleAdminError(error));
     }
   };
 };
@@ -67,16 +67,16 @@ export const addAdmin = (obj) => {
         dispatch(addAdminError(data.message));
       }
     } catch (error) {
-      dispatch(addAdminError(error.toString()));
+      dispatch(addAdminError(error));
     }
   };
 };
 
-export const updateAdmin = (obj, id) => {
+export const editAdmin = (obj, id) => {
   return async (dispatch) => {
     try {
       dispatch(resetMessage());
-      dispatch(updateAdminPending());
+      dispatch(editAdminPending());
       const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
@@ -84,13 +84,13 @@ export const updateAdmin = (obj, id) => {
       });
       const data = await response.json();
       if (!data.error) {
-        dispatch(updateAdminSuccess(data));
+        dispatch(editAdminSuccess(data));
         dispatch(resetAdmin());
       } else {
-        dispatch(updateAdminError(data.message));
+        dispatch(editAdminError(data.message));
       }
     } catch (error) {
-      dispatch(updateAdminError(error.toString()));
+      dispatch(editAdminError(error));
     }
   };
 };
@@ -113,7 +113,7 @@ export const deleteAdmin = (id) => {
         dispatch(deleteAdminError(data.message));
       }
     } catch (error) {
-      dispatch(deleteAdminError(error.toString()));
+      dispatch(deleteAdminError(error));
     }
   };
 };

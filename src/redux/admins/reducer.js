@@ -5,9 +5,9 @@ import {
   ADD_ADMIN_ERROR,
   ADD_ADMIN_PENDING,
   ADD_ADMIN_SUCCESS,
-  UPDATE_ADMIN_ERROR,
-  UPDATE_ADMIN_PENDING,
-  UPDATE_ADMIN_SUCCESS,
+  EDIT_ADMIN_ERROR,
+  EDIT_ADMIN_PENDING,
+  EDIT_ADMIN_SUCCESS,
   DELETE_ADMIN_ERROR,
   DELETE_ADMIN_PENDING,
   DELETE_ADMIN_SUCCESS,
@@ -93,12 +93,12 @@ export const adminsReducer = (state = initialState, action) => {
         message: action.payload,
         isLoading: false
       };
-    case UPDATE_ADMIN_PENDING:
+    case EDIT_ADMIN_PENDING:
       return {
         ...state,
         isLoading: true
       };
-    case UPDATE_ADMIN_SUCCESS:
+    case EDIT_ADMIN_SUCCESS:
       return {
         ...state,
         error: false,
@@ -112,7 +112,7 @@ export const adminsReducer = (state = initialState, action) => {
         isLoading: false,
         message: action.payload.message
       };
-    case UPDATE_ADMIN_ERROR:
+    case EDIT_ADMIN_ERROR:
       return {
         ...state,
         error: true,

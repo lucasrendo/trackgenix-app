@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { addAdmin, updateAdmin, getSingleAdmin } from '../../../redux/admins/thunks';
+import { addAdmin, editAdmin, getSingleAdmin } from 'redux/admins/thunks';
 import { resetAdmin, resetMessage, setModal } from 'redux/admins/actions';
 
 import Modal from 'Components/Shared/Modal/Index';
@@ -76,7 +76,7 @@ const Admins = () => {
   // === Handle submit data and method === //
   const submitHandler = (data) => {
     if (id) {
-      dispatch(updateAdmin(data, id));
+      dispatch(editAdmin(data, id));
     } else {
       dispatch(addAdmin(data));
     }
@@ -120,7 +120,6 @@ const Admins = () => {
           register={register}
           text={'Is Active?'}
           type={'checkbox'}
-          required={false}
           error={errors.checkbox}
         />
         <div className={styles.btnsContainer}>

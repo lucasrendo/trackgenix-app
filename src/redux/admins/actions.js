@@ -5,9 +5,9 @@ import {
   ADD_ADMIN_ERROR,
   ADD_ADMIN_PENDING,
   ADD_ADMIN_SUCCESS,
-  UPDATE_ADMIN_ERROR,
-  UPDATE_ADMIN_PENDING,
-  UPDATE_ADMIN_SUCCESS,
+  EDIT_ADMIN_ERROR,
+  EDIT_ADMIN_PENDING,
+  EDIT_ADMIN_SUCCESS,
   DELETE_ADMIN_ERROR,
   DELETE_ADMIN_PENDING,
   DELETE_ADMIN_SUCCESS,
@@ -61,17 +61,17 @@ export const addAdminError = (error) => ({
   payload: error
 });
 
-export const updateAdminSuccess = (admin) => ({
-  type: UPDATE_ADMIN_SUCCESS,
+export const editAdminSuccess = (admin) => ({
+  type: EDIT_ADMIN_SUCCESS,
   payload: admin
 });
 
-export const updateAdminPending = () => ({
-  type: UPDATE_ADMIN_PENDING
+export const editAdminPending = () => ({
+  type: EDIT_ADMIN_PENDING
 });
 
-export const updateAdminError = (error) => ({
-  type: UPDATE_ADMIN_ERROR,
+export const editAdminError = (error) => ({
+  type: EDIT_ADMIN_ERROR,
   payload: error
 });
 
