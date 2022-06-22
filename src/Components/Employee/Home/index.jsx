@@ -7,7 +7,8 @@ function Home() {
   return (
     <section className={styles.container}>
       <h2>
-        Welcome Jorge Pérez
+        <p>Welcome,</p>
+        <p>Jorge Pérez!</p>
         {/*{employee.firstName}&nbsp;
         {employee.lastName}*/}
       </h2>
