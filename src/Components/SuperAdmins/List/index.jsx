@@ -7,7 +7,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './super-admins.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSuperAdmins, deleteSuperAdmins } from 'redux/SuperAdmins/thunks';
-import { superAdminModal, updateList, resetMessage } from 'redux/SuperAdmins/actions';
+import { superAdminModal, resetMessage } from 'redux/SuperAdmins/actions';
 
 function SuperAdmins() {
   const dispatch = useDispatch();
@@ -34,8 +34,6 @@ function SuperAdmins() {
   const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteSuperAdmins(id));
-    !error &&
-      dispatch(updateList([...superAdminList.filter((superAdmins) => superAdmins._id !== id)]));
   };
 
   const closeHandler = () => {

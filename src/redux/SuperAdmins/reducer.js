@@ -15,7 +15,6 @@ import {
   EDIT_SUPER_ADMIN_PENDING,
   EDIT_SUPER_ADMIN_ERROR,
   SUPER_ADMIN_MODAL,
-  UPDATE_LIST,
   RESET_MESSAGE,
   RESET_SUPER_ADMIN
 } from './constants';
@@ -77,8 +76,9 @@ export const superAdminsReducer = (state = initialState, action) => {
     case DELETE_SUPER_ADMIN_SUCCESS:
       return {
         ...state,
-        message: action.payload,
+        message: 'Super Admin deleted',
         isLoading: false,
+        list: state.list.filter((superAdmin) => superAdmin._id !== action.payload),
         showModal: true,
         error: false
       };
@@ -141,11 +141,6 @@ export const superAdminsReducer = (state = initialState, action) => {
       return {
         ...state,
         showModal: action.payload
-      };
-    case UPDATE_LIST:
-      return {
-        ...state,
-        list: action.payload
       };
     case RESET_MESSAGE:
       return {

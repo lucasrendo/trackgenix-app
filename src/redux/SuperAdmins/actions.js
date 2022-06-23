@@ -15,7 +15,6 @@ import {
   EDIT_SUPER_ADMIN_PENDING,
   EDIT_SUPER_ADMIN_ERROR,
   SUPER_ADMIN_MODAL,
-  UPDATE_LIST,
   RESET_MESSAGE,
   RESET_SUPER_ADMIN
 } from './constants';
@@ -92,11 +91,6 @@ export const editSuperAdminError = (error) => ({
 export const superAdminModal = (state) => ({
   type: SUPER_ADMIN_MODAL,
   payload: state
-});
-
-export const updateList = (newList) => ({
-  type: UPDATE_LIST,
-  payload: newList
 });
 
 export const resetMessage = () => ({
