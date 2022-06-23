@@ -1,7 +1,7 @@
 import {
-  getTimesheetPending,
-  getTimesheetSuccess,
-  getTimesheetError,
+  getTimesheetsPending,
+  getTimesheetsSuccess,
+  getTimesheetsError,
   deleteTimesheetPending,
   deleteTimesheetSuccess,
   deleteTimesheetError,
@@ -18,20 +18,19 @@ import {
   resetTimesheet
 } from './actions';
 
-const resource = '/timesheets';
 const url = `${process.env.REACT_APP_API_URL}/timesheets`;
 
-export const getTimesheet = () => {
+export const getTimesheets = () => {
   return async (dispatch) => {
     try {
-      dispatch(getTimesheetPending());
+      dispatch(getTimesheetsPending());
       const response = await fetch(url);
       const data = await response.json();
 
-      if (!data.error) dispatch(getTimesheetSuccess(data.data));
-      else dispatch(getTimesheetError(data.message));
+      if (!data.error) dispatch(getTimesheetsSuccess(data.data));
+      else dispatch(getTimesheetsError(data.message));
     } catch (error) {
-      dispatch(getTimesheetError(error));
+      dispatch(getTimesheetsError(error));
     }
   };
 };
@@ -45,11 +44,12 @@ export const deleteTimesheet = (id) => {
       };
       dispatch(deleteTimesheetPending());
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}${resource}/${id}`,
+        `${process.env.REACT_APP_API_URL}/timesheets/${id}`,
         requestConfig
       );
       const data = await response.json();
-      dispatch(deleteTimesheetSuccess(data.message));
+      if (!data.error) dispatch(deleteTimesheetSuccess(data.data));
+      else dispatch(deleteTimesheetError(data.message));
     } catch (error) {
       dispatch(deleteTimesheetError(error.message));
     }
@@ -60,7 +60,7 @@ export const getSingleTimesheet = (id) => {
   return async (dispatch) => {
     try {
       dispatch(getSingleTimesheetPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}/${id}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets/${id}`);
       const data = await response.json();
       if (!data.error) {
         dispatch(getSingleTimesheetSuccess(data));
@@ -82,7 +82,7 @@ export const addTimesheet = (timesheet) => {
         body: JSON.stringify(timesheet)
       };
       dispatch(addTimesheetPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${resource}`, requestConfig);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/timesheets`, requestConfig);
       const data = await response.json();
       if (!data.error) {
         dispatch(addTimesheetSuccess(data));
@@ -107,7 +107,7 @@ export const editTimesheet = (timesheet, id) => {
       dispatch(resetMessage());
       dispatch(editTimesheetPending());
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}${resource}/${id}`,
+        `${process.env.REACT_APP_API_URL}/timesheets/${id}`,
         requestConfig
       );
       const data = await response.json();

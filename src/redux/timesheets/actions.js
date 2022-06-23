@@ -9,33 +9,32 @@ import {
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
   RESET_TIMESHEET,
-  GET_TIMESHEET_PENDING,
-  GET_TIMESHEET_SUCCESS,
-  GET_TIMESHEET_ERROR,
+  GET_TIMESHEETS_PENDING,
+  GET_TIMESHEETS_SUCCESS,
+  GET_TIMESHEETS_ERROR,
   DELETE_TIMESHEET_PENDING,
   DELETE_TIMESHEET_SUCCESS,
   DELETE_TIMESHEET_ERROR,
   RESET_MESSAGE,
-  SET_MODAL,
-  UPDATE_LIST
+  SET_MODAL
 } from './constants';
 
-export const getTimesheetPending = () => {
+export const getTimesheetsPending = () => {
   return {
-    type: GET_TIMESHEET_PENDING
+    type: GET_TIMESHEETS_PENDING
   };
 };
 
-export const getTimesheetError = (error) => {
+export const getTimesheetsError = (error) => {
   return {
-    type: GET_TIMESHEET_ERROR,
+    type: GET_TIMESHEETS_ERROR,
     payload: error
   };
 };
 
-export const getTimesheetSuccess = (data) => {
+export const getTimesheetsSuccess = (data) => {
   return {
-    type: GET_TIMESHEET_SUCCESS,
+    type: GET_TIMESHEETS_SUCCESS,
     payload: data
   };
 };
@@ -136,12 +135,5 @@ export const setModal = (state) => {
   return {
     type: SET_MODAL,
     payload: state
-  };
-};
-
-export const updateList = (newList) => {
-  return {
-    type: UPDATE_LIST,
-    payload: newList
   };
 };
