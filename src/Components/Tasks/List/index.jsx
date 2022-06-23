@@ -71,6 +71,7 @@ function Tasks() {
               setId(id);
               dispatch(setModal(true));
             }}
+            showButtons={true}
           />
           <div>
             <Link to="/tasks/form" className={styles.linkReset}>
