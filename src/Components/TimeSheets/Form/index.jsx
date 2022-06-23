@@ -51,7 +51,7 @@ const timeSheetValidate = Joi.object({
     'string.empty': `Employee cannot be an empty field`
   }),
 
-  task: Joi.string().label('Task').required().messages({
+  task: Joi.string().label('Task').messages({
     'string.empty': `Task cannot be an empty field`
   }),
 
@@ -76,7 +76,7 @@ const TimeSheets = () => {
     formState: { errors },
     reset
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: joiResolver(timeSheetValidate),
     defaultValues: {
       employee: '',
@@ -103,7 +103,7 @@ const TimeSheets = () => {
       employee: timesheet.employee?._id,
       project: timesheet.project?._id,
       task: timesheet.task?._id,
-      date: timesheet.date.substring(0, 10),
+      date: timesheet.date?.substring(0, 10),
       role: timesheet.role,
       rate: timesheet.rate,
       workedHours: timesheet.workedHours,
@@ -155,92 +155,61 @@ const TimeSheets = () => {
         <Loading />
       ) : (
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <div className={styles.textContainer}>
-            <Select
-              id={'project'}
-              type={'select'}
-              text={'Project'}
-              options={formatProjects()}
-              register={register}
-              error={errors.project}
-            />
-          </div>
+          <Select
+            id={'project'}
+            text={'Project'}
+            options={formatProjects()}
+            register={register}
+            error={errors.project}
+          />
 
-          <div className={styles.textContainer}>
-            <Select
-              id={'employee'}
-              type={'select'}
-              text={'Employee'}
-              options={formatEmployees()}
-              register={register}
-              error={errors.employee}
-            />
-          </div>
+          <Select
+            id={'employee'}
+            text={'Employee'}
+            options={formatEmployees()}
+            register={register}
+            error={errors.employee}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'role'}
-              register={register}
-              text={'Role'}
-              type={'text'}
-              error={errors.role}
-            />
-          </div>
+          <Input id={'role'} register={register} text={'Role'} type={'text'} error={errors.role} />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'date'}
-              text={'Date'}
-              type={'date'}
-              register={register}
-              error={errors.date}
-            />
-          </div>
+          <Input id={'date'} text={'Date'} type={'date'} register={register} error={errors.date} />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'rate'}
-              text={'Rate'}
-              type={'number'}
-              register={register}
-              error={errors.rate}
-            />
-          </div>
+          <Input
+            id={'rate'}
+            text={'Rate'}
+            type={'number'}
+            register={register}
+            error={errors.rate}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'workedHours'}
-              text={'Worked Hours'}
-              type={'number'}
-              register={register}
-              error={errors.workedHours}
-            />
-          </div>
+          <Input
+            id={'workedHours'}
+            text={'Worked Hours'}
+            type={'number'}
+            register={register}
+            error={errors.workedHours}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'description'}
-              type={'text'}
-              text={'Description'}
-              required={false}
-              register={register}
-              error={errors.description}
-            />
-          </div>
+          <Input
+            id={'description'}
+            type={'text'}
+            text={'Description'}
+            required={false}
+            register={register}
+            error={errors.description}
+          />
 
-          <div className={styles.textContainer}>
-            <Select
-              id={'task'}
-              type={'select'}
-              text={'Task'}
-              options={formatTasks()}
-              register={register}
-              error={errors.task}
-            />
-          </div>
+          <Select
+            id={'task'}
+            text={'Task'}
+            options={formatTasks()}
+            register={register}
+            error={errors.task}
+          />
           <div className={styles.buttonContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
-              Cancel
+              Back
             </Button>
             <Button>Save</Button>
           </div>

@@ -64,7 +64,8 @@ export const timesheetReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         showModal: true,
-        message: action.payload
+        message: 'Timesheet deleted',
+        list: state.list.filter((timesheet) => timesheet._id !== action.payload)
       };
     case DELETE_TIMESHEET_ERROR:
       return {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTimesheet, deleteTimesheet } from '../../../redux/timesheets/thunks';
-import { resetMessage, setModal, updateList } from '../../../redux/timesheets/actions';
-import List from '../../Shared/List';
-import Loading from '../../Shared/Loading';
-import Modal from '../../Shared/Modal/Modal';
-import Button from '../../Shared/Button';
+import { getTimesheet, deleteTimesheet } from 'redux/timesheets/thunks';
+import { resetMessage, setModal, updateList } from 'redux/timesheets/actions';
+import List from 'Components/Shared/List';
+import Loading from 'Components/Shared/Loading';
+import Modal from 'Components/Shared/Modal/Modal';
+import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 
 const TimeSheets = () => {
@@ -26,7 +26,7 @@ const TimeSheets = () => {
     const data = responseData.map((timeSheet) => {
       return {
         id: timeSheet._id,
-        date: timeSheet.date.slice(0, 10),
+        date: timeSheet.date.substring(0, 10),
         employee: timeSheet.employee
           ? timeSheet.employee.firstName + ' ' + timeSheet.employee.lastName
           : '',
@@ -49,7 +49,6 @@ const TimeSheets = () => {
   const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteTimesheet(id));
-    !error && dispatch(updateList([...list.filter((timeSheet) => timeSheet._id !== id)]));
   };
 
   const closeHandler = () => {
