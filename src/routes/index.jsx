@@ -15,6 +15,7 @@ const TasksForm = lazy(() => import('Components/Tasks/Form'));
 const TasksList = lazy(() => import('Components/Tasks/List'));
 const TimeSheetsList = lazy(() => import('Components/TimeSheets/List'));
 const TimeSheetsForm = lazy(() => import('Components/TimeSheets/Form'));
+const EmployeeProjects = lazy(() => import('Components/Employee/MyProjects'));
 
 const Routes = () => {
   return (
@@ -41,6 +42,10 @@ const Routes = () => {
             <Route exact path={'/timesheets'} component={TimeSheetsList} />
             <Route exact path={'/timesheets/form/'} component={TimeSheetsForm} />
             <Route exact path={'/timesheets/form/:id'} component={TimeSheetsForm} />
+            <Route exact path={'/employee'} />
+            <Route exact path={'/employee/projects'} component={EmployeeProjects} />
+            <Route exact path={'/employee/profile'} />
+            <Route exact path={'/employee/workedhours'} />
           </Switch>
         </Suspense>
       </Layout>

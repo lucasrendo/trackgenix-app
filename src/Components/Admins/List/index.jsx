@@ -70,6 +70,7 @@ const Admins = () => {
           setId(id);
           dispatch(setModal(true));
         }}
+        showButtons={true}
       />
       <div>
         <Link to={'/admins/form'} className={styles.linkReset}>

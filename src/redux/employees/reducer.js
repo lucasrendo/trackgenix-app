@@ -14,7 +14,6 @@ import {
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
-  FILL_EMPLOYEE,
   SET_MODAL,
   UPDATE_LIST,
   RESET_MESSAGE,
@@ -45,7 +44,6 @@ export const employeeReducer = (state = initialState, action) => {
     case GET_EMPLOYEES_ERROR:
       return {
         ...state,
-        isLoading: false,
         error: true,
         message: action.payload
       };
@@ -53,14 +51,14 @@ export const employeeReducer = (state = initialState, action) => {
     case GET_SINGLE_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
         error: false,
+        isLoading: false,
         employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
           email: action.payload.data.email,
           password: action.payload.data.password,
-          assignedProjects: action.payload.data.assignedProjects[0]._id,
+          assignedProjects: action.payload.data.assignedProjects,
           isActive: action.payload.data.isActive
         },
         message: action.payload.message
@@ -70,41 +68,33 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, message: 'Loading...' };
 
     case GET_SINGLE_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case ADD_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        employee: action.payload.data,
         error: false,
-        employee: {
-          firstName: action.payload.data.firstName,
-          lastName: action.payload.data.lastName,
-          email: action.payload.data.email,
-          password: action.payload.data.password,
-          projectId: action.payload.data.projectId,
-          isActive: action.payload.data.isActive
-        },
         message: action.payload.message
       };
 
     case ADD_EMPLOYEES_PENDING:
-      return { ...state, isLoading: true, message: 'Loading...' };
+      return { ...state, message: 'Loading...' };
 
     case ADD_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case EDIT_EMPLOYEES_SUCCESS:
       return {
         ...state,
-        isLoading: false,
         error: false,
+        isLoading: false,
         employee: {
           firstName: action.payload.data.firstName,
           lastName: action.payload.data.lastName,
           email: action.payload.data.email,
           password: action.payload.data.password,
-          projectId: action.payload.data.projectId,
+          assignedProjects: [action.payload.data.projectId],
           isActive: action.payload.data.isActive
         },
         message: action.payload.message
@@ -113,17 +103,17 @@ export const employeeReducer = (state = initialState, action) => {
     case EDIT_EMPLOYEES_PENDING:
       return {
         ...state,
-        isLoading: true,
         message: 'Loading...'
       };
 
     case EDIT_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload };
 
     case DELETE_EMPLOYEES_SUCCESS:
       return {
         ...state,
         isLoading: false,
+        list: state.list.filter((employee) => employee._id !== action.payload),
         message: 'The employee was successfully deleted',
         error: false
       };
@@ -132,10 +122,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, message: 'Loading...' };
 
     case DELETE_EMPLOYEES_ERROR:
-      return { ...state, isLoading: false, error: true, message: action.payload.message };
-
-    case FILL_EMPLOYEE:
-      return { ...state, employee: { ...state.employee, ...action.payload } };
+      return { ...state, error: true, message: action.payload.message };
 
     case SET_MODAL:
       return { ...state, showModal: action.payload };
