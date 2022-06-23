@@ -8,6 +8,9 @@
   color: #373867;
 }
 
+.readOnly{
+  color: #37386766;
+}
 
 .inputContainer input[type="number"]{
   -moz-appearance: textfield;

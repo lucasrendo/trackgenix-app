@@ -3,7 +3,7 @@ import styles from './list.module.css';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
 
-const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
+const List = ({ data, headers, resource, deleteItem, editItem, linkData, showButtons }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -16,8 +16,14 @@ const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
                 </th>
               );
             })}
-            <th className={styles.th}>Edit</th>
-            <th className={styles.th}>Delete</th>
+            {showButtons ? (
+              <>
+                <th className={styles.th}>Edit</th>
+                <th className={styles.th}>Delete</th>
+              </>
+            ) : (
+              <></>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -31,25 +37,31 @@ const List = ({ data, headers, resource, deleteItem, editItem, linkData }) => {
                     </td>
                   );
                 })}
-                <td className={styles.td}>
-                  <Link
-                    to={{
-                      pathname: `${resource}/form/${row.id}`,
-                      linkData: linkData,
-                      DBPath: resource,
-                      itemData: row
-                    }}
-                  >
-                    <Button classes="edit" editItem={editItem} _id={row.id} resource={resource}>
-                      &#9998;
-                    </Button>
-                  </Link>
-                </td>
-                <td className={styles.td}>
-                  <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
-                    <Button classes="close">X</Button>
-                  </span>
-                </td>
+                {showButtons ? (
+                  <>
+                    <td className={styles.td}>
+                      <Link
+                        to={{
+                          pathname: `${resource}/form/${row.id}`,
+                          linkData: linkData,
+                          DBPath: resource,
+                          itemData: row
+                        }}
+                      >
+                        <Button classes="edit" editItem={editItem} _id={row.id} resource={resource}>
+                          &#9998;
+                        </Button>
+                      </Link>
+                    </td>
+                    <td className={styles.td}>
+                      <span _id={row.id} resource={resource} onClick={() => deleteItem(row.id)}>
+                        <Button classes="close">X</Button>
+                      </span>
+                    </td>
+                  </>
+                ) : (
+                  <></>
+                )}
               </tr>
             );
           })}

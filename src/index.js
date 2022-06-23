@@ -4,13 +4,11 @@ import Routes from './routes';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import './index.css';
-import EmployeesRoutes from 'routes/employees';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <EmployeesRoutes />
-      {/* <Routes /> */}
+      <Routes />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

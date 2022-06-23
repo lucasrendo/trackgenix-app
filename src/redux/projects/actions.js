@@ -13,18 +13,17 @@ import {
   GET_SINGLE_PROJECT_SUCCESS,
   RESET_PROJECT,
   RESET_MESSAGE,
-  FORMATED_PROJECT,
-  DELETE_PROJECTS_SUCCESS,
-  DELETE_PROJECTS_PENDING,
-  DELETE_PROJECTS_ERROR,
+  DELETE_PROJECT_SUCCESS,
+  DELETE_PROJECT_PENDING,
+  DELETE_PROJECT_ERROR,
   SET_MESSAGE,
   SET_MODAL
 } from './constants';
 
-export const getProjectsSuccess = (projects) => {
+export const getProjectsSuccess = (data) => {
   return {
     type: GET_PROJECTS_SUCCESS,
-    payload: projects
+    payload: data
   };
 };
 
@@ -113,30 +112,23 @@ export const resetMessage = () => {
   };
 };
 
-export const formatedProject = (data) => {
+export const deleteProjectPending = () => {
   return {
-    type: FORMATED_PROJECT,
-    payload: data
+    type: DELETE_PROJECT_PENDING
   };
 };
 
-export const deleteProjectsSuccess = (id) => {
+export const deleteProjectSuccess = (id) => {
   return {
-    type: DELETE_PROJECTS_SUCCESS,
+    type: DELETE_PROJECT_SUCCESS,
     payload: id
   };
 };
 
-export const deleteProjectsPending = () => {
+export const deleteProjectError = (error) => {
   return {
-    type: DELETE_PROJECTS_PENDING
-  };
-};
-
-export const deleteProjectsError = (message) => {
-  return {
-    type: DELETE_PROJECTS_ERROR,
-    payload: message
+    type: DELETE_PROJECT_ERROR,
+    payload: error
   };
 };
 

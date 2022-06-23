@@ -15,7 +15,6 @@ import {
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
   RESET_EMPLOYEE,
-  FILL_EMPLOYEE,
   FORMAT_EMPLOYEE_OBJECTS,
   SET_MODAL,
   RESET_MESSAGE,
@@ -42,19 +41,19 @@ export const getSingleEmployeesPending = () => {
   return { type: GET_SINGLE_EMPLOYEES_PENDING };
 };
 
-export const getSingleEmployeesError = (message) => {
-  return { type: GET_SINGLE_EMPLOYEES_ERROR, payload: message };
+export const getSingleEmployeesError = (error) => {
+  return { type: GET_SINGLE_EMPLOYEES_ERROR, payload: error };
 };
 
-export const createEmployeesSuccess = (data) => {
+export const addEmployeesSuccess = (data) => {
   return { type: ADD_EMPLOYEES_SUCCESS, payload: data };
 };
 
-export const createEmployeesPending = () => {
+export const addEmployeesPending = () => {
   return { type: ADD_EMPLOYEES_PENDING };
 };
 
-export const createEmployeesError = (error) => {
+export const addEmployeesError = (error) => {
   return { type: ADD_EMPLOYEES_ERROR, payload: error };
 };
 
@@ -70,24 +69,20 @@ export const editEmployeesError = (error) => {
   return { type: EDIT_EMPLOYEES_ERROR, payload: error };
 };
 
-export const deleteEmployeesSuccess = (data) => {
-  return { type: DELETE_EMPLOYEES_SUCCESS, payload: data };
+export const deleteEmployeesSuccess = (id) => {
+  return { type: DELETE_EMPLOYEES_SUCCESS, payload: id };
 };
 
 export const deleteEmployeesPending = () => {
   return { type: DELETE_EMPLOYEES_PENDING };
 };
 
-export const deleteEmployeesError = (message) => {
-  return { type: DELETE_EMPLOYEES_ERROR, payload: message };
+export const deleteEmployeesError = (error) => {
+  return { type: DELETE_EMPLOYEES_ERROR, payload: error };
 };
 
 export const resetEmployee = () => {
   return { type: RESET_EMPLOYEE };
-};
-
-export const fillEmployee = (userInput) => {
-  return { type: FILL_EMPLOYEE, payload: userInput };
 };
 
 export const formatEmployeeObject = (data) => {

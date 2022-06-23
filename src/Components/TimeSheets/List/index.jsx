@@ -71,6 +71,7 @@ const TimeSheets = () => {
           setId(id);
           dispatch(setModal(true));
         }}
+        showButtons={true}
       />
       <div>
         <Link to={'/timesheets/form'} className={styles.LinkReset}>

@@ -1,108 +1,118 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetEmployee, resetMessage } from '../../../redux/employees/actions';
-import { getSingleEmployee, createEmployee, editEmployees } from '../../../redux/employees/thunks';
-import Form from '../../Shared/Form';
-import Modal from '../../Shared/Modal/Modal';
-import Loading from '../../Shared/Loading';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { resetEmployee, resetMessage, setModal } from 'redux/employees/actions';
+import { getSingleEmployee, addEmployee, editEmployees } from 'redux/employees/thunks';
+import { getProjects } from 'redux/projects/thunks';
+import Joi, { allow } from 'joi';
+
+import Modal from 'Components/Shared/Modal/Modal';
+import Loading from 'Components/Shared/Loading';
 import styles from './employee.module.css';
+import Input from 'Components/Shared/Input';
+import Select from 'Components/Shared/Select';
+import Button from 'Components/Shared/Button';
+
+const employeeValidate = Joi.object({
+  firstName: Joi.string()
+    .pattern(/^[a-zA-Z ]+$/)
+    .label('First Name')
+    .min(3)
+    .max(20)
+    .required()
+    .messages({
+      'string.pattern.base': `First Name" should only have letters`,
+      'string.empty': `First Name cannot be an empty field`,
+      'string.max': `First name should have a maximum length of 10`,
+      'string.min': `First name should have a minimum length of 3`
+    }),
+  lastName: Joi.string()
+    .pattern(/^[a-zA-Z ]+$/)
+    .label('Last Name')
+    .min(3)
+    .max(10)
+    .required()
+    .messages({
+      'string.pattern.base': `Last Name" should only have letters`,
+      'string.empty': `Last Name cannot be an empty field`,
+      'string.max': `Last name should have a maximum length of 10`,
+      'string.min': `Last name should have a minimum length of 3`
+    }),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required()
+    .messages({
+      'string.empty': `Email cannot be an empty field`
+    }),
+  password: Joi.string().label('Password').min(8).required().messages({
+    'string.empty': `Password cannot be an empty field`,
+    'string.min': `Password should have a minimum length of 8`
+  }),
+  assignedProjects: Joi.string().allow('').label('Project'),
+  isActive: Joi.boolean()
+});
 
 const EmployeesForm = () => {
-  const [projects, setProjects] = useState([]);
-  const [inputValues, setInputValues] = useState({});
   const { goBack } = useHistory();
-  const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const employee = useSelector((state) => state.employees.employee);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const message = useSelector((state) => state.employees.message);
-
-  const getProjects = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      alert(error);
-      setShowModal(true);
+  const projectList = useSelector((state) => state.projects.list);
+  const showModal = useSelector((state) => state.tasks.showModal);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset
+  } = useForm({
+    mode: 'onBlur',
+    resolver: joiResolver(employeeValidate),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      assignedProjects: [],
+      isActive: false
     }
-  };
-
-  const dataOptions = async () => {
-    const rawProjects = await getProjects();
-    let projectsData = [];
-    rawProjects.forEach((project, index) => {
-      projectsData.push({ id: project._id });
-      projectsData[index].text = project.projectName;
-    });
-    setProjects(projectsData);
-  };
+  });
 
   useEffect(() => {
     id && dispatch(getSingleEmployee(id));
-    dataOptions();
+    dispatch(getProjects());
     return () => dispatch(resetEmployee());
   }, []);
 
-  const config = [
-    {
-      header: 'First Name',
-      type: 'text',
-      key: 'firstName',
-      required: true
-    },
-    {
-      header: 'Last Name',
-      type: 'text',
-      key: 'lastName',
-      required: true
-    },
-    {
-      header: 'Email',
-      type: 'email',
-      key: 'email',
-      required: true
-    },
-    {
-      header: 'Password',
-      type: 'password',
-      key: 'password',
-      required: true
-    },
-    {
-      header: 'Project',
-      type: 'select',
-      key: 'assignedProjects',
-      options: projects,
-      required: true
-    },
-    {
-      header: 'Is active',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
-    }
-  ];
+  useEffect(() => {
+    reset(employee);
+  }, [employee]);
+
+  const formatProjects = () => {
+    return projectList.map((project) => {
+      return { id: project._id, text: project.projectName };
+    });
+  };
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
       goBack();
     }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const submitHandler = (data) => {
     if (id) {
-      dispatch(editEmployees(inputValues, id));
+      dispatch(editEmployees(data, id));
     } else {
-      dispatch(createEmployee(inputValues));
+      dispatch(addEmployee(data));
     }
-    setShowModal(true);
+    dispatch(setModal(true));
   };
 
   return (
@@ -111,12 +121,56 @@ const EmployeesForm = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <Form
-          data={config}
-          itemData={employee}
-          submitHandler={submitHandler}
-          userInput={[inputValues, setInputValues]}
-        />
+        <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
+          <Input
+            id={'lastName'}
+            text={'Last Name'}
+            type={'text'}
+            register={register}
+            error={errors.lastName}
+          />
+          <Input
+            id={'email'}
+            text={'Email'}
+            type={'email'}
+            register={register}
+            error={errors.email}
+          />
+          <Input
+            id={'password'}
+            text={'Password'}
+            type={'password'}
+            register={register}
+            error={errors.password}
+          />
+          <Select
+            id={'assignedProjects'}
+            text={'Projects'}
+            options={formatProjects()}
+            register={register}
+            error={errors.assignedProjects}
+          />
+          <Input
+            id={'isActive'}
+            type={'checkbox'}
+            text={'Is Active?'}
+            register={register}
+            error={errors.isActive}
+          />
+          <div className={styles.btnsContainer}>
+            <Button classes={'red'} onClick={() => goBack()}>
+              Back
+            </Button>
+            <Button>Save</Button>
+          </div>
+        </form>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
