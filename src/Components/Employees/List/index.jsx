@@ -72,6 +72,7 @@ const Employees = () => {
               setId(id);
               dispatch(setModal(true));
             }}
+            showButtons={true}
           />
           <div>
             <Link to={'employees/form'} className={styles.LinkReset}>
