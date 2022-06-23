@@ -106,58 +106,48 @@ function SuperAdminsForm() {
         <Loading />
       ) : (
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <div className={styles.textContainer}>
-            <Input
-              id={'firstName'}
-              register={register}
-              text={'First Name'}
-              type={'text'}
-              error={errors.firstName}
-            />
-          </div>
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'lastName'}
-              text={'Last Name'}
-              type={'text'}
-              register={register}
-              error={errors.lastName}
-            />
-          </div>
+          <Input
+            id={'lastName'}
+            text={'Last Name'}
+            type={'text'}
+            register={register}
+            error={errors.lastName}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'email'}
-              text={'Email'}
-              type={'email'}
-              register={register}
-              error={errors.email}
-            />
-          </div>
+          <Input
+            id={'email'}
+            text={'Email'}
+            type={'email'}
+            register={register}
+            error={errors.email}
+          />
 
-          <div className={styles.textContainer}>
-            <Input
-              id={'password'}
-              text={'Password'}
-              type={'password'}
-              register={register}
-              error={errors.password}
-            />
-          </div>
+          <Input
+            id={'password'}
+            text={'Password'}
+            type={'password'}
+            register={register}
+            error={errors.password}
+          />
 
-          <div className={styles.checkContainer}>
-            <Input
-              id={'isActive'}
-              type={'checkbox'}
-              text={'Is Active?'}
-              register={register}
-              error={errors.isActive}
-            />
-          </div>
+          <Input
+            id={'isActive'}
+            type={'checkbox'}
+            text={'Is Active?'}
+            register={register}
+            error={errors.isActive}
+          />
           <div className={styles.buttonContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
-              Cancel
+              Back
             </Button>
             <Button>Save</Button>
           </div>

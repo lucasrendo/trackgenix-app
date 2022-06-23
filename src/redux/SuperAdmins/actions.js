@@ -20,9 +20,9 @@ import {
   RESET_SUPER_ADMIN
 } from './constants';
 
-export const getSuperAdminsSuccess = (superAdmins) => ({
+export const getSuperAdminsSuccess = (data) => ({
   type: GET_SUPER_ADMINS_SUCCESS,
-  payload: superAdmins
+  payload: data
 });
 
 export const getSuperAdminsPending = () => ({
