@@ -23,12 +23,18 @@ const EmployeeProfile = () => {
       .label('First Name')
       .min(3)
       .max(20)
+      .messages({
+        'string.pattern.base': `First Name should only have letters`
+      })
       .required(),
     lastName: Joi.string()
       .pattern(/^[a-zA-Z ]+$/)
       .label('Last Name')
       .min(3)
       .max(20)
+      .messages({
+        'string.pattern.base': `Last Name should only have letters`
+      })
       .required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
