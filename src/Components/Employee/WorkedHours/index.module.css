@@ -86,9 +86,11 @@ h4 {
   width: fit-content;
   height: 50;
 }
+
 label {
   text-align: center;
 }
+
 .btn {
   display: inline-block;
   background: #ea3354;

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
-import { Link } from 'react-router-dom';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
-import { resetEmployee, resetMessage } from 'redux/employees/actions.js';
+import { resetMessage } from 'redux/employees/actions.js';
 import Joi, { allow } from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
@@ -30,21 +28,20 @@ const HoursForm = () => {
   });
   const [add, setAdd] = useState();
   const validationSchema = Joi.object({
-    monday: Joi.number().min(0).max(12),
-    tuesday: Joi.number().min(0).max(12),
-    wednesday: Joi.number().min(0).max(12),
-    thursday: Joi.number().min(0).max(12),
-    friday: Joi.number().min(0).max(12),
-    saturday: Joi.number().min(0).max(12),
-    sunday: Joi.number().min(0).max(12),
+    monday: Joi.number().min(0).max(12).required(),
+    tuesday: Joi.number().min(0).max(12).required(),
+    wednesday: Joi.number().min(0).max(12).required(),
+    thursday: Joi.number().min(0).max(12).required(),
+    friday: Joi.number().min(0).max(12).required(),
+    saturday: Joi.number().min(0).max(12).required(),
+    sunday: Joi.number().min(0).max(12).required(),
     weekend: Joi.date().required().max(Date.now())
   });
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
-    reset
+    formState: { errors }
   } = useForm({
     mode: 'onBlur',
     resolver: joiResolver(validationSchema),
@@ -52,12 +49,7 @@ const HoursForm = () => {
   });
 
   useEffect(() => {
-    reset({});
-  }, []);
-
-  useEffect(() => {
     id && dispatch(getSingleEmployee(id));
-    return () => dispatch(resetEmployee());
   }, []);
 
   useEffect(() => {
@@ -73,9 +65,8 @@ const HoursForm = () => {
     );
   }, [number]);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    setShowModal(true);
+  const submitHandler = async (data) => {
+    if (data) setShowModal(true);
   };
 
   const closeHandler = () => {
@@ -83,10 +74,11 @@ const HoursForm = () => {
     dispatch(resetMessage());
   };
 
-  const handleInput = (e) => {
-    const { name, value } = e.target;
+  const handleInput = (data) => {
+    const { name, value } = data.target;
     setNumber({ ...number, [name]: value });
   };
+
   const headers = [
     { header: 'Project Name', key: 'Project Name' },
     { header: 'Monday', key: 'Monday' },
@@ -109,7 +101,7 @@ const HoursForm = () => {
           id={'weekend'}
           register={register}
           type="date"
-          error={errors.date?.message}
+          error={errors.weekend}
         />
         <Button>Next</Button>
       </div>
@@ -136,76 +128,75 @@ const HoursForm = () => {
             </div>
             <Input
               id={'monday'}
-              register={register}
               type={'number'}
-              error={errors.monday?.message}
-              onChange={handleInput}
-              name="one"
-              value={number.one}
+              register={register}
+              error={errors.monday}
+              // onChange={handleInput}
+              // name="one"
+              // value={number.one}
             />
             <Input
               id={'tuesday'}
               register={register}
-              type="number"
-              onChange={handleInput}
-              name="two"
-              value={number.two}
+              type={'number'}
+              error={errors.tuesday}
+              // onChange={handleInput}
+              // name="two"
+              // value={hours.two}
             />
             <Input
               id={'wednesday'}
               register={register}
-              type="number"
-              error={errors.wednesday?.message}
-              onChange={handleInput}
-              name="three"
-              value={number.three}
+              type={'number'}
+              error={errors.wednesday}
+              // onChange={handleInput}
+              // name="three"
+              // value={hours.three}
             />
             <Input
               id={'thursday'}
               register={register}
-              type="number"
-              error={errors.thursday?.message}
-              onChange={handleInput}
-              name="four"
-              value={number.four}
+              type={'number'}
+              error={errors.thursday}
+              // onChange={handleInput}
+              // name="four"
+              // value={hours.four}
             />
             <Input
               id={'friday'}
               register={register}
-              type="number"
-              error={errors.friday?.message}
-              onChange={handleInput}
-              name="five"
-              value={number.five}
+              type={'number'}
+              error={errors.friday}
+              // onChange={handleInput}
+              // name="five"
+              // value={hours.five}
             />
             <Input
               id={'saturday'}
               register={register}
-              type="number"
-              error={errors.saturday?.message}
-              onChange={handleInput}
-              name="six"
-              value={number.six}
+              type={'number'}
+              error={errors.saturday}
+              // onChange={handleInput}
+              // name="six"
+              // value={hours.six}
             />
             <Input
               id={'sunday'}
               register={register}
-              type="number"
-              error={errors.sunday?.message}
-              onChange={handleInput}
-              name="seven"
-              value={number.seven}
+              type={'number'}
+              error={errors.sunday}
+              // onChange={handleInput}
+              // name="seven"
+              // value={hours.seven}
             />
-            <Input readOnly value={add} />
+            <input readOnly value={add} />
           </form>
           <div>
-            <Button classes="block" onClick={() => reset()}>
-              Confirm
-            </Button>
+            <Button classes="block">Confirm</Button>
           </div>
         </>
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandler()}>
         <h2>{message}</h2>
       </Modal>
     </section>
