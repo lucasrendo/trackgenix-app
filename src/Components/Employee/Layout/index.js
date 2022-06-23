@@ -6,7 +6,7 @@ import Sidebar from 'Components/Shared/Sidebar';
 import styles from './layout.module.css';
 
 const EmployeeLayout = ({ children }) => {
-  const { id } = useParams();
+  const id = '62b1122165165c996de858ec';
   const [links, setLinks] = useState([]);
   const [linkTitles, setLinksTitles] = useState([]);
   const [title, setTitle] = useState('');
