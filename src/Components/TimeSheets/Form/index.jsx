@@ -11,7 +11,7 @@ import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheet
 import { resetTimesheet, resetMessage } from 'redux/timesheets/actions';
 import { getEmployees } from 'redux/employees/thunks';
 import { getProjects } from 'redux/projects/thunks';
-import { getTasks } from 'redux/Task/thunks';
+import { getTasks } from 'redux/tasks/thunks';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
