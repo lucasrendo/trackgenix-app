@@ -1,24 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './admins.module.css';
-import List from '../../Shared/List';
-import Button from '../../Shared/Button';
-import Loading from '../../Shared/Loading';
-import Modal from '../../Shared/Modal/Modal';
+import List from 'Components/Shared/List';
+import Button from 'Components/Shared/Button';
+import Loading from 'Components/Shared/Loading';
+import Modal from 'Components/Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAdmin, getAdmins } from '../../../redux/admins/thunks';
-import { updateList } from '../../../redux/admins/actions';
+import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
+import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Admins = () => {
   const dispatch = useDispatch();
   const serverPath = '/admins';
-  const admins = useSelector((state) => state.admins.list);
-  const pending = useSelector((state) => state.admins.pending);
-  const error = useSelector((state) => state.admins.error);
+  const list = useSelector((state) => state.admins.list);
+  const isLoading = useSelector((state) => state.admins.isLoading);
   const message = useSelector((state) => state.admins.message);
   const [confirmation, setConfirmation] = useState(true);
-  const [isAdding, setIsAdding] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const showModal = useSelector((state) => state.admins.showModal);
   const [id, setId] = useState('');
 
   const headers = [
@@ -32,19 +30,15 @@ const Admins = () => {
     dispatch(getAdmins());
   }, []);
 
-  const deleteItem = () => {
+  const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteAdmin(id));
-    setModalMessage('Admin deleted');
-    setIsAdding(true);
-    !error && dispatch(updateList([...admins.filter((admin) => admin._id !== id)]));
   };
 
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
-    }
+    dispatch(setModal(false));
+    dispatch(resetMessage());
+    setConfirmation(true);
   };
 
   const formatListData = (responseData) => {
@@ -60,7 +54,7 @@ const Admins = () => {
     return data;
   };
 
-  return pending ? (
+  return isLoading ? (
     <>
       <h2>Admins</h2>
       <Loading />
@@ -69,14 +63,12 @@ const Admins = () => {
     <section className={styles.container}>
       <h2>Admins</h2>
       <List
-        fullList={admins}
-        data={formatListData(admins)}
+        data={formatListData(list)}
         headers={headers}
         resource={serverPath}
         deleteItem={(id) => {
           setId(id);
-          setConfirmation(true);
-          setIsAdding(true);
+          dispatch(setModal(true));
         }}
         showButtons={true}
       />
@@ -86,12 +78,12 @@ const Admins = () => {
         </Link>
       </div>
       <Modal
-        handleClose={() => closeHandler()}
-        isOpen={isAdding}
+        handleClose={confirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
+        isOpen={showModal}
         isConfirmation={confirmation}
-        confirmed={deleteItem}
+        confirmed={() => confirmationHandler()}
       >
-        <h2>{confirmation ? 'Are you sure you want to delete this admin?' : modalMessage}</h2>
+        <h2>{confirmation ? 'Are you sure you want to delete this admin?' : message}</h2>
       </Modal>
     </section>
   );
