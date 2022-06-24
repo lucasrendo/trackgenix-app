@@ -72,6 +72,7 @@ function SuperAdmins() {
           setId(id);
           dispatch(superAdminModal(true));
         }}
+        showButtons={true}
       />
       <div>
         <Link to={'/super-admins/form'} className={styles.linkReset}>

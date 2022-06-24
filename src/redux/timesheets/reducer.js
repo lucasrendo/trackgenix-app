@@ -10,14 +10,13 @@ import {
   GET_SINGLE_TIMESHEET_ERROR,
   RESET_TIMESHEET,
   RESET_MESSAGE,
-  GET_TIMESHEET_PENDING,
-  GET_TIMESHEET_SUCCESS,
-  GET_TIMESHEET_ERROR,
+  GET_TIMESHEETS_PENDING,
+  GET_TIMESHEETS_SUCCESS,
+  GET_TIMESHEETS_ERROR,
   DELETE_TIMESHEET_PENDING,
   DELETE_TIMESHEET_SUCCESS,
   DELETE_TIMESHEET_ERROR,
-  SET_MODAL,
-  UPDATE_LIST
+  SET_MODAL
 } from './constants';
 
 const initialState = {
@@ -31,20 +30,20 @@ const initialState = {
 
 export const timesheetReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_TIMESHEET_PENDING:
+    case GET_TIMESHEETS_PENDING:
       return {
         ...state,
         isLoading: true,
         message: 'Loading...'
       };
-    case GET_TIMESHEET_SUCCESS:
+    case GET_TIMESHEETS_SUCCESS:
       return {
         ...state,
         isLoading: false,
         error: false,
         list: action.payload
       };
-    case GET_TIMESHEET_ERROR:
+    case GET_TIMESHEETS_ERROR:
       return {
         ...state,
         isLoading: false,
@@ -64,7 +63,8 @@ export const timesheetReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         showModal: true,
-        message: action.payload
+        message: 'Timesheet deleted',
+        list: state.list.filter((timesheet) => timesheet._id !== action.payload)
       };
     case DELETE_TIMESHEET_ERROR:
       return {
@@ -86,10 +86,10 @@ export const timesheetReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         timesheet: {
-          employee: action.payload.data.employee,
-          project: action.payload.data.project,
-          task: action.payload.data.task,
-          date: action.payload.data.date,
+          employee: action.payload.data.employee._id,
+          project: action.payload.data.project._id,
+          task: action.payload.data.task._id,
+          date: action.payload.data.date.substring(0, 10),
           role: action.payload.data.role,
           rate: action.payload.data.rate,
           workedHours: action.payload.data.workedHours,
@@ -160,11 +160,6 @@ export const timesheetReducer = (state = initialState, action) => {
       return {
         ...state,
         showModal: action.payload
-      };
-    case UPDATE_LIST:
-      return {
-        ...state,
-        list: action.payload
       };
     default:
       return state;
