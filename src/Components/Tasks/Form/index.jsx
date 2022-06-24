@@ -14,6 +14,7 @@ import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from 'Components/Tasks/Form/tasks.module.css';
+import { waitForDomChange } from '@testing-library/react';
 
 function Tasks() {
   const { id } = useParams();
@@ -70,7 +71,7 @@ function Tasks() {
         projectId: task.projectId?._id,
         title: task.title,
         description: task.description,
-        date: task.date.substring(0, 10),
+        date: task.date?.substring(0, 10),
         done: task.done
       });
   }, [task]);
@@ -95,6 +96,8 @@ function Tasks() {
   };
 
   const submitHandler = (data) => {
+    console.log(data);
+    if (data.employeeId === '') data.employeeId = undefined;
     id ? dispatch(editTask(data, id)) : dispatch(addTask(data));
     dispatch(setModal(true));
   };
