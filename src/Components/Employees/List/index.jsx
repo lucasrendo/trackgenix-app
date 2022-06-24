@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployees, deleteEmployees } from '../../../redux/employees/thunks';
-import List from '../../Shared/List';
-import Button from '../../Shared/Button';
-import Loading from '../../Shared/Loading';
-import Modal from '../../Shared/Modal/Modal';
+import { getEmployees, deleteEmployees } from 'redux/employees/thunks';
+import List from 'Components/Shared/List';
+import Button from 'Components/Shared/Button';
+import Loading from 'Components/Shared/Loading';
+import Modal from 'Components/Shared/Modal/Modal';
 import styles from './employees.module.css';
-import { resetMessage, setModal, updateList } from '../../../redux/employees/actions';
+import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Employees = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,6 @@ const Employees = () => {
   const confirmationHandler = () => {
     setConfirmation(false);
     dispatch(deleteEmployees(id));
-    !error && dispatch(updateList([...list.filter((employee) => employee._id !== id)]));
   };
 
   const closeHandler = () => {
@@ -73,6 +72,7 @@ const Employees = () => {
               setId(id);
               dispatch(setModal(true));
             }}
+            showButtons={true}
           />
           <div>
             <Link to={'employees/form'} className={styles.LinkReset}>

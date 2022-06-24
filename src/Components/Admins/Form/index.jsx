@@ -1,104 +1,136 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import Joi from 'joi';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { addAdmin, editAdmin, getSingleAdmin } from 'redux/admins/thunks';
+import { resetAdmin, resetMessage, setModal } from 'redux/admins/actions';
+
+import Modal from 'Components/Shared/Modal/Index';
+import Input from 'Components/Shared/Input';
+import Button from 'Components/Shared/Button';
 import styles from './admins.module.css';
-import Form from '../../Shared/Form';
-import { addAdmin, updateAdmin, getSingleAdmin, getAdmins } from '../../../redux/admins/thunks';
-import { resetAdmin } from '../../../redux/admins/actions';
-import Modal from '../../Shared/Modal/Modal';
 
 const Admins = () => {
-  const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admins.admin);
-  const pending = useSelector((state) => state.admins.pending);
-  const error = useSelector((state) => state.admins.error);
   const { id } = useParams();
   const { goBack } = useHistory();
-  const [inputValues, setInputValues] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const resource = '/admins';
-  const config = [
-    {
-      header: 'First Name',
-      type: 'text',
-      key: 'firstName',
-      required: true
-    },
-    {
-      header: 'Last Name',
-      type: 'text',
-      key: 'lastName',
-      required: true
-    },
-    {
-      header: 'Email',
-      type: 'email',
-      key: 'email',
-      required: true
-    },
-    {
-      header: 'Password',
-      type: 'password',
-      key: 'password',
-      required: true
-    },
-    {
-      header: 'Is Active?',
-      type: 'checkbox',
-      key: 'isActive',
-      required: false
+  const dispatch = useDispatch();
+  const admin = useSelector((state) => state.admins.admin);
+  const error = useSelector((state) => state.admins.error);
+  const message = useSelector((state) => state.admins.message);
+  const showModal = useSelector((state) => state.admins.showModal);
+  const adminValidate = Joi.object({
+    firstName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('First Name')
+      .min(4)
+      .max(15)
+      .required(),
+    lastName: Joi.string()
+      .pattern(/^[a-zA-Z ]+$/)
+      .label('Last Name')
+      .min(4)
+      .max(15)
+      .required(),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required(),
+    password: Joi.string().label('password').min(8).required(),
+    isActive: Joi.boolean()
+  });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset
+  } = useForm({
+    mode: 'onBlur',
+    resolver: joiResolver(adminValidate),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      isActive: false
     }
-  ];
+  });
 
   useEffect(() => {
-    getAdmins();
     id && dispatch(getSingleAdmin(id));
-    return dispatch(resetAdmin());
+    return () => dispatch(resetAdmin());
   }, []);
 
-  const getAdmin = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
-      const jsonResponse = await response.json();
-      return jsonResponse.data;
-    } catch (error) {
-      setIsAdding(true);
-    }
-  };
+  useEffect(() => {
+    reset(admin);
+  }, [admin]);
 
   const closeHandler = () => {
-    if (error) setIsAdding(false);
-    else {
-      setIsAdding(false);
+    dispatch(setModal(false));
+    dispatch(resetMessage());
+    if (!error) {
       goBack();
     }
   };
 
   // === Handle submit data and method === //
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const submitHandler = (data) => {
     if (id) {
-      dispatch(updateAdmin(inputValues, id));
-      setModalMessage('Edit successful');
+      dispatch(editAdmin(data, id));
     } else {
-      dispatch(addAdmin(inputValues));
-      setModalMessage('Creation successful');
+      dispatch(addAdmin(data));
     }
-    setIsAdding(true);
+    dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <Form
-        data={config}
-        itemData={admin}
-        submitHandler={submitHandler}
-        userInput={[inputValues, setInputValues]}
-      />
-      <Modal handleClose={() => closeHandler()} isOpen={isAdding} isConfirmation={false}>
-        <h2>{modalMessage}</h2>
+      <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
+        <Input
+          id={'firstName'}
+          register={register}
+          text={'First Name'}
+          type={'text'}
+          error={errors.firstName}
+        />
+        <Input
+          id={'lastName'}
+          register={register}
+          text={'Last Name'}
+          type={'text'}
+          error={errors.lastName}
+        />
+        <Input
+          id={'email'}
+          register={register}
+          text={'Email'}
+          type={'email'}
+          error={errors.email}
+        />
+        <Input
+          id={'password'}
+          register={register}
+          text={'Password'}
+          type={'password'}
+          error={errors.password}
+        />
+        <Input
+          id={'isActive'}
+          register={register}
+          text={'Is Active?'}
+          type={'checkbox'}
+          error={errors.checkbox}
+        />
+        <div className={styles.btnsContainer}>
+          <Button classes={'red'} onClick={() => goBack()}>
+            Back
+          </Button>
+          <Button>Save</Button>
+        </div>
+      </form>
+      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );
