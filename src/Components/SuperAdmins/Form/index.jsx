@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetMessage, resetSuperAdmin } from 'redux/SuperAdmins/actions';
 import { createSuperAdmins, editSuperAdmins, getSingleSuperAdmins } from 'redux/SuperAdmins/thunks';
 import Loading from 'Components/Shared/Loading';
-import Modal from 'Components/Shared/Modal';
+import Modal from 'Components/Shared/Modal/Modal';
 import styles from './super-admins.module.css';
 import { useForm } from 'react-hook-form';
 import Input from 'Components/Shared/Input';

@@ -32,9 +32,9 @@ export const getSuperAdminsError = (error) => ({
   type: GET_SUPER_ADMINS_ERROR,
   payload: error
 });
-export const getSingleSuperAdminSuccess = (data) => ({
+export const getSingleSuperAdminSuccess = (id) => ({
   type: GET_SINGLE_SUPER_ADMIN_SUCCESS,
-  payload: data
+  payload: id
 });
 
 export const getSingleSuperAdminPending = () => ({
