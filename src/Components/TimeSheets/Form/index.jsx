@@ -30,6 +30,8 @@ const timeSheetValidate = Joi.object({
   role: Joi.string()
     .pattern(/^[a-zA-Z]+$/)
     .label('Role')
+    .valid('DEV', 'QA', 'PM', 'TL')
+    .insensitive()
     .min(2)
     .max(3)
     .required()
