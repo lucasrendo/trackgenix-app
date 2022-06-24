@@ -15,6 +15,7 @@ import { getTasks } from 'redux/Task/thunks';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { timesheetReducer } from 'redux/timesheets/reducer';
 
 const timeSheetValidate = Joi.object({
   workedHours: Joi.number().required().label('Worked Hours').messages({
@@ -83,8 +84,8 @@ const TimeSheets = () => {
       project: '',
       task: '',
       role: '',
-      rate: 0,
-      workedHours: 0,
+      rate: '',
+      workedHours: '',
       description: '',
       date: ''
     }
@@ -99,16 +100,7 @@ const TimeSheets = () => {
   }, []);
 
   useEffect(() => {
-    reset({
-      employee: timesheet.employee?._id,
-      project: timesheet.project?._id,
-      task: timesheet.task?._id,
-      date: timesheet.date?.substring(0, 10),
-      role: timesheet.role,
-      rate: timesheet.rate,
-      workedHours: timesheet.workedHours,
-      description: timesheet.description
-    });
+    reset(timesheet);
   }, [timesheet]);
 
   // === format option objects for the form config === //

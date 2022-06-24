@@ -43,13 +43,14 @@ export const deleteTimesheet = (id) => {
         headers: { 'content-type': 'application/json' }
       };
       dispatch(deleteTimesheetPending());
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/timesheets/${id}`,
-        requestConfig
-      );
+      const response = await fetch(`${url}/${id}`, requestConfig);
       const data = await response.json();
-      if (!data.error) dispatch(deleteTimesheetSuccess(data.data));
-      else dispatch(deleteTimesheetError(data.message));
+      if (!data.error) {
+        dispatch(deleteTimesheetSuccess(id));
+        dispatch(resetTimesheet());
+      } else {
+        dispatch(deleteTimesheetError(data.message));
+      }
     } catch (error) {
       dispatch(deleteTimesheetError(error.message));
     }

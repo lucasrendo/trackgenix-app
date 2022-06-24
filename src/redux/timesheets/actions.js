@@ -85,10 +85,10 @@ export const deleteTimesheetPending = () => {
   };
 };
 
-export const deleteTimesheetSuccess = (data) => {
+export const deleteTimesheetSuccess = (id) => {
   return {
     type: DELETE_TIMESHEET_SUCCESS,
-    payload: data
+    payload: id
   };
 };
 
