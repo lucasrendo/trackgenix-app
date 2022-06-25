@@ -7,7 +7,7 @@ import Button from 'Components/Shared/Button';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
 import { resetMessage } from 'redux/employees/actions.js';
-import Joi, { allow } from 'joi';
+import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 
