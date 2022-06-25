@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Modal from 'Components/Shared/Modal';
+import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
