@@ -5,7 +5,7 @@ import {
   getUserPending,
   getUserSuccess,
   getUserError
-} from './reducer';
+} from './actions';
 import firebase from 'helper/firebase';
 
 export const login = (credentials) => {
