@@ -5,6 +5,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
 import { getSingleEmployee } from 'redux/employees/thunks';
+import { getTimesheets } from 'redux/timesheets/thunks';
 import { useForm } from 'react-hook-form';
 import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
@@ -15,7 +16,8 @@ const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.employees.isLoading);
+  const timesheetsList = useSelector((state) => state.timesheet.list);
+  const isLoading = useSelector((state) => state.timesheet.isLoading);
   const message = useSelector((state) => state.employees.message);
   const [number, setNumber] = useState({
     one: '',
@@ -49,7 +51,8 @@ const HoursForm = () => {
   });
 
   useEffect(() => {
-    id && dispatch(getSingleEmployee(id));
+    dispatch(getTimesheets());
+    filterTimesheets();
   }, []);
 
   useEffect(() => {
@@ -64,6 +67,23 @@ const HoursForm = () => {
         Number(seven)
     );
   }, [number]);
+
+  const filterTimesheets = () => {
+    const filteredTimesheets = timesheetsList.filter(
+      (timesheets) => timesheets.employee?._id === id
+    );
+    return filteredTimesheets;
+  };
+
+  const getValues = (filteredTimesheets) => {
+    const data = filteredTimesheets.map((timesheet) => {
+      return {
+        projectName: timesheet.project.projectName,
+        role: timesheet.role
+      };
+    });
+    return data[0].projectName + '-' + data[0].role;
+  };
 
   const submitHandler = async (data) => {
     if (data) setShowModal(true);
@@ -124,7 +144,7 @@ const HoursForm = () => {
         <>
           <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
             <div>
-              <h4>Project 1 - Rol</h4>
+              <h4>{getValues(filterTimesheets())}</h4>
             </div>
             <input
               type={'number'}
@@ -182,9 +202,9 @@ const HoursForm = () => {
           </div>
         </>
       )}
-      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandler()}>
+      {/* <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandler()}>
         <h2>{message}</h2>
-      </Modal>
+      </Modal> */}
     </section>
   );
 };
