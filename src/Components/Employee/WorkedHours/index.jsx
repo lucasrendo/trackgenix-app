@@ -126,68 +126,54 @@ const HoursForm = () => {
             <div>
               <h4>Project 1 - Rol</h4>
             </div>
-            <Input
-              id={'monday'}
+            <input
               type={'number'}
-              register={register}
               error={errors.monday}
-              // onChange={handleInput}
-              // name="one"
-              // value={number.one}
+              onChange={handleInput}
+              name="one"
+              value={number.one}
             />
-            <Input
-              id={'tuesday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.tuesday}
-              // onChange={handleInput}
-              // name="two"
-              // value={hours.two}
+              onChange={handleInput}
+              name="two"
+              value={number.two}
             />
-            <Input
-              id={'wednesday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.wednesday}
-              // onChange={handleInput}
-              // name="three"
-              // value={hours.three}
+              onChange={handleInput}
+              name="three"
+              value={number.three}
             />
-            <Input
-              id={'thursday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.thursday}
-              // onChange={handleInput}
-              // name="four"
-              // value={hours.four}
+              onChange={handleInput}
+              name="four"
+              value={number.four}
             />
-            <Input
-              id={'friday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.friday}
-              // onChange={handleInput}
-              // name="five"
-              // value={hours.five}
+              onChange={handleInput}
+              name="five"
+              value={number.five}
             />
-            <Input
-              id={'saturday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.saturday}
-              // onChange={handleInput}
-              // name="six"
-              // value={hours.six}
+              onChange={handleInput}
+              name="six"
+              value={number.six}
             />
-            <Input
-              id={'sunday'}
-              register={register}
+            <input
               type={'number'}
               error={errors.sunday}
-              // onChange={handleInput}
-              // name="seven"
-              // value={hours.seven}
+              onChange={handleInput}
+              name="seven"
+              value={number.seven}
             />
             <input readOnly value={add} />
           </form>
