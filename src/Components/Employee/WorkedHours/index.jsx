@@ -10,6 +10,7 @@ import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
+import { Link } from 'react-router-dom';
 
 const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
@@ -66,21 +67,59 @@ const HoursForm = () => {
     );
   }, [number]);
 
-  const filterTimesheets = () => {
-    const filteredTimesheets = timesheetsList.filter(
-      (timesheets) => timesheets.employee?._id === id
-    );
-    return filteredTimesheets;
-  };
-
-  const getValues = (filteredTimesheets) => {
+  const formatData = (filteredTimesheets) => {
     const data = filteredTimesheets.map((timesheet) => {
       return {
-        projectName: timesheet.project.projectName,
-        role: timesheet.role
+        id: timesheet._id,
+        projectName: timesheet.project?.projectName,
+        role: timesheet.role,
+        monday: 'Monday Timesheet',
+        tuesday: 'Tuesday Timesheet',
+        wednesday: 'Wednesday Timesheet',
+        thursday: 'Thursday Timesheet',
+        friday: 'Friday Timesheet',
+        weekHours: 'Week hours'
       };
     });
-    return data[0].projectName + '-' + data[0].role;
+    return data;
+  };
+
+  const getTodayDate = () => {
+    let currentDate = new Date();
+    let day = currentDate.getDate().toString();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    let month = currentDate.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    month = month.toString();
+    let year = currentDate.getFullYear().toString();
+    let maxValue = day + '-' + month + '-' + year;
+    return maxValue;
+  };
+
+  const formatDates = (filteredTimesheets) => {
+    const dates = filteredTimesheets.map((timesheet) => {
+      let startDate = new Date(timesheet.date);
+      let day = startDate.getDate().toString();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      let month = startDate.getMonth() + 1;
+      if (month < 10) {
+        month = '0' + month;
+      }
+      month = month.toString();
+      let year = startDate.getFullYear().toString();
+      let startDateValue = day + '-' + month + '-' + year;
+      return {
+        startDate: startDateValue,
+        endDate: getTodayDate()
+      };
+    });
+    return dates;
   };
 
   const submitHandler = async (data) => {
@@ -98,15 +137,16 @@ const HoursForm = () => {
   };
 
   const headers = [
-    { header: 'Project Name', key: 'Project Name' },
-    { header: 'Monday', key: 'Monday' },
-    { header: 'Tuesday', key: 'Tuesday' },
-    { header: 'Wednesday', key: 'Wednesday' },
-    { header: 'Thursday', key: 'Thursday' },
-    { header: 'Friday', key: 'Friday' },
-    { header: 'Saturday', key: 'Saturday' },
-    { header: 'Sunday', key: 'Sunday' },
-    { header: 'Total', key: 'Total' }
+    { header: 'Project Name', key: 'projectName' },
+    { header: 'Role', key: 'role' },
+    { header: 'Monday', key: 'monday' },
+    { header: 'Tuesday', key: 'tuesday' },
+    { header: 'Wednesday', key: 'wednesday' },
+    { header: 'Thursday', key: 'thursday' },
+    { header: 'Friday', key: 'friday' },
+    { header: 'Saturday', key: 'saturday' },
+    { header: 'Sunday', key: 'sunday' },
+    { header: 'Total', key: 'total' }
   ];
 
   return (
@@ -114,34 +154,49 @@ const HoursForm = () => {
       <h2>Worked Hours</h2>
       <div className={styles.topContainer}>
         <Button>Before</Button>
-        <Input
-          className={styles.dateInput}
-          id={'weekend'}
-          register={register}
-          type="date"
-          error={errors.weekend}
-        />
+        <p>
+          {formatDates(timesheetsList)[0]?.startDate} - {formatDates(timesheetsList)[0]?.endDate}
+        </p>
         <Button>Next</Button>
-      </div>
-      <div>
-        <thead>
-          <tr className={styles.headerRow}>
-            {headers.map((header, index) => {
-              return (
-                <th key={index} className={styles.th}>
-                  {header.header}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
       </div>
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-            <div>{/* <h4>{getValues(filterTimesheets())}</h4> */}</div>
+          <div>
+            <table>
+              <thead>
+                <tr className={styles.headerRow}>
+                  {headers.map((header, index) => {
+                    return (
+                      <th key={index} className={styles.th}>
+                        {header.header}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {formatData(timesheetsList).map((row) => {
+                  return (
+                    <tr key={row.id} className={styles.rows}>
+                      {headers.map((header, index) => {
+                        return (
+                          <td key={index} className={styles.td}>
+                            {row[header.key]}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {/* <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
+            <div>
+              <h4>{formatData(timesheetsList)[0]?.projectName || ''}</h4>
+            </div>
             <input
               type={'number'}
               error={errors.monday}
@@ -192,7 +247,7 @@ const HoursForm = () => {
               value={number.seven}
             />
             <input readOnly value={add} />
-          </form>
+          </form> */}
           <div>
             <Button classes="block">Confirm</Button>
           </div>
