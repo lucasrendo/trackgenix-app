@@ -4,8 +4,7 @@ import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
-import { getSingleEmployee } from 'redux/employees/thunks';
-import { getTimesheets } from 'redux/timesheets/thunks';
+import { getTimesheetsByEmployee } from 'redux/employee/thunks';
 import { useForm } from 'react-hook-form';
 import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
@@ -16,7 +15,7 @@ const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
-  const timesheetsList = useSelector((state) => state.timesheet.list);
+  const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const isLoading = useSelector((state) => state.timesheet.isLoading);
   const message = useSelector((state) => state.employees.message);
   const [number, setNumber] = useState({
@@ -51,8 +50,7 @@ const HoursForm = () => {
   });
 
   useEffect(() => {
-    dispatch(getTimesheets());
-    filterTimesheets();
+    id && dispatch(getTimesheetsByEmployee(id));
   }, []);
 
   useEffect(() => {
@@ -143,9 +141,7 @@ const HoursForm = () => {
       ) : (
         <>
           <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-            <div>
-              <h4>{getValues(filterTimesheets())}</h4>
-            </div>
+            <div>{/* <h4>{getValues(filterTimesheets())}</h4> */}</div>
             <input
               type={'number'}
               error={errors.monday}
