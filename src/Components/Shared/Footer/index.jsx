@@ -23,7 +23,28 @@ function Footer() {
               src={`${process.env.PUBLIC_URL}/assets/images/instagram.svg`}
             />
           </a>
+          <a
+            href={'https://github.com/BaSP-m2022/balti-trackgenix-app'}
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            <img
+              className={styles.socialIcon}
+              src={`${process.env.PUBLIC_URL}/assets/images/github.svg`}
+            />
+          </a>
+          <a
+            href={'https://www.linkedin.com/company/radium-rocket/'}
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            <img
+              className={styles.socialIcon}
+              src={`${process.env.PUBLIC_URL}/assets/images/linkedin.svg`}
+            />
+          </a>
         </div>
+        <div className={styles.copyright}>Rosario, Argentina.</div>
         <div className={styles.copyright}>Copyright © 2021 Radium Rocket</div>
       </div>
     </footer>
