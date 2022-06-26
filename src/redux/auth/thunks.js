@@ -34,9 +34,9 @@ export const getUser = () => {
       const response = await fetch(`${process.env.REACT_APP_API}/auth/user`, {
         headers: { token }
       });
-      const responseJson = await response.json();
-      dispatch(getUserSuccess(responseJson.data));
-      return responseJson.data;
+      const data = await response.json();
+      dispatch(getUserSuccess(data.data));
+      return data.data;
     } catch (error) {
       dispatch(getUserError(error));
     }

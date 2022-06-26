@@ -21,8 +21,7 @@ export const authReducer = (state = initialState, action) => {
     case LOGIN_PENDING:
       return {
         ...state,
-        isLoading: true,
-        error: false
+        isLoading: true
       };
     case LOGIN_SUCCESS:
       return {
@@ -30,7 +29,7 @@ export const authReducer = (state = initialState, action) => {
         isLoading: false,
         authenticated: action.payload,
         error: false,
-        message: action.payload.message
+        message: 'Successful login'
       };
     case LOGIN_ERROR:
       return {
@@ -42,8 +41,7 @@ export const authReducer = (state = initialState, action) => {
     case GET_USER_PENDING:
       return {
         ...state,
-        isLoading: true,
-        error: false
+        isLoading: true
       };
     case GET_USER_SUCCESS:
       return {
@@ -57,7 +55,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         error: true,
         isLoading: false,
-        message: action.payload.message
+        message: action.payload
       };
     case RESET_MESSAGE:
       return {
