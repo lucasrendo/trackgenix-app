@@ -11,11 +11,20 @@ import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import { Link } from 'react-router-dom';
-import { endOfWeekWithOptions, startOfWeekWithOptions, format } from 'date-fns/esm/fp';
+import {
+  endOfWeekWithOptions,
+  startOfWeekWithOptions,
+  format,
+  add,
+  sub,
+  isWithinInterval
+} from 'date-fns/esm/fp';
 
 const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
   const todayDate = new Date();
+  const [startWeekDay, setStartWeekDay] = useState();
+  const [endWeekDay, setEndWeekDay] = useState();
   const [week, setWeek] = useState({});
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
@@ -31,7 +40,6 @@ const HoursForm = () => {
     six: '',
     seven: ''
   });
-  const [add, setAdd] = useState();
   const validationSchema = Joi.object({
     monday: Joi.number().min(0).max(12).required(),
     tuesday: Joi.number().min(0).max(12).required(),
@@ -58,6 +66,8 @@ const HoursForm = () => {
     getCurrentWeek(todayDate);
   }, []);
 
+  useEffect(() => {}, [week]);
+
   const formatData = (filteredTimesheets) => {
     const data = filteredTimesheets.map((timesheet) => {
       return {
@@ -71,19 +81,44 @@ const HoursForm = () => {
     return data;
   };
 
-  // const addDaytoDate = (date) => {
-  //   if (date <= todayDate) {
-  //     let newDate = new Date(date);
-  //     newDate.setDate(newDate.getDate() + 1);
-  //     setCurrentDate(newDate);
-  //   }
-  // };
+  const getCurrentWeek = (todayDate) => {
+    const startofWeek = startOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    const endofWeek = endOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    setStartWeekDay(startofWeek);
+    setEndWeekDay(endofWeek);
+    const formatedStart = format('dd/MM/yyyy', startofWeek);
+    const formatedEnd = format('dd/MM/yyyy', endofWeek);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
+  };
 
-  // const subtractDaytoDate = (date) => {
-  //   let newDate = new Date(date);
-  //   newDate.setDate(newDate.getDate() - 1);
-  //   setCurrentDate(newDate);
-  // };
+  const nextWeek = (start, end) => {
+    const newStartDate = add({ days: 7 }, start);
+    const newEndDate = add({ days: 7 }, end);
+    setStartWeekDay(newStartDate);
+    setEndWeekDay(newEndDate);
+    const formatedStart = format('dd/MM/yyyy', newStartDate);
+    const formatedEnd = format('dd/MM/yyyy', newEndDate);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
+  };
+
+  const prevWeek = (start, end) => {
+    const newStartDate = sub({ days: 7 }, start);
+    const newEndDate = sub({ days: 7 }, end);
+    setStartWeekDay(newStartDate);
+    setEndWeekDay(newEndDate);
+    const formatedStart = format('dd/MM/yyyy', newStartDate);
+    const formatedEnd = format('dd/MM/yyyy', newEndDate);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
+  };
 
   // const formatDates = (filteredTimesheets) => {
   //   const dates = filteredTimesheets.map((timesheet) => {
@@ -98,17 +133,6 @@ const HoursForm = () => {
   //   });
   //   return dates;
   // };
-
-  const getCurrentWeek = (todayDate) => {
-    const startofWeek = startOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
-    const endofWeek = endOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
-    const formatedStart = format('dd/MM/yyyy', startofWeek);
-    const formatedEnd = format('dd/MM/yyyy', endofWeek);
-    setWeek({
-      startDate: formatedStart,
-      endDate: formatedEnd
-    });
-  };
 
   const submitHandler = async (data) => {
     if (data) setShowModal(true);
@@ -127,19 +151,25 @@ const HoursForm = () => {
   const headers = [
     { header: 'Project Name', key: 'projectName' },
     { header: 'Role', key: 'role' },
-    { header: 'Task', key: 'task' },
-    { header: 'Worked Hours', key: 'workedHours' }
+    { header: 'Monday', key: 'monday' },
+    { header: 'Tuesday', key: 'tuesday' },
+    { header: 'Wednesday', key: 'wednesday' },
+    { header: 'Thursday', key: 'thursday' },
+    { header: 'Friday', key: 'friday' },
+    { header: 'Saturday', key: 'saturday' },
+    { header: 'Sunday', key: 'sunday' },
+    { header: 'Total', key: 'workedHours' }
   ];
 
   return (
     <section className={styles.container}>
       <h2>Worked Hours</h2>
       <div className={styles.topContainer}>
-        <Button>{'<'}</Button>
+        <Button onClick={() => prevWeek(startWeekDay, endWeekDay)}>{'<'}</Button>
         <p>
           {week?.startDate} - {week?.endDate}
         </p>
-        <Button>{'>'}</Button>
+        <Button onClick={() => nextWeek(startWeekDay, endWeekDay)}>{'>'}</Button>
       </div>
       {isLoading ? (
         <Loading />
@@ -156,7 +186,6 @@ const HoursForm = () => {
                       </th>
                     );
                   })}
-                  <th className={styles.th}>Add timesheet</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,11 +199,6 @@ const HoursForm = () => {
                           </td>
                         );
                       })}
-                      <td className={styles.td}>
-                        <Button classes="edit" _id={row.id}>
-                          +
-                        </Button>
-                      </td>
                     </tr>
                   );
                 })}
@@ -236,9 +260,6 @@ const HoursForm = () => {
             />
             <input readOnly value={add} />
           </form> */}
-          <div>
-            <Button classes="block">Add new timesheet</Button>
-          </div>
         </>
       )}
       {/* <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandler()}>
