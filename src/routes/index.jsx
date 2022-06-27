@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import Loading from 'Components/Shared/Loading';
-const RegisterForm = 'Components/Auth/registerForm';
+import RegisterForm from 'Components/Auth/RegisterForm';
 const Admins = lazy(() => import('Components/Admins/List'));
 const AdminsForm = lazy(() => import('Components/Admins/Form'));
 const SuperAdmins = lazy(() => import('Components/SuperAdmins/List'));

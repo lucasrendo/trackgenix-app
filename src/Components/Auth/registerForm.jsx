@@ -8,9 +8,9 @@ import { registerEmployee } from 'redux/auth/thunks';
 import Joi from 'joi';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
-import styles from './employee.module.css';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
+import styles from './auth.module.css';
 
 const registerValidate = Joi.object({
   firstName: Joi.string()
@@ -136,7 +136,7 @@ const RegisterForm = () => {
             <Button classes={'red'} onClick={() => history.goBack()}>
               Back
             </Button>
-            <Button>Register</Button>
+            <Button onClick={() => console.log(errors)}>Register</Button>
           </div>
         </form>
       )}

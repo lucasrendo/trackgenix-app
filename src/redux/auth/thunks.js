@@ -45,7 +45,7 @@ export const getUser = () => {
   };
 };
 
-export const register = (obj) => {
+export const registerEmployee = (obj) => {
   return async (dispatch) => {
     try {
       const requestConfig = {
