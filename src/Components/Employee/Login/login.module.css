@@ -39,14 +39,8 @@
     margin: 10px;
   }
   
-  .checkContainer{
-    display: flex;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px;
-  }
-  
   .buttonContainer{
     display: flex;
-    align-self: flex-end;
+    align-self: center;
     margin-bottom: 10px;
   }

@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -8,29 +8,37 @@ import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
-import styles from 'login.module.css';
-// import { login, getUser } from 'redux/auth/thunks'
+import styles from './login.module.css';
+import { login, getUser } from 'redux/auth/thunks';
+import { resetMessage } from 'redux/auth/actions';
 
 const loginValidations = joi.object({
-  email: joi.email().required().label('Email').messages({
-    'string.empty': `Invalid credentials`
-  }),
-  password: joi.password().required().label('Password').min(8).alphanumeric().messages({
+  email: joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required()
+    .messages({
+      'string.empty': `Invalid credentials`
+    }),
+  password: joi.string().required().label('Password').min(8).messages({
     'string.empty': `Invalid credentials`,
     'string.min': `Invalid credentials`
   })
-})
+});
 
-function Login () {
+function Login() {
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-
+  const isLoading = useSelector((state) => state.superAdmins.isLoading);
+  const message = useSelector((state) => state.superAdmins.message);
+  const [modalMessage, setModalMessage] = useState(false);
+  const error = useSelector((state) => state.superAdmins.error);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     mode: 'onBlur',
     resolver: joiResolver(loginValidations),
@@ -46,9 +54,17 @@ function Login () {
     dispatch(login(data));
   };
 
+  const closeHandler = () => {
+    setModalMessage(false);
+    dispatch(resetMessage());
+    if (!error) {
+      goBack();
+    }
+  };
+
   return (
     <section className={styles.container}>
-      <h2>Tasks</h2>
+      <h2>Log in</h2>
       {isLoading ? (
         <Loading />
       ) : (
@@ -61,7 +77,7 @@ function Login () {
             error={errors.password}
             register={register}
           />
-          <div className={styles.btnsContainer}>
+          <div className={styles.buttonContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
               Back
             </Button>
@@ -69,7 +85,7 @@ function Login () {
           </div>
         </form>
       )}
-      <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
+      <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
     </section>
