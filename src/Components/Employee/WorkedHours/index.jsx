@@ -5,15 +5,18 @@ import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
 import { getTimesheetsByEmployee } from 'redux/employee/thunks';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import { Link } from 'react-router-dom';
+import { endOfWeekWithOptions, startOfWeekWithOptions, format } from 'date-fns/esm/fp';
 
 const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
+  const todayDate = new Date();
+  const [week, setWeek] = useState({});
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
@@ -52,20 +55,8 @@ const HoursForm = () => {
 
   useEffect(() => {
     id && dispatch(getTimesheetsByEmployee(id));
+    getCurrentWeek(todayDate);
   }, []);
-
-  useEffect(() => {
-    const { one, two, three, four, five, six, seven } = number;
-    setAdd(
-      Number(one) +
-        Number(two) +
-        Number(three) +
-        Number(four) +
-        Number(five) +
-        Number(six) +
-        Number(seven)
-    );
-  }, [number]);
 
   const formatData = (filteredTimesheets) => {
     const data = filteredTimesheets.map((timesheet) => {
@@ -73,53 +64,50 @@ const HoursForm = () => {
         id: timesheet._id,
         projectName: timesheet.project?.projectName,
         role: timesheet.role,
-        monday: 'Monday Timesheet',
-        tuesday: 'Tuesday Timesheet',
-        wednesday: 'Wednesday Timesheet',
-        thursday: 'Thursday Timesheet',
-        friday: 'Friday Timesheet',
-        weekHours: 'Week hours'
+        task: timesheet.task?.description,
+        workedHours: timesheet.workedHours
       };
     });
     return data;
   };
 
-  const getTodayDate = () => {
-    let currentDate = new Date();
-    let day = currentDate.getDate().toString();
-    if (day < 10) {
-      day = '0' + day;
-    }
-    let month = currentDate.getMonth() + 1;
-    if (month < 10) {
-      month = '0' + month;
-    }
-    month = month.toString();
-    let year = currentDate.getFullYear().toString();
-    let maxValue = day + '-' + month + '-' + year;
-    return maxValue;
-  };
+  // const addDaytoDate = (date) => {
+  //   if (date <= todayDate) {
+  //     let newDate = new Date(date);
+  //     newDate.setDate(newDate.getDate() + 1);
+  //     setCurrentDate(newDate);
+  //   }
+  // };
 
-  const formatDates = (filteredTimesheets) => {
-    const dates = filteredTimesheets.map((timesheet) => {
-      let startDate = new Date(timesheet.date);
-      let day = startDate.getDate().toString();
-      if (day < 10) {
-        day = '0' + day;
-      }
-      let month = startDate.getMonth() + 1;
-      if (month < 10) {
-        month = '0' + month;
-      }
-      month = month.toString();
-      let year = startDate.getFullYear().toString();
-      let startDateValue = day + '-' + month + '-' + year;
-      return {
-        startDate: startDateValue,
-        endDate: getTodayDate()
-      };
+  // const subtractDaytoDate = (date) => {
+  //   let newDate = new Date(date);
+  //   newDate.setDate(newDate.getDate() - 1);
+  //   setCurrentDate(newDate);
+  // };
+
+  // const formatDates = (filteredTimesheets) => {
+  //   const dates = filteredTimesheets.map((timesheet) => {
+  //     let timesheetDate = new Date(timesheet.date);
+  //     startOfWeek(timesheetDate, { weekStartsOn: 1 });
+  //     endOfWeek(timesheetDate, { weekStartsOn: 1 });
+  //     console.log(startOfWeek, endOfWeek);
+  //     return {
+  //       startDate: startOfWeek,
+  //       endDate: endOfWeek
+  //     };
+  //   });
+  //   return dates;
+  // };
+
+  const getCurrentWeek = (todayDate) => {
+    const startofWeek = startOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    const endofWeek = endOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    const formatedStart = format('dd/MM/yyyy', startofWeek);
+    const formatedEnd = format('dd/MM/yyyy', endofWeek);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
     });
-    return dates;
   };
 
   const submitHandler = async (data) => {
@@ -139,25 +127,19 @@ const HoursForm = () => {
   const headers = [
     { header: 'Project Name', key: 'projectName' },
     { header: 'Role', key: 'role' },
-    { header: 'Monday', key: 'monday' },
-    { header: 'Tuesday', key: 'tuesday' },
-    { header: 'Wednesday', key: 'wednesday' },
-    { header: 'Thursday', key: 'thursday' },
-    { header: 'Friday', key: 'friday' },
-    { header: 'Saturday', key: 'saturday' },
-    { header: 'Sunday', key: 'sunday' },
-    { header: 'Total', key: 'total' }
+    { header: 'Task', key: 'task' },
+    { header: 'Worked Hours', key: 'workedHours' }
   ];
 
   return (
     <section className={styles.container}>
       <h2>Worked Hours</h2>
       <div className={styles.topContainer}>
-        <Button>Before</Button>
+        <Button>{'<'}</Button>
         <p>
-          {formatDates(timesheetsList)[0]?.startDate} - {formatDates(timesheetsList)[0]?.endDate}
+          {week?.startDate} - {week?.endDate}
         </p>
-        <Button>Next</Button>
+        <Button>{'>'}</Button>
       </div>
       {isLoading ? (
         <Loading />
@@ -174,6 +156,7 @@ const HoursForm = () => {
                       </th>
                     );
                   })}
+                  <th className={styles.th}>Add timesheet</th>
                 </tr>
               </thead>
               <tbody>
@@ -187,6 +170,11 @@ const HoursForm = () => {
                           </td>
                         );
                       })}
+                      <td className={styles.td}>
+                        <Button classes="edit" _id={row.id}>
+                          +
+                        </Button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -249,7 +237,7 @@ const HoursForm = () => {
             <input readOnly value={add} />
           </form> */}
           <div>
-            <Button classes="block">Confirm</Button>
+            <Button classes="block">Add new timesheet</Button>
           </div>
         </>
       )}
