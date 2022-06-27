@@ -56,7 +56,7 @@ export const registerEmployee = (obj) => {
         body: JSON.stringify(obj)
       };
       dispatch(registerPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, requestConfig);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, requestConfig);
       const data = await response.json();
       if (!data.error) {
         dispatch(registerSuccess(data));

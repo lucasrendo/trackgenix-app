@@ -86,13 +86,14 @@ const RegisterForm = () => {
   };
 
   const submitHandler = (data) => {
+    console.log(errors);
     dispatch(registerEmployee(data));
     dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
-      <h2>Employees</h2>
+      <h2>Register</h2>
       {isLoading ? (
         <Loading />
       ) : (
@@ -136,7 +137,7 @@ const RegisterForm = () => {
             <Button classes={'red'} onClick={() => history.goBack()}>
               Back
             </Button>
-            <Button onClick={() => console.log(errors)}>Register</Button>
+            <Button>Register</Button>
           </div>
         </form>
       )}
