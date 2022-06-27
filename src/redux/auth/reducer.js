@@ -9,7 +9,7 @@ import {
 } from './constants';
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   error: false,
   message: '',
   authenticated: undefined,

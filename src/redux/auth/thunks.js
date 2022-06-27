@@ -36,7 +36,6 @@ export const getUser = () => {
       });
       const data = await response.json();
       dispatch(getUserSuccess(data.data));
-      return data.data;
     } catch (error) {
       dispatch(getUserError(error));
     }
