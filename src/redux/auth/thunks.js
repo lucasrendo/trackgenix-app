@@ -2,6 +2,9 @@ import {
   loginPending,
   loginSuccess,
   loginError,
+  registerPending,
+  registerSuccess,
+  registerError,
   getUserPending,
   getUserSuccess,
   getUserError
@@ -38,6 +41,28 @@ export const getUser = () => {
       dispatch(getUserSuccess(data.data));
     } catch (error) {
       dispatch(getUserError(error));
+    }
+  };
+};
+
+export const register = (obj) => {
+  return async (dispatch) => {
+    try {
+      const requestConfig = {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+      };
+      dispatch(registerPending());
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, requestConfig);
+      const data = await response.json();
+      if (!data.error) {
+        dispatch(registerSuccess(data));
+      } else dispatch(registerError(data.message));
+    } catch (error) {
+      dispatch(registerError(error));
     }
   };
 };
