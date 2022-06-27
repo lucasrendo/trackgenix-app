@@ -34,7 +34,7 @@ export const getUser = () => {
     dispatch(getUserPending());
     const token = sessionStorage.getItem('token');
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}/auth/user`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/user`, {
         headers: { token }
       });
       const data = await response.json();
