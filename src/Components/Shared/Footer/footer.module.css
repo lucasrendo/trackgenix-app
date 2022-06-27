@@ -22,6 +22,26 @@
   color: #AACE9B;
 }
 
+.iconGit{
+  width: 24px;
+  border-radius: 60%;
+  margin-left: 5px;
+}
+
+.iconGit:hover{
+  background-color: #516449;
+}
+
+.iconLink{
+  width: 24px;
+  border-radius: 60%;
+  margin-left: 7px;
+}
+
+.iconLink:hover{
+  background-color: #516449;
+}
+
 .socialIcon {
   border-radius: 50%;
   background-color: #AACE9B;

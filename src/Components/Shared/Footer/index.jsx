@@ -29,7 +29,7 @@ function Footer() {
             rel="noreferrer"
           >
             <img
-              className={styles.socialIcon}
+              className={styles.iconGit}
               src={`${process.env.PUBLIC_URL}/assets/images/github.svg`}
             />
           </a>
@@ -39,7 +39,7 @@ function Footer() {
             rel="noreferrer"
           >
             <img
-              className={styles.socialIcon}
+              className={styles.iconLink}
               src={`${process.env.PUBLIC_URL}/assets/images/linkedin.svg`}
             />
           </a>
