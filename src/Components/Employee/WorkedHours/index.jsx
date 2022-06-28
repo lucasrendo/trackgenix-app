@@ -17,9 +17,9 @@ import {
   format,
   add,
   sub,
-  isWithinInterval,
   eachDayOfInterval
 } from 'date-fns/esm/fp';
+import { isWithinInterval } from 'date-fns';
 
 const HoursForm = () => {
   const id = '62b1122165165c996de858ec';
@@ -27,7 +27,7 @@ const HoursForm = () => {
   const [startWeekDay, setStartWeekDay] = useState();
   const [endWeekDay, setEndWeekDay] = useState();
   const [week, setWeek] = useState({});
-  const [timesheetsByDate, setTimesheetsByDate] = useState([]);
+  const [listData, setListData] = useState([]);
   const [daysOfWeek, setDaysofWeek] = useState([]);
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
@@ -72,23 +72,27 @@ const HoursForm = () => {
   }, []);
 
   useEffect(() => {
-    //formatData(timesheetsList);
+    formatData(timesheetsList, daysOfWeek);
   }, [week]);
 
-  const formatData = (filteredTimesheets) => {
+  const formatData = (filteredTimesheets, daysOfWeek) => {
+    const formatedWeek = formatDaysOfWeek(daysOfWeek);
     const data = filteredTimesheets.map((timesheet) => {
-      const timesheetDate = new Date(timesheet.date);
-      if (isWithinInterval(timesheetDate, { start: startWeekDay, end: endWeekDay })) {
-        return {
-          id: timesheet._id,
-          projectName: timesheet.project?.projectName,
-          role: timesheet.role,
-          task: timesheet.task?.description,
-          workedHours: timesheet.workedHours
-        };
-      }
+      const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
+      return {
+        id: timesheet._id,
+        projectName: timesheet.project?.projectName,
+        role: timesheet.role,
+        monday: timesheetDate === formatedWeek[0] ? timesheet.workedHours : 0,
+        tuesday: timesheetDate === formatedWeek[1] ? timesheet.workedHours : 0,
+        wednesday: timesheetDate === formatedWeek[2] ? timesheet.workedHours : 0,
+        thursday: timesheetDate === formatedWeek[3] ? timesheet.workedHours : 0,
+        friday: timesheetDate === formatedWeek[4] ? timesheet.workedHours : 0,
+        saturday: timesheetDate === formatedWeek[5] ? timesheet.workedHours : 0,
+        sunday: timesheetDate === formatedWeek[6] ? timesheet.workedHours : 0
+      };
     });
-    setTimesheetsByDate(data);
+    setListData(data);
   };
 
   const getCurrentWeek = (todayDate) => {
@@ -103,7 +107,6 @@ const HoursForm = () => {
       startDate: formatedStart,
       endDate: formatedEnd
     });
-    //formatData(timesheetsList);
   };
 
   const nextWeek = (start, end) => {
@@ -132,6 +135,13 @@ const HoursForm = () => {
       startDate: formatedStart,
       endDate: formatedEnd
     });
+  };
+
+  const formatDaysOfWeek = (days) => {
+    const formatedWeek = days.map((date) => {
+      return format('dd/MM/yyyy', date);
+    });
+    return formatedWeek;
   };
 
   const submitHandler = async (data) => {
@@ -189,7 +199,7 @@ const HoursForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {timesheetsByDate.map((row) => {
+                {listData.map((row) => {
                   return (
                     <tr key={row.id} className={styles.rows}>
                       {headers.map((header, index) => {
