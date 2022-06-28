@@ -50,7 +50,7 @@ const Routes = () => {
             <Route exact path={'/employee/projects'} component={EmployeeProjects} />
             <Route exact path={'/employee/profile'} component={EmployeeProfile} />
             <Route exact path={'/employee/workedhours'} component={EmployeeWorkedHours} />
-            <Route exact path={'/auth/login'} component={Login} />
+            <Route exact path={'/login'} component={Login} />
           </Switch>
         </Suspense>
       </Layout>
