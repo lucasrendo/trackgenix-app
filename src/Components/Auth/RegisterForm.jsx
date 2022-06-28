@@ -67,8 +67,7 @@ const RegisterForm = () => {
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      isActive: false
+      password: ''
     }
   });
 
@@ -83,63 +82,56 @@ const RegisterForm = () => {
   };
 
   const submitHandler = (data) => {
-    console.log('here');
     dispatch(registerEmployee(data));
     dispatch(setModal(true));
   };
 
   return (
     <section className={styles.container}>
-      <h2>Register</h2>
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-        <Input
-          id={'firstName'}
-          register={register}
-          text={'First Name'}
-          type={'text'}
-          error={errors.firstName}
-        />
-        <Input
-          id={'lastName'}
-          text={'Last Name'}
-          type={'text'}
-          register={register}
-          error={errors.lastName}
-        />
-        <Input
-          id={'email'}
-          text={'Email'}
-          type={'email'}
-          register={register}
-          error={errors.email}
-        />
-        <Input
-          id={'password'}
-          text={'Password'}
-          type={'password'}
-          register={register}
-          error={errors.password}
-        />
-        <Input
-          id={'isActive'}
-          type={'checkbox'}
-          text={'Is Active?'}
-          register={register}
-          error={errors.isActive}
-        />
+        <div className={styles.inputsContainer}>
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
+          <Input
+            id={'lastName'}
+            text={'Last Name'}
+            type={'text'}
+            register={register}
+            error={errors.lastName}
+          />
+          <Input
+            id={'email'}
+            text={'Email'}
+            type={'email'}
+            register={register}
+            error={errors.email}
+          />
+          <Input
+            id={'password'}
+            text={'Password'}
+            type={'password'}
+            register={register}
+            error={errors.password}
+          />
+        </div>
         <div className={styles.btnsContainer}>
+          <Button>CREATE ACCOUNT</Button>
           <Button classes={'red'} onClick={() => history.goBack()}>
-            Back
+            Cancel
           </Button>
-          <Button>Register</Button>
+          <p className={styles.text}>
+            Already have an account?{' '}
+            <Link to="/login" className={styles.link}>
+              Log In
+            </Link>
+          </p>
         </div>
       </form>
-      <p>
-        Already have an account?{' '}
-        <Link to="/login" className={styles.link}>
-          Log In
-        </Link>
-      </p>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
