@@ -9,7 +9,7 @@ import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
-import { login, getUser } from 'redux/auth/thunks';
+import { login } from 'redux/auth/thunks';
 import { resetMessage } from 'redux/auth/actions';
 
 const loginValidations = joi.object({
@@ -92,7 +92,7 @@ function Login() {
         <h2>{message}</h2>
       </Modal>
       <div>
-        Do you not have an account? <a href="/">Sign up</a>
+        Do you not have an account? <a href="/register">Sign up</a>
       </div>
     </section>
   );
