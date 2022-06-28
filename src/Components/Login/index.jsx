@@ -59,7 +59,9 @@ function Login() {
     setModalMessage(false);
     dispatch(resetMessage());
     if (!error) {
-      goBack();
+      {
+        goBack();
+      }
     }
   };
 
