@@ -67,7 +67,8 @@ const RegisterForm = () => {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      isActive: true
     }
   });
 
