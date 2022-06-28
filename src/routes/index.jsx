@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import Loading from 'Components/Shared/Loading';
+import RegisterForm from 'Components/Auth/RegisterForm';
 const Admins = lazy(() => import('Components/Admins/List'));
 const AdminsForm = lazy(() => import('Components/Admins/Form'));
 const SuperAdmins = lazy(() => import('Components/SuperAdmins/List'));
@@ -27,6 +28,7 @@ const Routes = () => {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={'/'} component={Home} />
+            <Route exact path={'/register'} component={RegisterForm} />
             <Route exact path={'/admins'} component={Admins} />
             <Route exact path={'/admins/form'} component={AdminsForm} />
             <Route exact path={'/admins/form/:id'} component={AdminsForm} />
