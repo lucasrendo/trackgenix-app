@@ -11,6 +11,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
 import { login, getUser } from 'redux/auth/thunks';
 import { resetMessage } from 'redux/auth/actions';
+import { getEmployees } from 'redux/employees/thunks';
 
 const loginValidations = joi.object({
   email: joi
@@ -18,11 +19,11 @@ const loginValidations = joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required()
     .messages({
-      'string.empty': `Invalid credentials`
+      'string.empty': `Invalid email`
     }),
   password: joi.string().required().label('Password').min(8).messages({
-    'string.empty': `Invalid credentials`,
-    'string.min': `Invalid credentials`
+    'string.empty': `Invalid password`,
+    'string.min': `Invalid password`
   })
 });
 
@@ -48,9 +49,15 @@ function Login() {
     }
   });
 
+  useEffect(() => {
+    dispatch(getEmployees());
+  }, []);
+
   useEffect(() => reset(), []);
 
   const submitHandler = (data) => {
+    console.log(data);
+    dispatch(getUser());
     dispatch(login(data));
   };
 
@@ -64,7 +71,7 @@ function Login() {
 
   return (
     <section className={styles.container}>
-      <h2>Log in</h2>
+      <h2>Log in to Trackgenix</h2>
       {isLoading ? (
         <Loading />
       ) : (
