@@ -9,7 +9,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_ERROR,
   RESET_MESSAGE,
-  SHOW_MODAL
+  SET_MODAL
 } from './constants';
 
 const initialState = {
@@ -65,29 +65,27 @@ export const authReducer = (state = initialState, action) => {
     case REGISTER_PENDING:
       return {
         ...state,
-        isLoading: true
+        message: 'Loading...'
       };
     case REGISTER_SUCCESS:
       return {
         ...state,
-        isLoading: false,
-        authenticated: action.payload,
+        authenticated: action.payload.data,
         error: false,
-        message: `Successful register!`
+        message: action.payload.message
       };
     case REGISTER_ERROR:
       return {
         ...state,
         error: true,
-        message: action.payload,
-        isLoading: false
+        message: action.payload
       };
     case RESET_MESSAGE:
       return {
         ...state,
         message: ''
       };
-    case SHOW_MODAL:
+    case SET_MODAL:
       return {
         ...state,
         showModal: action.payload

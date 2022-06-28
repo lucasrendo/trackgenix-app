@@ -6,6 +6,23 @@
   align-items: center;
 }
 
+.container p {
+  margin: 10px;
+  color: #373867
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link:visited {
+  color: inherit
+}
+
+.link:hover {
+  color: #4d51c1;
+}
+
 .form {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -7,7 +7,6 @@ import { resetMessage, setModal } from 'redux/auth/actions';
 import { registerEmployee } from 'redux/auth/thunks';
 import Joi from 'joi';
 import Modal from 'Components/Shared/Modal/Modal';
-import Loading from 'Components/Shared/Loading';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './auth.module.css';
@@ -53,10 +52,9 @@ const registerValidate = Joi.object({
 const RegisterForm = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.employees.isLoading);
-  const error = useSelector((state) => state.employees.error);
-  const message = useSelector((state) => state.employees.message);
-  const showModal = useSelector((state) => state.tasks.showModal);
+  const error = useSelector((state) => state.auth.error);
+  const message = useSelector((state) => state.auth.message);
+  const showModal = useSelector((state) => state.auth.showModal);
   const {
     handleSubmit,
     register,
@@ -70,7 +68,6 @@ const RegisterForm = () => {
       lastName: '',
       email: '',
       password: '',
-      assignedProjects: [],
       isActive: false
     }
   });
@@ -81,12 +78,12 @@ const RegisterForm = () => {
     dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
-      history.push(`${process.env.REACT_APP_API_URL}/login`);
+      history.push('/login');
     }
   };
 
   const submitHandler = (data) => {
-    console.log(errors);
+    console.log('here');
     dispatch(registerEmployee(data));
     dispatch(setModal(true));
   };
@@ -94,53 +91,55 @@ const RegisterForm = () => {
   return (
     <section className={styles.container}>
       <h2>Register</h2>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-          <Input
-            id={'firstName'}
-            register={register}
-            text={'First Name'}
-            type={'text'}
-            error={errors.firstName}
-          />
-          <Input
-            id={'lastName'}
-            text={'Last Name'}
-            type={'text'}
-            register={register}
-            error={errors.lastName}
-          />
-          <Input
-            id={'email'}
-            text={'Email'}
-            type={'email'}
-            register={register}
-            error={errors.email}
-          />
-          <Input
-            id={'password'}
-            text={'Password'}
-            type={'password'}
-            register={register}
-            error={errors.password}
-          />
-          <Input
-            id={'isActive'}
-            type={'checkbox'}
-            text={'Is Active?'}
-            register={register}
-            error={errors.isActive}
-          />
-          <div className={styles.btnsContainer}>
-            <Button classes={'red'} onClick={() => history.goBack()}>
-              Back
-            </Button>
-            <Button>Register</Button>
-          </div>
-        </form>
-      )}
+      <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
+        <Input
+          id={'firstName'}
+          register={register}
+          text={'First Name'}
+          type={'text'}
+          error={errors.firstName}
+        />
+        <Input
+          id={'lastName'}
+          text={'Last Name'}
+          type={'text'}
+          register={register}
+          error={errors.lastName}
+        />
+        <Input
+          id={'email'}
+          text={'Email'}
+          type={'email'}
+          register={register}
+          error={errors.email}
+        />
+        <Input
+          id={'password'}
+          text={'Password'}
+          type={'password'}
+          register={register}
+          error={errors.password}
+        />
+        <Input
+          id={'isActive'}
+          type={'checkbox'}
+          text={'Is Active?'}
+          register={register}
+          error={errors.isActive}
+        />
+        <div className={styles.btnsContainer}>
+          <Button classes={'red'} onClick={() => history.goBack()}>
+            Back
+          </Button>
+          <Button>Register</Button>
+        </div>
+      </form>
+      <p>
+        Already have an account?{' '}
+        <Link to="/login" className={styles.link}>
+          Log In
+        </Link>
+      </p>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
