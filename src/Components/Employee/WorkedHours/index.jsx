@@ -17,7 +17,8 @@ import {
   format,
   add,
   sub,
-  isWithinInterval
+  isWithinInterval,
+  eachDayOfInterval
 } from 'date-fns/esm/fp';
 
 const HoursForm = () => {
@@ -26,6 +27,8 @@ const HoursForm = () => {
   const [startWeekDay, setStartWeekDay] = useState();
   const [endWeekDay, setEndWeekDay] = useState();
   const [week, setWeek] = useState({});
+  const [timesheetsByDate, setTimesheetsByDate] = useState([]);
+  const [daysOfWeek, setDaysofWeek] = useState([]);
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
@@ -62,23 +65,30 @@ const HoursForm = () => {
   });
 
   useEffect(() => {
-    id && dispatch(getTimesheetsByEmployee(id));
-    getCurrentWeek(todayDate);
+    if (id) {
+      dispatch(getTimesheetsByEmployee(id));
+      getCurrentWeek(todayDate);
+    }
   }, []);
 
-  useEffect(() => {}, [week]);
+  useEffect(() => {
+    //formatData(timesheetsList);
+  }, [week]);
 
   const formatData = (filteredTimesheets) => {
     const data = filteredTimesheets.map((timesheet) => {
-      return {
-        id: timesheet._id,
-        projectName: timesheet.project?.projectName,
-        role: timesheet.role,
-        task: timesheet.task?.description,
-        workedHours: timesheet.workedHours
-      };
+      const timesheetDate = new Date(timesheet.date);
+      if (isWithinInterval(timesheetDate, { start: startWeekDay, end: endWeekDay })) {
+        return {
+          id: timesheet._id,
+          projectName: timesheet.project?.projectName,
+          role: timesheet.role,
+          task: timesheet.task?.description,
+          workedHours: timesheet.workedHours
+        };
+      }
     });
-    return data;
+    setTimesheetsByDate(data);
   };
 
   const getCurrentWeek = (todayDate) => {
@@ -86,12 +96,14 @@ const HoursForm = () => {
     const endofWeek = endOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
     setStartWeekDay(startofWeek);
     setEndWeekDay(endofWeek);
+    setDaysofWeek(eachDayOfInterval({ start: startofWeek, end: endofWeek }));
     const formatedStart = format('dd/MM/yyyy', startofWeek);
     const formatedEnd = format('dd/MM/yyyy', endofWeek);
     setWeek({
       startDate: formatedStart,
       endDate: formatedEnd
     });
+    //formatData(timesheetsList);
   };
 
   const nextWeek = (start, end) => {
@@ -99,6 +111,7 @@ const HoursForm = () => {
     const newEndDate = add({ days: 7 }, end);
     setStartWeekDay(newStartDate);
     setEndWeekDay(newEndDate);
+    setDaysofWeek(eachDayOfInterval({ start: newStartDate, end: newEndDate }));
     const formatedStart = format('dd/MM/yyyy', newStartDate);
     const formatedEnd = format('dd/MM/yyyy', newEndDate);
     setWeek({
@@ -112,6 +125,7 @@ const HoursForm = () => {
     const newEndDate = sub({ days: 7 }, end);
     setStartWeekDay(newStartDate);
     setEndWeekDay(newEndDate);
+    setDaysofWeek(eachDayOfInterval({ start: newStartDate, end: newEndDate }));
     const formatedStart = format('dd/MM/yyyy', newStartDate);
     const formatedEnd = format('dd/MM/yyyy', newEndDate);
     setWeek({
@@ -119,20 +133,6 @@ const HoursForm = () => {
       endDate: formatedEnd
     });
   };
-
-  // const formatDates = (filteredTimesheets) => {
-  //   const dates = filteredTimesheets.map((timesheet) => {
-  //     let timesheetDate = new Date(timesheet.date);
-  //     startOfWeek(timesheetDate, { weekStartsOn: 1 });
-  //     endOfWeek(timesheetDate, { weekStartsOn: 1 });
-  //     console.log(startOfWeek, endOfWeek);
-  //     return {
-  //       startDate: startOfWeek,
-  //       endDate: endOfWeek
-  //     };
-  //   });
-  //   return dates;
-  // };
 
   const submitHandler = async (data) => {
     if (data) setShowModal(true);
@@ -189,7 +189,7 @@ const HoursForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {formatData(timesheetsList).map((row) => {
+                {timesheetsByDate.map((row) => {
                   return (
                     <tr key={row.id} className={styles.rows}>
                       {headers.map((header, index) => {
