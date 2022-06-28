@@ -11,7 +11,6 @@ import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
 import { login, getUser } from 'redux/auth/thunks';
 import { resetMessage } from 'redux/auth/actions';
-import { getEmployees } from 'redux/employees/thunks';
 
 const loginValidations = joi.object({
   email: joi
@@ -30,10 +29,10 @@ const loginValidations = joi.object({
 function Login() {
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.superAdmins.isLoading);
-  const message = useSelector((state) => state.superAdmins.message);
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const message = useSelector((state) => state.auth.message);
   const [modalMessage, setModalMessage] = useState(false);
-  const error = useSelector((state) => state.superAdmins.error);
+  const error = useSelector((state) => state.auth.error);
 
   const {
     register,
@@ -49,16 +48,11 @@ function Login() {
     }
   });
 
-  useEffect(() => {
-    dispatch(getEmployees());
-  }, []);
-
   useEffect(() => reset(), []);
 
   const submitHandler = (data) => {
-    console.log(data);
-    dispatch(getUser());
     dispatch(login(data));
+    setModalMessage(true);
   };
 
   const closeHandler = () => {
@@ -95,6 +89,9 @@ function Login() {
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
+      <div>
+        Do you not have an account? <a>Sign up</a>
+      </div>
     </section>
   );
 }
