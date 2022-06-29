@@ -1,6 +1,6 @@
 import joi from 'joi';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -9,7 +9,7 @@ import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
-import { login, getUser } from 'redux/auth/thunks';
+import { login } from 'redux/auth/thunks';
 import { resetMessage } from 'redux/auth/actions';
 
 const loginValidations = joi.object({
@@ -33,6 +33,7 @@ function Login() {
   const message = useSelector((state) => state.auth.message);
   const [modalMessage, setModalMessage] = useState(false);
   const error = useSelector((state) => state.auth.error);
+  const history = useHistory();
 
   const {
     register,
@@ -59,7 +60,9 @@ function Login() {
     setModalMessage(false);
     dispatch(resetMessage());
     if (!error) {
-      goBack();
+      {
+        history.push('/employee');
+      }
     }
   };
 
@@ -89,9 +92,12 @@ function Login() {
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
-      <div>
-        Do you not have an account? <a>Sign up</a>
-      </div>
+      <p className={styles.text}>
+        Do you not have an account?{' '}
+        <Link to="/register" className={styles.link}>
+          Sign up
+        </Link>
+      </p>
     </section>
   );
 }

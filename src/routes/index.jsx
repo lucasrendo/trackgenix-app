@@ -20,7 +20,7 @@ const EmployeeProjects = lazy(() => import('Components/Employee/MyProjects'));
 const EmployeeProfile = lazy(() => import('Components/Employee/UserProfile/index'));
 const EmployeeHome = lazy(() => import('Components/Employee/Home'));
 const EmployeeWorkedHours = lazy(() => import('Components/Employee/WorkedHours'));
-const Login = lazy(() => import('Components/Login'));
+const Login = lazy(() => import('Components/Auth/Login'));
 
 const Routes = () => {
   return (
