@@ -1,24 +1,22 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Loading from 'Components/Shared/Loading';
-const EmployeeWorkedHours = lazy(() => import('Components/Employee/WorkedHours'));
-const EmployeeProfile = lazy(() => import('Components/Employee/UserProfile/index'));
-const EmployeeHome = lazy(() => import('Components/Employee/Home'));
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Home from 'Components/Employee/Home';
+import Profile from 'Components/Employee/UserProfile';
+import WorkedHours from 'Components/Employee/WorkedHours';
+import Projects from 'Components/Employee/MyProjects';
 
-const employeeRoutes = () => {
+const Employee = () => {
   return (
-    <Router>
-      <Suspense fallback={<Loading />}>
-        <Switch>
-          <Route exact path={'/employee/home'} component={EmployeeHome} />
-          <Route exact path={'/employee/:id'} />
-          <Route exact path={'/employee/projects/:id'} />
-          <Route exact path={'/employee/profile/:id'} component={EmployeeProfile} />
-          <Route exact path={'/employee/workedhours/:id'} component={EmployeeWorkedHours} />
-        </Switch>
-      </Suspense>
-    </Router>
+    <Switch>
+      <Route path="/employee/home" component={Home} />
+      <Route exact path="/employee">
+        <Redirect to="/employee/home" />
+      </Route>
+      <Route path="/employee/worked-hours" component={WorkedHours} />
+      <Route path="/employee/projects" component={Projects} />
+      <Route path="/employee/profile" component={Profile} />
+    </Switch>
   );
 };
 
-export default employeeRoutes;
+export default Employee;
