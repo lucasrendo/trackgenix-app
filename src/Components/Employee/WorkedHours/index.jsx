@@ -28,7 +28,15 @@ const HoursForm = () => {
   const [endWeekDay, setEndWeekDay] = useState();
   const [week, setWeek] = useState({});
   const [listData, setListData] = useState([]);
+  const [daysTimesheetData, setDaysTimesheetData] = useState([]);
   const [daysOfWeek, setDaysofWeek] = useState([]);
+  const [mondayTimesheet, setMondayTimesheet] = useState({});
+  const [tuesdayTimesheet, setTuesdayTimesheet] = useState({});
+  const [wednesdayTimesheet, setWednesdayTimesheet] = useState({});
+  const [thursdayTimesheet, setThursdayTimesheet] = useState({});
+  const [fridayTimesheet, setFridayTimesheet] = useState({});
+  const [saturdayTimesheet, setSaturdayTimesheet] = useState({});
+  const [sundayTimesheet, setSundayTimesheet] = useState({});
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
@@ -72,17 +80,32 @@ const HoursForm = () => {
   }, []);
 
   useEffect(() => {
-    formatData(timesheetsList, daysOfWeek);
+    formatListData(timesheetsList);
+    formatWeekTimesheets(timesheetsList, daysOfWeek);
   }, [week]);
 
-  const formatData = (filteredTimesheets, daysOfWeek) => {
+  const formatListData = (filteredTimesheets) => {
+    let id = 0;
+    let projects = [];
+    const data = filteredTimesheets.map((timesheet) => {
+      id++;
+      if (!projects.includes(timesheet.project)) {
+        projects.push(timesheet.project);
+        return {
+          id: id,
+          projectName: timesheet.project?.projectName,
+          role: timesheet.role
+        };
+      }
+    });
+    setListData(data);
+  };
+
+  const formatWeekTimesheets = (filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
     const data = filteredTimesheets.map((timesheet) => {
       const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
       return {
-        id: timesheet._id,
-        projectName: timesheet.project?.projectName,
-        role: timesheet.role,
         monday: timesheetDate === formatedWeek[0] ? timesheet.workedHours : 0,
         tuesday: timesheetDate === formatedWeek[1] ? timesheet.workedHours : 0,
         wednesday: timesheetDate === formatedWeek[2] ? timesheet.workedHours : 0,
@@ -92,7 +115,7 @@ const HoursForm = () => {
         sunday: timesheetDate === formatedWeek[6] ? timesheet.workedHours : 0
       };
     });
-    setListData(data);
+    setDaysTimesheetData(data);
   };
 
   const getCurrentWeek = (todayDate) => {
@@ -160,15 +183,17 @@ const HoursForm = () => {
 
   const headers = [
     { header: 'Project Name', key: 'projectName' },
-    { header: 'Role', key: 'role' },
+    { header: 'Role', key: 'role' }
+  ];
+
+  const daysHeaders = [
     { header: 'Monday', key: 'monday' },
     { header: 'Tuesday', key: 'tuesday' },
     { header: 'Wednesday', key: 'wednesday' },
     { header: 'Thursday', key: 'thursday' },
     { header: 'Friday', key: 'friday' },
     { header: 'Saturday', key: 'saturday' },
-    { header: 'Sunday', key: 'sunday' },
-    { header: 'Total', key: 'workedHours' }
+    { header: 'Sunday', key: 'sunday' }
   ];
 
   return (
@@ -196,6 +221,14 @@ const HoursForm = () => {
                       </th>
                     );
                   })}
+                  {daysHeaders.map((header, index) => {
+                    return (
+                      <th key={index} className={styles.th}>
+                        {header.header}
+                      </th>
+                    );
+                  })}
+                  <th className={styles.th}>Total hours</th>
                 </tr>
               </thead>
               <tbody>
@@ -209,6 +242,14 @@ const HoursForm = () => {
                           </td>
                         );
                       })}
+                      {daysHeaders.map((header, index) => {
+                        return (
+                          <td key={index} className={styles.td}>
+                            {row[header.key]}
+                          </td>
+                        );
+                      })}
+                      <td className={styles.td}>0</td>
                     </tr>
                   );
                 })}
