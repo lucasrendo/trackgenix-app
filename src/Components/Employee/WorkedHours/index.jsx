@@ -28,15 +28,7 @@ const HoursForm = () => {
   const [endWeekDay, setEndWeekDay] = useState();
   const [week, setWeek] = useState({});
   const [listData, setListData] = useState([]);
-  const [daysTimesheetData, setDaysTimesheetData] = useState([]);
   const [daysOfWeek, setDaysofWeek] = useState([]);
-  const [mondayTimesheet, setMondayTimesheet] = useState({});
-  const [tuesdayTimesheet, setTuesdayTimesheet] = useState({});
-  const [wednesdayTimesheet, setWednesdayTimesheet] = useState({});
-  const [thursdayTimesheet, setThursdayTimesheet] = useState({});
-  const [fridayTimesheet, setFridayTimesheet] = useState({});
-  const [saturdayTimesheet, setSaturdayTimesheet] = useState({});
-  const [sundayTimesheet, setSundayTimesheet] = useState({});
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
@@ -80,42 +72,37 @@ const HoursForm = () => {
   }, []);
 
   useEffect(() => {
-    formatListData(timesheetsList);
-    formatWeekTimesheets(timesheetsList, daysOfWeek);
+    formatListData(timesheetsList, daysOfWeek);
   }, [week]);
 
-  const formatListData = (filteredTimesheets) => {
+  const formatListData = (filteredTimesheets, daysOfWeek) => {
+    const formatedWeek = formatDaysOfWeek(daysOfWeek);
     let id = 0;
     let projects = [];
-    const data = filteredTimesheets.map((timesheet) => {
+    let list = [];
+    filteredTimesheets.forEach((timesheet, index) => {
       id++;
+      const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
       if (!projects.includes(timesheet.project)) {
         projects.push(timesheet.project);
-        return {
+        list.push({
           id: id,
-          projectName: timesheet.project?.projectName,
-          role: timesheet.role
-        };
+          projectName: timesheet.project
+            ? timesheet.project.projectName
+            : "This project doesn't exist any more",
+          role: timesheet.role,
+          monday: timesheetDate === formatedWeek[0] ? timesheet.workedHours : 0,
+          tuesday: timesheetDate === formatedWeek[1] ? timesheet.workedHours : 0,
+          wednesday: timesheetDate === formatedWeek[2] ? timesheet.workedHours : 0,
+          thursday: timesheetDate === formatedWeek[3] ? timesheet.workedHours : 0,
+          friday: timesheetDate === formatedWeek[4] ? timesheet.workedHours : 0,
+          saturday: timesheetDate === formatedWeek[5] ? timesheet.workedHours : 0,
+          sunday: timesheetDate === formatedWeek[6] ? timesheet.workedHours : 0
+        });
       }
     });
-    setListData(data);
-  };
-
-  const formatWeekTimesheets = (filteredTimesheets, daysOfWeek) => {
-    const formatedWeek = formatDaysOfWeek(daysOfWeek);
-    const data = filteredTimesheets.map((timesheet) => {
-      const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
-      return {
-        monday: timesheetDate === formatedWeek[0] ? timesheet.workedHours : 0,
-        tuesday: timesheetDate === formatedWeek[1] ? timesheet.workedHours : 0,
-        wednesday: timesheetDate === formatedWeek[2] ? timesheet.workedHours : 0,
-        thursday: timesheetDate === formatedWeek[3] ? timesheet.workedHours : 0,
-        friday: timesheetDate === formatedWeek[4] ? timesheet.workedHours : 0,
-        saturday: timesheetDate === formatedWeek[5] ? timesheet.workedHours : 0,
-        sunday: timesheetDate === formatedWeek[6] ? timesheet.workedHours : 0
-      };
-    });
-    setDaysTimesheetData(data);
+    console.log(list);
+    setListData(list);
   };
 
   const getCurrentWeek = (todayDate) => {
@@ -183,10 +170,7 @@ const HoursForm = () => {
 
   const headers = [
     { header: 'Project Name', key: 'projectName' },
-    { header: 'Role', key: 'role' }
-  ];
-
-  const daysHeaders = [
+    { header: 'Role', key: 'role' },
     { header: 'Monday', key: 'monday' },
     { header: 'Tuesday', key: 'tuesday' },
     { header: 'Wednesday', key: 'wednesday' },
@@ -221,13 +205,6 @@ const HoursForm = () => {
                       </th>
                     );
                   })}
-                  {daysHeaders.map((header, index) => {
-                    return (
-                      <th key={index} className={styles.th}>
-                        {header.header}
-                      </th>
-                    );
-                  })}
                   <th className={styles.th}>Total hours</th>
                 </tr>
               </thead>
@@ -236,13 +213,6 @@ const HoursForm = () => {
                   return (
                     <tr key={row.id} className={styles.rows}>
                       {headers.map((header, index) => {
-                        return (
-                          <td key={index} className={styles.td}>
-                            {row[header.key]}
-                          </td>
-                        );
-                      })}
-                      {daysHeaders.map((header, index) => {
                         return (
                           <td key={index} className={styles.td}>
                             {row[header.key]}
