@@ -5,6 +5,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
 import { getTimesheetsByEmployee } from 'redux/employee/thunks';
+import { getSingleEmployee } from 'redux/employees/thunks';
 import { set, useForm } from 'react-hook-form';
 import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
@@ -33,6 +34,7 @@ const HoursForm = () => {
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const isLoading = useSelector((state) => state.timesheet.isLoading);
+  const employee = useSelector((state) => state.employees.employee);
   const message = useSelector((state) => state.employees.message);
   const [number, setNumber] = useState({
     one: '',
@@ -66,43 +68,50 @@ const HoursForm = () => {
 
   useEffect(() => {
     if (id) {
+      dispatch(getSingleEmployee(id));
       dispatch(getTimesheetsByEmployee(id));
       getCurrentWeek(todayDate);
     }
   }, []);
 
   useEffect(() => {
-    formatListData(timesheetsList, daysOfWeek);
+    formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
   }, [week]);
 
-  const formatListData = (filteredTimesheets, daysOfWeek) => {
+  const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
-    let id = 0;
-    let projects = [];
-    let list = [];
-    filteredTimesheets.forEach((timesheet, index) => {
-      id++;
-      const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
-      if (!projects.includes(timesheet.project)) {
-        projects.push(timesheet.project);
-        list.push({
-          id: id,
-          projectName: timesheet.project
-            ? timesheet.project.projectName
-            : "This project doesn't exist any more",
-          role: timesheet.role,
-          monday: timesheetDate === formatedWeek[0] ? timesheet.workedHours : 0,
-          tuesday: timesheetDate === formatedWeek[1] ? timesheet.workedHours : 0,
-          wednesday: timesheetDate === formatedWeek[2] ? timesheet.workedHours : 0,
-          thursday: timesheetDate === formatedWeek[3] ? timesheet.workedHours : 0,
-          friday: timesheetDate === formatedWeek[4] ? timesheet.workedHours : 0,
-          saturday: timesheetDate === formatedWeek[5] ? timesheet.workedHours : 0,
-          sunday: timesheetDate === formatedWeek[6] ? timesheet.workedHours : 0
-        });
+    const dataList = projects.map((project) => {
+      let role = '';
+      for (let i = 0; i < project.employees.length; i++) {
+        if (project.employees[i].employeeId === id) {
+          role = project.employees[i].role;
+        }
       }
+      let weekTimesheets = [0, 0, 0, 0, 0, 0, 0];
+      filteredTimesheets.forEach((timesheet) => {
+        if (timesheet.project?._id === project._id) {
+          const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
+          for (let i = 0; i < formatedWeek.length; i++) {
+            if (timesheetDate === formatedWeek[i]) {
+              weekTimesheets[i] = timesheet.workedHours;
+            }
+          }
+        }
+      });
+      return {
+        id: project._id,
+        projectName: project.projectName,
+        role: role,
+        monday: weekTimesheets[0],
+        tuesday: weekTimesheets[1],
+        wednesday: weekTimesheets[2],
+        thursday: weekTimesheets[3],
+        friday: weekTimesheets[4],
+        saturday: weekTimesheets[5],
+        sunday: weekTimesheets[6]
+      };
     });
-    console.log(list);
-    setListData(list);
+    setListData(dataList);
   };
 
   const getCurrentWeek = (todayDate) => {
