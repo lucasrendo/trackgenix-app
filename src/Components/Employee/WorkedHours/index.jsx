@@ -81,23 +81,8 @@ const HoursForm = () => {
   const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
     const dataList = projects.map((project) => {
-      let role = '';
-      for (let i = 0; i < project.employees.length; i++) {
-        if (project.employees[i].employeeId === id) {
-          role = project.employees[i].role;
-        }
-      }
-      let weekTimesheets = [0, 0, 0, 0, 0, 0, 0];
-      filteredTimesheets.forEach((timesheet) => {
-        if (timesheet.project?._id === project._id) {
-          const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
-          for (let i = 0; i < formatedWeek.length; i++) {
-            if (timesheetDate === formatedWeek[i]) {
-              weekTimesheets[i] = timesheet.workedHours;
-            }
-          }
-        }
-      });
+      const role = getRole(project);
+      const weekTimesheets = getWeekTimesheets(filteredTimesheets, project, formatedWeek);
       return {
         id: project._id,
         projectName: project.projectName,
@@ -108,10 +93,45 @@ const HoursForm = () => {
         thursday: weekTimesheets[3],
         friday: weekTimesheets[4],
         saturday: weekTimesheets[5],
-        sunday: weekTimesheets[6]
+        sunday: weekTimesheets[6],
+        totalHours: weekTotalHours(weekTimesheets)
       };
     });
     setListData(dataList);
+  };
+
+  const getWeekTimesheets = (filteredTimesheets, project, formatedWeek) => {
+    let weekTimesheetsWorkedHours = [0, 0, 0, 0, 0, 0, 0];
+    filteredTimesheets.forEach((timesheet) => {
+      if (timesheet.project?._id === project._id) {
+        const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
+        for (let i = 0; i < formatedWeek.length; i++) {
+          if (timesheetDate === formatedWeek[i]) {
+            weekTimesheetsWorkedHours[i] = timesheet.workedHours;
+          }
+        }
+      }
+    });
+    return weekTimesheetsWorkedHours;
+  };
+
+  const getRole = (project) => {
+    let role = '';
+    for (let i = 0; i < project.employees.length; i++) {
+      if (project.employees[i].employeeId === id) {
+        role = project.employees[i].role;
+      }
+    }
+    return role;
+  };
+
+  const weekTotalHours = (weekTimesheets) => {
+    const initialValue = 0;
+    const sumWithInitial = weekTimesheets.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+      initialValue
+    );
+    return sumWithInitial;
   };
 
   const getCurrentWeek = (todayDate) => {
@@ -186,7 +206,8 @@ const HoursForm = () => {
     { header: 'Thursday', key: 'thursday' },
     { header: 'Friday', key: 'friday' },
     { header: 'Saturday', key: 'saturday' },
-    { header: 'Sunday', key: 'sunday' }
+    { header: 'Sunday', key: 'sunday' },
+    { header: 'Total Hours', key: 'totalHours' }
   ];
 
   return (
@@ -214,7 +235,6 @@ const HoursForm = () => {
                       </th>
                     );
                   })}
-                  <th className={styles.th}>Total hours</th>
                 </tr>
               </thead>
               <tbody>
@@ -228,7 +248,6 @@ const HoursForm = () => {
                           </td>
                         );
                       })}
-                      <td className={styles.td}>0</td>
                     </tr>
                   );
                 })}
