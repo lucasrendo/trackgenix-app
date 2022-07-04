@@ -30,41 +30,13 @@ const HoursForm = () => {
   const [week, setWeek] = useState({});
   const [listData, setListData] = useState([]);
   const [daysOfWeek, setDaysofWeek] = useState([]);
+  const [totalHours, setTotalHours] = useState(0);
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const isLoading = useSelector((state) => state.timesheet.isLoading);
   const employee = useSelector((state) => state.employees.employee);
   const message = useSelector((state) => state.employees.message);
-  const [number, setNumber] = useState({
-    one: '',
-    two: '',
-    three: '',
-    four: '',
-    five: '',
-    six: '',
-    seven: ''
-  });
-  const validationSchema = Joi.object({
-    monday: Joi.number().min(0).max(12).required(),
-    tuesday: Joi.number().min(0).max(12).required(),
-    wednesday: Joi.number().min(0).max(12).required(),
-    thursday: Joi.number().min(0).max(12).required(),
-    friday: Joi.number().min(0).max(12).required(),
-    saturday: Joi.number().min(0).max(12).required(),
-    sunday: Joi.number().min(0).max(12).required(),
-    weekend: Joi.date().required().max(Date.now())
-  });
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm({
-    mode: 'onBlur',
-    resolver: joiResolver(validationSchema),
-    defaultValues: { one: '', two: '', three: '', four: '', five: '', six: '', seven: '' }
-  });
 
   useEffect(() => {
     if (id) {
@@ -80,9 +52,12 @@ const HoursForm = () => {
 
   const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
+    let hoursForeachProject = [];
     const dataList = projects.map((project) => {
       const role = getRole(project);
       const weekTimesheets = getWeekTimesheets(filteredTimesheets, project, formatedWeek);
+      const totalHours = weekTotalHours(weekTimesheets);
+      hoursForeachProject.push(totalHours);
       return {
         id: project._id,
         projectName: project.projectName,
@@ -94,10 +69,11 @@ const HoursForm = () => {
         friday: weekTimesheets[4],
         saturday: weekTimesheets[5],
         sunday: weekTimesheets[6],
-        totalHours: weekTotalHours(weekTimesheets)
+        totalHours: totalHours
       };
     });
     setListData(dataList);
+    setTotalHours(weekTotalHours(hoursForeachProject));
   };
 
   const getWeekTimesheets = (filteredTimesheets, project, formatedWeek) => {
@@ -183,20 +159,6 @@ const HoursForm = () => {
     return formatedWeek;
   };
 
-  const submitHandler = async (data) => {
-    if (data) setShowModal(true);
-  };
-
-  const closeHandler = () => {
-    setShowModal(false);
-    dispatch(resetMessage());
-  };
-
-  const handleInput = (data) => {
-    const { name, value } = data.target;
-    setNumber({ ...number, [name]: value });
-  };
-
   const headers = [
     { header: 'Project Name', key: 'projectName' },
     { header: 'Role', key: 'role' },
@@ -254,6 +216,7 @@ const HoursForm = () => {
               </tbody>
             </table>
           </div>
+          <h2>Total: {totalHours}</h2>
           {/* <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
             <div>
               <h4>{formatData(timesheetsList)[0]?.projectName || ''}</h4>
