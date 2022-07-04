@@ -5,10 +5,9 @@ import styles from './sidebar.module.css';
 const Sidebar = ({ links, title }) => {
   return (
     <aside className={styles.aside}>
+      <p>{title}</p>
       <nav>
-        <span className={styles.shortcuts}>{title}</span>
-        <div className={styles.horizontalLine}></div>
-        <ul>
+        <ul className={styles.navList}>
           {links.map((link, index) => {
             return (
               <li key={index}>

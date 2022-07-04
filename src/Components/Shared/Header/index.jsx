@@ -11,7 +11,7 @@ function Header() {
             <Link to={'/'}>TRACKGENIX</Link>
           </h1>
         </div>
-        <ul className={styles.rutes}>
+        <ul className={styles.routes}>
           <li>
             <Link to={'/admins'}>admins</Link>
           </li>
