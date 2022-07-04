@@ -56,19 +56,19 @@ const HoursForm = () => {
     const dataList = projects.map((project) => {
       const role = getRole(project);
       const weekTimesheets = getWeekTimesheets(filteredTimesheets, project, formatedWeek);
-      const totalHours = weekTotalHours(weekTimesheets);
+      const totalHours = weekTotalHours(weekTimesheets.workedHours);
       hoursForeachProject.push(totalHours);
       return {
         id: project._id,
         projectName: project.projectName,
         role: role,
-        monday: weekTimesheets[0],
-        tuesday: weekTimesheets[1],
-        wednesday: weekTimesheets[2],
-        thursday: weekTimesheets[3],
-        friday: weekTimesheets[4],
-        saturday: weekTimesheets[5],
-        sunday: weekTimesheets[6],
+        monday: weekTimesheets.workedHours[0],
+        tuesday: weekTimesheets.workedHours[1],
+        wednesday: weekTimesheets.workedHours[2],
+        thursday: weekTimesheets.workedHours[3],
+        friday: weekTimesheets.workedHours[4],
+        saturday: weekTimesheets.workedHours[5],
+        sunday: weekTimesheets.workedHours[6],
         totalHours: totalHours
       };
     });
@@ -78,17 +78,19 @@ const HoursForm = () => {
 
   const getWeekTimesheets = (filteredTimesheets, project, formatedWeek) => {
     let weekTimesheetsWorkedHours = [0, 0, 0, 0, 0, 0, 0];
+    let weekTimesheetsId = [null, null, null, null, null, null, null];
     filteredTimesheets.forEach((timesheet) => {
       if (timesheet.project?._id === project._id) {
         const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
         for (let i = 0; i < formatedWeek.length; i++) {
           if (timesheetDate === formatedWeek[i]) {
             weekTimesheetsWorkedHours[i] = timesheet.workedHours;
+            weekTimesheetsId[i] = timesheet._id;
           }
         }
       }
     });
-    return weekTimesheetsWorkedHours;
+    return { workedHours: weekTimesheetsWorkedHours, timesheets: weekTimesheetsId };
   };
 
   const getRole = (project) => {
@@ -186,37 +188,35 @@ const HoursForm = () => {
         <Loading />
       ) : (
         <>
-          <div>
-            <table>
-              <thead>
-                <tr className={styles.headerRow}>
-                  {headers.map((header, index) => {
-                    return (
-                      <th key={index} className={styles.th}>
-                        {header.header}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {listData.map((row) => {
+          <table className={styles.table}>
+            <thead>
+              <tr className={styles.headerRow}>
+                {headers.map((header, index) => {
                   return (
-                    <tr key={row.id} className={styles.rows}>
-                      {headers.map((header, index) => {
-                        return (
-                          <td key={index} className={styles.td}>
-                            {row[header.key]}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                    <th key={index} className={styles.th}>
+                      {header.header}
+                    </th>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-          <h2>Total: {totalHours}</h2>
+              </tr>
+            </thead>
+            <tbody>
+              {listData.map((row) => {
+                return (
+                  <tr key={row.id} className={styles.rows}>
+                    {headers.map((header, index) => {
+                      return (
+                        <td key={index} className={styles.td}>
+                          {row[header.key]}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <h2 className={styles.totalText}>Total: {totalHours}</h2>
           {/* <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
             <div>
               <h4>{formatData(timesheetsList)[0]?.projectName || ''}</h4>
