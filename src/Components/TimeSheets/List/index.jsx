@@ -59,7 +59,7 @@ const TimeSheets = () => {
     <Loading />
   ) : (
     <section className={styles.container}>
-      <h2>TimeSheets</h2>
+      <h2>Timesheets</h2>
       <List
         data={formatListData(list)}
         headers={headers}
