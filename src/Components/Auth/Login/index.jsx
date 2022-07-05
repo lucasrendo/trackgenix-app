@@ -11,6 +11,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
 import { login } from 'redux/auth/thunks';
 import { resetMessage } from 'redux/auth/actions';
+import { toggleSidebar } from 'redux/global/actions';
 
 const loginValidations = joi.object({
   email: joi
@@ -60,9 +61,11 @@ function Login() {
     setModalMessage(false);
     dispatch(resetMessage());
     if (!error) {
-      {
-        history.push('/employee');
-      }
+      // Use a switch or if to change where the login redirects to
+      // depending on what entity logs in.
+      dispatch(toggleSidebar(true));
+      history.push('/employee');
+      // superAdmin does not have a sidebar. don't dispatch the toggle in that case
     }
   };
 

@@ -1,5 +1,5 @@
 .aside {
-  /* display: none; */
+  display: none;
   position: fixed;
   top: 126px;
   left: 0;
@@ -7,12 +7,6 @@
   width: max-content;
   height: 100%;
   background-color: #7A9F6B;
-}
-
-.aside a {
-  font-size: 20px;
-  color: #373867;
-  text-decoration: none;
 }
 
 .aside p {
@@ -35,18 +29,33 @@
   background-color: #373867;
 }
 
+.aside a {
+  font-size: 20px;
+  color: #373867;
+  text-decoration: none;
+}
+
 .navList {
   padding: 0;
   list-style-type: none;
 }
 
 .navList li {
-  /* max-width: 241px; */
-  /* height: 36px; */
   margin-bottom: 23px;
   padding: 10px 10px 3px;
+  border-bottom: 3px solid #373867;
+  border-radius: 2px;
   background-color: #ffffff;
-  box-shadow: 0px 3px 0px #373867;
+  transition: 100ms;
+}
+
+.navList li:hover {
+  background-color: #eaeaea;
+}
+
+.navList li:active {
+  /* outline: 3px solid #373867; */
+  box-shadow: none;
 }
 
 @media only screen and (min-width: 768px) {
@@ -54,5 +63,11 @@
     position: sticky;
     top: 0px;
     height: initial;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .aside {
+    display: block;
   }
 }

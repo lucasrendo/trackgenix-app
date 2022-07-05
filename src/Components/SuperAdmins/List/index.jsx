@@ -49,7 +49,7 @@ function SuperAdmins() {
         firstName: superAdmin.firstName,
         lastName: superAdmin.lastName,
         email: superAdmin.email,
-        isActive: superAdmin.isActive.toString()
+        isActive: superAdmin.isActive?.toString()
       };
     });
     return data;
