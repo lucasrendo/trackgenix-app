@@ -5,13 +5,13 @@ const initialState = {
 };
 
 export const globalReducer = (state = initialState, action) => {
-  switch (action) {
+  switch (action.type) {
     case TOGGLE_SIDEBAR:
       return {
         ...state,
         showSidebar: action.payload
       };
     default:
-      return initialState;
+      return state;
   }
 };

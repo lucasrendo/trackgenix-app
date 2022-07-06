@@ -1,5 +1,4 @@
 .aside {
-  display: none;
   position: fixed;
   top: 126px;
   left: 0;
@@ -43,19 +42,22 @@
 .navList li {
   margin-bottom: 23px;
   padding: 10px 10px 3px;
-  border-bottom: 3px solid #373867;
-  border-radius: 2px;
-  background-color: #ffffff;
+  border: 1px solid #373867;
+  border-radius: 4px;
+  background-color: white;
   transition: 100ms;
 }
 
 .navList li:hover {
-  background-color: #eaeaea;
+  background-color: #95b587;
 }
 
 .navList li:active {
-  /* outline: 3px solid #373867; */
-  box-shadow: none;
+  background-color: #49A37B;
+}
+
+.currentLink li {
+  background-color: #49A37B;
 }
 
 @media only screen and (min-width: 768px) {
@@ -63,11 +65,5 @@
     position: sticky;
     top: 0px;
     height: initial;
-  }
-}
-
-@media only screen and (min-width: 1024px) {
-  .aside {
-    display: block;
   }
 }

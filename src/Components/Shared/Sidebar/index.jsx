@@ -1,46 +1,44 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from 'redux/global/actions';
 import styles from './sidebar.module.css';
 
 const Sidebar = () => {
-  const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [links, setLinks] = useState([]);
   const [title, setTitle] = useState('');
   const employeeLinks = [
-    { link: `/employee`, title: 'Home' },
-    { link: `/employee/projects`, title: 'My Projects' },
-    { link: `/employee/profile`, title: 'User Profile' },
-    { link: `/employee/workedhours`, title: 'Work Hours' },
-    { link: '#', title: 'Help' }
+    { link: '/employee', title: 'Home' },
+    { link: '/employee/projects', title: 'My Projects' },
+    { link: '/employee/profile', title: 'User Profile' },
+    { link: '/employee/workedhours', title: 'Work Hours' }
   ];
   const adminLinks = [
-    { link: `/admin`, title: 'Home' },
-    { link: `/admin/projects`, title: 'All Projects' },
-    { link: `/admin/projects/add`, title: 'Create Project' },
-    { link: `/admin/employees`, title: 'Employees' },
-    { link: `/admin/report`, title: 'Report' },
-    { link: '#', title: 'Help' }
+    { link: '/admin', title: 'Home' },
+    { link: '/admin/projects', title: 'All Projects' },
+    { link: '/admin/projects/add', title: 'Create Project' },
+    { link: '/admin/employees', title: 'Employees' },
+    { link: '/admin/reports', title: 'Report' }
   ];
 
   const setSidebarValues = () => {
-    if (history.location.pathname.includes('/employee')) {
+    if (location.pathname.includes('/employee')) {
       setTitle('Employee');
       setLinks(employeeLinks);
-    } else if (history.location.pathname.includes('/admin')) {
+      dispatch(toggleSidebar(true));
+    } else if (location.pathname.includes('/admin')) {
       setTitle('Admin');
       setLinks(adminLinks);
+      dispatch(toggleSidebar(true));
     } else {
       dispatch(toggleSidebar(false));
     }
   };
 
-  useEffect(() => {
-    setSidebarValues();
-  }, [history.location.pathname]);
+  useEffect(() => setSidebarValues(), [location.pathname]);
 
   return (
     <aside className={styles.aside}>
@@ -49,11 +47,14 @@ const Sidebar = () => {
         <ul className={styles.navList}>
           {links.map((link, index) => {
             return (
-              <Link to={link} key={index}>
-                <li>{title}</li>
-              </Link>
+              <NavLink to={link.link} exact key={index} activeClassName={styles.currentLink}>
+                <li>{link.title}</li>
+              </NavLink>
             );
           })}
+          <NavLink to="#">
+            <li>Help</li>
+          </NavLink>
         </ul>
       </nav>
     </aside>
