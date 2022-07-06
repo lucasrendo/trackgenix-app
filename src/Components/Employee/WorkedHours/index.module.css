@@ -17,7 +17,7 @@
   margin-bottom: 5px;
 }
 
-.table{
+.table {
   width: 75%;
   border: 0;
   border-collapse: collapse;
@@ -25,19 +25,28 @@
   box-shadow: 0 2px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
-.totalText{
+.totalText {
   align-self: flex-end;
   margin-right: 10rem;
 }
 
-.headerRow{
+.weekText {
+  text-decoration: underline;
+  font-weight: bolder;
+}
+
+.modalText {
+  text-align: center;
+}
+
+.headerRow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   border-radius: 10px 10px 0 0;
 }
 
-.th{
+.th {
   width: 25%;
   text-align: center;
   padding: 5px;
@@ -45,18 +54,29 @@
   background-color: #373867;
 }
 
-.rows{
+.rows {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.td{
+.td {
   width: 25%;
   max-width: 180px;
   text-align: center;
   word-break: break-word;
-  padding: 10px;
+  margin: 10px;
+  font-weight: bolder;
+}
+
+.timesheetTd {
+  width: 25%;
+  max-width: 180px;
+  text-align: center;
+  word-break: break-word;
+  margin: 10px;
+  border: 1px solid #aaa;
+  box-shadow: 0 1.5px 0.75px 0.75px rgba(0, 0, 0, 0.25);
 }
 
 .LinkReset {
@@ -67,4 +87,4 @@
 
 .rows:nth-child(even) {background-color: #AACE9B33;}
 
-.td:hover {background-color: #aace9bb7;}
+.timesheetTd:hover {background-color: #aace9bb7;}
