@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 const AdminRoutes = lazy(() => import('routes/admins'));
-const superAdminRoutes = lazy(() => import('routes/superadmins'));
+const superAdminRoutes = lazy(() => import('routes/superAdmins'));
 const EmployeeRoutes = lazy(() => import('routes/employees'));
 const AuthRoutes = lazy(() => import('routes/auth'));
 
