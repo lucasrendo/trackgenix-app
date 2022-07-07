@@ -1,11 +1,14 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import Layout from 'Components/Layout';
 
 const Admin = () => {
   return (
-    <Switch>
-      <Route path="/admin" component={Admin} />
-    </Switch>
+    <Layout>
+      <Switch>
+        <Route path="/admin" component={Admin} />
+      </Switch>
+    </Layout>
   );
 };
 

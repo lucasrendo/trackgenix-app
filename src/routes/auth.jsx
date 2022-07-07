@@ -1,7 +1,7 @@
 import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import Login from 'Components/Auth/Login';
 import Layout from 'Components/Layout';
-import register from 'Components/Auth/RegisterForm';
+import Register from 'Components/Auth/RegisterForm';
 
 const authRoutes = [{ name: 'Login', path: '/auth/login' }];
 
@@ -11,7 +11,7 @@ const AuthRoutes = () => {
     <Layout routes={authRoutes}>
       <Switch>
         <Route path={`${url}/login`} component={Login} />
-        <Route path={`${url}/register`} component={register} />
+        <Route path={`${url}/register`} component={Register} />
         <Redirect to={`${url}/login`} />
       </Switch>
     </Layout>
