@@ -1,69 +1,41 @@
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  background-color: #373867;
-}
-
-.license {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  width: 90%;
-  margin: 1rem;
+  padding: 15px 20px;
   background-color: #373867;
 }
 
 .copyright {
-  font-size: 0.7rem;
-  font-style: italic;
+  text-align: center;
+}
+
+.copyright p {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size: 16px;
   color: #AACE9B;
 }
 
-.iconGit{
-  width: 24px;
-  border-radius: 60%;
-  margin-left: 5px;
-}
-
-.iconGit:hover{
-  background-color: #516449;
-}
-
-.iconLink{
-  width: 24px;
-  border-radius: 60%;
-  margin-left: 7px;
-}
-
-.iconLink:hover{
-  background-color: #516449;
-}
-
-.socialIcon {
+.links img {
   border-radius: 50%;
-  background-color: #AACE9B;
-  color: #373867;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-.socialIcon:hover{
-  background-color: #95b587;
+.links :nth-child(even) {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-@media screen and (min-width: 750px) {
-  .main {
-    padding: 0 20%;
-    width: unset;
-  }
+.links img:hover{
+  box-shadow: inset 0 0 0 20px #000;
+}
 
-  .license {
-    padding: 0 20px;
-    width: calc(60% - 40px);
-  }
-
-  .socialIcon {
-    margin: 0 5px;
+@media screen and (min-width: 768px) {
+  .links :nth-child(even) {
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
