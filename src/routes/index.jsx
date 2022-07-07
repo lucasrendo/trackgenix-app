@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import Loading from 'Components/Shared/Loading';
+import RegisterForm from 'Components/Auth/RegisterForm';
 const Admins = lazy(() => import('Components/Admins/List'));
 const AdminsForm = lazy(() => import('Components/Admins/Form'));
 const SuperAdmins = lazy(() => import('Components/SuperAdmins/List'));
@@ -19,6 +20,7 @@ const EmployeeProjects = lazy(() => import('Components/Employee/MyProjects'));
 const EmployeeProfile = lazy(() => import('Components/Employee/UserProfile/index'));
 const EmployeeHome = lazy(() => import('Components/Employee/Home'));
 const EmployeeWorkedHours = lazy(() => import('Components/Employee/WorkedHours'));
+const Login = lazy(() => import('Components/Auth/Login'));
 
 const Routes = () => {
   return (
@@ -27,6 +29,7 @@ const Routes = () => {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={'/'} component={Home} />
+            <Route exact path={'/register'} component={RegisterForm} />
             <Route exact path={'/admins'} component={Admins} />
             <Route exact path={'/admins/form'} component={AdminsForm} />
             <Route exact path={'/admins/form/:id'} component={AdminsForm} />
@@ -49,6 +52,7 @@ const Routes = () => {
             <Route exact path={'/employee/projects'} component={EmployeeProjects} />
             <Route exact path={'/employee/profile'} component={EmployeeProfile} />
             <Route exact path={'/employee/workedhours'} component={EmployeeWorkedHours} />
+            <Route exact path={'/login'} component={Login} />
           </Switch>
         </Suspense>
       </Layout>

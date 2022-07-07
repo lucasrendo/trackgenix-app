@@ -143,7 +143,7 @@ const TimeSheets = () => {
 
   return (
     <section className={styles.container}>
-      <h2>Time Sheets</h2>
+      <h2>Timesheets</h2>
       {isLoading ? (
         <Loading />
       ) : (

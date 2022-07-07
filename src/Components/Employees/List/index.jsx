@@ -43,7 +43,7 @@ const Employees = () => {
     { header: 'First Name', key: 'firstName' },
     { header: 'Last Name', key: 'lastName' },
     { header: 'Mail', key: 'email' },
-    { header: 'Active', key: 'isActive' }
+    { header: 'Is Active?', key: 'isActive' }
   ];
 
   const confirmationHandler = () => {
@@ -87,7 +87,7 @@ const Employees = () => {
         handleClose={confirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
         confirmed={() => confirmationHandler()}
       >
-        <h2>{confirmation ? 'Are you sure you want to delete this employee' : message}</h2>
+        <h2>{confirmation ? 'Are you sure you want to delete this employee?' : message}</h2>
       </Modal>
     </section>
   );
