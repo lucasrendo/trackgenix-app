@@ -23,8 +23,8 @@ function SuperAdmins() {
   const headers = [
     { header: 'First name', key: 'firstName' },
     { header: 'Last name', key: 'lastName' },
-    { header: 'Email', key: 'email' },
-    { header: 'is Active?', key: 'isActive' }
+    { header: 'Email', key: 'email' }
+    // { header: 'is Active?', key: 'isActive' }
   ];
 
   useEffect(async () => {
@@ -48,8 +48,8 @@ function SuperAdmins() {
         id: superAdmin._id,
         firstName: superAdmin.firstName,
         lastName: superAdmin.lastName,
-        email: superAdmin.email,
-        isActive: superAdmin.isActive.toString()
+        email: superAdmin.email
+        // isActive: superAdmin.isActive.toString()
       };
     });
     return data;
