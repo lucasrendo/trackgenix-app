@@ -59,6 +59,7 @@
 
 .currentLink li {
   background-color: #49A37B;
+  color: white;
 }
 
 @media only screen and (min-width: 768px) {
