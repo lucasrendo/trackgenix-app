@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'Components/Shared/Button';
-import menu from 'assets/images/menu-icon.png';
-import logo from 'assets/images/app-logo.png';
+import menu from 'assets/icons/menu-icon.png';
+import logo from 'assets/icons/app-logo.png';
 import { toggleSidebar } from 'redux/global/actions';
 import styles from './header.module.css';
 
