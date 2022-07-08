@@ -3,7 +3,7 @@ import Login from 'Components/Auth/Login';
 import Register from 'Components/Auth/RegisterForm';
 import NotFound from 'Components/Shared/NotFound';
 
-const AuthRoutes = () => {
+const Auth = () => {
   return (
     <Switch>
       <Route exact path="/auth/login" component={Login} />
@@ -13,4 +13,4 @@ const AuthRoutes = () => {
   );
 };
 
-export default AuthRoutes;
+export default Auth;

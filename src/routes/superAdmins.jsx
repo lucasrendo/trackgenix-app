@@ -4,7 +4,7 @@ import List from 'Components/SuperAdmins/List';
 import Form from 'Components/SuperAdmins/Form';
 import NotFound from 'Components/Shared/NotFound';
 
-const superAdmin = () => {
+const SuperAdmin = () => {
   return (
     <Switch>
       <Route exact path="/superadmin" component={List} />
@@ -14,4 +14,4 @@ const superAdmin = () => {
   );
 };
 
-export default superAdmin;
+export default SuperAdmin;
