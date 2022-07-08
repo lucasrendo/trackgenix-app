@@ -73,7 +73,7 @@ function Login() {
       ) : (
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
           <div className={styles.inputsContainer}>
-            <h2 className={styles.loginTitle}>Log in</h2>
+            <h2 className={styles.loginTitle}>Log In</h2>
             <Input type="email" id="email" text="Email" error={errors.email} register={register} />
             <Input
               type="password"
