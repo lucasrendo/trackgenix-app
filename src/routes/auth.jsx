@@ -1,20 +1,15 @@
-import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Login from 'Components/Auth/Login';
-import Layout from 'Components/Layout';
 import Register from 'Components/Auth/RegisterForm';
-
-const authRoutes = [{ name: 'Login', path: '/auth/login' }];
+import NotFound from 'Components/Shared/NotFound';
 
 const AuthRoutes = () => {
-  const { url } = useRouteMatch();
   return (
-    <Layout routes={authRoutes}>
-      <Switch>
-        <Route path={`${url}/login`} component={Login} />
-        <Route path={`${url}/register`} component={Register} />
-        <Redirect to={`${url}/login`} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route exact path="/auth/login" component={Login} />
+      <Route exact path="/auth/register" component={Register} />
+      <Route component={NotFound} />
+    </Switch>
   );
 };
 

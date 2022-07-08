@@ -1,5 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import Layout from 'Components/Layout';
+import NotFound from 'Components/Shared/NotFound';
+import Unfinished from 'Components/Shared/Unfinished';
 
 const AdminRoutes = lazy(() => import('routes/admins'));
 const superAdminRoutes = lazy(() => import('routes/superAdmins'));
@@ -10,13 +13,16 @@ const Routes = () => {
   return (
     <Router>
       <Suspense fallback={<div />}>
-        <Switch>
-          <Route path="/employee" component={EmployeeRoutes} />
-          <Route path="/admin" component={AdminRoutes} />
-          <Route path="/superadmins" component={superAdminRoutes} />
-          <Route path="/auth" component={AuthRoutes} />
-          <Redirect to="/auth" />
-        </Switch>
+        <Layout>
+          <Switch>
+            <Route exact path="/" component={Unfinished} />
+            <Route path="/employee" component={EmployeeRoutes} />
+            <Route path="/admin" component={AdminRoutes} />
+            <Route path="/superadmin" component={superAdminRoutes} />
+            <Route path="/auth" component={AuthRoutes} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
       </Suspense>
     </Router>
   );

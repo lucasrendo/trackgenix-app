@@ -78,7 +78,7 @@ const RegisterForm = () => {
     dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
-      history.push('/login');
+      history.push('/auth/login');
     }
   };
 

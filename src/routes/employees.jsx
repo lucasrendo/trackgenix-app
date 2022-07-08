@@ -4,21 +4,30 @@ import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/UserProfile';
 import WorkedHours from 'Components/Employee/WorkedHours';
 import Projects from 'Components/Employee/MyProjects';
-import Layout from 'Components/Layout';
+import Unfinished from 'Components/Shared/Unfinished';
+import NotFound from 'Components/Shared/NotFound';
 
 const Employee = () => {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/employee/home" component={Home} />
-        <Route exact path="/employee">
-          <Redirect to="/employee/home" />
-        </Route>
-        <Route path="/employee/workedhours" component={WorkedHours} />
-        <Route path="/employee/projects" component={Projects} />
-        <Route path="/employee/profile" component={Profile} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route exact path="/employee/home" component={Home} />
+      <Route exact path="/employee">
+        <Redirect to="/employee/home" />
+      </Route>
+      <Route exact path="/employee/workedhours" component={WorkedHours} />
+      <Route exact path="/employee/projects" component={Projects} />
+      <Route exact path="/employee/profile" component={Profile} />
+      {/* ONLY FOR PMs */}
+      {/* projects of this PM */}
+      <Route exact path="/employee/projects" component={Unfinished} />
+      {/* Single project */}
+      <Route exact path="/employee/projects/:id" component={Unfinished} />
+      {/* employee hours on this project */}
+      <Route exact path="/employee/projects/:id/:employee" component={Unfinished} />
+      {/* Reports */}
+      <Route exact path="/employee/reports" component={Unfinished} />
+      <Route component={NotFound} />
+    </Switch>
   );
 };
 
