@@ -68,19 +68,21 @@ function Login() {
 
   return (
     <section className={styles.container}>
-      <h2>Log in to Trackgenix</h2>
       {isLoading ? (
         <Loading />
       ) : (
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <Input type="email" id="email" text="Email" error={errors.email} register={register} />
-          <Input
-            type="password"
-            id="password"
-            text="Password"
-            error={errors.password}
-            register={register}
-          />
+          <div className={styles.inputsContainer}>
+            <h2 className={styles.loginTitle}>Log in</h2>
+            <Input type="email" id="email" text="Email" error={errors.email} register={register} />
+            <Input
+              type="password"
+              id="password"
+              text="Password"
+              error={errors.password}
+              register={register}
+            />
+          </div>
           <div className={styles.buttonContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
               Back

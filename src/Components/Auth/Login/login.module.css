@@ -1,29 +1,47 @@
 .container {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #37386766;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
   margin: 40px auto;
-  border: 3px solid #373867;
-  border-radius: 10px;
+  border-radius: 23px;
   background-color: #aace9b1a;
   width: 80%;
-  max-width: 768px;
+  max-width: 540px;
+  height: 600px;
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.5);
-  background-image: url('assets/images/register-background.png');
   background-position: bottom left;
   background-repeat: no-repeat;
   background-size: 20%;
   background-color: white;
 }
   
+.inputsContainer {
+  margin: 80px 10% 15px;
+  padding: 20px;
+  border: 1px solid #373867;
+  max-width: 350px;
+  height: 330px;
+  border-radius: 23px;
+}
+
+.loginTitle {
+  margin-bottom: 50px;
+  font-size: 25px;
+  text-align: center;
+  color: #373867;
+
+}
+
 .textContainer{
   display: flex;
   flex-direction: column;
@@ -32,9 +50,9 @@
 }
   
 .buttonContainer{
-  display: flex;
-  align-self: center;
-  margin-bottom: 10px;
+  margin: 0 5% 45px;
+  padding: 20px;
+  text-align: center;
 }
 
 .link {
