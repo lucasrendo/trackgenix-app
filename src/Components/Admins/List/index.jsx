@@ -22,8 +22,7 @@ const Admins = () => {
   const headers = [
     { header: 'First name', key: 'firstName' },
     { header: 'Last name', key: 'lastName' },
-    { header: 'Email', key: 'email' },
-    { header: 'is Active?', key: 'isActive' }
+    { header: 'Email', key: 'email' }
   ];
 
   useEffect(() => {
@@ -47,8 +46,7 @@ const Admins = () => {
         id: admin._id,
         firstName: admin.firstName,
         lastName: admin.lastName,
-        email: admin.email,
-        isActive: admin.isActive.toString()
+        email: admin.email
       };
     });
     return data;

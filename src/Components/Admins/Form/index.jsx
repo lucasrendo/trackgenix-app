@@ -36,8 +36,7 @@ const Admins = () => {
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required(),
-    password: Joi.string().label('password').min(8).required(),
-    isActive: Joi.boolean()
+    password: Joi.string().label('password').min(8).required()
   });
   const {
     handleSubmit,
@@ -51,8 +50,7 @@ const Admins = () => {
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      isActive: false
+      password: ''
     }
   });
 
@@ -85,7 +83,7 @@ const Admins = () => {
 
   return (
     <section className={styles.container}>
-      <h2>Admins</h2>
+      <h2>New Admin Account</h2>
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
         <Input
           id={'firstName'}
