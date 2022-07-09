@@ -39,6 +39,13 @@
   text-align: center;
 }
 
+.h4 {
+display: block;
+font-weight: bolder;
+color: #373867;
+margin: 20px;
+}
+
 .headerRow {
   display: flex;
   flex-direction: row;

@@ -81,6 +81,7 @@ const HoursForm = () => {
   const [daysOfWeek, setDaysofWeek] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [timesheetData, setTimesheetData] = useState({});
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const timesheet = useSelector((state) => state.timesheet.timesheet);
@@ -99,7 +100,6 @@ const HoursForm = () => {
     resolver: joiResolver(timeSheetValidate),
     defaultValues: {
       task: '',
-      rate: '',
       workedHours: '',
       description: ''
     }
@@ -127,6 +127,7 @@ const HoursForm = () => {
     let hoursForeachProject = [];
     const dataList = projects.map((project) => {
       const role = getRole(project);
+      const rate = getRate(project);
       const weekTimesheets = getWeekTimesheets(filteredTimesheets, project, formatedWeek);
       const totalHours = weekTotalHours(weekTimesheets.workedHours);
       hoursForeachProject.push(totalHours);
@@ -134,6 +135,7 @@ const HoursForm = () => {
         id: project._id,
         projectName: project.projectName,
         role: role,
+        rate: rate,
         monday: weekTimesheets.workedHours[0],
         tuesday: weekTimesheets.workedHours[1],
         wednesday: weekTimesheets.workedHours[2],
@@ -173,6 +175,16 @@ const HoursForm = () => {
       }
     }
     return role;
+  };
+
+  const getRate = (project) => {
+    let rate = 0;
+    for (let i = 0; i < project.employees.length; i++) {
+      if (project.employees[i].employeeId === id) {
+        rate = project.employees[i].rate;
+      }
+    }
+    return rate;
   };
 
   const weekTotalHours = (weekTimesheets) => {
@@ -242,13 +254,13 @@ const HoursForm = () => {
   const headers = [
     { header: 'Project Name', key: 'projectName', style: false },
     { header: 'Role', key: 'role', style: false },
-    { header: 'Monday', key: 'monday', style: true },
-    { header: 'Tuesday', key: 'tuesday', style: true },
-    { header: 'Wednesday', key: 'wednesday', style: true },
-    { header: 'Thursday', key: 'thursday', style: true },
-    { header: 'Friday', key: 'friday', style: true },
-    { header: 'Saturday', key: 'saturday', style: true },
-    { header: 'Sunday', key: 'sunday', style: true },
+    { header: 'Monday', key: 'monday', style: true, date: daysOfWeek[0] },
+    { header: 'Tuesday', key: 'tuesday', style: true, date: daysOfWeek[1] },
+    { header: 'Wednesday', key: 'wednesday', style: true, date: daysOfWeek[2] },
+    { header: 'Thursday', key: 'thursday', style: true, date: daysOfWeek[3] },
+    { header: 'Friday', key: 'friday', style: true, date: daysOfWeek[4] },
+    { header: 'Saturday', key: 'saturday', style: true, date: daysOfWeek[5] },
+    { header: 'Sunday', key: 'sunday', style: true, date: daysOfWeek[6] },
     { header: 'Total Hours', key: 'totalHours', style: false }
   ];
 
@@ -266,6 +278,16 @@ const HoursForm = () => {
     } else {
       dispatch(addTimesheet(data));
     }
+    setShowModal(true);
+  };
+
+  const openModalHandler = (data) => {
+    setTimesheetData({
+      project: data.projectName,
+      role: data.role,
+      rate: data.rate,
+      date: 'placeholder'
+    });
     setShowModal(true);
   };
 
@@ -304,7 +326,7 @@ const HoursForm = () => {
                         <td
                           key={index}
                           className={header.style ? styles.timesheetTd : styles.td}
-                          onClick={() => setShowModal(true)}
+                          onClick={() => openModalHandler(row)}
                         >
                           {row[header.key]}
                         </td>
@@ -322,6 +344,9 @@ const HoursForm = () => {
         <Modal isOpen={showModal} isConfirmation={true} handleClose={() => closeHandler()}>
           <h2 className={styles.modalText}>Timesheet</h2>
           <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+            <h4 className={styles.h4}>Project: {timesheetData.project}</h4>
+            <h4 className={styles.h4}>Role: {timesheetData.role}</h4>
+            <h4 className={styles.h4}>Date: {timesheetData.date}</h4>
             <Select
               id={'task'}
               text={'Task'}
@@ -329,7 +354,6 @@ const HoursForm = () => {
               register={register}
               error={errors.task}
             />
-
             <Input
               id={'description'}
               type={'text'}
@@ -344,14 +368,6 @@ const HoursForm = () => {
               type={'number'}
               register={register}
               error={errors.workedHours}
-            />
-
-            <Input
-              id={'rate'}
-              text={'Rate'}
-              type={'number'}
-              register={register}
-              error={errors.rate}
             />
           </form>
         </Modal>
