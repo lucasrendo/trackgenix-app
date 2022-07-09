@@ -28,7 +28,7 @@ function NewProject() {
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
-  const [counter, setCounter] = useState(0);
+  const [employeeInputs, setEmployeeInputs] = useState([{ inputs: '' }]);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -115,31 +115,16 @@ function NewProject() {
     }
   };
   0;
-  const addNewEmployee = () => {
-    setCounter(counter + 1);
-    console.log(counter);
+
+  const handleEmployeeInputAdd = () => {
+    setEmployeeInputs([...employeeInputs, { inputs: '' }]);
   };
 
-  const newEmployee = (
-    <div>
-      <Select
-        text="Employees"
-        id="employeeId"
-        options={formatEmployees()}
-        error={errors.employeeId}
-        register={register}
-      />
-      <Input type="text" id="role" text="Role" error={errors.role} register={register} />
-      <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
-      <Input
-        type="number"
-        id="hoursInProject"
-        text="Hours in project"
-        error={errors.hoursInProject}
-        register={register}
-      />
-    </div>
-  );
+  const handleEmployeeInputRemove = (index) => {
+    const inputsList = [...employeeInputs];
+    inputsList.splice(index, 1);
+    setEmployeeInputs(inputsList);
+  };
 
   return (
     <section className={styles.container}>
@@ -181,28 +166,35 @@ function NewProject() {
           register={register}
         />
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
-        <Select
-          text="Employees"
-          id="employeeId"
-          options={formatEmployees()}
-          error={errors.employeeId}
-          register={register}
-        />
-        <Input type="text" id="role" text="Role" error={errors.role} register={register} />
-        <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
-        <Input
-          type="number"
-          id="hoursInProject"
-          text="Hours in project"
-          error={errors.hoursInProject}
-          register={register}
-        />
-        <div>
-          <Button onClick={() => addNewEmployee()}>+</Button>
-          {Array.from(Array(counter)).map((c) => {
-            return newEmployee;
-          })}
-        </div>
+        {employeeInputs.map((singleEmployee, index) => (
+          <div className={styles.employeeBox} key={index}>
+            <Select
+              text="Employee"
+              id="employeeId"
+              options={formatEmployees()}
+              error={errors.employeeId}
+              register={register}
+            />
+            <Input type="text" id="role" text="Role" error={errors.role} register={register} />
+            <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
+            <Input
+              type="number"
+              id="hoursInProject"
+              text="Hours in project"
+              error={errors.hoursInProject}
+              register={register}
+            />
+            {employeeInputs.length - 1 === index && (
+              <Button onClick={handleEmployeeInputAdd}>Add another employee</Button>
+            )}
+            {employeeInputs.length > 1 && (
+              <Button classes={'red'} onClick={() => handleEmployeeInputRemove(index)}>
+                Remove
+              </Button>
+            )}
+          </div>
+        ))}
+
         <Input
           type="checkbox"
           id="isActive"
