@@ -81,7 +81,12 @@ const HoursForm = () => {
   const [daysOfWeek, setDaysofWeek] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [timesheetData, setTimesheetData] = useState({});
+  const [timesheetShowData, setTimesheetShowData] = useState({
+    project: '',
+    role: '',
+    date: ''
+  });
+  const [timesheetReqData, setTimesheetReqData] = useState({});
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const timesheet = useSelector((state) => state.timesheet.timesheet);
@@ -273,20 +278,26 @@ const HoursForm = () => {
   };
 
   const submitHandler = (data) => {
-    if (id) {
-      dispatch(editTimesheet(data, id));
-    } else {
-      dispatch(addTimesheet(data));
-    }
+    // if (id) {
+    //   dispatch(editTimesheet(data, id));
+    // } else {
+    //   dispatch(addTimesheet(data));
+    // }
     setShowModal(true);
   };
 
-  const openModalHandler = (data) => {
-    setTimesheetData({
+  const openModalHandler = (data, header) => {
+    setTimesheetShowData({
       project: data.projectName,
       role: data.role,
+      date: format('dd/MM/yyyy', header.date)
+    });
+    setTimesheetReqData({
+      employee: id,
+      project: data.id,
+      role: data.role,
       rate: data.rate,
-      date: 'placeholder'
+      date: header.date
     });
     setShowModal(true);
   };
@@ -326,7 +337,11 @@ const HoursForm = () => {
                         <td
                           key={index}
                           className={header.style ? styles.timesheetTd : styles.td}
-                          onClick={() => openModalHandler(row)}
+                          onClick={() => {
+                            if (header.style) {
+                              openModalHandler(row, header);
+                            }
+                          }}
                         >
                           {row[header.key]}
                         </td>
@@ -344,9 +359,9 @@ const HoursForm = () => {
         <Modal isOpen={showModal} isConfirmation={true} handleClose={() => closeHandler()}>
           <h2 className={styles.modalText}>Timesheet</h2>
           <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-            <h4 className={styles.h4}>Project: {timesheetData.project}</h4>
-            <h4 className={styles.h4}>Role: {timesheetData.role}</h4>
-            <h4 className={styles.h4}>Date: {timesheetData.date}</h4>
+            <h4 className={styles.h4}>Project: {timesheetShowData.project}</h4>
+            <h4 className={styles.h4}>Role: {timesheetShowData.role}</h4>
+            <h4 className={styles.h4}>Date: {timesheetShowData.date}</h4>
             <Select
               id={'task'}
               text={'Task'}
