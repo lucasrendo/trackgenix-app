@@ -15,7 +15,7 @@ import { getEmployees } from '../../../redux/employees/thunks';
 import { getAdmins } from '../../../redux/admins/thunks';
 import styles from './index.module.css';
 
-function Projects() {
+function NewProject() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ function Projects() {
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
+  const [counter, setCounter] = useState(0);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -113,81 +114,109 @@ function Projects() {
       goBack();
     }
   };
+  0;
+  const addNewEmployee = () => {
+    setCounter(counter + 1);
+    console.log(counter);
+  };
+
+  const newEmployee = (
+    <div>
+      <Select
+        text="Employees"
+        id="employeeId"
+        options={formatEmployees()}
+        error={errors.employeeId}
+        register={register}
+      />
+      <Input type="text" id="role" text="Role" error={errors.role} register={register} />
+      <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
+      <Input
+        type="number"
+        id="hoursInProject"
+        text="Hours in project"
+        error={errors.hoursInProject}
+        register={register}
+      />
+    </div>
+  );
 
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      {isLoading || employeesLoading || adminsLoading ? (
-        <Loading />
-      ) : (
-        <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <Input
-            type="text"
-            id="projectName"
-            text="Project Name"
-            error={errors.projectName}
-            register={register}
-          />
-          <Input
-            type="text"
-            id="description"
-            text="Description"
-            error={errors.description}
-            register={register}
-          />
-          <Input
-            type="date"
-            id="startDate"
-            text="Start Date"
-            error={errors.startDate}
-            register={register}
-          />
-          <Input
-            type="date"
-            id="endDate"
-            text="End Date"
-            error={errors.endDate}
-            register={register}
-          />
-          <Select
-            text="Admin"
-            id="admin"
-            options={formatAdmins()}
-            error={errors.admin}
-            register={register}
-          />
-          <Input type="text" id="client" text="Client" error={errors.client} register={register} />
-          <Select
-            text="Employees"
-            id="employeeId"
-            options={formatEmployees()}
-            error={errors.employeeId}
-            register={register}
-          />
-          <Input type="text" id="role" text="Role" error={errors.role} register={register} />
-          <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
-          <Input
-            type="number"
-            id="hoursInProject"
-            text="Hours in project"
-            error={errors.hoursInProject}
-            register={register}
-          />
-          <Input
-            type="checkbox"
-            id="isActive"
-            text="is Active?"
-            error={errors.isActive?.message}
-            register={register}
-          />
-          <div className={styles.btnsContainer}>
-            <Button classes={'red'} onClick={() => goBack()}>
-              Back
-            </Button>
-            <Button>Save</Button>
-          </div>
-        </form>
-      )}
+      <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+        <Input
+          type="text"
+          id="projectName"
+          text="Project Name"
+          error={errors.projectName}
+          register={register}
+        />
+        <Input
+          type="text"
+          id="description"
+          text="Description"
+          error={errors.description}
+          register={register}
+        />
+        <Input
+          type="date"
+          id="startDate"
+          text="Start Date"
+          error={errors.startDate}
+          register={register}
+        />
+        <Input
+          type="date"
+          id="endDate"
+          text="End Date"
+          error={errors.endDate}
+          register={register}
+        />
+        <Select
+          text="Admin"
+          id="admin"
+          options={formatAdmins()}
+          error={errors.admin}
+          register={register}
+        />
+        <Input type="text" id="client" text="Client" error={errors.client} register={register} />
+        <Select
+          text="Employees"
+          id="employeeId"
+          options={formatEmployees()}
+          error={errors.employeeId}
+          register={register}
+        />
+        <Input type="text" id="role" text="Role" error={errors.role} register={register} />
+        <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
+        <Input
+          type="number"
+          id="hoursInProject"
+          text="Hours in project"
+          error={errors.hoursInProject}
+          register={register}
+        />
+        <div>
+          <Button onClick={() => addNewEmployee()}>+</Button>
+          {Array.from(Array(counter)).map((c) => {
+            return newEmployee;
+          })}
+        </div>
+        <Input
+          type="checkbox"
+          id="isActive"
+          text="is Active?"
+          error={errors.isActive?.message}
+          register={register}
+        />
+        <div className={styles.btnsContainer}>
+          <Button classes={'red'} onClick={() => goBack()}>
+            Back
+          </Button>
+          <Button>Save</Button>
+        </div>
+      </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
@@ -195,4 +224,4 @@ function Projects() {
   );
 }
 
-export default Projects;
+export default NewProject;
