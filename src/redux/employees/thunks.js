@@ -53,7 +53,7 @@ export const getEmployees = () => {
   return async (dispatch) => {
     try {
       dispatch(getEmployeesPending());
-      const response = await fetch(`${url}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin/employees`);
       const data = await response.json();
       if (!data.error) dispatch(getEmployeesSuccess(data.data));
       else dispatch(getEmployeesError(data.message));

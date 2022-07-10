@@ -7,15 +7,15 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
-import Loading from '../../Shared/Loading';
-import Modal from '../../Shared/Modal/Modal';
-import { resetProject, resetMessage } from '../../../redux/projects/actions';
-import { addProject, editProject, getSingleProject } from '../../../redux/projects/thunks';
-import { getEmployees } from '../../../redux/employees/thunks';
-import { getAdmins } from '../../../redux/admins/thunks';
+import Loading from 'Components/Shared/Loading';
+import Modal from 'Components/Shared/Modal/Modal';
+import { resetProject, resetMessage } from 'redux/projects/actions';
+import { addProject, editProject, getSingleProject } from 'redux/projects/thunks';
+import { getEmployees } from 'redux/employees/thunks';
+import { getAdmins } from 'redux/admins/thunks';
 import styles from './index.module.css';
 
-function Projects() {
+function NewProject() {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ function Projects() {
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
+  const [employeeInputs, setEmployeeInputs] = useState([{ inputs: '' }]);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -113,81 +114,101 @@ function Projects() {
       goBack();
     }
   };
+  0;
+
+  const handleEmployeeInputAdd = () => {
+    setEmployeeInputs([...employeeInputs, { inputs: '' }]);
+  };
+
+  const handleEmployeeInputRemove = (index) => {
+    const inputsList = [...employeeInputs];
+    inputsList.splice(index, 1);
+    setEmployeeInputs(inputsList);
+  };
 
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      {isLoading || employeesLoading || adminsLoading ? (
-        <Loading />
-      ) : (
-        <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <Input
-            type="text"
-            id="projectName"
-            text="Project Name"
-            error={errors.projectName}
-            register={register}
-          />
-          <Input
-            type="text"
-            id="description"
-            text="Description"
-            error={errors.description}
-            register={register}
-          />
-          <Input
-            type="date"
-            id="startDate"
-            text="Start Date"
-            error={errors.startDate}
-            register={register}
-          />
-          <Input
-            type="date"
-            id="endDate"
-            text="End Date"
-            error={errors.endDate}
-            register={register}
-          />
-          <Select
-            text="Admin"
-            id="admin"
-            options={formatAdmins()}
-            error={errors.admin}
-            register={register}
-          />
-          <Input type="text" id="client" text="Client" error={errors.client} register={register} />
-          <Select
-            text="Employees"
-            id="employeeId"
-            options={formatEmployees()}
-            error={errors.employeeId}
-            register={register}
-          />
-          <Input type="text" id="role" text="Role" error={errors.role} register={register} />
-          <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
-          <Input
-            type="number"
-            id="hoursInProject"
-            text="Hours in project"
-            error={errors.hoursInProject}
-            register={register}
-          />
-          <Input
-            type="checkbox"
-            id="isActive"
-            text="is Active?"
-            error={errors.isActive?.message}
-            register={register}
-          />
-          <div className={styles.btnsContainer}>
-            <Button classes={'red'} onClick={() => goBack()}>
-              Back
-            </Button>
-            <Button>Save</Button>
+      <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+        <Input
+          type="text"
+          id="projectName"
+          text="Project Name"
+          error={errors.projectName}
+          register={register}
+        />
+        <Input
+          type="text"
+          id="description"
+          text="Description"
+          error={errors.description}
+          register={register}
+        />
+        <Input
+          type="date"
+          id="startDate"
+          text="Start Date"
+          error={errors.startDate}
+          register={register}
+        />
+        <Input
+          type="date"
+          id="endDate"
+          text="End Date"
+          error={errors.endDate}
+          register={register}
+        />
+        <Select
+          text="Admin"
+          id="admin"
+          options={formatAdmins()}
+          error={errors.admin}
+          register={register}
+        />
+        <Input type="text" id="client" text="Client" error={errors.client} register={register} />
+        {employeeInputs.map((singleEmployee, index) => (
+          <div className={styles.employeeBox} key={index}>
+            <Select
+              text="Employee"
+              id="employeeId"
+              options={formatEmployees()}
+              error={errors.employeeId}
+              register={register}
+            />
+            <Input type="text" id="role" text="Role" error={errors.role} register={register} />
+            <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
+            <Input
+              type="number"
+              id="hoursInProject"
+              text="Hours in project"
+              error={errors.hoursInProject}
+              register={register}
+            />
+            {employeeInputs.length - 1 === index && (
+              <Button onClick={handleEmployeeInputAdd}>Add another employee</Button>
+            )}
+            {employeeInputs.length > 1 && (
+              <Button classes={'red'} onClick={() => handleEmployeeInputRemove(index)}>
+                Remove
+              </Button>
+            )}
           </div>
-        </form>
-      )}
+        ))}
+
+        <Input
+          type="checkbox"
+          id="isActive"
+          text="is Active?"
+          error={errors.isActive?.message}
+          register={register}
+        />
+        <div className={styles.btnsContainer}>
+          <Button classes={'red'} onClick={() => goBack()}>
+            Back
+          </Button>
+          <Button>Save</Button>
+        </div>
+      </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
         <h2>{message}</h2>
       </Modal>
@@ -195,4 +216,4 @@ function Projects() {
   );
 }
 
-export default Projects;
+export default NewProject;
