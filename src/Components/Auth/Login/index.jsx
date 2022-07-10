@@ -71,26 +71,36 @@ function Login() {
 
   return (
     <section className={styles.container}>
-      <h2>Log in to Trackgenix</h2>
       {isLoading ? (
         <Loading />
       ) : (
-        <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <Input type="email" id="email" text="Email" error={errors.email} register={register} />
-          <Input
-            type="password"
-            id="password"
-            text="Password"
-            error={errors.password}
-            register={register}
-          />
-          <div className={styles.buttonContainer}>
-            <Button classes={'red'} onClick={() => goBack()}>
-              Back
-            </Button>
-            <Button>Log in</Button>
+        <div className={styles.formContainer}>
+          <div className={styles.form}>
+            <h2 className={styles.loginTitle}>Log In</h2>
+            <form onSubmit={handleSubmit(submitHandler)}>
+              <Input
+                type="email"
+                id="email"
+                text="Email"
+                error={errors.email}
+                register={register}
+              />
+              <Input
+                type="password"
+                id="password"
+                text="Password"
+                error={errors.password}
+                register={register}
+              />
+              <div className={styles.buttonContainer}>
+                <Button classes={'red'} onClick={() => goBack()}>
+                  Back
+                </Button>
+                <Button>Log in</Button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
         <h2>{message}</h2>
