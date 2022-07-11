@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
@@ -10,10 +9,9 @@ import Select from 'Components/Shared/Select';
 import { getTimesheetsByEmployee } from 'redux/employee/thunks';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { getTasks } from 'redux/tasks/thunks';
-import { getSingleProject } from 'redux/projects/thunks';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheets/thunks';
 import { resetMessage, resetTimesheet } from 'redux/timesheets/actions';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import {
@@ -24,42 +22,11 @@ import {
   sub,
   eachDayOfInterval
 } from 'date-fns/esm/fp';
+import { isBefore } from 'date-fns';
 
 const timeSheetValidate = Joi.object({
   workedHours: Joi.number().required().label('Worked Hours').messages({
     'string.empty': `Worked Hours cannot be empty`
-  }),
-
-  date: Joi.date().required().min('2022-01-01').label('Date').messages({
-    'string.empty': `Date cannot be empty`,
-    'date.min': `Date cannot be earlier than 2022/01/01`
-  }),
-
-  role: Joi.string()
-    .pattern(/^[a-zA-Z]+$/)
-    .label('Role')
-    .valid('DEV', 'QA', 'PM', 'TL')
-    .insensitive()
-    .min(2)
-    .max(3)
-    .required()
-    .messages({
-      'string.pattern.base': `Role must only have letters`,
-      'string.empty': `Role cannot be empty`,
-      'string.max': `Role cannot have more than 3 characters`,
-      'string.min': `Role must have at least 2 characters`
-    }),
-
-  rate: Joi.number().required().label('Rate').messages({
-    'string.empty': `Rate cannot be empty`
-  }),
-
-  project: Joi.string().label('Project').required().messages({
-    'string.empty': `Project cannot be an empty field`
-  }),
-
-  employee: Joi.string().label('Employee').required().messages({
-    'string.empty': `Employee cannot be an empty field`
   }),
 
   task: Joi.string().label('Task').messages({
@@ -80,6 +47,7 @@ const HoursForm = () => {
   const [listData, setListData] = useState([]);
   const [daysOfWeek, setDaysofWeek] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
+  const [showModalForm, setShowModalForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [timesheetShowData, setTimesheetShowData] = useState({
     project: '',
@@ -120,12 +88,9 @@ const HoursForm = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(getTimesheetsByEmployee(id));
     formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
   }, [week]);
-
-  useEffect(() => {
-    reset(timesheet);
-  }, [timesheet]);
 
   const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
@@ -269,21 +234,25 @@ const HoursForm = () => {
     { header: 'Total Hours', key: 'totalHours', style: false }
   ];
 
-  const closeHandler = () => {
+  const closeHandlerForm = () => {
+    setShowModalForm(false);
+    reset();
+  };
+
+  const closeHandlerModal = () => {
     setShowModal(false);
     dispatch(resetMessage());
-    // if (!error) {
-    //   goBack();
-    // }
   };
 
   const submitHandler = (data) => {
-    // if (id) {
-    //   dispatch(editTimesheet(data, id));
-    // } else {
-    //   dispatch(addTimesheet(data));
-    // }
+    const reqData = {
+      ...timesheetReqData,
+      ...data
+    };
+    dispatch(addTimesheet(reqData));
     setShowModal(true);
+    setShowModalForm(false);
+    reset();
   };
 
   const openModalHandler = (data, header) => {
@@ -299,7 +268,7 @@ const HoursForm = () => {
       rate: data.rate,
       date: header.date
     });
-    setShowModal(true);
+    setShowModalForm(true);
   };
 
   return (
@@ -338,7 +307,7 @@ const HoursForm = () => {
                           key={index}
                           className={header.style ? styles.timesheetTd : styles.td}
                           onClick={() => {
-                            if (header.style) {
+                            if (header.style && isBefore(header.date, todayDate)) {
                               openModalHandler(row, header);
                             }
                           }}
@@ -356,12 +325,12 @@ const HoursForm = () => {
         </>
       )}
       {
-        <Modal isOpen={showModal} isConfirmation={true} handleClose={() => closeHandler()}>
+        <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
           <h2 className={styles.modalText}>Timesheet</h2>
+          <label className={styles.label}>Project: {timesheetShowData.project}</label>
+          <label className={styles.label}>Role: {timesheetShowData.role}</label>
+          <label className={styles.label}>Date: {timesheetShowData.date}</label>
           <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-            <h4 className={styles.h4}>Project: {timesheetShowData.project}</h4>
-            <h4 className={styles.h4}>Role: {timesheetShowData.role}</h4>
-            <h4 className={styles.h4}>Date: {timesheetShowData.date}</h4>
             <Select
               id={'task'}
               text={'Task'}
@@ -384,9 +353,13 @@ const HoursForm = () => {
               register={register}
               error={errors.workedHours}
             />
+            <Button>Save</Button>
           </form>
         </Modal>
       }
+      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>
+        <h2 className={styles.modalText}>{message}</h2>
+      </Modal>
     </section>
   );
 };

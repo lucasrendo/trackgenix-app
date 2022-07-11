@@ -24,11 +24,7 @@ const Modal = ({ children, isOpen, handleClose, isConfirmation, confirmed }) => 
             </Button>
           </div>
         ) : (
-          <div className={styles.buttonWrapper}>
-            <Button className={styles.modalButton} onClick={handleClose}>
-              OK
-            </Button>
-          </div>
+          <div className={styles.buttonWrapper}></div>
         )}
       </div>
     </div>
