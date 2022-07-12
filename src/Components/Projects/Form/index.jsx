@@ -12,7 +12,7 @@ import Modal from '../../Shared/Modal/Modal';
 import { resetProject, resetMessage } from '../../../redux/projects/actions';
 import { addProject, editProject, getSingleProject } from '../../../redux/projects/thunks';
 import { getEmployees } from '../../../redux/employees/thunks';
-import { getAdmins } from '../../../redux/admins/thunks';
+import { getAdmins } from '../../../redux/thunks/super-admin';
 import styles from './index.module.css';
 
 function Projects() {

@@ -9,7 +9,7 @@ import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
-import { login } from 'redux/auth/thunks';
+import { login } from 'redux/thunks/auth';
 import { resetMessage } from 'redux/auth/actions';
 
 const loginValidations = joi.object({

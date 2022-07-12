@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { resetMessage, setModal } from 'redux/auth/actions';
-import { registerEmployee } from 'redux/auth/thunks';
+import { registerEmployee } from 'redux/thunks/auth';
 import Joi from 'joi';
 import Modal from 'Components/Shared/Modal/Modal';
 import Input from 'Components/Shared/Input';

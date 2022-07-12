@@ -16,13 +16,15 @@ import {
   getSingleAdminSuccess,
   resetMessage,
   resetAdmin
-} from './actions';
+} from '../admins/actions';
+
+const url = `${process.env.REACT_APP_API_URL}/super-admin`;
 
 export const getAdmins = () => {
   return async (dispatch) => {
     try {
       dispatch(getAdminsPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const response = await fetch(`${url}/admins`);
       const data = await response.json();
       if (!data.error) dispatch(getAdminsSuccess(data.data));
       else dispatch(getAdminsError(data.message));
@@ -36,7 +38,7 @@ export const getSingleAdmin = (id) => {
   return async (dispatch) => {
     try {
       dispatch(getSingleAdminPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`);
+      const response = await fetch(`${url}/admins/${id}`);
       const data = await response.json();
       if (!data.error) {
         dispatch(getSingleAdminSuccess(data));
@@ -53,7 +55,7 @@ export const addAdmin = (obj) => {
   return async (dispatch) => {
     dispatch(addAdminPending());
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`, {
+      const response = await fetch(`${url}/admins`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(obj)
@@ -77,7 +79,7 @@ export const editAdmin = (obj, id) => {
     try {
       dispatch(resetMessage());
       dispatch(editAdminPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
+      const response = await fetch(`${url}/admins/${id}`, {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(obj)
@@ -99,7 +101,7 @@ export const deleteAdmin = (id) => {
   return async (dispatch) => {
     dispatch(deleteAdminPending());
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins/${id}`, {
+      const response = await fetch(`${url}/admins/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-type': 'application/json'

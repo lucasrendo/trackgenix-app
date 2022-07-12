@@ -6,7 +6,7 @@ import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
 import Modal from 'Components/Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
+import { deleteAdmin, getAdmins } from 'redux/thunks/super-admin';
 import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Admins = () => {

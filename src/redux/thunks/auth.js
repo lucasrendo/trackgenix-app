@@ -4,12 +4,11 @@ import {
   loginError,
   registerPending,
   registerSuccess,
-  registerError,
-  getUserPending,
-  getUserSuccess,
-  getUserError
-} from './actions';
+  registerError
+} from '../auth/actions';
 import firebase from 'helper/firebase';
+
+const url = `${process.env.REACT_APP_API_URL}/auth`;
 
 export const login = (credentials) => {
   return async (dispatch) => {
@@ -29,22 +28,6 @@ export const login = (credentials) => {
   };
 };
 
-export const getUser = () => {
-  return async (dispatch) => {
-    dispatch(getUserPending());
-    const token = sessionStorage.getItem('token');
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/user`, {
-        headers: { token }
-      });
-      const data = await response.json();
-      dispatch(getUserSuccess(data.data));
-    } catch (error) {
-      dispatch(getUserError(error));
-    }
-  };
-};
-
 export const registerEmployee = (obj) => {
   return async (dispatch) => {
     try {
@@ -56,7 +39,7 @@ export const registerEmployee = (obj) => {
         body: JSON.stringify(obj)
       };
       dispatch(registerPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, requestConfig);
+      const response = await fetch(`${url}/register`, requestConfig);
       const data = await response.json();
       if (!data.error) {
         dispatch(registerSuccess(data));

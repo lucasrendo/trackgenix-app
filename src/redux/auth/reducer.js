@@ -2,9 +2,6 @@ import {
   LOGIN_PENDING,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
-  GET_USER_PENDING,
-  GET_USER_SUCCESS,
-  GET_USER_ERROR,
   REGISTER_PENDING,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
@@ -42,25 +39,6 @@ export const authReducer = (state = initialState, action) => {
         error: true,
         message: action.payload,
         isLoading: false
-      };
-    case GET_USER_PENDING:
-      return {
-        ...state,
-        isLoading: true
-      };
-    case GET_USER_SUCCESS:
-      return {
-        ...state,
-        error: false,
-        user: action.payload,
-        isLoading: false
-      };
-    case GET_USER_ERROR:
-      return {
-        ...state,
-        error: true,
-        isLoading: false,
-        message: action.payload
       };
     case REGISTER_PENDING:
       return {
