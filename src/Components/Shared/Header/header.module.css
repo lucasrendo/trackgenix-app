@@ -1,48 +1,34 @@
-.navbar {
+.container {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 5%;
-  min-height: 100px;
+  padding: 0px 2%;
+  height: 100px;
   background-color: #373867;
 }
 
-.appName {
+.container a {
+  text-decoration: none;
+  color: #AACE9B;
+}
+
+.container a:hover{
+  color: #95b587;
+}
+.container h1 {
   font-size: 1.75rem;
   font-weight: bold;
 }
 
-.appName > h1 > a {
-  text-decoration: none;
-  color: #AACE9B;
+.logo {
+  height: 70px;
 }
 
-.appName > h1 > a:hover, .rutes > li > a:hover{
-  color: #95b587;
-}
-
-.rutes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  list-style-type: none;
-}
-
-.rutes > li > a {
-  margin-left: 15px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  text-transform: capitalize;
-  color: #AACE9B;
-}
-
-@media screen and (min-width: 750px) {
-  .container {
-    padding: 0 20%;
-  }
-
-  .navbar {
-    padding: 0 20%;
-  }
+.menu {
+  position: relative;
+  left: 35px;
+  margin: 15px;
+  width: 40px;
+  cursor: pointer;
 }
