@@ -50,17 +50,28 @@ function NewProject() {
       .label('Client'),
     startDate: joi.date().required().label('Start Date'),
     endDate: joi.date().min(joi.ref('startDate')).allow('').label('End Date'),
-    employeeId: joi.string().required().label('Employee'),
-    role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
-    rate: joi.number().min(0).precision(2).required().label('Rate'),
-    hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
+    employees: joi
+      .array()
+      .items(
+        joi.object({
+          employeeId: joi.string().required().label('Employee ID'),
+          role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
+          rate: joi.number().min(0).precision(2).required().label('Rate'),
+          hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
+        })
+      )
+      .label('Employee')
+    // role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
+    // rate: joi.number().min(0).precision(2).required().label('Rate'),
+    // hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    watch
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
@@ -70,11 +81,8 @@ function NewProject() {
       endDate: '',
       admin: '',
       client: '',
-      employeeId: '',
-      role: '',
-      rate: 0,
-      hoursInProject: 0,
-      isActive: false
+      employees: [],
+      isActive: true
     },
     resolver: joiResolver(validationSchema)
   });
@@ -103,6 +111,7 @@ function NewProject() {
   };
 
   const submitHandler = (data) => {
+    console.log(data);
     id ? dispatch(editProject(data, id)) : dispatch(addProject(data));
     setShowModal(true);
   };
@@ -170,16 +179,28 @@ function NewProject() {
           <div className={styles.employeeBox} key={index}>
             <Select
               text="Employee"
-              id="employeeId"
+              id={`employees.${index}.employeeId`}
               options={formatEmployees()}
               error={errors.employeeId}
               register={register}
             />
-            <Input type="text" id="role" text="Role" error={errors.role} register={register} />
-            <Input type="number" id="rate" text="Rate" error={errors.rate} register={register} />
+            <Input
+              type="text"
+              id={`employees.${index}.role`}
+              text="Role"
+              error={errors.role}
+              register={register}
+            />
             <Input
               type="number"
-              id="hoursInProject"
+              id={`employees.${index}.rate`}
+              text="Rate"
+              error={errors.rate}
+              register={register}
+            />
+            <Input
+              type="number"
+              id={`employees.${index}.hoursInProject`}
               text="Hours in project"
               error={errors.hoursInProject}
               register={register}

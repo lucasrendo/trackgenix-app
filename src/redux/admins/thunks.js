@@ -22,7 +22,7 @@ export const getAdmins = () => {
   return async (dispatch) => {
     try {
       dispatch(getAdminsPending());
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/admins`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/admins`);
       const data = await response.json();
       if (!data.error) dispatch(getAdminsSuccess(data.data));
       else dispatch(getAdminsError(data.message));

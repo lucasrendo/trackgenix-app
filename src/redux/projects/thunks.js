@@ -19,7 +19,7 @@ import {
 const url = `${process.env.REACT_APP_API_URL}/projects`;
 
 const formatProject = (project) => {
-  return {
+  const data = {
     projectName: project.projectName,
     description: project.description,
     admin: project.admin,
@@ -27,15 +27,15 @@ const formatProject = (project) => {
     startDate: project.startDate,
     endDate: project.endDate,
     isActive: project.isActive,
-    employees: [
-      {
-        employeeId: project.employeeId,
-        role: project.role,
-        rate: project.rate,
-        hoursInProject: project.hoursInProject
-      }
-    ]
+    employees: []
   };
+  data.employees.push({
+    employeeId: project.employeeId,
+    role: project.role,
+    rate: project.rate,
+    hoursInProject: project.hoursInProject
+  });
+  return data;
 };
 
 export const getProjects = () => {
@@ -71,14 +71,17 @@ export const getSingleProject = (id) => {
 export const addProject = (obj) => {
   return async (dispatch) => {
     try {
-      const project = formatProject(obj);
+      //const project = formatProject(obj);
       const requestConfig = {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(project)
+        body: JSON.stringify(obj)
       };
       dispatch(addProjectPending());
-      const response = await fetch(url, requestConfig);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/admin/projects`,
+        requestConfig
+      );
       const data = await response.json();
 
       !data.error
