@@ -103,7 +103,6 @@ export const addEmployee = (obj) => {
       const response = await fetch(`${url}/employees`, requestConfig);
       const data = await response.json();
 
-      // eslint-disable-next-line prettier/prettier
       return !data.error
         ? dispatch(addEmployeesSuccess(data))
         : dispatch(addEmployeesError(data.message));
@@ -248,7 +247,6 @@ export const deleteProject = (id) => {
       const response = await fetch(`${url}/projects/${id}`, requestConfig);
       const data = await response.json();
 
-      // eslint-disable-next-line prettier/prettier
       return !data.error
         ? dispatch(deleteProjectSuccess(id))
         : dispatch(deleteProjectError(data.message));

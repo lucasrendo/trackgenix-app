@@ -4,9 +4,7 @@ import {
   LOGIN_ERROR,
   REGISTER_PENDING,
   REGISTER_SUCCESS,
-  REGISTER_ERROR,
-  RESET_MESSAGE,
-  SET_MODAL
+  REGISTER_ERROR
 } from './constants';
 
 export const loginPending = () => {
@@ -46,18 +44,5 @@ export const registerError = (error) => {
   return {
     type: REGISTER_ERROR,
     payload: error
-  };
-};
-
-export const resetMessage = () => {
-  return {
-    type: RESET_MESSAGE
-  };
-};
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
   };
 };

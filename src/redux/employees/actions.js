@@ -14,11 +14,7 @@ import {
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
-  RESET_EMPLOYEE,
-  FORMAT_EMPLOYEE_OBJECTS,
-  SET_MODAL,
-  RESET_MESSAGE,
-  UPDATE_LIST
+  RESET_EMPLOYEE
 } from './constants';
 
 export const getEmployeesSuccess = (data) => {
@@ -83,20 +79,4 @@ export const deleteEmployeesError = (error) => {
 
 export const resetEmployee = () => {
   return { type: RESET_EMPLOYEE };
-};
-
-export const formatEmployeeObject = (data) => {
-  return { type: FORMAT_EMPLOYEE_OBJECTS, payload: data };
-};
-
-export const resetMessage = () => {
-  return { type: RESET_MESSAGE };
-};
-
-export const setModal = (state) => {
-  return { type: SET_MODAL, payload: state };
-};
-
-export const updateList = (newList) => {
-  return { type: UPDATE_LIST, payload: newList };
 };

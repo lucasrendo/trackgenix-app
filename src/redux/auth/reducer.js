@@ -4,18 +4,14 @@ import {
   LOGIN_ERROR,
   REGISTER_PENDING,
   REGISTER_SUCCESS,
-  REGISTER_ERROR,
-  RESET_MESSAGE,
-  SET_MODAL
+  REGISTER_ERROR
 } from './constants';
 
 const initialState = {
   isLoading: false,
   error: false,
-  message: '',
   authenticated: undefined,
-  user: undefined,
-  showModal: false
+  user: undefined
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -57,16 +53,6 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         error: true,
         message: action.payload
-      };
-    case RESET_MESSAGE:
-      return {
-        ...state,
-        message: ''
-      };
-    case SET_MODAL:
-      return {
-        ...state,
-        showModal: action.payload
       };
     default:
       return state;

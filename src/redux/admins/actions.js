@@ -14,10 +14,8 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  RESET_MESSAGE,
-  RESET_ADMIN,
-  SET_MODAL
-} from './constants';
+  RESET_ADMIN
+} from 'redux/admins/constants';
 
 export const getAdminsPending = () => ({
   type: GET_ADMINS_PENDING
@@ -89,17 +87,6 @@ export const deleteAdminError = (error) => ({
   payload: error
 });
 
-export const resetMessage = () => ({
-  type: RESET_MESSAGE
-});
-
 export const resetAdmin = () => ({
   type: RESET_ADMIN
 });
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
-  };
-};
