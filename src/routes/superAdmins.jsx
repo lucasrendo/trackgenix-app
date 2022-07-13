@@ -1,35 +1,17 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
-import Layout from 'Components/Layout';
-import Loading from 'Components/Shared/Loading';
-import List from 'Components/SuperAdmin/List';
-import Form from 'Components/SuperAdmin/Form';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import List from 'Components/SuperAdmins/List';
+import Form from 'Components/SuperAdmins/Form';
+import NotFound from 'Components/Shared/NotFound';
 
-const superAdmins = () => {
+const SuperAdmin = () => {
   return (
-    <Router>
-      <Suspense fallback={<Loading />}>
-        <Layout>
-          {superAdmins ? (
-            <em>Logged as {superAdmins.firstName}</em>
-          ) : (
-            <Link to="/auth/login">Login</Link>
-          )}
-          <Switch>
-            {/* <Route
-              path="/auth/login"
-              render={() => {
-                return superAdmins ? <Redirect to="/super-admins" /> : <Redirect to="/" />;
-              }}
-              component={List}
-            /> */}
-            {/* <Route exact path={'/super-admins'} component={List} /> */}
-            <Route exact path={'/super-admins/form'} component={Form} />
-          </Switch>
-        </Layout>
-      </Suspense>
-    </Router>
+    <Switch>
+      <Route exact path="/superadmin" component={List} />
+      <Route exact path="/superadmin/add-admin" component={Form} />
+      <Route component={NotFound} />
+    </Switch>
   );
 };
 
-export default superAdmins;
+export default SuperAdmin;

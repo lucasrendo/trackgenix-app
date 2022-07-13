@@ -78,7 +78,7 @@ const RegisterForm = () => {
     dispatch(setModal(false));
     dispatch(resetMessage());
     if (!error) {
-      history.push('/login');
+      history.push('/auth/login');
     }
   };
 
@@ -127,7 +127,7 @@ const RegisterForm = () => {
           </Button>
           <p className={styles.text}>
             Already have an account?{' '}
-            <Link to="/login" className={styles.link}>
+            <Link to="/auth/login" className={styles.link}>
               Log In
             </Link>
           </p>

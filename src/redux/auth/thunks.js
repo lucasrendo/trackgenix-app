@@ -62,7 +62,7 @@ export const registerEmployee = (obj) => {
         dispatch(registerSuccess(data));
       } else dispatch(registerError(data.message));
     } catch (error) {
-      dispatch(registerError(error));
+      dispatch(registerError(error.toString()));
     }
   };
 };

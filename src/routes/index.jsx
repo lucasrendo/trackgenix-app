@@ -1,27 +1,29 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import Layout from 'Components/Layout';
-import Loading from 'Components/Shared/Loading';
-import PrivateRoute from 'helper/firebase/PrivateRoute';
-import PublicRoute from 'helper/firebase/PublicRoute';
-const superAdminRoutes = lazy(() => import('routes/superAdmins'));
+import NotFound from 'Components/Shared/NotFound';
+import Unfinished from 'Components/Shared/Unfinished';
+
 const AdminRoutes = lazy(() => import('routes/admins'));
+const superAdminRoutes = lazy(() => import('routes/superAdmins'));
 const EmployeeRoutes = lazy(() => import('routes/employees'));
 const AuthRoutes = lazy(() => import('routes/auth'));
 
 const Routes = () => {
   return (
     <Router>
-      <Layout>
-        <Suspense fallback={<Loading />}>
+      <Suspense fallback={<div />}>
+        <Layout>
           <Switch>
-            <PublicRoute path="/auth/login" component={AuthRoutes} />
+            <Route exact path="/" component={Unfinished} />
             <Route path="/employee" component={EmployeeRoutes} />
             <Route path="/admin" component={AdminRoutes} />
-            <PrivateRoute path="/super-admins" component={superAdminRoutes} />
+            <Route path="/superadmin" component={superAdminRoutes} />
+            <Route path="/auth" component={AuthRoutes} />
+            <Route component={NotFound} />
           </Switch>
-        </Suspense>
-      </Layout>
+        </Layout>
+      </Suspense>
     </Router>
   );
 };
