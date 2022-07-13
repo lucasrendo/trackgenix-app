@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
 import { login } from 'redux/thunks/auth';

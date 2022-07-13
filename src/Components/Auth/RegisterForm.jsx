@@ -3,10 +3,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { resetMessage, setModal } from 'redux/auth/actions';
+import { resetMessage } from 'redux/auth/actions';
+import { toggleModal } from 'redux/global/actions';
 import { registerEmployee } from 'redux/thunks/auth';
 import Joi from 'joi';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './auth.module.css';
@@ -75,7 +76,7 @@ const RegisterForm = () => {
   useEffect(() => reset(), []);
 
   const closeHandler = () => {
-    dispatch(setModal(false));
+    dispatch(toggleModal());
     dispatch(resetMessage());
     if (!error) {
       history.push('/auth/login');
@@ -84,7 +85,7 @@ const RegisterForm = () => {
 
   const submitHandler = (data) => {
     dispatch(registerEmployee(data));
-    dispatch(setModal(true));
+    dispatch(toggleModal());
   };
 
   return (

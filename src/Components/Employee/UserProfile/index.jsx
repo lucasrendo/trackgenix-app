@@ -5,7 +5,7 @@ import { resetMessage } from 'redux/employees/actions';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Loading from 'Components/Shared/Loading';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './index.module.css';

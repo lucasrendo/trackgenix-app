@@ -14,7 +14,8 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  RESET_ADMIN
+  RESET_ADMIN,
+  RESET_MESSAGE
 } from 'redux/admins/constants';
 
 export const getAdminsPending = () => ({
@@ -90,3 +91,9 @@ export const deleteAdminError = (error) => ({
 export const resetAdmin = () => ({
   type: RESET_ADMIN
 });
+
+export const resetMessage = () => {
+  return {
+    type: RESET_MESSAGE
+  };
+};

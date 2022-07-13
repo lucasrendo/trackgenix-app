@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSingleEmployee } from 'redux/employees/thunks';
+import { getSingleEmployee } from 'redux/thunks/employee';
 import List from 'Components/Shared/List';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';

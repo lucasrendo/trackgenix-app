@@ -15,8 +15,7 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_ERROR,
   RESET_TASK,
-  RESET_MESSAGE,
-  SET_MODAL
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
@@ -24,7 +23,6 @@ const initialState = {
   error: false,
   message: '',
   task: undefined,
-  showModal: false,
   list: []
 };
 
@@ -143,11 +141,6 @@ export const tasksReducer = (state = initialState, action) => {
         message: action.payload,
         showModal: true,
         error: true
-      };
-    case SET_MODAL:
-      return {
-        ...state,
-        showModal: action.payload
       };
     case RESET_TASK:
       return {

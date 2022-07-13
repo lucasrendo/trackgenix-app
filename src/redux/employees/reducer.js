@@ -14,14 +14,16 @@ import {
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
-  RESET_EMPLOYEE
+  RESET_EMPLOYEE,
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
   isLoading: false,
   error: false,
   employee: undefined,
-  list: []
+  list: [],
+  message: ''
 };
 
 export const employeeReducer = (state = initialState, action) => {
@@ -107,6 +109,11 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state, error: true, message: action.payload.message };
     case RESET_EMPLOYEE:
       return { ...state, employee: undefined };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: ''
+      };
     default:
       return state;
   }

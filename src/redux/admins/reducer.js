@@ -14,14 +14,16 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  RESET_ADMIN
+  RESET_ADMIN,
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
   list: [],
   isLoading: false,
   admin: undefined,
-  error: false
+  error: false,
+  message: ''
 };
 
 export const adminsReducer = (state = initialState, action) => {
@@ -139,6 +141,11 @@ export const adminsReducer = (state = initialState, action) => {
       return {
         ...state,
         admin: undefined
+      };
+    case RESET_MESSAGE:
+      return {
+        ...state,
+        message: ''
       };
     default:
       return state;

@@ -156,12 +156,12 @@ export const editProject = (obj, id) => {
   TIMESHEETS API
 ****************/
 
-export const getTimesheets = () => {
+export const getEmployeeTimesheets = (employee) => {
   return async (dispatch) => {
     try {
       dispatch(getTimesheetsPending());
 
-      const response = await fetch(`${url}/timesheets`);
+      const response = await fetch(`${url}/timesheet/get-by-employee/${employee}`);
       const data = await response.json();
 
       return !data.error
@@ -169,23 +169,6 @@ export const getTimesheets = () => {
         : dispatch(getTimesheetsError(data.message));
     } catch (error) {
       return dispatch(getTimesheetsError(error));
-    }
-  };
-};
-
-export const getSingleTimesheet = (id) => {
-  return async (dispatch) => {
-    try {
-      dispatch(getSingleTimesheetPending());
-
-      const response = await fetch(`${url}/timesheets/${id}`);
-      const data = await response.json();
-
-      return !data.error
-        ? dispatch(getSingleTimesheetSuccess(data))
-        : dispatch(getSingleTimesheetError(data.message));
-    } catch (error) {
-      return dispatch(getSingleTimesheetError(error));
     }
   };
 };
@@ -200,7 +183,7 @@ export const addTimesheet = (timesheet) => {
         body: JSON.stringify(timesheet)
       };
 
-      const response = await fetch(`${url}/timesheets`, requestConfig);
+      const response = await fetch(`${url}/timesheet`, requestConfig);
       const data = await response.json();
 
       return !data.error
@@ -222,7 +205,7 @@ export const editTimesheet = (timesheet, id) => {
         body: JSON.stringify(timesheet)
       };
 
-      const response = await fetch(`${url}/timesheets/${id}`, requestConfig);
+      const response = await fetch(`${url}/timesheet/${id}`, requestConfig);
       const data = await response.json();
 
       return !data.error

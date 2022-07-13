@@ -13,9 +13,7 @@ import {
   deleteAdminSuccess,
   getSingleAdminError,
   getSingleAdminPending,
-  getSingleAdminSuccess,
-  resetMessage,
-  resetAdmin
+  getSingleAdminSuccess
 } from 'redux/admins/actions';
 
 const url = `${process.env.REACT_APP_API_URL}/super-admin`;
