@@ -10,7 +10,7 @@ import { getTimesheetsByEmployee } from 'redux/employee/thunks';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { getTasks } from 'redux/tasks/thunks';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheets/thunks';
-import { resetMessage, resetTimesheet } from 'redux/timesheets/actions';
+import { resetMessage } from 'redux/timesheets/actions';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -55,12 +55,13 @@ const HoursForm = () => {
     date: ''
   });
   const [timesheetReqData, setTimesheetReqData] = useState({});
+  const [timesheetId, setTimesheetId] = useState(null);
   const dispatch = useDispatch();
   const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
   const timesheet = useSelector((state) => state.timesheet.timesheet);
   const tasks = useSelector((state) => state.tasks.list);
-  const isLoading = useSelector((state) => state.timesheet.isLoading);
-  const error = useSelector((state) => state.timesheet.error);
+  const isLoadingTimesheet = useSelector((state) => state.timesheet.isLoading);
+  const isLoadingList = useSelector((state) => state.employees.isLoading);
   const employee = useSelector((state) => state.employees.employee);
   const message = useSelector((state) => state.timesheet.message);
   const {
@@ -83,6 +84,7 @@ const HoursForm = () => {
       dispatch(getSingleEmployee(id));
       dispatch(getTimesheetsByEmployee(id));
       getCurrentWeek(todayDate);
+      formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
     }
     dispatch(getTasks());
   }, []);
@@ -91,6 +93,11 @@ const HoursForm = () => {
     dispatch(getTimesheetsByEmployee(id));
     formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
   }, [week]);
+
+  useEffect(() => {
+    const formatedTimesheet = formatTimesheet(timesheet);
+    reset(formatedTimesheet);
+  }, [timesheet]);
 
   const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
     const formatedWeek = formatDaysOfWeek(daysOfWeek);
@@ -106,13 +113,34 @@ const HoursForm = () => {
         projectName: project.projectName,
         role: role,
         rate: rate,
-        monday: weekTimesheets.workedHours[0],
-        tuesday: weekTimesheets.workedHours[1],
-        wednesday: weekTimesheets.workedHours[2],
-        thursday: weekTimesheets.workedHours[3],
-        friday: weekTimesheets.workedHours[4],
-        saturday: weekTimesheets.workedHours[5],
-        sunday: weekTimesheets.workedHours[6],
+        monday: {
+          workedHours: weekTimesheets.workedHours[0],
+          id: weekTimesheets.timesheets[0]
+        },
+        tuesday: {
+          workedHours: weekTimesheets.workedHours[1],
+          id: weekTimesheets.timesheets[1]
+        },
+        wednesday: {
+          workedHours: weekTimesheets.workedHours[2],
+          id: weekTimesheets.timesheets[2]
+        },
+        thursday: {
+          workedHours: weekTimesheets.workedHours[3],
+          id: weekTimesheets.timesheets[3]
+        },
+        friday: {
+          workedHours: weekTimesheets.workedHours[4],
+          id: weekTimesheets.timesheets[4]
+        },
+        saturday: {
+          workedHours: weekTimesheets.workedHours[5],
+          id: weekTimesheets.timesheets[5]
+        },
+        sunday: {
+          workedHours: weekTimesheets.workedHours[6],
+          id: weekTimesheets.timesheets[6]
+        },
         totalHours: totalHours
       };
     });
@@ -221,6 +249,14 @@ const HoursForm = () => {
     });
   };
 
+  const formatTimesheet = (timesheet) => {
+    return {
+      task: timesheet?.task,
+      description: timesheet?.description,
+      workedHours: timesheet?.workedHours
+    };
+  };
+
   const headers = [
     { header: 'Project Name', key: 'projectName', style: false },
     { header: 'Role', key: 'role', style: false },
@@ -235,8 +271,8 @@ const HoursForm = () => {
   ];
 
   const closeHandlerForm = () => {
-    setShowModalForm(false);
     reset();
+    setShowModalForm(false);
   };
 
   const closeHandlerModal = () => {
@@ -249,13 +285,22 @@ const HoursForm = () => {
       ...timesheetReqData,
       ...data
     };
-    dispatch(addTimesheet(reqData));
+    if (timesheetId) {
+      dispatch(editTimesheet(reqData, timesheetId));
+    } else {
+      dispatch(addTimesheet(reqData));
+    }
     setShowModal(true);
-    setShowModalForm(false);
     reset();
+    setShowModalForm(false);
   };
 
   const openModalHandler = (data, header) => {
+    const _id = data[header.key].id;
+    if (_id) {
+      setTimesheetId(_id);
+      dispatch(getSingleTimesheet(_id));
+    }
     setTimesheetShowData({
       project: data.projectName,
       role: data.role,
@@ -281,7 +326,7 @@ const HoursForm = () => {
         </p>
         <Button onClick={() => nextWeek(startWeekDay, endWeekDay)}>{'>'}</Button>
       </div>
-      {isLoading ? (
+      {isLoadingList ? (
         <Loading />
       ) : (
         <>
@@ -312,7 +357,7 @@ const HoursForm = () => {
                             }
                           }}
                         >
-                          {row[header.key]}
+                          {header.style ? row[header.key].workedHours : row[header.key]}
                         </td>
                       );
                     })}
@@ -330,31 +375,35 @@ const HoursForm = () => {
           <label className={styles.label}>Project: {timesheetShowData.project}</label>
           <label className={styles.label}>Role: {timesheetShowData.role}</label>
           <label className={styles.label}>Date: {timesheetShowData.date}</label>
-          <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-            <Select
-              id={'task'}
-              text={'Task'}
-              options={formatTasks()}
-              register={register}
-              error={errors.task}
-            />
-            <Input
-              id={'description'}
-              type={'text'}
-              text={'Description'}
-              required={false}
-              register={register}
-              error={errors.description}
-            />
-            <Input
-              id={'workedHours'}
-              text={'Worked Hours'}
-              type={'number'}
-              register={register}
-              error={errors.workedHours}
-            />
-            <Button>Save</Button>
-          </form>
+          {isLoadingTimesheet ? (
+            <Loading />
+          ) : (
+            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+              <Select
+                id={'task'}
+                text={'Task'}
+                options={formatTasks()}
+                register={register}
+                error={errors.task}
+              />
+              <Input
+                id={'description'}
+                type={'text'}
+                text={'Description'}
+                required={false}
+                register={register}
+                error={errors.description}
+              />
+              <Input
+                id={'workedHours'}
+                text={'Worked Hours'}
+                type={'number'}
+                register={register}
+                error={errors.workedHours}
+              />
+              <Button>Save</Button>
+            </form>
+          )}
         </Modal>
       }
       <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>

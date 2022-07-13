@@ -1,8 +1,7 @@
 import {
   getTimesheetsByEmployeePending,
   getTimesheetsByEmployeeSuccess,
-  getTimesheetsByEmployeeError,
-  resetMessage
+  getTimesheetsByEmployeeError
 } from './actions';
 
 const url = `${process.env.REACT_APP_API_URL}/timesheets/get-by-employee`;
