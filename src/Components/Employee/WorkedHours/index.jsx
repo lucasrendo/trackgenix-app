@@ -92,7 +92,7 @@ const HoursForm = () => {
   useEffect(() => {
     dispatch(getTimesheetsByEmployee(id));
     formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
-  }, [week]);
+  }, [timesheetsList]);
 
   useEffect(() => {
     const formatedTimesheet = formatTimesheet(timesheet);
@@ -378,7 +378,7 @@ const HoursForm = () => {
           {isLoadingTimesheet ? (
             <Loading />
           ) : (
-            <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit(submitHandler)}>
               <Select
                 id={'task'}
                 text={'Task'}
