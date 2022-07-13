@@ -58,10 +58,11 @@ const url = `${process.env.REACT_APP_API_URL}/admin`;
 
 export const getSingleEmployee = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleEmployeesPending());
     try {
-      dispatch(getSingleEmployeesPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/employees/${id}`);
+      const response = await fetch(`${url}/employees/${id}`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -75,10 +76,11 @@ export const getSingleEmployee = (id) => {
 
 export const getEmployees = () => {
   return async (dispatch) => {
+    dispatch(getEmployeesPending());
     try {
-      dispatch(getEmployeesPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/employees`);
+      const response = await fetch(`${url}/employees`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -92,11 +94,12 @@ export const getEmployees = () => {
 
 export const addEmployee = (obj) => {
   return async (dispatch) => {
+    dispatch(addEmployeesPending());
     try {
-      dispatch(addEmployeesPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'POST',
-        headers: { 'Content-type': 'application/json' },
+        headers: { 'Content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -114,11 +117,12 @@ export const addEmployee = (obj) => {
 
 export const editEmployees = (obj, id) => {
   return async (dispatch) => {
+    dispatch(editEmployeesPending());
     try {
-      dispatch(editEmployeesPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
+        headers: { 'Content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -136,11 +140,12 @@ export const editEmployees = (obj, id) => {
 
 export const deleteEmployees = (id) => {
   return async (dispatch) => {
+    dispatch(deleteEmployeesPending());
     try {
-      dispatch(deleteEmployeesPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'DELETE',
-        headers: { 'Content-type': 'application/json' }
+        headers: { 'Content-type': 'application/json', token }
       };
 
       const response = await fetch(`${url}/employees/${id}`, requestConfig);
@@ -161,10 +166,11 @@ export const deleteEmployees = (id) => {
 
 export const getProjects = () => {
   return async (dispatch) => {
+    dispatch(getProjectsPending());
     try {
-      dispatch(getProjectsPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/projects`);
+      const response = await fetch(`${url}/projects`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -178,9 +184,11 @@ export const getProjects = () => {
 
 export const getSingleProject = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleProjectPending());
     try {
-      dispatch(getSingleProjectPending());
-      const response = await fetch(`${url}/projects/${id}`);
+      const token = sessionStorage.getItem('token');
+
+      const response = await fetch(`${url}/projects/${id}`, { headers: { token } });
       const data = await response.json();
       return !data.error
         ? dispatch(getSingleProjectSuccess(data.data))
@@ -193,11 +201,12 @@ export const getSingleProject = (id) => {
 
 export const addProject = (obj) => {
   return async (dispatch) => {
+    dispatch(addProjectPending());
     try {
-      dispatch(addProjectPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -215,11 +224,12 @@ export const addProject = (obj) => {
 
 export const editProject = (obj, id) => {
   return async (dispatch) => {
+    dispatch(editProjectPending());
     try {
-      dispatch(editProjectPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -237,11 +247,12 @@ export const editProject = (obj, id) => {
 
 export const deleteProject = (id) => {
   return async (dispatch) => {
+    dispatch(deleteProjectPending());
     try {
-      dispatch(deleteProjectPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json', token }
       };
 
       const response = await fetch(`${url}/projects/${id}`, requestConfig);
@@ -262,10 +273,11 @@ export const deleteProject = (id) => {
 
 export const getTimesheets = () => {
   return async (dispatch) => {
+    dispatch(getTimesheetsPending());
     try {
-      dispatch(getTimesheetsPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/timesheets`);
+      const response = await fetch(`${url}/timesheets`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -279,11 +291,12 @@ export const getTimesheets = () => {
 
 export const deleteTimesheet = (id) => {
   return async (dispatch) => {
+    dispatch(deleteTimesheetPending());
     try {
-      dispatch(deleteTimesheetPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json', token }
       };
 
       const response = await fetch(`${url}/timesheets/${id}`, requestConfig);
@@ -300,10 +313,11 @@ export const deleteTimesheet = (id) => {
 
 export const getSingleTimesheet = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleTimesheetPending());
     try {
-      dispatch(getSingleTimesheetPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/timesheets/${id}`);
+      const response = await fetch(`${url}/timesheets/${id}`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -317,11 +331,12 @@ export const getSingleTimesheet = (id) => {
 
 export const addTimesheet = (timesheet) => {
   return async (dispatch) => {
+    dispatch(addTimesheetPending());
     try {
-      dispatch(addTimesheetPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(timesheet)
       };
 
@@ -339,11 +354,12 @@ export const addTimesheet = (timesheet) => {
 
 export const editTimesheet = (timesheet, id) => {
   return async (dispatch) => {
+    dispatch(editTimesheetPending());
     try {
-      dispatch(editTimesheetPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(timesheet)
       };
 

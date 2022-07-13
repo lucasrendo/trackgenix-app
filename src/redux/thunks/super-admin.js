@@ -20,10 +20,11 @@ const url = `${process.env.REACT_APP_API_URL}/super-admin`;
 
 export const getAdmins = () => {
   return async (dispatch) => {
+    dispatch(getAdminsPending());
     try {
-      dispatch(getAdminsPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/admins`);
+      const response = await fetch(`${url}/admins`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -37,10 +38,11 @@ export const getAdmins = () => {
 
 export const getSingleAdmin = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleAdminPending());
     try {
-      dispatch(getSingleAdminPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/admins/${id}`);
+      const response = await fetch(`${url}/admins/${id}`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -54,11 +56,12 @@ export const getSingleAdmin = (id) => {
 
 export const addAdmin = (obj) => {
   return async (dispatch) => {
+    dispatch(addAdminPending());
     try {
-      dispatch(addAdminPending());
+      const token = sessionStorage.getItem('token');
       const dataOptions = {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -74,11 +77,12 @@ export const addAdmin = (obj) => {
 
 export const editAdmin = (obj, id) => {
   return async (dispatch) => {
+    dispatch(editAdminPending());
     try {
-      dispatch(editAdminPending());
+      const token = sessionStorage.getItem('token');
       const dataOptions = {
         method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
+        headers: { 'Content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -96,11 +100,12 @@ export const editAdmin = (obj, id) => {
 
 export const deleteAdmin = (id) => {
   return async (dispatch) => {
+    dispatch(deleteAdminPending());
     try {
-      dispatch(deleteAdminPending());
+      const token = sessionStorage.getItem('token');
       const dataOptions = {
         method: 'DELETE',
-        headers: { 'Content-type': 'application/json' }
+        headers: { 'Content-type': 'application/json', token }
       };
 
       const response = await fetch(`${url}/admins/${id}`, dataOptions);

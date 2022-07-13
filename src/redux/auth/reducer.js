@@ -11,8 +11,6 @@ import {
 const initialState = {
   isLoading: false,
   error: false,
-  authenticated: undefined,
-  user: undefined,
   message: ''
 };
 
@@ -27,7 +25,6 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        authenticated: action.payload,
         error: false,
         message: 'Successful login'
       };

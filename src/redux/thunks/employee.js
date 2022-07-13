@@ -26,10 +26,7 @@ import {
   addTimesheetSuccess,
   editTimesheetError,
   editTimesheetPending,
-  editTimesheetSuccess,
-  getSingleTimesheetError,
-  getSingleTimesheetPending,
-  getSingleTimesheetSuccess
+  editTimesheetSuccess
 } from 'redux/timesheets/actions';
 import {
   getTasksPending,
@@ -57,10 +54,11 @@ const url = `${process.env.REACT_APP_API_URL}/employee`;
 
 export const getSingleEmployee = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleEmployeesPending());
     try {
-      dispatch(getSingleEmployeesPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/${id}`);
+      const response = await fetch(`${url}/${id}`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -74,11 +72,12 @@ export const getSingleEmployee = (id) => {
 
 export const editEmployees = (obj, id) => {
   return async (dispatch) => {
+    dispatch(editEmployeesPending());
     try {
-      dispatch(editEmployeesPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
+        headers: { 'Content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -100,10 +99,11 @@ export const editEmployees = (obj, id) => {
 
 export const getProjects = () => {
   return async (dispatch) => {
+    dispatch(getProjectsPending());
     try {
-      dispatch(getProjectsPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/projects`);
+      const response = await fetch(`${url}/projects`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -117,9 +117,11 @@ export const getProjects = () => {
 
 export const getSingleProject = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleProjectPending());
     try {
-      dispatch(getSingleProjectPending());
-      const response = await fetch(`${url}/projects/${id}`);
+      const token = sessionStorage.getItem('token');
+
+      const response = await fetch(`${url}/projects/${id}`, { headers: { token } });
       const data = await response.json();
       return !data.error
         ? dispatch(getSingleProjectSuccess(data.data))
@@ -132,11 +134,12 @@ export const getSingleProject = (id) => {
 
 export const editProject = (obj, id) => {
   return async (dispatch) => {
+    dispatch(editProjectPending());
     try {
-      dispatch(editProjectPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -158,10 +161,13 @@ export const editProject = (obj, id) => {
 
 export const getEmployeeTimesheets = (employee) => {
   return async (dispatch) => {
+    dispatch(getTimesheetsPending());
     try {
-      dispatch(getTimesheetsPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/timesheet/get-by-employee/${employee}`);
+      const response = await fetch(`${url}/timesheet/get-by-employee/${employee}`, {
+        headers: { token }
+      });
       const data = await response.json();
 
       return !data.error
@@ -175,11 +181,12 @@ export const getEmployeeTimesheets = (employee) => {
 
 export const addTimesheet = (timesheet) => {
   return async (dispatch) => {
+    dispatch(addTimesheetPending());
     try {
-      dispatch(addTimesheetPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(timesheet)
       };
 
@@ -197,11 +204,12 @@ export const addTimesheet = (timesheet) => {
 
 export const editTimesheet = (timesheet, id) => {
   return async (dispatch) => {
+    dispatch(editTimesheetPending());
     try {
-      dispatch(editTimesheetPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(timesheet)
       };
 
@@ -223,10 +231,11 @@ export const editTimesheet = (timesheet, id) => {
 
 export const getTasks = () => {
   return async (dispatch) => {
+    dispatch(getTasksPending());
     try {
-      dispatch(getTasksPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/tasks`);
+      const response = await fetch(`${url}/tasks`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -240,10 +249,11 @@ export const getTasks = () => {
 
 export const getSingleTask = (id) => {
   return async (dispatch) => {
+    dispatch(getSingleTaskPending());
     try {
-      dispatch(getSingleTaskPending());
+      const token = sessionStorage.getItem('token');
 
-      const response = await fetch(`${url}/tasks/${id}`);
+      const response = await fetch(`${url}/tasks/${id}`, { headers: { token } });
       const data = await response.json();
 
       return !data.error
@@ -257,11 +267,12 @@ export const getSingleTask = (id) => {
 
 export const addTask = (obj) => {
   return async (dispatch) => {
+    dispatch(addTaskPending());
     try {
-      dispatch(addTaskPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', token },
         body: JSON.stringify(obj)
       };
 
@@ -277,11 +288,12 @@ export const addTask = (obj) => {
 
 export const editTask = (object, id) => {
   return async (dispatch) => {
+    dispatch(editTaskPending());
     try {
-      dispatch(editTaskPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', token },
         body: JSON.stringify(object)
       };
 
@@ -297,13 +309,12 @@ export const editTask = (object, id) => {
 
 export const deleteTask = (id) => {
   return async (dispatch) => {
+    dispatch(deleteTaskPending());
     try {
-      dispatch(deleteTaskPending());
+      const token = sessionStorage.getItem('token');
       const requestConfig = {
         method: 'DELETE',
-        headers: {
-          'Content-type': 'application/json'
-        }
+        headers: { 'Content-type': 'application/json', token }
       };
 
       const response = await fetch(`${url}/tasks/${id}`, requestConfig);

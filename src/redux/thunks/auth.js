@@ -21,9 +21,11 @@ export const login = (credentials) => {
       const {
         claims: { role }
       } = await response.user.getIdTokenResult();
-      return await dispatch(loginSuccess({ role, token }));
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('role', role);
+      return dispatch(loginSuccess());
     } catch (error) {
-      return dispatch(loginError(error));
+      return dispatch(loginError(error.toString()));
     }
   };
 };
