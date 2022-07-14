@@ -85,48 +85,51 @@ const Admins = () => {
 
   return (
     <section className={styles.container}>
-      <h2>Admins</h2>
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-        <Input
-          id={'firstName'}
-          register={register}
-          text={'First Name'}
-          type={'text'}
-          error={errors.firstName}
-        />
-        <Input
-          id={'lastName'}
-          register={register}
-          text={'Last Name'}
-          type={'text'}
-          error={errors.lastName}
-        />
-        <Input
-          id={'email'}
-          register={register}
-          text={'Email'}
-          type={'email'}
-          error={errors.email}
-        />
-        <Input
-          id={'password'}
-          register={register}
-          text={'Password'}
-          type={'password'}
-          error={errors.password}
-        />
-        <Input
-          id={'isActive'}
-          register={register}
-          text={'Is Active?'}
-          type={'checkbox'}
-          error={errors.checkbox}
-        />
+        <h2 className={styles.header}>New Admin Account</h2>
+        <div className={styles.inputsContainer}>
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
+          <Input
+            id={'lastName'}
+            register={register}
+            text={'Last Name'}
+            type={'text'}
+            error={errors.lastName}
+          />
+          <Input
+            id={'email'}
+            register={register}
+            text={'Email'}
+            type={'email'}
+            error={errors.email}
+          />
+          <Input
+            id={'password'}
+            register={register}
+            text={'Password'}
+            type={'password'}
+            error={errors.password}
+          />
+          <Input
+            id={'isActive'}
+            register={register}
+            text={'Confirm password'}
+            type={'password'}
+            error={errors.checkbox}
+          />
+        </div>
+
         <div className={styles.btnsContainer}>
+          <Button classes={'darker'}>Create Account</Button>
           <Button classes={'red'} onClick={() => goBack()}>
-            Back
+            Cancel
           </Button>
-          <Button>Save</Button>
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
