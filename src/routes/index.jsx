@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Layout from 'Components/Layout';
 import NotFound from 'Components/Shared/NotFound';
 import Unfinished from 'Components/Shared/Unfinished';
@@ -11,12 +12,16 @@ const EmployeeRoutes = lazy(() => import('routes/employees'));
 const AuthRoutes = lazy(() => import('routes/auth'));
 
 const Routes = () => {
+  const homePath = useSelector((state) => state.global.homePath);
+
   return (
     <Router>
       <Suspense fallback={<div />}>
         <Layout>
           <Switch>
-            <Route exact path="/" component={Unfinished} />
+            <Route exact path="/" component={Unfinished}>
+              {homePath !== '/' && <Redirect to={homePath} />}
+            </Route>
             <PrivateRoute path="/employee" role="EMPLOYEE" component={EmployeeRoutes} />
             <PrivateRoute path="/admin" role="ADMIN" component={AdminRoutes} />
             <PrivateRoute path="/superadmin" role="SUPER ADMIN" component={superAdminRoutes} />

@@ -17,7 +17,7 @@ const PrivateRoute = ({ component: RouteComponent, ...props }) => {
     <Route
       {...props}
       render={(routeProps) => {
-        if (!token || error) return <Redirect to={'/auth/login'} />;
+        if (!token || error) return <Redirect to="/auth/login" />;
         else if (role !== props.role) return <Unauthorized />;
         else return <RouteComponent {...routeProps} />;
       }}

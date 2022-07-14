@@ -1,10 +1,11 @@
-import { TOGGLE_SIDEBAR, TOGGLE_MODAL } from 'redux/global/constants';
+import { TOGGLE_SIDEBAR, TOGGLE_MODAL, SET_HOME } from 'redux/global/constants';
 
 const initialState = {
   showSidebar: false,
   showModal: false,
   message: '',
-  loading: false
+  loading: false,
+  homePath: '/'
 };
 
 export const globalReducer = (state = initialState, action) => {
@@ -18,6 +19,11 @@ export const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         showModal: !state.showModal
+      };
+    case SET_HOME:
+      return {
+        ...state,
+        homePath: action.payload
       };
     default:
       return state;
