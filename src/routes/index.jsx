@@ -3,6 +3,7 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import NotFound from 'Components/Shared/NotFound';
 import Unfinished from 'Components/Shared/Unfinished';
+import PrivateRoute from './PrivateRoute';
 
 const AdminRoutes = lazy(() => import('routes/admins'));
 const superAdminRoutes = lazy(() => import('routes/superAdmins'));
@@ -16,9 +17,9 @@ const Routes = () => {
         <Layout>
           <Switch>
             <Route exact path="/" component={Unfinished} />
-            <Route path="/employee" component={EmployeeRoutes} />
-            <Route path="/admin" component={AdminRoutes} />
-            <Route path="/superadmin" component={superAdminRoutes} />
+            <PrivateRoute path="/employee" role="EMPLOYEE" component={EmployeeRoutes} />
+            <PrivateRoute path="/admin" role="ADMIN" component={AdminRoutes} />
+            <PrivateRoute path="/superadmin" role="SUPER ADMIN" component={superAdminRoutes} />
             <Route path="/auth" component={AuthRoutes} />
             <Route component={NotFound} />
           </Switch>
