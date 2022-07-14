@@ -10,7 +10,7 @@ import { getTimesheetsByEmployee } from 'redux/employee/thunks';
 import { getSingleEmployee } from 'redux/employees/thunks';
 import { getTasks } from 'redux/tasks/thunks';
 import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheets/thunks';
-import { resetMessage } from 'redux/timesheets/actions';
+import { resetMessage, resetTimesheet } from 'redux/timesheets/actions';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -272,6 +272,7 @@ const HoursForm = () => {
 
   const closeHandlerForm = () => {
     reset();
+    dispatch(resetTimesheet());
     setShowModalForm(false);
   };
 
