@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import List from 'Components/SuperAdmins/List';
-import Form from 'Components/SuperAdmins/Form';
+import List from 'Components/Admins/List';
+import Form from 'Components/Admins/Form';
 import NotFound from 'Components/Shared/NotFound';
 
 const SuperAdmin = () => {

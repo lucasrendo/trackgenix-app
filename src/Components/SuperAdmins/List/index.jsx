@@ -46,12 +46,7 @@ function SuperAdmins() {
         id: superAdmin._id,
         firstName: superAdmin.firstName,
         lastName: superAdmin.lastName,
-<<<<<<< HEAD
         email: superAdmin.email
-=======
-        email: superAdmin.email,
-        isActive: superAdmin.isActive?.toString()
->>>>>>> 478e4354f749519ab39f05b1d2b562859dd8bb52
       };
     });
     return data;
