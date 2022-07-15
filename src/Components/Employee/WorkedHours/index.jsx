@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Modal from 'Components/Shared/Modal/Modal';
-import Loading from 'Components/Shared/Loading';
-import styles from './index.module.css';
-import Button from 'Components/Shared/Button';
-import { getSingleEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { getSingleEmployee } from 'redux/thunks/employee';
 import { resetMessage } from 'redux/employees/actions.js';
 import Joi from 'joi';
-import { joiResolver } from '@hookform/resolvers/joi';
+import Modal from 'Components/Shared/Modal';
+import Loading from 'Components/Shared/Loading';
+import Button from 'Components/Shared/Button';
 import Input from 'Components/Shared/Input';
+import styles from './index.module.css';
 
 const HoursForm = () => {
   const id = '62b1122165165c996de858ec';

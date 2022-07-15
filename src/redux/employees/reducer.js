@@ -14,18 +14,16 @@ import {
   DELETE_EMPLOYEES_SUCCESS,
   DELETE_EMPLOYEES_PENDING,
   DELETE_EMPLOYEES_ERROR,
-  SET_MODAL,
-  UPDATE_LIST,
-  RESET_MESSAGE,
-  RESET_EMPLOYEE
+  RESET_EMPLOYEE,
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
   isLoading: false,
   error: false,
-  message: '',
   employee: undefined,
-  list: []
+  list: [],
+  message: ''
 };
 
 export const employeeReducer = (state = initialState, action) => {
@@ -37,17 +35,14 @@ export const employeeReducer = (state = initialState, action) => {
         error: false,
         list: action.payload
       };
-
     case GET_EMPLOYEES_PENDING:
       return { ...state, isLoading: true };
-
     case GET_EMPLOYEES_ERROR:
       return {
         ...state,
         error: true,
         message: action.payload
       };
-
     case GET_SINGLE_EMPLOYEES_SUCCESS:
       return {
         ...state,
@@ -63,13 +58,10 @@ export const employeeReducer = (state = initialState, action) => {
         },
         message: action.payload.message
       };
-
     case GET_SINGLE_EMPLOYEES_PENDING:
       return { ...state, isLoading: true, message: 'Loading...' };
-
     case GET_SINGLE_EMPLOYEES_ERROR:
       return { ...state, error: true, message: action.payload };
-
     case ADD_EMPLOYEES_SUCCESS:
       return {
         ...state,
@@ -77,13 +69,10 @@ export const employeeReducer = (state = initialState, action) => {
         error: false,
         message: action.payload.message
       };
-
     case ADD_EMPLOYEES_PENDING:
       return { ...state, message: 'Loading...' };
-
     case ADD_EMPLOYEES_ERROR:
       return { ...state, error: true, message: action.payload };
-
     case EDIT_EMPLOYEES_SUCCESS:
       return {
         ...state,
@@ -99,16 +88,13 @@ export const employeeReducer = (state = initialState, action) => {
         },
         message: action.payload.message
       };
-
     case EDIT_EMPLOYEES_PENDING:
       return {
         ...state,
         message: 'Loading...'
       };
-
     case EDIT_EMPLOYEES_ERROR:
       return { ...state, error: true, message: action.payload };
-
     case DELETE_EMPLOYEES_SUCCESS:
       return {
         ...state,
@@ -117,24 +103,16 @@ export const employeeReducer = (state = initialState, action) => {
         message: 'The employee was successfully deleted',
         error: false
       };
-
     case DELETE_EMPLOYEES_PENDING:
       return { ...state, isLoading: true, message: 'Loading...' };
-
     case DELETE_EMPLOYEES_ERROR:
       return { ...state, error: true, message: action.payload.message };
-
-    case SET_MODAL:
-      return { ...state, showModal: action.payload };
-
-    case RESET_MESSAGE:
-      return { ...state, message: '' };
     case RESET_EMPLOYEE:
       return { ...state, employee: undefined };
-    case UPDATE_LIST:
+    case RESET_MESSAGE:
       return {
         ...state,
-        list: action.payload
+        message: ''
       };
     default:
       return state;
