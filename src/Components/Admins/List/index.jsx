@@ -4,10 +4,10 @@ import styles from './admins.module.css';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
-import { resetMessage, setModal } from 'redux/employees/actions';
+import { deleteEmployees, getEmployees } from 'redux/thunks/admin';
+import { resetMessage } from 'redux/admins/actions';
 
 const AdminsList = () => {
   const dispatch = useDispatch();
@@ -16,8 +16,8 @@ const AdminsList = () => {
   const isLoading = useSelector((state) => state.admins.isLoading);
   const message = useSelector((state) => state.admins.message);
   const [confirmation, setConfirmation] = useState(true);
-  const showModal = useSelector((state) => state.admins.showModal);
   const [id, setId] = useState('');
+  const [modalMessage, setModalMessage] = useState(false);
 
   const headers = [
     { header: 'First name', key: 'firstName' },
@@ -27,16 +27,16 @@ const AdminsList = () => {
   ];
 
   useEffect(() => {
-    dispatch(getAdmins());
+    dispatch(getEmployees());
   }, []);
 
   const confirmationHandler = () => {
     setConfirmation(false);
-    dispatch(deleteAdmin(id));
+    dispatch(deleteEmployees(id));
   };
 
   const closeHandler = () => {
-    dispatch(setModal(false));
+    dispatch(setModalMessage(false));
     dispatch(resetMessage());
     setConfirmation(true);
   };
@@ -68,18 +68,18 @@ const AdminsList = () => {
         resource={serverPath}
         deleteItem={(id) => {
           setId(id);
-          dispatch(setModal(true));
+          dispatch(setModalMessage(true));
         }}
         showButtons={true}
       />
       <div>
-        <Link to={'/admins/form'} className={styles.linkReset}>
+        <Link to={'/superadmin/add-admin'} className={styles.linkReset}>
           <Button classes="block">Create Admin</Button>
         </Link>
       </div>
       <Modal
-        handleClose={confirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
-        isOpen={showModal}
+        handleClose={confirmation ? () => dispatch(setModalMessage(false)) : () => closeHandler()}
+        isOpen={modalMessage}
         isConfirmation={confirmation}
         confirmed={() => confirmationHandler()}
       >
