@@ -2,13 +2,12 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
-import Admins from 'Components/Admins/Form';
 
 const Admin = () => {
   return (
     <Switch>
       {/*home*/}
-      <Route exact path="/admin" component={Admins} />
+      <Route exact path="/admin" component={Unfinished} />
       {/*Project list*/}
       <Route exact path="/admin/projects" component={Unfinished} />
       {/*single project details*/}

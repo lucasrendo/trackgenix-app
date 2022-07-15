@@ -12,7 +12,7 @@ import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './admins.module.css';
 
-const Admins = () => {
+const AdminsForm = () => {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const Admins = () => {
       .email({ tlds: { allow: false } })
       .required(),
     password: Joi.string().label('password').min(8).required(),
-    isActive: Joi.boolean()
+    confirmPassword: Joi.ref('password')
   });
   const {
     handleSubmit,
@@ -52,7 +52,7 @@ const Admins = () => {
       lastName: '',
       email: '',
       password: '',
-      isActive: false
+      confirmPassword: ''
     }
   });
 
@@ -86,8 +86,8 @@ const Admins = () => {
   return (
     <section className={styles.container}>
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-        <h2 className={styles.header}>New Admin Account</h2>
         <div className={styles.inputsContainer}>
+          <h2 className={styles.header}>New Admin Account</h2>
           <Input
             id={'firstName'}
             register={register}
@@ -117,11 +117,11 @@ const Admins = () => {
             error={errors.password}
           />
           <Input
-            id={'isActive'}
+            id={'confirmPassword'}
             register={register}
             text={'Confirm password'}
             type={'password'}
-            error={errors.checkbox}
+            error={errors.confirmPassword}
           />
         </div>
 
@@ -139,4 +139,4 @@ const Admins = () => {
   );
 };
 
-export default Admins;
+export default AdminsForm;

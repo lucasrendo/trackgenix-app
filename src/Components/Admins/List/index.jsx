@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
 import { resetMessage, setModal } from 'redux/employees/actions';
 
-const Admins = () => {
+const AdminsList = () => {
   const dispatch = useDispatch();
   const serverPath = '/admins';
   const list = useSelector((state) => state.admins.list);
@@ -89,4 +89,4 @@ const Admins = () => {
   );
 };
 
-export default Admins;
+export default AdminsList;
