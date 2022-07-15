@@ -2,7 +2,7 @@ import joi from 'joi';
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
@@ -28,7 +28,9 @@ function NewProject() {
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
-  const [employeeInputs, setEmployeeInputs] = useState([{ inputs: '' }]);
+  const [employeeInputs, setEmployeeInputs] = useState([
+    { employeeId: '', role: '', rate: '', hoursInProject: '' }
+  ]);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -61,17 +63,14 @@ function NewProject() {
         })
       )
       .label('Employee')
-    // role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
-    // rate: joi.number().min(0).precision(2).required().label('Rate'),
-    // hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
   });
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
-    reset,
-    watch
+    reset
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
@@ -85,6 +84,11 @@ function NewProject() {
       isActive: true
     },
     resolver: joiResolver(validationSchema)
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'employees'
   });
 
   useEffect(() => {
@@ -122,17 +126,6 @@ function NewProject() {
     if (!error) {
       goBack();
     }
-  };
-  0;
-
-  const handleEmployeeInputAdd = () => {
-    setEmployeeInputs([...employeeInputs, { inputs: '' }]);
-  };
-
-  const handleEmployeeInputRemove = (index) => {
-    const inputsList = [...employeeInputs];
-    inputsList.splice(index, 1);
-    setEmployeeInputs(inputsList);
   };
 
   return (
@@ -175,10 +168,10 @@ function NewProject() {
           register={register}
         />
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
-        {employeeInputs.map((singleEmployee, index) => (
-          <div className={styles.employeeBox} key={index}>
+        {fields.map((field, index) => (
+          <div className={styles.employeeBox} key={field.id}>
             <Select
-              text="Employee"
+              text={`Employee ${index + 1}`}
               id={`employees.${index}.employeeId`}
               options={formatEmployees()}
               error={errors.employeeId}
@@ -205,17 +198,12 @@ function NewProject() {
               error={errors.hoursInProject}
               register={register}
             />
-            {employeeInputs.length - 1 === index && (
-              <Button onClick={handleEmployeeInputAdd}>Add another employee</Button>
-            )}
-            {employeeInputs.length > 1 && (
-              <Button classes={'red'} onClick={() => handleEmployeeInputRemove(index)}>
-                Remove
-              </Button>
-            )}
+            <Button classes={'red'} onClick={() => remove(index)}>
+              Remove
+            </Button>
           </div>
         ))}
-
+        <Button onClick={() => append({})}> +Add employee</Button>
         <Input
           type="checkbox"
           id="isActive"
