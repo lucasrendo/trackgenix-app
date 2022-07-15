@@ -1,17 +1,17 @@
 import joi from 'joi';
 import { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './login.module.css';
-import { login } from 'redux/auth/thunks';
+import { login } from 'redux/thunks/auth';
 import { resetMessage } from 'redux/auth/actions';
-import { toggleSidebar } from 'redux/global/actions';
+import { setHome, toggleSidebar } from 'redux/global/actions';
 
 const loginValidations = joi.object({
   email: joi
@@ -28,13 +28,14 @@ const loginValidations = joi.object({
 });
 
 function Login() {
-  const { goBack } = useHistory();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.auth.isLoading);
   const message = useSelector((state) => state.auth.message);
+  const homePath = useSelector((state) => state.global.homePath);
   const [modalMessage, setModalMessage] = useState(false);
   const error = useSelector((state) => state.auth.error);
   const history = useHistory();
+  const superAdminRoutes = useRouteMatch('/superadmin');
 
   const {
     register,
@@ -50,6 +51,14 @@ function Login() {
     }
   });
 
+  const changeHome = () => {
+    if (sessionStorage.getItem('token')) {
+      sessionStorage.getItem('role') === 'EMPLOYEE' && dispatch(setHome('/employee'));
+      sessionStorage.getItem('role') === 'ADMIN' && dispatch(setHome('/admin'));
+      sessionStorage.getItem('role') === 'SUPER ADMIN' && dispatch(setHome('/superadmin'));
+    }
+  };
+
   useEffect(() => reset(), []);
 
   const submitHandler = (data) => {
@@ -61,11 +70,9 @@ function Login() {
     setModalMessage(false);
     dispatch(resetMessage());
     if (!error) {
-      // Use a switch or if to change where the login redirects to
-      // depending on what entity logs in.
-      dispatch(toggleSidebar(true));
-      history.push('/employee');
-      // superAdmin does not have a sidebar. don't dispatch the toggle in that case
+      changeHome();
+      history.push(homePath);
+      !superAdminRoutes && dispatch(toggleSidebar(true));
     }
   };
 
@@ -93,7 +100,7 @@ function Login() {
                 register={register}
               />
               <div className={styles.buttonContainer}>
-                <Button classes={'red'} onClick={() => goBack()}>
+                <Button classes={'red'} onClick={() => history.push(homePath)}>
                   Back
                 </Button>
                 <Button>Log in</Button>

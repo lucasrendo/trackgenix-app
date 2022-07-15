@@ -5,11 +5,7 @@ import {
   REGISTER_PENDING,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
-  GET_USER_PENDING,
-  GET_USER_SUCCESS,
-  GET_USER_ERROR,
-  RESET_MESSAGE,
-  SET_MODAL
+  RESET_MESSAGE
 } from './constants';
 
 export const loginPending = () => {
@@ -18,36 +14,15 @@ export const loginPending = () => {
   };
 };
 
-export const loginSuccess = (data) => {
+export const loginSuccess = () => {
   return {
-    type: LOGIN_SUCCESS,
-    payload: data
+    type: LOGIN_SUCCESS
   };
 };
 
 export const loginError = (error) => {
   return {
     type: LOGIN_ERROR,
-    payload: error
-  };
-};
-
-export const getUserPending = () => {
-  return {
-    type: GET_USER_PENDING
-  };
-};
-
-export const getUserSuccess = (data) => {
-  return {
-    type: GET_USER_SUCCESS,
-    payload: data
-  };
-};
-
-export const getUserError = (error) => {
-  return {
-    type: GET_USER_ERROR,
     payload: error
   };
 };
@@ -75,12 +50,5 @@ export const registerError = (error) => {
 export const resetMessage = () => {
   return {
     type: RESET_MESSAGE
-  };
-};
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
   };
 };

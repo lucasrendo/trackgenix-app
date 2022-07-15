@@ -14,9 +14,8 @@ import {
   GET_SINGLE_ADMIN_ERROR,
   GET_SINGLE_ADMIN_PENDING,
   GET_SINGLE_ADMIN_SUCCESS,
-  RESET_MESSAGE,
   RESET_ADMIN,
-  SET_MODAL
+  RESET_MESSAGE
 } from './constants';
 
 const initialState = {
@@ -24,8 +23,7 @@ const initialState = {
   isLoading: false,
   admin: undefined,
   error: false,
-  message: '',
-  showModal: false
+  message: ''
 };
 
 export const adminsReducer = (state = initialState, action) => {
@@ -139,21 +137,15 @@ export const adminsReducer = (state = initialState, action) => {
         message: action.payload,
         isLoading: false
       };
-    case RESET_MESSAGE:
-      return {
-        ...state,
-        message: ''
-      };
     case RESET_ADMIN:
       return {
         ...state,
         admin: undefined
       };
-    case SET_MODAL:
+    case RESET_MESSAGE:
       return {
         ...state,
-        showModal: action.payload,
-        message: 'Loading...'
+        message: ''
       };
     default:
       return state;

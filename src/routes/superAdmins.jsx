@@ -1,14 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import List from 'Components/SuperAdmins/List';
-import Form from 'Components/SuperAdmins/Form';
+import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
 
 const SuperAdmin = () => {
   return (
     <Switch>
-      <Route exact path="/superadmin" component={List} />
-      <Route exact path="/superadmin/add-admin" component={Form} />
+      <Route exact path="/superadmin" component={Unfinished} />
+      <Route exact path="/superadmin/add-admin" component={Unfinished} />
       <Route component={NotFound} />
     </Switch>
   );
