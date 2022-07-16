@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import List from 'Components/Old Components/Admins/List';
-import Form from 'Components/Old Components/Admins/Form';
+import List from 'Components/Admins/List';
+import Form from 'Components/Admins/Form';
 import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
 

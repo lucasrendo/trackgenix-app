@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { addAdmin, editAdmin, getSingleAdmin } from 'redux/admins/thunks';
-import { resetAdmin, resetMessage, setModal } from 'redux/admins/actions';
-
-import Modal from 'Components/Shared/Modal/Index';
+import { addEmployee, editEmployees, getSingleEmployee } from 'redux/thunks/admin';
+import { resetAdmin, resetMessage } from 'redux/admins/actions';
+import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './admins.module.css';
@@ -17,9 +16,8 @@ const Admins = () => {
   const { goBack } = useHistory();
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admins.admin);
-  const error = useSelector((state) => state.admins.error);
   const message = useSelector((state) => state.admins.message);
-  const showModal = useSelector((state) => state.admins.showModal);
+  const [showModal, setShowModal] = useState(false);
   const adminValidate = Joi.object({
     firstName: Joi.string()
       .pattern(/^[a-zA-Z ]+$/)
@@ -55,7 +53,7 @@ const Admins = () => {
   });
 
   useEffect(() => {
-    id && dispatch(getSingleAdmin(id));
+    id && dispatch(getSingleEmployee(id));
     return () => dispatch(resetAdmin());
   }, []);
 
@@ -64,21 +62,18 @@ const Admins = () => {
   }, [admin]);
 
   const closeHandler = () => {
-    dispatch(setModal(false));
+    setShowModal(false);
     dispatch(resetMessage());
-    if (!error) {
-      goBack();
-    }
   };
 
   // === Handle submit data and method === //
   const submitHandler = (data) => {
     if (id) {
-      dispatch(editAdmin(data, id));
+      dispatch(editEmployees(data, id));
     } else {
-      dispatch(addAdmin(data));
+      dispatch(addEmployee(data));
     }
-    dispatch(setModal(true));
+    setShowModal(true);
   };
 
   return (
