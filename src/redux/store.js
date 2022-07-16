@@ -4,7 +4,6 @@ import thunk from 'redux-thunk';
 import { employeeReducer } from './employees/reducer';
 import { adminsReducer } from './admins/reducer';
 import { timesheetReducer } from './timesheets/reducer';
-import { superAdminsReducer } from './SuperAdmins/reducer';
 import { projectsReducer } from './projects/reducer';
 import { tasksReducer } from './tasks/reducer';
 import { authReducer } from './auth/reducer';
@@ -15,7 +14,6 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   projects: projectsReducer,
   timesheet: timesheetReducer,
-  superAdmins: superAdminsReducer,
   employees: employeeReducer,
   auth: authReducer,
   global: globalReducer

@@ -15,9 +15,7 @@ import {
   RESET_MESSAGE,
   DELETE_PROJECT_SUCCESS,
   DELETE_PROJECT_PENDING,
-  DELETE_PROJECT_ERROR,
-  SET_MESSAGE,
-  SET_MODAL
+  DELETE_PROJECT_ERROR
 } from './constants';
 
 export const getProjectsSuccess = (data) => {
@@ -129,18 +127,5 @@ export const deleteProjectError = (error) => {
   return {
     type: DELETE_PROJECT_ERROR,
     payload: error
-  };
-};
-
-export const setMessage = () => {
-  return {
-    type: SET_MESSAGE
-  };
-};
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
   };
 };

@@ -15,8 +15,7 @@ import {
   DELETE_TIMESHEET_PENDING,
   DELETE_TIMESHEET_SUCCESS,
   DELETE_TIMESHEET_ERROR,
-  RESET_MESSAGE,
-  SET_MODAL
+  RESET_MESSAGE
 } from './constants';
 
 export const getTimesheetsPending = () => {
@@ -128,12 +127,5 @@ export const resetTimesheet = () => {
 export const resetMessage = () => {
   return {
     type: RESET_MESSAGE
-  };
-};
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
   };
 };
