@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { addEmployee, editEmployees, getSingleEmployee } from 'redux/thunks/admin';
-import { resetAdmin, resetMessage } from 'redux/admins/actions';
+import { addAdmin, getSingleAdmin } from 'redux/thunks/super-admin';
+import { resetMessage, resetSuperAdmin } from 'redux/superadmin/actions';
+import { toggleModal } from 'redux/global/actions';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
@@ -15,9 +16,10 @@ const AdminsForm = () => {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admins.admin);
-  const message = useSelector((state) => state.admins.message);
-  const [showModal, setShowModal] = useState(false);
+  const superAdmin = useSelector((state) => state.superAdmin.superAdmin);
+  const error = useSelector((state) => state.superAdmin.error);
+  const message = useSelector((state) => state.superAdmin.message);
+  const showModal = useSelector((state) => state.global.showModal);
   const adminValidate = Joi.object({
     firstName: Joi.string()
       .pattern(/^[a-zA-Z ]+$/)
@@ -33,8 +35,10 @@ const AdminsForm = () => {
       .required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
+      .label('Email')
       .required(),
-    password: Joi.string().label('password').min(8).required()
+    password: Joi.string().label('Password').min(8).required(),
+    isActive: Joi.boolean()
   });
   const {
     handleSubmit,
@@ -48,32 +52,32 @@ const AdminsForm = () => {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      isActive: true
     }
   });
 
   useEffect(() => {
-    id && dispatch(getSingleEmployee(id));
-    return () => dispatch(resetAdmin());
+    id && dispatch(getSingleAdmin(id));
+    return () => dispatch(resetSuperAdmin());
   }, []);
 
   useEffect(() => {
-    reset(admin);
-  }, [admin]);
+    reset(superAdmin);
+  }, [superAdmin]);
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(toggleModal(false));
     dispatch(resetMessage());
+    if (!error) {
+      goBack();
+    }
   };
 
   // === Handle submit data and method === //
   const submitHandler = (data) => {
-    if (id) {
-      dispatch(editEmployees(data, id));
-    } else {
-      dispatch(addEmployee(data));
-    }
-    setShowModal(true);
+    dispatch(addAdmin(data));
+    dispatch(toggleModal(true));
   };
 
   return (
@@ -108,18 +112,11 @@ const AdminsForm = () => {
           type={'password'}
           error={errors.password}
         />
-        <Input
-          id={'isActive'}
-          register={register}
-          text={'Is Active?'}
-          type={'checkbox'}
-          error={errors.checkbox}
-        />
         <div className={styles.btnsContainer}>
           <Button classes={'red'} onClick={() => goBack()}>
             Back
           </Button>
-          <Button>Save</Button>
+          <Button>Create Account</Button>
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>

@@ -4,38 +4,39 @@ import styles from './admins.module.css';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
-import Modal from 'Components/Shared/Modal';
+import Modal from 'Components/Shared/Modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployees, getEmployees } from 'redux/thunks/admin';
-import { resetMessage } from 'redux/employees/actions';
+import { deleteAdmin, getAdmins } from 'redux/admins/thunks';
+import { resetMessage, setModal } from 'redux/employees/actions';
 
 const Admins = () => {
   const dispatch = useDispatch();
-  const serverPath = '/admin';
+  const serverPath = '/admins';
   const list = useSelector((state) => state.admins.list);
   const isLoading = useSelector((state) => state.admins.isLoading);
   const message = useSelector((state) => state.admins.message);
   const [confirmation, setConfirmation] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const showModal = useSelector((state) => state.admins.showModal);
   const [id, setId] = useState('');
 
   const headers = [
     { header: 'First name', key: 'firstName' },
     { header: 'Last name', key: 'lastName' },
-    { header: 'Email', key: 'email' }
+    { header: 'Email', key: 'email' },
+    { header: 'is Active?', key: 'isActive' }
   ];
 
   useEffect(() => {
-    dispatch(getEmployees());
+    dispatch(getAdmins());
   }, []);
 
   const confirmationHandler = () => {
     setConfirmation(false);
-    dispatch(deleteEmployees(id));
+    dispatch(deleteAdmin(id));
   };
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(setModal(false));
     dispatch(resetMessage());
     setConfirmation(true);
   };
@@ -46,7 +47,8 @@ const Admins = () => {
         id: admin._id,
         firstName: admin.firstName,
         lastName: admin.lastName,
-        email: admin.email
+        email: admin.email,
+        isActive: admin.isActive.toString()
       };
     });
     return data;
@@ -66,17 +68,17 @@ const Admins = () => {
         resource={serverPath}
         deleteItem={(id) => {
           setId(id);
-          setShowModal(true);
+          dispatch(setModal(true));
         }}
         showButtons={true}
       />
       <div>
-        <Link to={'/superadmin/add-admin'} className={styles.linkReset}>
+        <Link to={'/admins/form'} className={styles.linkReset}>
           <Button classes="block">Create Admin</Button>
         </Link>
       </div>
       <Modal
-        handleClose={() => closeHandler()}
+        handleClose={confirmation ? () => dispatch(setModal(false)) : () => closeHandler()}
         isOpen={showModal}
         isConfirmation={confirmation}
         confirmed={() => confirmationHandler()}

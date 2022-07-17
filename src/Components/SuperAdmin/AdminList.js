@@ -6,17 +6,18 @@ import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
 import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployees, getEmployees } from 'redux/thunks/admin';
-import { resetMessage } from 'redux/employees/actions';
+import { deleteAdmin, getAdmins } from 'redux/thunks/super-admin';
+import { resetMessage } from 'redux/superadmin/actions';
+import { toggleModal } from 'redux/global/actions';
 
 const AdminsList = () => {
   const dispatch = useDispatch();
-  const serverPath = '/admin';
   const list = useSelector((state) => state.admins.list);
-  const isLoading = useSelector((state) => state.admins.isLoading);
-  const message = useSelector((state) => state.admins.message);
+  const isLoading = useSelector((state) => state.superAdmin.isLoading);
+  const message = useSelector((state) => state.superAdmin.message);
   const [confirmation, setConfirmation] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const showModal = useSelector((state) => state.global.showModal);
+
   const [id, setId] = useState('');
 
   const headers = [
@@ -26,16 +27,16 @@ const AdminsList = () => {
   ];
 
   useEffect(() => {
-    dispatch(getEmployees());
+    dispatch(getAdmins());
   }, []);
 
   const confirmationHandler = () => {
     setConfirmation(false);
-    dispatch(deleteEmployees(id));
+    dispatch(deleteAdmin(id));
   };
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(toggleModal(false));
     dispatch(resetMessage());
     setConfirmation(true);
   };
@@ -46,7 +47,8 @@ const AdminsList = () => {
         id: admin._id,
         firstName: admin.firstName,
         lastName: admin.lastName,
-        email: admin.email
+        email: admin.email,
+        isActive: admin.isActive
       };
     });
     return data;
@@ -63,10 +65,9 @@ const AdminsList = () => {
       <List
         data={formatListData(list)}
         headers={headers}
-        resource={serverPath}
         deleteItem={(id) => {
           setId(id);
-          setShowModal(true);
+          dispatch(toggleModal(true));
         }}
         showButtons={true}
       />
@@ -76,7 +77,7 @@ const AdminsList = () => {
         </Link>
       </div>
       <Modal
-        handleClose={() => closeHandler()}
+        handleClose={confirmation ? () => dispatch(toggleModal(false)) : () => closeHandler()}
         isOpen={showModal}
         isConfirmation={confirmation}
         confirmed={() => confirmationHandler()}

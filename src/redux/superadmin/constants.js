@@ -1,0 +1,2 @@
+export const RESET_SUPER_ADMIN = 'RESET_SUPER_ADMIN';
+export const RESET_MESSAGE = 'RESET_MESSAGE';
