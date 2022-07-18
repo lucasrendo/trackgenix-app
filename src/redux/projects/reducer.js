@@ -15,8 +15,7 @@ import {
   RESET_MESSAGE,
   DELETE_PROJECT_SUCCESS,
   DELETE_PROJECT_PENDING,
-  DELETE_PROJECT_ERROR,
-  SET_MODAL
+  DELETE_PROJECT_ERROR
 } from './constants';
 
 const initialState = {
@@ -24,8 +23,7 @@ const initialState = {
   isLoading: false,
   error: false,
   message: '',
-  project: undefined,
-  showModal: false
+  project: undefined
 };
 
 export const projectsReducer = (state = initialState, action) => {
@@ -151,11 +149,6 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         message: ''
-      };
-    case SET_MODAL:
-      return {
-        ...state,
-        showModal: action.payload
       };
     default:
       return state;

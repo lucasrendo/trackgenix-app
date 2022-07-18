@@ -1,21 +1,58 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { toggleSidebar } from 'redux/global/actions';
 import styles from './sidebar.module.css';
 
-const Sidebar = ({ links, title }) => {
+const Sidebar = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const [links, setLinks] = useState([]);
+  const [title, setTitle] = useState('');
+  const employeeLinks = [
+    { link: '/employee', title: 'Home' },
+    { link: '/employee/projects', title: 'My Projects' },
+    { link: '/employee/profile', title: 'User Profile' },
+    { link: '/employee/workedhours', title: 'Work Hours' }
+  ];
+  const adminLinks = [
+    { link: '/admin', title: 'Home' },
+    { link: '/admin/projects', title: 'All Projects' },
+    { link: '/admin/projects/add', title: 'Create Project' },
+    { link: '/admin/employees', title: 'Employees' },
+    { link: '/admin/reports', title: 'Report' }
+  ];
+
+  const setSidebarValues = () => {
+    if (location.pathname.includes('/employee')) {
+      setTitle('Employee');
+      setLinks(employeeLinks);
+    } else if (location.pathname.includes('/admin')) {
+      setTitle('Admin');
+      setLinks(adminLinks);
+    } else {
+      dispatch(toggleSidebar(false));
+    }
+  };
+
+  useEffect(() => setSidebarValues(), [location.pathname]);
+
   return (
     <aside className={styles.aside}>
+      <p>{title}</p>
       <nav>
-        <span className={styles.shortcuts}>{title}</span>
-        <div className={styles.horizontalLine}></div>
-        <ul>
+        <ul className={styles.navList}>
           {links.map((link, index) => {
             return (
-              <li key={index}>
-                <Link to={link.link}>{link.title}</Link>
-              </li>
+              <NavLink to={link.link} exact key={index} activeClassName={styles.currentLink}>
+                <li>{link.title}</li>
+              </NavLink>
             );
           })}
+          <NavLink to="#">
+            <li>Help</li>
+          </NavLink>
         </ul>
       </nav>
     </aside>

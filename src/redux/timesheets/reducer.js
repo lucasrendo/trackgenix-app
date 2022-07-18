@@ -15,15 +15,13 @@ import {
   GET_TIMESHEETS_ERROR,
   DELETE_TIMESHEET_PENDING,
   DELETE_TIMESHEET_SUCCESS,
-  DELETE_TIMESHEET_ERROR,
-  SET_MODAL
+  DELETE_TIMESHEET_ERROR
 } from './constants';
 
 const initialState = {
   list: [],
   isLoading: false,
   error: false,
-  showModal: false,
   message: '',
   timesheet: undefined
 };
@@ -155,11 +153,6 @@ export const timesheetReducer = (state = initialState, action) => {
       return {
         ...state,
         message: ''
-      };
-    case SET_MODAL:
-      return {
-        ...state,
-        showModal: action.payload
       };
     default:
       return state;

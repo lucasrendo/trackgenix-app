@@ -1,24 +1,34 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Loading from 'Components/Shared/Loading';
-const EmployeeWorkedHours = lazy(() => import('Components/Employee/WorkedHours'));
-const EmployeeProfile = lazy(() => import('Components/Employee/UserProfile/index'));
-const EmployeeHome = lazy(() => import('Components/Employee/Home'));
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Home from 'Components/Employee/Home';
+import Profile from 'Components/Employee/UserProfile';
+import WorkedHours from 'Components/Employee/WorkedHours';
+import Projects from 'Components/Employee/MyProjects';
+import Unfinished from 'Components/Shared/Unfinished';
+import NotFound from 'Components/Shared/NotFound';
 
-const employeeRoutes = () => {
+const Employee = () => {
   return (
-    <Router>
-      <Suspense fallback={<Loading />}>
-        <Switch>
-          <Route exact path={'/employee/home'} component={EmployeeHome} />
-          <Route exact path={'/employee/:id'} />
-          <Route exact path={'/employee/projects/:id'} />
-          <Route exact path={'/employee/profile/:id'} component={EmployeeProfile} />
-          <Route exact path={'/employee/workedhours/:id'} component={EmployeeWorkedHours} />
-        </Switch>
-      </Suspense>
-    </Router>
+    <Switch>
+      <Route exact path="/employee/home" component={Home} />
+      <Route exact path="/employee">
+        <Redirect to="/employee/home" />
+      </Route>
+      <Route exact path="/employee/workedhours" component={WorkedHours} />
+      <Route exact path="/employee/projects" component={Projects} />
+      <Route exact path="/employee/profile" component={Profile} />
+      {/* ONLY FOR PMs */}
+      {/* projects of this PM */}
+      <Route exact path="/employee/projects" component={Unfinished} />
+      {/* Single project */}
+      <Route exact path="/employee/projects/:id" component={Unfinished} />
+      {/* employee hours on this project */}
+      <Route exact path="/employee/projects/:id/:employee" component={Unfinished} />
+      {/* Reports */}
+      <Route exact path="/employee/reports" component={Unfinished} />
+      <Route component={NotFound} />
+    </Switch>
   );
 };
 
-export default employeeRoutes;
+export default Employee;

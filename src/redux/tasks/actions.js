@@ -15,8 +15,7 @@ import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_ERROR,
   RESET_TASK,
-  RESET_MESSAGE,
-  SET_MODAL
+  RESET_MESSAGE
 } from './constants';
 
 // === GET ALL TASKS === //
@@ -134,12 +133,5 @@ export const resetTask = () => {
 export const resetMessage = () => {
   return {
     type: RESET_MESSAGE
-  };
-};
-
-export const setModal = (state) => {
-  return {
-    type: SET_MODAL,
-    payload: state
   };
 };
