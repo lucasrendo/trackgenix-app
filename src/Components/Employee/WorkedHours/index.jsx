@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
-import { getTimesheetsByEmployee } from 'redux/employee/thunks';
-import { getSingleEmployee } from 'redux/employees/thunks';
-import { getTasks } from 'redux/tasks/thunks';
-import { addTimesheet, editTimesheet, getSingleTimesheet } from 'redux/timesheets/thunks';
+import {
+  getEmployeeTimesheets,
+  getSingleEmployee,
+  getTasks,
+  addTimesheet,
+  editTimesheet,
+  getSingleTimesheet
+} from 'redux/thunks/employee';
 import { resetMessage, resetTimesheet } from 'redux/timesheets/actions';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
@@ -57,7 +61,7 @@ const HoursForm = () => {
   const [timesheetReqData, setTimesheetReqData] = useState({});
   const [timesheetId, setTimesheetId] = useState(null);
   const dispatch = useDispatch();
-  const timesheetsList = useSelector((state) => state.employeeTimesheets.list);
+  const timesheetsList = useSelector((state) => state.timesheet.list);
   const timesheet = useSelector((state) => state.timesheet.timesheet);
   const tasks = useSelector((state) => state.tasks.list);
   const isLoadingTimesheet = useSelector((state) => state.timesheet.isLoading);
@@ -82,17 +86,15 @@ const HoursForm = () => {
   useEffect(() => {
     if (id) {
       dispatch(getSingleEmployee(id));
-      dispatch(getTimesheetsByEmployee(id));
+      dispatch(getEmployeeTimesheets(id));
       getCurrentWeek(todayDate);
-      formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
     }
     dispatch(getTasks());
   }, []);
 
   useEffect(() => {
-    dispatch(getTimesheetsByEmployee(id));
     formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
-  }, [timesheetsList]);
+  }, [timesheetsList, week]);
 
   useEffect(() => {
     const formatedTimesheet = formatTimesheet(timesheet);
@@ -277,8 +279,10 @@ const HoursForm = () => {
   };
 
   const closeHandlerModal = () => {
-    setShowModal(false);
+    dispatch(getEmployeeTimesheets(id));
     dispatch(resetMessage());
+    dispatch(resetTimesheet());
+    setShowModal(false);
   };
 
   const submitHandler = (data) => {
@@ -297,9 +301,10 @@ const HoursForm = () => {
   };
 
   const openModalHandler = (data, header) => {
+    dispatch(resetMessage());
     const _id = data[header.key].id;
+    setTimesheetId(_id);
     if (_id) {
-      setTimesheetId(_id);
       dispatch(getSingleTimesheet(_id));
     }
     setTimesheetShowData({
