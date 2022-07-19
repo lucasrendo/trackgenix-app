@@ -12,7 +12,7 @@ import { toggleModal } from 'redux/global/actions';
 
 const AdminsList = () => {
   const dispatch = useDispatch();
-  const list = useSelector((state) => state.admins.list);
+  const list = useSelector((state) => state.superAdmin.adminList);
   const isLoading = useSelector((state) => state.superAdmin.isLoading);
   const message = useSelector((state) => state.superAdmin.message);
   const [confirmation, setConfirmation] = useState(true);

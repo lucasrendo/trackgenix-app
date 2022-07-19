@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { addAdmin, getSingleAdmin } from 'redux/thunks/super-admin';
-import { resetMessage, resetSuperAdmin } from 'redux/superadmin/actions';
+import { resetMessage, resetAdmin } from 'redux/superadmin/actions';
 import { toggleModal } from 'redux/global/actions';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
@@ -16,7 +16,7 @@ const AdminsForm = () => {
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const superAdmin = useSelector((state) => state.superAdmin.superAdmin);
+  const admin = useSelector((state) => state.superAdmin.admin);
   const error = useSelector((state) => state.superAdmin.error);
   const message = useSelector((state) => state.superAdmin.message);
   const showModal = useSelector((state) => state.global.showModal);
@@ -59,12 +59,12 @@ const AdminsForm = () => {
 
   useEffect(() => {
     id && dispatch(getSingleAdmin(id));
-    return () => dispatch(resetSuperAdmin());
+    return () => dispatch(resetAdmin());
   }, []);
 
   useEffect(() => {
-    reset(superAdmin);
-  }, [superAdmin]);
+    reset(admin);
+  }, [admin]);
 
   const closeHandler = () => {
     dispatch(toggleModal(false));
