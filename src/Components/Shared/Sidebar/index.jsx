@@ -25,12 +25,12 @@ const Sidebar = () => {
   ];
 
   const setSidebarValues = () => {
-    if (location.pathname.includes('/employee')) {
-      setTitle('Employee');
-      setLinks(employeeLinks);
-    } else if (location.pathname.includes('/admin')) {
+    if (location.pathname.includes('/admin')) {
       setTitle('Admin');
       setLinks(adminLinks);
+    } else if (location.pathname.includes('/employee')) {
+      setTitle('Employee');
+      setLinks(employeeLinks);
     } else {
       dispatch(toggleSidebar(false));
     }

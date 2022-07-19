@@ -15,6 +15,7 @@ import {
   deleteEmployeesPending,
   deleteEmployeesError
 } from 'redux/employees/actions';
+import { toggleModal } from 'redux/global/actions';
 import {
   getProjectsSuccess,
   getProjectsPending,
@@ -248,6 +249,7 @@ export const editProject = (obj, id) => {
 export const deleteProject = (id) => {
   return async (dispatch) => {
     dispatch(deleteProjectPending());
+    dispatch(toggleModal(false));
     try {
       const token = sessionStorage.getItem('token');
       const requestConfig = {
@@ -258,11 +260,11 @@ export const deleteProject = (id) => {
       const response = await fetch(`${url}/projects/${id}`, requestConfig);
       const data = await response.json();
 
-      return !data.error
-        ? dispatch(deleteProjectSuccess(id))
-        : dispatch(deleteProjectError(data.message));
+      !data.error ? dispatch(deleteProjectSuccess(id)) : dispatch(deleteProjectError(data.message));
+      return dispatch(toggleModal(true));
     } catch (error) {
-      return dispatch(deleteProjectError(error.message));
+      dispatch(deleteProjectError(error.message));
+      return dispatch(toggleModal(true));
     }
   };
 };
