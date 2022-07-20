@@ -1,4 +1,4 @@
-h2 {
+.h2 {
   color: #373867;
   background-color: rgba(55, 56, 103, 0.1);
   backdrop-filter: blur(8px);
@@ -7,7 +7,7 @@ h2 {
   border-radius: 10px;
 }
 
-p {
+.p {
   margin: 0%;
 }
 

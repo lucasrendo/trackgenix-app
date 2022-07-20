@@ -103,20 +103,21 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        showModal: false
+        error: false
       };
     case GET_TASKS_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        list: action.payload
+        list: action.payload,
+        error: false
       };
     case GET_TASKS_ERROR:
       return {
         ...state,
         isLoading: false,
         message: action.payload,
-        showModal: true
+        error: true
       };
     case DELETE_TASK_PENDING:
       return {
