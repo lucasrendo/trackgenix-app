@@ -8,14 +8,16 @@ import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
 import Loading from 'Components/Shared/Loading';
-import Modal from 'Components/Shared/Modal/Modal';
+import Modal from 'Components/Shared/Modal';
 import { resetProject, resetMessage } from 'redux/projects/actions';
-import { addProject, editProject, getSingleProject } from 'redux/projects/thunks';
-import { getEmployees } from 'redux/employees/thunks';
-import { getAdmins } from 'redux/admins/thunks';
+import { addProject, editProject, getSingleProject } from 'redux/thunks/admin';
+import { getEmployees } from 'redux/thunks/admin';
+import { getAdmins } from 'redux/thunks/super-admin';
 import styles from './index.module.css';
+import firebase from 'helper/firebase';
 
 function NewProject() {
+  const uid = firebase.auth().currentUser?.uid;
   const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
@@ -28,10 +30,10 @@ function NewProject() {
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
+
   const [employeeInputs, setEmployeeInputs] = useState([
     { employeeId: '', role: '', rate: '', hoursInProject: '' }
   ]);
-
   const validationSchema = joi.object({
     projectName: joi
       .string()
@@ -42,7 +44,7 @@ function NewProject() {
       .label('Project name'),
     description: joi.string().min(10).max(140).allow('').label('Description'),
     isActive: joi.boolean(),
-    admin: joi.string().required().label('Admin'),
+    admin: joi.string().label('Admin').allow(''),
     client: joi
       .string()
       .min(1)
@@ -65,12 +67,30 @@ function NewProject() {
       .label('Employee')
   });
 
+  useEffect(() => {
+    id && dispatch(getSingleProject(id));
+    dispatch(getAdmins());
+    dispatch(getEmployees());
+    return () => dispatch(resetProject());
+  }, []);
+
+  useEffect(() => {
+    project && reset(project);
+  }, [project]);
+
+  const adminData = () => {
+    const currentAdmin = adminList.find((admin) => admin.firebaseUid === uid);
+    console.log(currentAdmin);
+    return currentAdmin?._id;
+  };
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    watch,
+    setValue
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
@@ -85,28 +105,12 @@ function NewProject() {
     },
     resolver: joiResolver(validationSchema)
   });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'employees'
   });
 
-  useEffect(() => {
-    id && dispatch(getSingleProject(id));
-    dispatch(getAdmins());
-    dispatch(getEmployees());
-    return () => dispatch(resetProject());
-  }, []);
-
-  useEffect(() => {
-    project && reset(project);
-  }, [project]);
-
-  const formatAdmins = () => {
-    return adminList.map((admin) => {
-      return { id: admin._id, text: `${admin.firstName} ${admin.lastName}` };
-    });
-  };
+  console.log(adminData());
 
   const formatEmployees = () => {
     return employeeList.map((employee) => {
@@ -115,9 +119,11 @@ function NewProject() {
   };
 
   const submitHandler = (data) => {
-    console.log(data);
+    const project = data;
+    project.admin = adminData();
     id ? dispatch(editProject(data, id)) : dispatch(addProject(data));
     setShowModal(true);
+    console.log(project);
   };
 
   const closeHandler = () => {
@@ -127,7 +133,7 @@ function NewProject() {
       goBack();
     }
   };
-
+  console.log(uid);
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
@@ -160,13 +166,14 @@ function NewProject() {
           error={errors.endDate}
           register={register}
         />
-        <Select
+        {/* <Input
           text="Admin"
+          type="text"
           id="admin"
-          options={formatAdmins()}
           error={errors.admin}
           register={register}
-        />
+          value={adminData()}
+        /> */}
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
         {fields.map((field, index) => (
           <div className={styles.employeeBox} key={field.id}>
