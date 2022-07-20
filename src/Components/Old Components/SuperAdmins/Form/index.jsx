@@ -47,7 +47,11 @@ const superAdminValidate = Joi.object({
     'string.empty': `Password cannot be empty`,
     'string.min': `Password must have at least 8 alphanumeric characters`
   }),
-  isActive: Joi.boolean()
+  repeatPassword: Joi.string()
+    .label('Repeat Password')
+    .required()
+    .valid(Joi.ref('password'))
+    .options({ messages: { 'any.only': '{{#label}} does not match' } })
 });
 
 function SuperAdminsForm() {
@@ -72,7 +76,7 @@ function SuperAdminsForm() {
       lastName: '',
       email: '',
       password: '',
-      isActive: false
+      repeatPassword: ''
     }
   });
 
@@ -106,50 +110,53 @@ function SuperAdminsForm() {
         <Loading />
       ) : (
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
-          <Input
-            id={'firstName'}
-            register={register}
-            text={'First Name'}
-            type={'text'}
-            error={errors.firstName}
-          />
+          <div className={styles.inputsContainer}>
+            <h3>New Admin Account</h3>
+            <Input
+              id={'firstName'}
+              register={register}
+              text={'First Name'}
+              type={'text'}
+              error={errors.firstName}
+            />
 
-          <Input
-            id={'lastName'}
-            text={'Last Name'}
-            type={'text'}
-            register={register}
-            error={errors.lastName}
-          />
+            <Input
+              id={'lastName'}
+              text={'Last Name'}
+              type={'text'}
+              register={register}
+              error={errors.lastName}
+            />
 
-          <Input
-            id={'email'}
-            text={'Email'}
-            type={'email'}
-            register={register}
-            error={errors.email}
-          />
+            <Input
+              id={'email'}
+              text={'Email'}
+              type={'email'}
+              register={register}
+              error={errors.email}
+            />
 
-          <Input
-            id={'password'}
-            text={'Password'}
-            type={'password'}
-            register={register}
-            error={errors.password}
-          />
+            <Input
+              id={'password'}
+              text={'Password'}
+              type={'password'}
+              register={register}
+              error={errors.password}
+            />
 
-          <Input
-            id={'isActive'}
-            type={'checkbox'}
-            text={'Is Active?'}
-            register={register}
-            error={errors.isActive}
-          />
+            <Input
+              id={'repeatPassword'}
+              type={'password'}
+              text={'Repeat Password'}
+              register={register}
+              error={errors.repeatPassword}
+            />
+          </div>
           <div className={styles.buttonContainer}>
+            <Button>CREATE ACCOUNT</Button>
             <Button classes={'red'} onClick={() => goBack()}>
-              Back
+              Cancel
             </Button>
-            <Button>Save</Button>
           </div>
         </form>
       )}
