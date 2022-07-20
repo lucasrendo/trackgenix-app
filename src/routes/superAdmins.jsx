@@ -10,6 +10,7 @@ const SuperAdmin = () => {
     <Switch>
       <Route exact path="/superadmin" component={AdminsList} />
       <Route exact path="/superadmin/add-admin" component={AdminsForm} />
+      <Route exact path="/superadmin/form/:id" component={Unfinished} />
       <Route component={NotFound} />
     </Switch>
   );
