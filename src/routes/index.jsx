@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Layout from 'Components/Layout';
 import NotFound from 'Components/Shared/NotFound';
 import Unfinished from 'Components/Shared/Unfinished';
-import PrivateRoute from './privateRoute';
+import PrivateRoute from './PrivateRoute';
 
 const AdminRoutes = lazy(() => import('routes/admins'));
 const superAdminRoutes = lazy(() => import('routes/superAdmins'));
