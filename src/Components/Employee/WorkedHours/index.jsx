@@ -29,7 +29,7 @@ import {
 import { isBefore } from 'date-fns';
 
 const timeSheetValidate = Joi.object({
-  workedHours: Joi.number().required().label('Worked Hours').messages({
+  workedHours: Joi.number().positive().required().label('Worked Hours').messages({
     'string.empty': `Worked Hours cannot be empty`
   }),
 
@@ -37,7 +37,7 @@ const timeSheetValidate = Joi.object({
     'string.empty': `Task cannot be an empty field`
   }),
 
-  description: Joi.string().label('Description').min(0).messages({
+  description: Joi.string().allow('').label('Description').min(0).messages({
     'string.empty': `Description cannot be an empty field`
   })
 });
@@ -396,7 +396,6 @@ const HoursForm = () => {
                 id={'description'}
                 type={'text'}
                 text={'Description'}
-                required={false}
                 register={register}
                 error={errors.description}
               />
