@@ -1,3 +1,11 @@
+.linkReset {
+  text-decoration: none;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   flex: 1;
@@ -7,18 +15,28 @@
   margin-bottom: 30px;
 }
 
-.linkReset {
-  text-decoration: none;
-}
-
-.container h2 {
+.container h2,
+.titleInput {
   color: #373867;
   font-size: 40px;
   font-weight: 700;
+}
+
+.titleInput, .titleInput:focus-visible {
+  max-width: fit-content;
+  border: none;
+  border-bottom: 1px solid #373867;
+  outline: none;
 }
 
 .modalText {
   color: #373867;
   font-size: 24px;
   font-weight: 500;
+}
+
+.error{
+  margin: 0px;
+  font-size: 14px;
+  color: #FF0303;
 }
