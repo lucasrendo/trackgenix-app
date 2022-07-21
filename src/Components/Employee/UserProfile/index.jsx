@@ -97,6 +97,7 @@ const EmployeeProfile = () => {
             text={'First Name'}
             type={'text'}
             error={errors.firstName}
+            className={styles.texterea}
           />
           <Input
             id={'lastName'}
@@ -104,6 +105,7 @@ const EmployeeProfile = () => {
             type={'text'}
             register={register}
             error={errors.lastName}
+            className={styles.texterea}
           />
           <Input
             id={'email'}
@@ -111,6 +113,7 @@ const EmployeeProfile = () => {
             type={'email'}
             register={register}
             error={errors.email}
+            className={styles.texterea}
           />
           <Input
             id={'repeatEmail'}
@@ -118,6 +121,7 @@ const EmployeeProfile = () => {
             type={'email'}
             register={register}
             error={errors.repeatEmail}
+            className={styles.texterea}
           />
           <Input
             id={'password'}
@@ -125,6 +129,7 @@ const EmployeeProfile = () => {
             type={'password'}
             register={register}
             error={errors.password}
+            className={styles.texterea}
           />
           <Input
             id={'repeatPassword'}
@@ -132,6 +137,7 @@ const EmployeeProfile = () => {
             type={'password'}
             register={register}
             error={errors.repeatPassword}
+            className={styles.texterea}
           />
           <Input
             id={'secretWord'}
@@ -139,6 +145,7 @@ const EmployeeProfile = () => {
             type={'password'}
             register={register}
             error={errors.secretWord}
+            className={styles.texterea}
           />
           <Input
             id={'repeatSecretWord'}
@@ -146,6 +153,7 @@ const EmployeeProfile = () => {
             type={'password'}
             register={register}
             error={errors.repeatSecretWord}
+            className={styles.texterea}
           />
           <Input
             id={'address'}
@@ -153,6 +161,7 @@ const EmployeeProfile = () => {
             type={'text'}
             register={register}
             error={errors.address}
+            className={styles.texterea}
           />
           <Input
             id={'birthDate'}
@@ -160,12 +169,13 @@ const EmployeeProfile = () => {
             type={'date'}
             register={register}
             error={errors.birthDate}
+            className={styles.texterea}
           />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
-              Back
+              Cancel
             </Button>
-            <Button>Save</Button>
+            <Button>Save changes</Button>
           </div>
         </form>
       )}

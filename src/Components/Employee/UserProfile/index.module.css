@@ -6,19 +6,26 @@
   align-items: center;
 }
 
+.container h2 {
+  color: #373867 ;
+}
+
 .form {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
   flex-direction: column;
   justify-content: space-evenly;
   margin: 40px auto;
-  border: 3px solid #373867;
   border-radius: 10px;
-  background-color: #aace9b1a;
   width: 80%;
   max-width: 768px;
-  box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.5);
+}
+
+.form input {
+  background: #84a1781a;
 }
 
 .btnsContainer {
-  text-align: right;
+  text-align: center;
+  grid-column:1/3;
 }
