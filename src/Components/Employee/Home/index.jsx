@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 function Home() {
   return (
     <section className={styles.container}>
-      <h2>
-        <p>Welcome,</p>
-        <p>Jorge Pérez!</p>
+      <h2 className={styles.h2}>
+        <p className={styles.p}>Welcome,</p>
+        <p className={styles.p}>Jorge Pérez!</p>
       </h2>
     </section>
   );
