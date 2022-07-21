@@ -7,7 +7,6 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
-import Loading from 'Components/Shared/Loading';
 import Modal from 'Components/Shared/Modal';
 import { resetProject, resetMessage } from 'redux/projects/actions';
 import { addProject, editProject, getSingleProject } from 'redux/thunks/admin';
@@ -23,17 +22,11 @@ function NewProject() {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const project = useSelector((state) => state.projects.project);
-  const isLoading = useSelector((state) => state.projects.isLoading);
-  const employeesLoading = useSelector((state) => state.employees.isLoading);
-  const adminsLoading = useSelector((state) => state.admins.isLoading);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
 
-  const [employeeInputs, setEmployeeInputs] = useState([
-    { employeeId: '', role: '', rate: '', hoursInProject: '' }
-  ]);
   const validationSchema = joi.object({
     projectName: joi
       .string()
@@ -68,29 +61,19 @@ function NewProject() {
   });
 
   useEffect(() => {
-    id && dispatch(getSingleProject(id));
     dispatch(getAdmins());
     dispatch(getEmployees());
-    return () => dispatch(resetProject());
   }, []);
-
-  useEffect(() => {
-    project && reset(project);
-  }, [project]);
 
   const adminData = () => {
     const currentAdmin = adminList.find((admin) => admin.firebaseUid === uid);
-    console.log(currentAdmin);
     return currentAdmin?._id;
   };
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-    setValue
+    formState: { errors }
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
@@ -110,8 +93,6 @@ function NewProject() {
     name: 'employees'
   });
 
-  console.log(adminData());
-
   const formatEmployees = () => {
     return employeeList.map((employee) => {
       return { id: employee._id, text: `${employee.firstName} ${employee.lastName}` };
@@ -123,7 +104,6 @@ function NewProject() {
     project.admin = adminData();
     id ? dispatch(editProject(data, id)) : dispatch(addProject(data));
     setShowModal(true);
-    console.log(project);
   };
 
   const closeHandler = () => {
@@ -133,7 +113,6 @@ function NewProject() {
       goBack();
     }
   };
-  console.log(uid);
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
@@ -166,14 +145,6 @@ function NewProject() {
           error={errors.endDate}
           register={register}
         />
-        {/* <Input
-          text="Admin"
-          type="text"
-          id="admin"
-          error={errors.admin}
-          register={register}
-          value={adminData()}
-        /> */}
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
         {fields.map((field, index) => (
           <div className={styles.employeeBox} key={field.id}>
