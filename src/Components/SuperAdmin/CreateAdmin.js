@@ -126,7 +126,7 @@ const AdminsForm = () => {
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>{message}</h2>
+        <h2>{message ? message : 'Creating admin...'}</h2>
       </Modal>
     </section>
   );

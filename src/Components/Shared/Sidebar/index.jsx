@@ -25,7 +25,7 @@ const Sidebar = () => {
   ];
   const superAdminLinks = [
     { link: '/superadmin', title: 'Home' },
-    { link: '/superadmin/list', title: 'All Admins' },
+    { link: '/superadmin/list', title: 'List of Admins' },
     { link: '/superadmin/add-admin', title: 'Create Admin' }
   ];
 

@@ -26,7 +26,8 @@
   top: 40px;
   left: 0;
   height: 3px;
-  width: 120%;
+  width: max-content;
+
 }
 
 .aside a {
