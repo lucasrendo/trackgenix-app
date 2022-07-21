@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { addAdmin, getSingleAdmin } from 'redux/thunks/super-admin';
+import { addAdmin, getSingleAdmin, editAdmin } from 'redux/thunks/super-admin';
 import { resetMessage, resetAdmin } from 'redux/superadmin/actions';
 import { toggleModal } from 'redux/global/actions';
 import Modal from 'Components/Shared/Modal';
@@ -26,12 +26,14 @@ const AdminsForm = () => {
       .label('First Name')
       .min(4)
       .max(15)
+      .messages({ 'string.pattern.base': 'First name must be only letters' })
       .required(),
     lastName: Joi.string()
-      .pattern(/^[a-zA-Z ]+$/)
+      .pattern(new RegExp(/^[a-zA-Z ]+$/))
       .label('Last Name')
       .min(4)
       .max(15)
+      .messages({ 'string.pattern.base': 'Last name must be only letters' })
       .required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
@@ -76,13 +78,17 @@ const AdminsForm = () => {
 
   // === Handle submit data and method === //
   const submitHandler = (data) => {
-    dispatch(addAdmin(data));
+    if (id) {
+      dispatch(editAdmin(data, id));
+    } else {
+      dispatch(addAdmin(data));
+    }
     dispatch(toggleModal(true));
   };
 
   return (
     <section className={styles.container}>
-      <h2>New Admin Account</h2>
+      {id ? <h2>Modify Admin</h2> : <h2>New Admin Account</h2>}
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
         <Input
           id={'firstName'}

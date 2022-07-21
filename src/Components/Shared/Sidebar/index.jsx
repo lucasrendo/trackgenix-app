@@ -23,6 +23,11 @@ const Sidebar = () => {
     { link: '/admin/employees', title: 'Employees' },
     { link: '/admin/reports', title: 'Report' }
   ];
+  const superAdminLinks = [
+    { link: '/superadmin', title: 'Home' },
+    { link: '/superadmin/list', title: 'All Admins' },
+    { link: '/superadmin/add-admin', title: 'Create Admin' }
+  ];
 
   const setSidebarValues = () => {
     if (location.pathname.includes('/employee')) {
@@ -31,6 +36,9 @@ const Sidebar = () => {
     } else if (location.pathname.includes('/admin')) {
       setTitle('Admin');
       setLinks(adminLinks);
+    } else if (location.pathname.includes('/superadmin')) {
+      setTitle('Super Admin');
+      setLinks(superAdminLinks);
     } else {
       dispatch(toggleSidebar(false));
     }

@@ -32,7 +32,7 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         error: true,
-        message: action.payload,
+        message: 'The email or the password are incorrect',
         isLoading: false
       };
     case REGISTER_PENDING:
