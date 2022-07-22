@@ -8,6 +8,9 @@ import {
   GET_SINGLE_TIMESHEET_PENDING,
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
+  GET_TIMESHEETS_BY_EMPLOYEE_PENDING,
+  GET_TIMESHEETS_BY_EMPLOYEE_SUCCESS,
+  GET_TIMESHEETS_BY_EMPLOYEE_ERROR,
   RESET_TIMESHEET,
   RESET_MESSAGE,
   GET_TIMESHEETS_PENDING,
@@ -47,6 +50,26 @@ export const timesheetReducer = (state = initialState, action) => {
         isLoading: false,
         error: true,
         showModal: true,
+        message: action.payload
+      };
+    case GET_TIMESHEETS_BY_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_TIMESHEETS_BY_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        message: action.payload.message,
+        list: action.payload.data
+      };
+    case GET_TIMESHEETS_BY_EMPLOYEE_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
         message: action.payload
       };
     case DELETE_TIMESHEET_PENDING:

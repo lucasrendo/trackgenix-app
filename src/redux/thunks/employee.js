@@ -18,9 +18,12 @@ import {
   getSingleProjectError
 } from 'redux/projects/actions';
 import {
-  getTimesheetsPending,
-  getTimesheetsSuccess,
-  getTimesheetsError,
+  getSingleTimesheetPending,
+  getSingleTimesheetSuccess,
+  getSingleTimesheetError,
+  getTimesheetsByEmployeePending,
+  getTimesheetsByEmployeeSuccess,
+  getTimesheetsByEmployeeError,
   addTimesheetError,
   addTimesheetPending,
   addTimesheetSuccess,
@@ -161,7 +164,7 @@ export const editProject = (obj, id) => {
 
 export const getEmployeeTimesheets = (employee) => {
   return async (dispatch) => {
-    dispatch(getTimesheetsPending());
+    dispatch(getTimesheetsByEmployeePending());
     try {
       const token = sessionStorage.getItem('token');
 
@@ -171,10 +174,28 @@ export const getEmployeeTimesheets = (employee) => {
       const data = await response.json();
 
       return !data.error
-        ? dispatch(getTimesheetsSuccess(data.data))
-        : dispatch(getTimesheetsError(data.message));
+        ? dispatch(getTimesheetsByEmployeeSuccess(data))
+        : dispatch(getTimesheetsByEmployeeError(data.message));
     } catch (error) {
-      return dispatch(getTimesheetsError(error));
+      return dispatch(getTimesheetsByEmployeeError(error));
+    }
+  };
+};
+
+export const getSingleTimesheet = (id) => {
+  return async (dispatch) => {
+    dispatch(getSingleTimesheetPending());
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${url}/timesheet/${id}`, {
+        headers: { token }
+      });
+      const data = await response.json();
+      return !data.error
+        ? dispatch(getSingleTimesheetSuccess(data))
+        : dispatch(getSingleTimesheetError(data.message));
+    } catch (error) {
+      return dispatch(getSingleTimesheetError(error));
     }
   };
 };
