@@ -12,6 +12,7 @@ import { resetMessage } from 'redux/projects/actions';
 import { addProject } from 'redux/thunks/admin';
 import { getEmployees } from 'redux/thunks/admin';
 import { getAdmins } from 'redux/thunks/super-admin';
+import { toggleModal } from 'redux/global/actions';
 import styles from './index.module.css';
 import firebase from 'helper/firebase';
 
@@ -19,7 +20,7 @@ function NewProject() {
   const uid = firebase.auth().currentUser?.uid;
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
+  const showModal = useSelector((state) => state.auth.showModal);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
@@ -101,11 +102,11 @@ function NewProject() {
     const project = data;
     project.admin = adminData();
     dispatch(addProject(data));
-    setShowModal(true);
+    dispatch(toggleModal());
   };
 
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(toggleModal());
     dispatch(resetMessage());
     if (!error) {
       goBack();
