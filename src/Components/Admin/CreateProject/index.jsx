@@ -1,6 +1,6 @@
 import joi from 'joi';
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -8,8 +8,8 @@ import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
-import { resetProject, resetMessage } from 'redux/projects/actions';
-import { addProject, editProject, getSingleProject } from 'redux/thunks/admin';
+import { resetMessage } from 'redux/projects/actions';
+import { addProject } from 'redux/thunks/admin';
 import { getEmployees } from 'redux/thunks/admin';
 import { getAdmins } from 'redux/thunks/super-admin';
 import styles from './index.module.css';
@@ -17,11 +17,9 @@ import firebase from 'helper/firebase';
 
 function NewProject() {
   const uid = firebase.auth().currentUser?.uid;
-  const { id } = useParams();
   const { goBack } = useHistory();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
-  const project = useSelector((state) => state.projects.project);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
@@ -102,7 +100,7 @@ function NewProject() {
   const submitHandler = (data) => {
     const project = data;
     project.admin = adminData();
-    id ? dispatch(editProject(data, id)) : dispatch(addProject(data));
+    dispatch(addProject(data));
     setShowModal(true);
   };
 
@@ -182,13 +180,6 @@ function NewProject() {
           </div>
         ))}
         <Button onClick={() => append({})}> +Add employee</Button>
-        <Input
-          type="checkbox"
-          id="isActive"
-          text="is Active?"
-          error={errors.isActive?.message}
-          register={register}
-        />
         <div className={styles.btnsContainer}>
           <Button classes={'red'} onClick={() => goBack()}>
             Back
