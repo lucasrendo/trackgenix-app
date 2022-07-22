@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetMessage } from 'redux/employees/actions';
@@ -10,11 +10,13 @@ import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 import Joi from 'joi';
+import { getSingleEmployee } from 'redux/thunks/employee';
 
 const EmployeeProfile = () => {
   const { goBack } = useHistory();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
+  const id = useSelector((state) => state.auth.user._id);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const validationSchema = Joi.object({
@@ -36,20 +38,13 @@ const EmployeeProfile = () => {
         'string.pattern.base': `Last Name should only have letters`
       })
       .required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-      .required(),
-    repeatEmail: Joi.string().label('Repeat Email').required().valid(Joi.ref('email')),
-    password: Joi.string().label('Password').min(8).required(),
-    repeatPassword: Joi.string().label('Repeat Password').required().valid(Joi.ref('password')),
-    secretWord: Joi.string().label('Secret Word').min(8).required(),
-    repeatSecretWord: Joi.string()
-      .label('Repeat Secret Word')
-      .required()
-      .valid(Joi.ref('secretWord')),
     address: Joi.string().label('Address').min(8).required(),
     birthDate: Joi.date().label('Birth Date').required().max(Date.now())
   });
+
+  useEffect(() => {
+    id && dispatch(getSingleEmployee(id));
+  }, []);
 
   const {
     handleSubmit,
@@ -59,12 +54,6 @@ const EmployeeProfile = () => {
     defaultValues: {
       firstName: '',
       lastName: '',
-      email: '',
-      repeatEmail: '',
-      password: '',
-      repeatPassword: '',
-      secretWord: '',
-      repeatSecretWord: '',
       address: '',
       birthDate: ''
     },
@@ -105,54 +94,6 @@ const EmployeeProfile = () => {
             type={'text'}
             register={register}
             error={errors.lastName}
-            className={styles.texterea}
-          />
-          <Input
-            id={'email'}
-            text={'Email'}
-            type={'email'}
-            register={register}
-            error={errors.email}
-            className={styles.texterea}
-          />
-          <Input
-            id={'repeatEmail'}
-            text={'Repeat Email'}
-            type={'email'}
-            register={register}
-            error={errors.repeatEmail}
-            className={styles.texterea}
-          />
-          <Input
-            id={'password'}
-            text={'Password'}
-            type={'password'}
-            register={register}
-            error={errors.password}
-            className={styles.texterea}
-          />
-          <Input
-            id={'repeatPassword'}
-            text={'Repeat Password'}
-            type={'password'}
-            register={register}
-            error={errors.repeatPassword}
-            className={styles.texterea}
-          />
-          <Input
-            id={'secretWord'}
-            text={'Secret Word'}
-            type={'password'}
-            register={register}
-            error={errors.secretWord}
-            className={styles.texterea}
-          />
-          <Input
-            id={'repeatSecretWord'}
-            text={'Repeat Secret Word'}
-            type={'password'}
-            register={register}
-            error={errors.repeatSecretWord}
             className={styles.texterea}
           />
           <Input
