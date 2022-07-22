@@ -5,6 +5,10 @@ import {
   REGISTER_PENDING,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
+  GET_AUTH_PENDING,
+  GET_AUTH_SUCCESS,
+  GET_AUTH_ERROR,
+  SET_AUTHENTICATION,
   RESET_MESSAGE
 } from './constants';
 
@@ -53,6 +57,34 @@ export const authReducer = (state = initialState, action) => {
         error: true,
         message: action.payload
       };
+    case GET_AUTH_PENDING: {
+      return {
+        ...state,
+        isLoading: true,
+        error: initialState.error
+      };
+    }
+    case GET_AUTH_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload
+      };
+    }
+    case GET_AUTH_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      };
+    }
+    case SET_AUTHENTICATION: {
+      return {
+        ...state,
+        authenticated: action.payload,
+        isLoading: false
+      };
+    }
     case RESET_MESSAGE:
       return {
         ...state,
