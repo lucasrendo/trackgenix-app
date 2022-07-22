@@ -60,8 +60,9 @@ const url = `${process.env.REACT_APP_API_URL}/employee`;
   AUTH API
 ***************/
 
-export const getAuthEmployee = (token) => {
-  return (dispatch) => {
+export const getAuthEmployee = () => {
+  const token = sessionStorage.getItem('token');
+  return async (dispatch) => {
     dispatch(getAuthenticationPending());
     return fetch(`${process.env.REACT_APP_API_URL}/auth/getEmployee`, { headers: { token } })
       .then((response) => response.json())
@@ -70,7 +71,7 @@ export const getAuthEmployee = (token) => {
         return response.data;
       })
       .catch((error) => {
-        dispatch(getAuthenticationError(error.toString()));
+        dispatch(getAuthenticationError(error));
       });
   };
 };

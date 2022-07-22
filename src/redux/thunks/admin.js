@@ -61,7 +61,8 @@ const url = `${process.env.REACT_APP_API_URL}/admin`;
   AUTH API
 ***************/
 
-export const getAuthAdmin = (token) => {
+export const getAuthAdmin = () => {
+  const token = sessionStorage.getItem('token');
   return (dispatch) => {
     dispatch(getAuthenticationPending());
     return fetch(`${process.env.REACT_APP_API_URL}/auth/getAdmin`, { headers: { token } })
@@ -71,7 +72,7 @@ export const getAuthAdmin = (token) => {
         return response.data;
       })
       .catch((error) => {
-        dispatch(getAuthenticationError(error.toString()));
+        dispatch(getAuthenticationError(error));
       });
   };
 };
