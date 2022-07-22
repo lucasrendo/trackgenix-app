@@ -48,8 +48,33 @@ import {
   deleteTaskSuccess,
   deleteTaskFailed
 } from 'redux/tasks/actions';
+import {
+  getAuthenticationError,
+  getAuthenticationPending,
+  getAuthenticationSuccess
+} from 'redux/auth/actions';
 
 const url = `${process.env.REACT_APP_API_URL}/employee`;
+
+/**************
+  AUTH API
+***************/
+
+export const getAuthEmployee = () => {
+  const token = sessionStorage.getItem('token');
+  return async (dispatch) => {
+    dispatch(getAuthenticationPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/auth/getEmployee`, { headers: { token } })
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getAuthenticationSuccess(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(getAuthenticationError(error));
+      });
+  };
+};
 
 /**************
   EMPLOYEE API
