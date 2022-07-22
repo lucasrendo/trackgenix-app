@@ -110,7 +110,7 @@ function Login() {
         </div>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
-        <h2>{message}</h2>
+        <h2>{message ? message : 'Login...'}</h2>
       </Modal>
       <p className={styles.text}>
         Do you not have an account?{' '}
