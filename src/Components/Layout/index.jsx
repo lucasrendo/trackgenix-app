@@ -15,12 +15,13 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const employeeRoutes = useRouteMatch('/employee');
   const adminRoutes = useRouteMatch('/admin');
+  const superAdminRoutes = useRouteMatch('/superadmin');
   const dispatch = useDispatch();
   const token = useSelector((store) => store.auth.authenticated?.token);
   const role = useSelector((store) => store.auth.authenticated?.role);
 
   const sidebarToggler = () => {
-    if (employeeRoutes || adminRoutes) dispatch(toggleSidebar(true));
+    if (employeeRoutes || adminRoutes || superAdminRoutes) dispatch(toggleSidebar(true));
     else dispatch(toggleSidebar(false));
   };
 
