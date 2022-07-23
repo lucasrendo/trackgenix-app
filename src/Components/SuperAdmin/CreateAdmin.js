@@ -122,11 +122,15 @@ const AdminsForm = () => {
           <Button classes={'red'} onClick={() => goBack()}>
             Back
           </Button>
-          <Button>Create Account</Button>
+          {id ? <Button>Modify Account</Button> : <Button>Create Account</Button>}
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>{message ? message : 'Creating admin...'}</h2>
+        {id ? (
+          <h2>{message ? message : 'Editing admin...'}</h2>
+        ) : (
+          <h2>{message ? message : 'Creating admin...'}</h2>
+        )}
       </Modal>
     </section>
   );

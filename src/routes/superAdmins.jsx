@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import AdminsForm from 'Components/SuperAdmin/CreateAdmin';
 import AdminsList from 'Components/SuperAdmin/AdminList';
 import SuperAdminHome from 'Components/SuperAdmin/Home';
-import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
 
 const SuperAdmin = () => {
