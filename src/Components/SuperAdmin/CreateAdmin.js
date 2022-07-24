@@ -88,10 +88,13 @@ const AdminsForm = () => {
 
   return (
     <section className={styles.container}>
-      {id ? <h2>Modify Admin</h2> : <h2>New Admin Account</h2>}
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
         <div className={styles.inputsContainer}>
-          <h2 className={styles.header}>New Admin Account</h2>
+          {id ? (
+            <h2 className={styles.header}>Modify Admin Account</h2>
+          ) : (
+            <h2 className={styles.header}>New Admin Account</h2>
+          )}
           <Input
             id={'firstName'}
             register={register}
@@ -122,11 +125,14 @@ const AdminsForm = () => {
           />
         </div>
         <div className={styles.btnsContainer}>
-          <Button classes={'darker'}>Create Account</Button>
           <Button classes={'red'} onClick={() => goBack()}>
             Back
           </Button>
-          {id ? <Button>Modify Account</Button> : <Button>Create Account</Button>}
+          {id ? (
+            <Button classes={'darker'}>Modify Account</Button>
+          ) : (
+            <Button classes={'darker'}>Create Account</Button>
+          )}
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
