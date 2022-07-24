@@ -13,7 +13,10 @@ const Button = ({ children, classes, onClick }) => {
       classes = `${styles.btn} ${styles.redBtn} ${styles.btnBlock}`;
       break;
     case 'close':
-      classes = styles.closeBtn;
+      classes = `${styles.roundBtn} ${styles.closeBtn}`;
+      break;
+    case 'accept':
+      classes = `${styles.roundBtn} ${styles.acceptBtn}`;
       break;
     case 'edit':
       classes = styles.editBtn;

@@ -4,7 +4,7 @@ import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
 import EmployeeDetails from 'Components/Admin/EmployeeDetails';
 import EmployeeList from 'Components/Admin/EmployeesList';
-import ProjectDetails from 'Components/Admin/ProjectDetails';
+import ProjectOverview from 'Components/Admin/ProjectOverview/index';
 import ProjectsList from 'Components/Admin/ProjectsList';
 
 const Admin = () => {
@@ -13,7 +13,7 @@ const Admin = () => {
       {/*home*/}
       <Route exact path="/admin" component={Unfinished} />
       <Route exact path="/admin/projects" component={ProjectsList} />
-      <Route exact path="/admin/projects/:id" component={ProjectDetails} />
+      <Route exact path="/admin/projects/:projectId" component={ProjectOverview} />
       {/*create project form*/}
       <Route exact path="/admin/add-project" component={Unfinished} />
       <Route exact path="/admin/employees" component={EmployeeList} />

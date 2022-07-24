@@ -1,0 +1,82 @@
+.container span[onClick] {
+  cursor: pointer;
+}
+
+.membersContainer table {
+  margin-right: 30px;
+  min-width: 450px;
+  max-width: 600px;
+}
+
+.listsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.titleInput {
+  border: none;
+  border-bottom: 1px solid #373867;
+  color: #373867;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.titleInput:focus-visible {
+  outline: none;
+  box-shadow: 0 1px #9495b9;
+}
+
+.detailsForm {
+  width: max-content;
+}
+
+.detailsForm label {
+  color: #373867;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.detailsForm input {
+  margin: 8px 1em 0;
+  border: none;
+  border-bottom: 1px solid #373867;
+  color: #373867;
+  font-size: 17px;
+}
+
+.detailsForm input:focus-visible {
+  outline: none;
+  box-shadow: 0 1px #9495b9;
+}
+
+.listTitle {
+  color: #373867;
+  font-size: 24px;
+  font-weight: 700
+}
+
+.listTitle span {
+  cursor: pointer;
+}
+
+.container span {
+  font-size: 0.75em;
+  cursor: pointer;
+}
+
+.infoContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.details {
+  color: #373867;
+  font-size: 17px;
+  margin: 0px;
+  margin-bottom: 8px;
+}
+
+.details span {
+  font-weight: 700;
+}

@@ -20,6 +20,8 @@ TODO - Fix app side adding members to project and server side project employees 
 * It's currently using a combination of variables and strings to create the path. It worked in the
 * previous applications but it's not suited for current application.
 TODO - Make it more reusable so it works in any context with any route.
+
+TODO - Update list to filter projects by admin id: it should only see the projects it created (i think)
 */
 
 const ProjectsList = () => {
@@ -62,7 +64,7 @@ const ProjectsList = () => {
     //TODO - Working draft. Waiting for fixes outside the scope of this feature
     const found = projectMembers.find((employee) => employee.role === 'PM');
     if (!found) return null;
-    const PM = employeesList.find((employee) => employee._id === found._id);
+    const PM = employeesList.find((employee) => employee.employeeId === found.employeeId);
     return PM ? `${PM.firstName} ${PM.lastName}` : 'PM id not in database';
   };
 
@@ -79,7 +81,7 @@ const ProjectsList = () => {
         projectManager: getProjectManager(project.employees) || '-',
         startDate: project.startDate && formatDate(project.startDate),
         endDate: project.endDate && formatDate(project.endDate),
-        isActive: project.isActive ? 'In progress' : 'Closed',
+        isActive: project.isActive ? 'Active' : 'Inactive',
         client: project.client
       };
     });

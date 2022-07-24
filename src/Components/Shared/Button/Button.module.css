@@ -7,7 +7,7 @@
   --grayish-navy-10: #3738671a;
   --light-grayish-green-10: #3738671a;
   --scarlet: #F33413;
-  --bright-green: #49A37B;
+  --bright-green: #49a37b;
 
   --button: 15px;
   --button-weight: 600;
@@ -68,8 +68,9 @@
   color: var(--grayish-navy);
 }
 
-/*=== Close btn ===*/
-.closeBtn {
+/*=== Close and ok btn ===*/
+
+.roundBtn {
   display: inline-block;
   position: relative;
   z-index: 1;
@@ -77,7 +78,6 @@
   padding: 0px;
   border: none;
   border-radius: 50%;
-  background-color: var(--scarlet);
   color: #15162A;
   font-size: var(--button);
   font-weight: var(--button-weight);
@@ -90,17 +90,43 @@
     box-shadow 400ms cubic-bezier(.2,0,.7,1),
 }
 
-.closeBtn:hover,
-.closeBtn:focus {
-  box-shadow: 0 0 1px 5px rgba(243, 51, 18, 0.4),
-  0 0 1px 10px rgba(243, 51, 18, 0.1),
-  0 0 1px 15px rgba(243, 51, 18, 0.1);
+.acceptBtn {
+  background-color: var(--bright-green);
+}
+
+.closeBtn {
+  background-color: var(--scarlet);
+}
+
+.roundBtn:hover,
+.roundBtn:focus {
   outline: none;
 }
 
-.closeBtn:active{
+.acceptBtn:hover,
+.acceptBtn:focus {
+  box-shadow: 0 0 1px 5px #49a37b66,
+  0 0 1px 10px #49a37b1a,
+  0 0 1px 15px #49a37b1a;
+}
+
+.closeBtn:hover,
+.closeBtn:focus {
+  box-shadow: 0 0 1px 5px #f3331266,
+  0 0 1px 10px #f333121a,
+  0 0 1px 15px #f333121a;
+}
+
+.roundBtn:active{
   box-shadow: none;
   background-color: transparent;
+}
+
+.acceptBtn:active{
+  box-shadow: inset 0px 0px 0px 3px var(--bright-green);
+}
+
+.closeBtn:active{
   box-shadow: inset 0px 0px 0px 3px var(--scarlet);
 }
 

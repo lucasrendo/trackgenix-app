@@ -1,66 +1,76 @@
+import joi from 'joi';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { editProject, getSingleProject } from 'redux/thunks/admin';
-import Joi from 'joi';
-import List from 'Components/Shared/List';
-import Input from 'Components/Shared/Input';
+import { toggleModal } from 'redux/global/actions';
+import ProjectMembers from './ProjectMembers';
+import ProjectDetails from './ProjectDetails';
 import Loading from 'Components/Shared/Loading';
-import styles from './admin.module.css';
 import Button from 'Components/Shared/Button';
+import generalStyles from '../admin.module.css';
+import styles from './ProjectOverview.module.css';
 
-const ProjectDetails = () => {
+/*
+! Project comes from server without employee names to show on members list
+TODO - update server controller to handle this directly there or at least partially
+
+TODO - Add responsive styles
+*/
+
+const ProjectOverview = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { projectId } = useParams();
   const project = useSelector((state) => state.projects.project);
   const isLoading = useSelector((state) => state.projects.isLoading);
-  const [editMode, setEditMode] = useState(false);
+  const [editTitle, setEditTitle] = useState(false);
   const [error, setError] = useState('');
   const [projectName, setProjectName] = useState('');
+  const titleSchema = joi
+    .string()
+    .min(3)
+    .max(30)
+    .pattern(/^[A-Za-z0-9 ]+$/)
+    .required()
+    .label('Project name');
 
+  // Get project information
   useEffect(() => {
-    dispatch(getSingleProject(id));
+    dispatch(getSingleProject(projectId));
   }, []);
 
-  useEffect(() => {
-    setProjectName(project?.projectName);
-  }, [project?.projectName]);
+  // set initial name when project comes from server
+  useEffect(() => setProjectName(project?.projectName), [project]);
 
+  // Handle form opening and closing, title input validation and update
   const updateTitle = (name) => {
     if (name === projectName) return;
-    // Validate title
-    const projectValidation = Joi.string()
-      .min(3)
-      .max(30)
-      .pattern(/^[A-Za-z0-9 ]+$/)
-      .required()
-      .label('Project name');
 
-    const validation = projectValidation.validate(name);
-
+    const validation = titleSchema.validate(name);
     if (validation.error) {
       setError(validation.error.details[0].message);
       setProjectName(projectName);
     } else {
-      dispatch(editProject({ projectName: name }, id));
+      dispatch(editProject({ projectName: name }, projectId));
       setProjectName(name);
-      setEditMode(false);
+      setEditTitle(false);
     }
   };
 
+  // discard edit changes
   const abort = () => {
-    setEditMode(false);
+    setEditTitle(false);
     setError('');
   };
 
   return (
-    <section className={styles.container}>
+    <section className={generalStyles.container}>
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          {editMode ? (
-            <form id="title-form">
+          {editTitle ? (
+            <form>
               <input
                 type="text"
                 defaultValue={projectName}
@@ -76,17 +86,17 @@ const ProjectDetails = () => {
             </form>
           ) : (
             <h2>
-              {projectName}{' '}
-              <span style={{ cursor: 'pointer' }} onClick={() => setEditMode(true)}>
-                &#9998;
-              </span>
+              {projectName} <span onClick={() => setEditTitle(true)}>&#9998;</span>
             </h2>
           )}
-          {/* <List /> */}
+          <div className={styles.infoContainer}>
+            <ProjectMembers />
+            <ProjectDetails />
+          </div>
         </>
       )}
     </section>
   );
 };
 
-export default ProjectDetails;
+export default ProjectOverview;
