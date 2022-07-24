@@ -1,189 +1,418 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { getSingleEmployee } from 'redux/thunks/employee';
-import { resetMessage } from 'redux/employees/actions.js';
-import Joi from 'joi';
 import Modal from 'Components/Shared/Modal';
 import Loading from 'Components/Shared/Loading';
+import styles from './index.module.css';
 import Button from 'Components/Shared/Button';
 import Input from 'Components/Shared/Input';
-import styles from './index.module.css';
+import Select from 'Components/Shared/Select';
+import {
+  getEmployeeTimesheets,
+  getSingleEmployee,
+  getTasks,
+  addTimesheet,
+  editTimesheet,
+  getSingleTimesheet
+} from 'redux/thunks/employee';
+import { resetMessage, resetTimesheet } from 'redux/timesheets/actions';
+import { useForm } from 'react-hook-form';
+import Joi from 'joi';
+import { joiResolver } from '@hookform/resolvers/joi';
+import {
+  endOfWeekWithOptions,
+  startOfWeekWithOptions,
+  format,
+  add,
+  sub,
+  eachDayOfInterval
+} from 'date-fns/esm/fp';
+import { isBefore } from 'date-fns';
+
+const timeSheetValidate = Joi.object({
+  workedHours: Joi.number().positive().required().label('Worked Hours').messages({
+    'string.empty': `Worked Hours cannot be empty`
+  }),
+
+  task: Joi.string().label('Task').messages({
+    'string.empty': `Task cannot be an empty field`
+  }),
+
+  description: Joi.string().allow('').label('Description').min(0).messages({
+    'string.empty': `Description cannot be an empty field`
+  })
+});
 
 const HoursForm = () => {
-  const id = '62b1122165165c996de858ec';
-  const [showModal, setShowModal] = useState(true);
+  const id = useSelector((state) => state.auth.user._id);
+  const todayDate = new Date();
+  const [startWeekDay, setStartWeekDay] = useState();
+  const [endWeekDay, setEndWeekDay] = useState();
+  const [week, setWeek] = useState({});
+  const [listData, setListData] = useState([]);
+  const [daysOfWeek, setDaysofWeek] = useState([]);
+  const [totalHours, setTotalHours] = useState(0);
+  const [showModalForm, setShowModalForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [timesheetShowData, setTimesheetShowData] = useState({
+    project: '',
+    role: '',
+    date: ''
+  });
+  const [timesheetReqData, setTimesheetReqData] = useState({});
+  const [timesheetId, setTimesheetId] = useState(null);
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.employees.isLoading);
-  const message = useSelector((state) => state.employees.message);
-  const [number, setNumber] = useState({
-    one: '',
-    two: '',
-    three: '',
-    four: '',
-    five: '',
-    six: '',
-    seven: ''
-  });
-  const [add, setAdd] = useState();
-  const validationSchema = Joi.object({
-    monday: Joi.number().min(0).max(12).required(),
-    tuesday: Joi.number().min(0).max(12).required(),
-    wednesday: Joi.number().min(0).max(12).required(),
-    thursday: Joi.number().min(0).max(12).required(),
-    friday: Joi.number().min(0).max(12).required(),
-    saturday: Joi.number().min(0).max(12).required(),
-    sunday: Joi.number().min(0).max(12).required(),
-    weekend: Joi.date().required().max(Date.now())
-  });
-
+  const timesheetsList = useSelector((state) => state.timesheet.list);
+  const timesheet = useSelector((state) => state.timesheet.timesheet);
+  const tasks = useSelector((state) => state.tasks.list);
+  const isLoadingTimesheet = useSelector((state) => state.timesheet.isLoading);
+  const isLoadingList = useSelector((state) => state.employees.isLoading);
+  const employee = useSelector((state) => state.employees.employee);
+  const message = useSelector((state) => state.timesheet.message);
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: 'onBlur',
-    resolver: joiResolver(validationSchema),
-    defaultValues: { one: '', two: '', three: '', four: '', five: '', six: '', seven: '' }
+    resolver: joiResolver(timeSheetValidate),
+    defaultValues: {
+      task: '',
+      workedHours: '',
+      description: ''
+    }
   });
 
   useEffect(() => {
-    id && dispatch(getSingleEmployee(id));
+    if (id) {
+      dispatch(getSingleEmployee(id));
+      dispatch(getEmployeeTimesheets(id));
+      getCurrentWeek(todayDate);
+    }
+    dispatch(getTasks());
   }, []);
 
   useEffect(() => {
-    const { one, two, three, four, five, six, seven } = number;
-    setAdd(
-      Number(one) +
-        Number(two) +
-        Number(three) +
-        Number(four) +
-        Number(five) +
-        Number(six) +
-        Number(seven)
+    formatListData(employee?.assignedProjects || [], timesheetsList, daysOfWeek);
+  }, [timesheetsList, week]);
+
+  useEffect(() => {
+    const formatedTimesheet = formatTimesheet(timesheet);
+    reset(formatedTimesheet);
+  }, [timesheet]);
+
+  const formatListData = (projects, filteredTimesheets, daysOfWeek) => {
+    const formatedWeek = formatDaysOfWeek(daysOfWeek);
+    let hoursForeachProject = [];
+    const dataList = projects.map((project) => {
+      const role = getRole(project);
+      const rate = getRate(project);
+      const weekTimesheets = getWeekTimesheets(filteredTimesheets, project, formatedWeek);
+      const totalHours = weekTotalHours(weekTimesheets.workedHours);
+      hoursForeachProject.push(totalHours);
+      return {
+        id: project._id,
+        projectName: project.projectName,
+        role: role,
+        rate: rate,
+        monday: {
+          workedHours: weekTimesheets.workedHours[0],
+          id: weekTimesheets.timesheets[0]
+        },
+        tuesday: {
+          workedHours: weekTimesheets.workedHours[1],
+          id: weekTimesheets.timesheets[1]
+        },
+        wednesday: {
+          workedHours: weekTimesheets.workedHours[2],
+          id: weekTimesheets.timesheets[2]
+        },
+        thursday: {
+          workedHours: weekTimesheets.workedHours[3],
+          id: weekTimesheets.timesheets[3]
+        },
+        friday: {
+          workedHours: weekTimesheets.workedHours[4],
+          id: weekTimesheets.timesheets[4]
+        },
+        saturday: {
+          workedHours: weekTimesheets.workedHours[5],
+          id: weekTimesheets.timesheets[5]
+        },
+        sunday: {
+          workedHours: weekTimesheets.workedHours[6],
+          id: weekTimesheets.timesheets[6]
+        },
+        totalHours: totalHours
+      };
+    });
+    setListData(dataList);
+    setTotalHours(weekTotalHours(hoursForeachProject));
+  };
+
+  const getWeekTimesheets = (filteredTimesheets, project, formatedWeek) => {
+    let weekTimesheetsWorkedHours = [0, 0, 0, 0, 0, 0, 0];
+    let weekTimesheetsId = [null, null, null, null, null, null, null];
+    filteredTimesheets.forEach((timesheet) => {
+      if (timesheet.project?._id === project._id) {
+        const timesheetDate = format('dd/MM/yyyy', new Date(timesheet.date));
+        for (let i = 0; i < formatedWeek.length; i++) {
+          if (timesheetDate === formatedWeek[i]) {
+            weekTimesheetsWorkedHours[i] = timesheet.workedHours;
+            weekTimesheetsId[i] = timesheet._id;
+          }
+        }
+      }
+    });
+    return { workedHours: weekTimesheetsWorkedHours, timesheets: weekTimesheetsId };
+  };
+
+  const getRole = (project) => {
+    let role = '';
+    for (let i = 0; i < project.employees.length; i++) {
+      if (project.employees[i].employeeId === id) {
+        role = project.employees[i].role;
+      }
+    }
+    return role;
+  };
+
+  const getRate = (project) => {
+    let rate = 0;
+    for (let i = 0; i < project.employees.length; i++) {
+      if (project.employees[i].employeeId === id) {
+        rate = project.employees[i].rate;
+      }
+    }
+    return rate;
+  };
+
+  const weekTotalHours = (weekTimesheets) => {
+    const initialValue = 0;
+    const sumWithInitial = weekTimesheets.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+      initialValue
     );
-  }, [number]);
-
-  const submitHandler = async (data) => {
-    if (data) setShowModal(true);
+    return sumWithInitial;
   };
 
-  const closeHandler = () => {
-    setShowModal(false);
-    dispatch(resetMessage());
+  const getCurrentWeek = (todayDate) => {
+    const startofWeek = startOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    const endofWeek = endOfWeekWithOptions({ weekStartsOn: 1 }, todayDate);
+    setStartWeekDay(startofWeek);
+    setEndWeekDay(endofWeek);
+    setDaysofWeek(eachDayOfInterval({ start: startofWeek, end: endofWeek }));
+    const formatedStart = format('dd/MM/yyyy', startofWeek);
+    const formatedEnd = format('dd/MM/yyyy', endofWeek);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
   };
 
-  const handleInput = (data) => {
-    const { name, value } = data.target;
-    setNumber({ ...number, [name]: value });
+  const nextWeek = (start, end) => {
+    const newStartDate = add({ days: 7 }, start);
+    const newEndDate = add({ days: 7 }, end);
+    setStartWeekDay(newStartDate);
+    setEndWeekDay(newEndDate);
+    setDaysofWeek(eachDayOfInterval({ start: newStartDate, end: newEndDate }));
+    const formatedStart = format('dd/MM/yyyy', newStartDate);
+    const formatedEnd = format('dd/MM/yyyy', newEndDate);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
+  };
+
+  const prevWeek = (start, end) => {
+    const newStartDate = sub({ days: 7 }, start);
+    const newEndDate = sub({ days: 7 }, end);
+    setStartWeekDay(newStartDate);
+    setEndWeekDay(newEndDate);
+    setDaysofWeek(eachDayOfInterval({ start: newStartDate, end: newEndDate }));
+    const formatedStart = format('dd/MM/yyyy', newStartDate);
+    const formatedEnd = format('dd/MM/yyyy', newEndDate);
+    setWeek({
+      startDate: formatedStart,
+      endDate: formatedEnd
+    });
+  };
+
+  const formatDaysOfWeek = (days) => {
+    const formatedWeek = days.map((date) => {
+      return format('dd/MM/yyyy', date);
+    });
+    return formatedWeek;
+  };
+
+  const formatTasks = () => {
+    return tasks.map((task) => {
+      return { id: task._id, text: task.title };
+    });
+  };
+
+  const formatTimesheet = (timesheet) => {
+    return {
+      task: timesheet?.task,
+      description: timesheet?.description,
+      workedHours: timesheet?.workedHours
+    };
   };
 
   const headers = [
-    { header: 'Project Name', key: 'Project Name' },
-    { header: 'Monday', key: 'Monday' },
-    { header: 'Tuesday', key: 'Tuesday' },
-    { header: 'Wednesday', key: 'Wednesday' },
-    { header: 'Thursday', key: 'Thursday' },
-    { header: 'Friday', key: 'Friday' },
-    { header: 'Saturday', key: 'Saturday' },
-    { header: 'Sunday', key: 'Sunday' },
-    { header: 'Total', key: 'Total' }
+    { header: 'Project Name', key: 'projectName', style: false },
+    { header: 'Role', key: 'role', style: false },
+    { header: 'Monday', key: 'monday', style: true, date: daysOfWeek[0] },
+    { header: 'Tuesday', key: 'tuesday', style: true, date: daysOfWeek[1] },
+    { header: 'Wednesday', key: 'wednesday', style: true, date: daysOfWeek[2] },
+    { header: 'Thursday', key: 'thursday', style: true, date: daysOfWeek[3] },
+    { header: 'Friday', key: 'friday', style: true, date: daysOfWeek[4] },
+    { header: 'Saturday', key: 'saturday', style: true, date: daysOfWeek[5] },
+    { header: 'Sunday', key: 'sunday', style: true, date: daysOfWeek[6] },
+    { header: 'Total Hours', key: 'totalHours', style: false }
   ];
+
+  const closeHandlerForm = () => {
+    reset();
+    dispatch(resetTimesheet());
+    setShowModalForm(false);
+  };
+
+  const closeHandlerModal = () => {
+    dispatch(getEmployeeTimesheets(id));
+    dispatch(resetMessage());
+    dispatch(resetTimesheet());
+    setShowModal(false);
+  };
+
+  const submitHandler = (data) => {
+    const reqData = {
+      ...timesheetReqData,
+      ...data
+    };
+    if (timesheetId) {
+      dispatch(editTimesheet(reqData, timesheetId));
+    } else {
+      dispatch(addTimesheet(reqData));
+    }
+    setShowModal(true);
+    reset();
+    setShowModalForm(false);
+  };
+
+  const openModalHandler = (data, header) => {
+    dispatch(resetMessage());
+    const _id = data[header.key].id;
+    setTimesheetId(_id);
+    if (_id) {
+      dispatch(getSingleTimesheet(_id));
+    }
+    setTimesheetShowData({
+      project: data.projectName,
+      role: data.role,
+      date: format('dd/MM/yyyy', header.date)
+    });
+    setTimesheetReqData({
+      employee: id,
+      project: data.id,
+      role: data.role,
+      rate: data.rate,
+      date: header.date
+    });
+    setShowModalForm(true);
+  };
 
   return (
     <section className={styles.container}>
       <h2>Worked Hours</h2>
       <div className={styles.topContainer}>
-        <Button>Before</Button>
-        <Input
-          className={styles.dateInput}
-          id={'weekend'}
-          register={register}
-          type="date"
-          error={errors.weekend}
-        />
-        <Button>Next</Button>
+        <Button onClick={() => prevWeek(startWeekDay, endWeekDay)}>{'<'}</Button>
+        <p className={styles.weekText}>
+          {week?.startDate} - {week?.endDate}
+        </p>
+        <Button onClick={() => nextWeek(startWeekDay, endWeekDay)}>{'>'}</Button>
       </div>
-      <div>
-        <thead>
-          <tr className={styles.headerRow}>
-            {headers.map((header, index) => {
-              return (
-                <th key={index} className={styles.th}>
-                  {header.header}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-      </div>
-      {isLoading ? (
+      {isLoadingList ? (
         <Loading />
       ) : (
         <>
-          <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-            <div>
-              <h4>Project 1 - Rol</h4>
-            </div>
-            <input
-              type={'number'}
-              error={errors.monday}
-              onChange={handleInput}
-              name="one"
-              value={number.one}
-            />
-            <input
-              type={'number'}
-              error={errors.tuesday}
-              onChange={handleInput}
-              name="two"
-              value={number.two}
-            />
-            <input
-              type={'number'}
-              error={errors.wednesday}
-              onChange={handleInput}
-              name="three"
-              value={number.three}
-            />
-            <input
-              type={'number'}
-              error={errors.thursday}
-              onChange={handleInput}
-              name="four"
-              value={number.four}
-            />
-            <input
-              type={'number'}
-              error={errors.friday}
-              onChange={handleInput}
-              name="five"
-              value={number.five}
-            />
-            <input
-              type={'number'}
-              error={errors.saturday}
-              onChange={handleInput}
-              name="six"
-              value={number.six}
-            />
-            <input
-              type={'number'}
-              error={errors.sunday}
-              onChange={handleInput}
-              name="seven"
-              value={number.seven}
-            />
-            <input readOnly value={add} />
-          </form>
-          <div>
-            <Button classes="block">Confirm</Button>
-          </div>
+          <table className={styles.table}>
+            <thead>
+              <tr className={styles.headerRow}>
+                {headers.map((header, index) => {
+                  return (
+                    <th key={index} className={styles.th}>
+                      {header.header}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {listData.map((row) => {
+                return (
+                  <tr key={row.id} className={styles.rows}>
+                    {headers.map((header, index) => {
+                      return (
+                        <td
+                          key={index}
+                          className={header.style ? styles.timesheetTd : styles.td}
+                          onClick={() => {
+                            if (header.style && isBefore(header.date, todayDate)) {
+                              openModalHandler(row, header);
+                            }
+                          }}
+                        >
+                          {header.style ? row[header.key].workedHours : row[header.key]}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <h2 className={styles.totalText}>Total: {totalHours}</h2>
         </>
       )}
-      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandler()}>
-        <h2>{message}</h2>
+      {
+        <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
+          <h2 className={styles.modalText}>Timesheet</h2>
+          <label className={styles.label}>Project: {timesheetShowData.project}</label>
+          <label className={styles.label}>Role: {timesheetShowData.role}</label>
+          <label className={styles.label}>Date: {timesheetShowData.date}</label>
+          {isLoadingTimesheet ? (
+            <Loading />
+          ) : (
+            <form onSubmit={handleSubmit(submitHandler)}>
+              <Select
+                id={'task'}
+                text={'Task'}
+                options={formatTasks()}
+                register={register}
+                error={errors.task}
+              />
+              <Input
+                id={'description'}
+                type={'text'}
+                text={'Description'}
+                register={register}
+                error={errors.description}
+              />
+              <Input
+                id={'workedHours'}
+                text={'Worked Hours'}
+                type={'number'}
+                register={register}
+                error={errors.workedHours}
+              />
+              <Button>Save</Button>
+            </form>
+          )}
+        </Modal>
+      }
+      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>
+        <h2 className={styles.modalText}>{message}</h2>
       </Modal>
     </section>
   );

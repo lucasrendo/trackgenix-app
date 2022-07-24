@@ -17,7 +17,6 @@ const AdminsList = () => {
   const message = useSelector((state) => state.superAdmin.message);
   const [confirmation, setConfirmation] = useState(true);
   const showModal = useSelector((state) => state.global.showModal);
-
   const [id, setId] = useState('');
 
   const headers = [
@@ -61,9 +60,10 @@ const AdminsList = () => {
     </>
   ) : (
     <section className={styles.container}>
-      <h2>Admins</h2>
+      <h2>List of Admins</h2>
       <List
         data={formatListData(list)}
+        resource={'/superadmin'}
         headers={headers}
         deleteItem={(id) => {
           setId(id);

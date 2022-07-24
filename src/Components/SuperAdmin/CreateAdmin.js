@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { addAdmin, editAdmin, getSingleAdmin } from 'redux/thunks/super-admin';
+import { addAdmin, getSingleAdmin, editAdmin } from 'redux/thunks/super-admin';
 import { resetMessage, resetAdmin } from 'redux/superadmin/actions';
 import { toggleModal } from 'redux/global/actions';
 import Modal from 'Components/Shared/Modal';
@@ -26,12 +26,14 @@ const AdminsForm = () => {
       .label('First Name')
       .min(4)
       .max(15)
+      .messages({ 'string.pattern.base': 'First name must be only letters' })
       .required(),
     lastName: Joi.string()
-      .pattern(/^[a-zA-Z ]+$/)
+      .pattern(new RegExp(/^[a-zA-Z ]+$/))
       .label('Last Name')
       .min(4)
       .max(15)
+      .messages({ 'string.pattern.base': 'Last name must be only letters' })
       .required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
@@ -86,6 +88,7 @@ const AdminsForm = () => {
 
   return (
     <section className={styles.container}>
+      {id ? <h2>Modify Admin</h2> : <h2>New Admin Account</h2>}
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
         <div className={styles.inputsContainer}>
           <h2 className={styles.header}>New Admin Account</h2>
@@ -123,10 +126,15 @@ const AdminsForm = () => {
           <Button classes={'red'} onClick={() => goBack()}>
             Back
           </Button>
+          {id ? <Button>Modify Account</Button> : <Button>Create Account</Button>}
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>{message}</h2>
+        {id ? (
+          <h2>{message ? message : 'Editing admin...'}</h2>
+        ) : (
+          <h2>{message ? message : 'Creating admin...'}</h2>
+        )}
       </Modal>
     </section>
   );

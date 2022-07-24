@@ -18,9 +18,12 @@ import {
   getSingleProjectError
 } from 'redux/projects/actions';
 import {
-  getTimesheetsPending,
-  getTimesheetsSuccess,
-  getTimesheetsError,
+  getSingleTimesheetPending,
+  getSingleTimesheetSuccess,
+  getSingleTimesheetError,
+  getTimesheetsByEmployeePending,
+  getTimesheetsByEmployeeSuccess,
+  getTimesheetsByEmployeeError,
   addTimesheetError,
   addTimesheetPending,
   addTimesheetSuccess,
@@ -45,8 +48,33 @@ import {
   deleteTaskSuccess,
   deleteTaskFailed
 } from 'redux/tasks/actions';
+import {
+  getAuthenticationError,
+  getAuthenticationPending,
+  getAuthenticationSuccess
+} from 'redux/auth/actions';
 
 const url = `${process.env.REACT_APP_API_URL}/employee`;
+
+/**************
+  AUTH API
+***************/
+
+export const getAuthEmployee = () => {
+  const token = sessionStorage.getItem('token');
+  return async (dispatch) => {
+    dispatch(getAuthenticationPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/auth/getEmployee`, { headers: { token } })
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getAuthenticationSuccess(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(getAuthenticationError(error));
+      });
+  };
+};
 
 /**************
   EMPLOYEE API
@@ -161,7 +189,7 @@ export const editProject = (obj, id) => {
 
 export const getEmployeeTimesheets = (employee) => {
   return async (dispatch) => {
-    dispatch(getTimesheetsPending());
+    dispatch(getTimesheetsByEmployeePending());
     try {
       const token = sessionStorage.getItem('token');
 
@@ -171,10 +199,28 @@ export const getEmployeeTimesheets = (employee) => {
       const data = await response.json();
 
       return !data.error
-        ? dispatch(getTimesheetsSuccess(data.data))
-        : dispatch(getTimesheetsError(data.message));
+        ? dispatch(getTimesheetsByEmployeeSuccess(data))
+        : dispatch(getTimesheetsByEmployeeError(data.message));
     } catch (error) {
-      return dispatch(getTimesheetsError(error));
+      return dispatch(getTimesheetsByEmployeeError(error));
+    }
+  };
+};
+
+export const getSingleTimesheet = (id) => {
+  return async (dispatch) => {
+    dispatch(getSingleTimesheetPending());
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${url}/timesheet/${id}`, {
+        headers: { token }
+      });
+      const data = await response.json();
+      return !data.error
+        ? dispatch(getSingleTimesheetSuccess(data))
+        : dispatch(getSingleTimesheetError(data.message));
+    } catch (error) {
+      return dispatch(getSingleTimesheetError(error));
     }
   };
 };

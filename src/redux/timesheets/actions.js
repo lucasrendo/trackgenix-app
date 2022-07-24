@@ -8,6 +8,9 @@ import {
   GET_SINGLE_TIMESHEET_PENDING,
   GET_SINGLE_TIMESHEET_SUCCESS,
   GET_SINGLE_TIMESHEET_ERROR,
+  GET_TIMESHEETS_BY_EMPLOYEE_PENDING,
+  GET_TIMESHEETS_BY_EMPLOYEE_SUCCESS,
+  GET_TIMESHEETS_BY_EMPLOYEE_ERROR,
   RESET_TIMESHEET,
   GET_TIMESHEETS_PENDING,
   GET_TIMESHEETS_SUCCESS,
@@ -56,6 +59,18 @@ export const getSingleTimesheetError = (error) => {
     type: GET_SINGLE_TIMESHEET_ERROR,
     payload: error
   };
+};
+
+export const getTimesheetsByEmployeePending = () => {
+  return { type: GET_TIMESHEETS_BY_EMPLOYEE_PENDING };
+};
+
+export const getTimesheetsByEmployeeSuccess = (data) => {
+  return { type: GET_TIMESHEETS_BY_EMPLOYEE_SUCCESS, payload: data };
+};
+
+export const getTimesheetsByEmployeeError = (error) => {
+  return { type: GET_TIMESHEETS_BY_EMPLOYEE_ERROR, payload: error };
 };
 
 export const addTimesheetPending = () => {

@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import Layout from 'Components/Layout';
 import NotFound from 'Components/Shared/NotFound';
 import Unfinished from 'Components/Shared/Unfinished';
+import HomePage from 'Components/Shared/Homepage';
 import PrivateRoute from './PrivateRoute';
-
 const AdminRoutes = lazy(() => import('routes/admins'));
 const superAdminRoutes = lazy(() => import('routes/superAdmins'));
 const EmployeeRoutes = lazy(() => import('routes/employees'));
@@ -19,7 +19,7 @@ const Routes = () => {
       <Suspense fallback={<div />}>
         <Layout>
           <Switch>
-            <Route exact path="/" component={Unfinished}>
+            <Route exact path="/" component={HomePage}>
               {homePath !== '/' && <Redirect to={homePath} />}
             </Route>
             <PrivateRoute path="/employee" role="EMPLOYEE" component={EmployeeRoutes} />
