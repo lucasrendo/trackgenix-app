@@ -14,7 +14,6 @@ function SuperAdmins() {
   const superAdminList = useSelector((state) => state.superAdmins.list);
   const isLoading = useSelector((state) => state.superAdmins.isLoading);
   const message = useSelector((state) => state.superAdmins.message);
-  const error = useSelector((state) => state.superAdmins.error);
   const modal = useSelector((state) => state.superAdmins.showModal);
   const [confirmation, setConfirmation] = useState(true);
   const [id, setId] = useState('');
@@ -23,8 +22,7 @@ function SuperAdmins() {
   const headers = [
     { header: 'First name', key: 'firstName' },
     { header: 'Last name', key: 'lastName' },
-    { header: 'Email', key: 'email' },
-    { header: 'is Active?', key: 'isActive' }
+    { header: 'Email', key: 'email' }
   ];
 
   useEffect(async () => {
@@ -48,8 +46,7 @@ function SuperAdmins() {
         id: superAdmin._id,
         firstName: superAdmin.firstName,
         lastName: superAdmin.lastName,
-        email: superAdmin.email,
-        isActive: superAdmin.isActive?.toString()
+        email: superAdmin.email
       };
     });
     return data;
