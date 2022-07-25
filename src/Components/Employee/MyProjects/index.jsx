@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleEmployee } from 'redux/thunks/employee';
-import List from 'Components/Shared/List';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
+import { format } from 'date-fns/esm/fp';
 
 const EmployeeProjects = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const EmployeeProjects = () => {
   const headers = [
     { header: 'Project Name', key: 'projectName' },
     { header: 'Client', key: 'client' },
+    { header: 'Role', key: 'role' },
     { header: 'Start Date', key: 'startDate' },
     { header: 'End Date', key: 'endDate' }
   ];
@@ -23,15 +24,27 @@ const EmployeeProjects = () => {
 
   const formatListData = (responseData) => {
     const data = responseData.map((project) => {
+      const role = getRole(project);
       return {
         id: project._id,
-        startDate: project.startDate.slice(0, 10),
-        endDate: project.endDate.slice(0, 10),
+        role: role,
+        startDate: format('dd/MM/yyyy', new Date(project.startDate)),
+        endDate: format('dd/MM/yyyy', new Date(project.endDate)),
         projectName: project.projectName,
         client: project.client
       };
     });
     return data;
+  };
+
+  const getRole = (project) => {
+    let role = '';
+    for (let i = 0; i < project.employees.length; i++) {
+      if (project.employees[i].employeeId === id) {
+        role = project.employees[i].role;
+      }
+    }
+    return role;
   };
 
   return (
@@ -40,11 +53,42 @@ const EmployeeProjects = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <List
-          data={formatListData(employee?.assignedProjects || [])}
-          headers={headers}
-          showButtons={false}
-        />
+        <table className={styles.table}>
+          <thead>
+            <tr className={styles.headerRow}>
+              {headers.map((header, index) => {
+                return (
+                  <th key={index} className={styles.th}>
+                    {header.header}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {formatListData(employee?.assignedProjects || []).map((row) => {
+              return (
+                <tr
+                  key={row.id}
+                  className={styles.rows}
+                  onClick={() => {
+                    if (row.role === 'PM') {
+                      console.log(row.id);
+                    }
+                  }}
+                >
+                  {headers.map((header, index) => {
+                    return (
+                      <td key={index} className={styles.td}>
+                        {row[header.key]}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       )}
     </section>
   );
