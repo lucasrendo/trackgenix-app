@@ -4,6 +4,7 @@ import { getSingleEmployee } from 'redux/thunks/employee';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 import { format } from 'date-fns/esm/fp';
+import { Link } from 'react-router-dom';
 
 const EmployeeProjects = () => {
   const dispatch = useDispatch();
@@ -68,19 +69,17 @@ const EmployeeProjects = () => {
           <tbody>
             {formatListData(employee?.assignedProjects || []).map((row) => {
               return (
-                <tr
-                  key={row.id}
-                  className={styles.rows}
-                  onClick={() => {
-                    if (row.role === 'PM') {
-                      console.log(row.id);
-                    }
-                  }}
-                >
+                <tr key={row.id} className={styles.rows}>
                   {headers.map((header, index) => {
                     return (
                       <td key={index} className={styles.td}>
-                        {row[header.key]}
+                        {row.role === 'PM' ? (
+                          <Link className={styles.linkReset} to={`/employee/projects/${row.id}`}>
+                            {row[header.key]}
+                          </Link>
+                        ) : (
+                          <>{row[header.key]}</>
+                        )}
                       </td>
                     );
                   })}

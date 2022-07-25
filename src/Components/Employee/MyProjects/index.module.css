@@ -42,10 +42,13 @@
   text-align: center;
   word-break: break-word;
   padding: 10px;
+  text-decoration: none;
+  color: inherit
 }
 
 .linkReset{
   text-decoration: none;
+  color: inherit;
 }
 
 .rows:nth-child(odd) {background-color: white;}

@@ -4,6 +4,7 @@ import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/UserProfile';
 import WorkedHours from 'Components/Employee/WorkedHours';
 import Projects from 'Components/Employee/MyProjects';
+import ProjectOverview from 'Components/Employee/ProjectDetails';
 import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
 
@@ -18,10 +19,8 @@ const Employee = () => {
       <Route exact path="/employee/projects" component={Projects} />
       <Route exact path="/employee/profile" component={Profile} />
       {/* ONLY FOR PMs */}
-      {/* projects of this PM */}
-      <Route exact path="/employee/projects" component={Unfinished} />
       {/* Single project */}
-      <Route exact path="/employee/projects/:id" component={Unfinished} />
+      <Route exact path="/employee/projects/:id" component={ProjectOverview} />
       {/* employee hours on this project */}
       <Route exact path="/employee/projects/:id/:employee" component={Unfinished} />
       {/* Reports */}
