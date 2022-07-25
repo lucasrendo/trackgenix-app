@@ -11,20 +11,24 @@ import Modal from 'Components/Shared/Modal';
 import { resetMessage } from 'redux/projects/actions';
 import { addProject } from 'redux/thunks/admin';
 import { getEmployees } from 'redux/thunks/admin';
-import { getAdmins } from 'redux/thunks/super-admin';
+import { getAdmins, getSingleAdmin } from 'redux/thunks/super-admin';
 import { toggleModal } from 'redux/global/actions';
 import styles from './index.module.css';
 import firebase from 'helper/firebase';
 
 function NewProject() {
   const uid = firebase.auth().currentUser?.uid;
+  const id = useSelector((state) => state.auth.user?._id);
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const showModal = useSelector((state) => state.auth.showModal);
+  const showModal = useSelector((state) => state.projects.showModal);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
   const adminList = useSelector((state) => state.admins.list);
+  const admin = useSelector((state) => state.admins.admin);
+  console.log(admin);
+  console.log(id);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -60,14 +64,18 @@ function NewProject() {
   });
 
   useEffect(() => {
+    id && dispatch(getSingleAdmin(id));
     dispatch(getAdmins());
     dispatch(getEmployees());
   }, []);
 
   const adminData = () => {
     const currentAdmin = adminList.find((admin) => admin.firebaseUid === uid);
+    console.log(currentAdmin);
     return currentAdmin?._id;
   };
+  console.log(uid);
+  console.log(adminData());
   const {
     register,
     control,
