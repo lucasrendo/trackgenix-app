@@ -1,5 +1,5 @@
 import joi from 'joi';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -14,21 +14,15 @@ import { getEmployees } from 'redux/thunks/admin';
 import { getAdmins, getSingleAdmin } from 'redux/thunks/super-admin';
 import { toggleModal } from 'redux/global/actions';
 import styles from './index.module.css';
-import firebase from 'helper/firebase';
 
 function NewProject() {
-  const uid = firebase.auth().currentUser?.uid;
   const id = useSelector((state) => state.auth.user?._id);
   const { goBack } = useHistory();
   const dispatch = useDispatch();
-  const showModal = useSelector((state) => state.projects.showModal);
+  const showModal = useSelector((state) => state.global.showModal);
   const error = useSelector((state) => state.projects.error);
   const message = useSelector((state) => state.projects.message);
   const employeeList = useSelector((state) => state.employees.list);
-  const adminList = useSelector((state) => state.admins.list);
-  const admin = useSelector((state) => state.admins.admin);
-  console.log(admin);
-  console.log(id);
 
   const validationSchema = joi.object({
     projectName: joi
@@ -64,18 +58,9 @@ function NewProject() {
   });
 
   useEffect(() => {
-    id && dispatch(getSingleAdmin(id));
-    dispatch(getAdmins());
     dispatch(getEmployees());
   }, []);
 
-  const adminData = () => {
-    const currentAdmin = adminList.find((admin) => admin.firebaseUid === uid);
-    console.log(currentAdmin);
-    return currentAdmin?._id;
-  };
-  console.log(uid);
-  console.log(adminData());
   const {
     register,
     control,
@@ -108,7 +93,7 @@ function NewProject() {
 
   const submitHandler = (data) => {
     const project = data;
-    project.admin = adminData();
+    project.admin = id;
     dispatch(addProject(data));
     dispatch(toggleModal());
   };
