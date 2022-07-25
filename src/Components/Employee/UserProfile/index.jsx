@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetMessage } from 'redux/employees/actions';
@@ -10,13 +10,16 @@ import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 import Joi from 'joi';
-import { getSingleEmployee } from 'redux/thunks/employee';
+import { editEmployees, getSingleEmployee } from 'redux/thunks/employee';
+import { toggleModal } from 'redux/global/actions';
 
 const EmployeeProfile = () => {
   const { goBack } = useHistory();
-  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const id = useSelector((state) => state.auth.user._id);
+  const message = useSelector((state) => state.employees.message);
+  const employee = useSelector((state) => state.employees.employee);
+  const showModal = useSelector((state) => state.global.showModal);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
   const validationSchema = Joi.object({
@@ -42,14 +45,11 @@ const EmployeeProfile = () => {
     birthDate: Joi.date().label('Birth Date').required().max(Date.now())
   });
 
-  useEffect(() => {
-    id && dispatch(getSingleEmployee(id));
-  }, []);
-
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     defaultValues: {
       firstName: '',
@@ -61,8 +61,21 @@ const EmployeeProfile = () => {
     resolver: joiResolver(validationSchema)
   });
 
+  useEffect(() => {
+    id && dispatch(getSingleEmployee(id));
+  }, []);
+
+  useEffect(() => {
+    reset({
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+      address: employee.address,
+      birthDate: employee.birthDate.substring(0, 10)
+    });
+  }, []);
+
   const closeHandler = () => {
-    setShowModal(false);
+    dispatch(toggleModal());
     dispatch(resetMessage());
     if (!error) {
       goBack();
@@ -70,7 +83,14 @@ const EmployeeProfile = () => {
   };
 
   const submitHandler = (data) => {
-    if (data) setShowModal(true);
+    const reqData = {
+      assignedProject: employee.assignedProject,
+      isActive: employee.isActive,
+      secretWord: employee.secretWord,
+      ...data
+    };
+    dispatch(editEmployees(reqData, id));
+    dispatch(toggleModal());
   };
 
   return (
@@ -86,7 +106,6 @@ const EmployeeProfile = () => {
             text={'First Name'}
             type={'text'}
             error={errors.firstName}
-            className={styles.texterea}
           />
           <Input
             id={'lastName'}
@@ -94,7 +113,6 @@ const EmployeeProfile = () => {
             type={'text'}
             register={register}
             error={errors.lastName}
-            className={styles.texterea}
           />
           <Input
             id={'address'}
@@ -102,7 +120,6 @@ const EmployeeProfile = () => {
             type={'text'}
             register={register}
             error={errors.address}
-            className={styles.texterea}
           />
           <Input
             id={'birthDate'}
@@ -110,7 +127,6 @@ const EmployeeProfile = () => {
             type={'date'}
             register={register}
             error={errors.birthDate}
-            className={styles.texterea}
           />
           <div className={styles.btnsContainer}>
             <Button classes={'red'} onClick={() => goBack()}>
@@ -121,7 +137,7 @@ const EmployeeProfile = () => {
         </form>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>User Profile successfully created</h2>
+        <h2>{message}</h2>
       </Modal>
     </section>
   );
