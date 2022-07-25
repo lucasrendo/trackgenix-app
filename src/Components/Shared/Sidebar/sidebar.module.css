@@ -16,6 +16,7 @@
   margin-bottom: 15px;
   font-size: 30px;
   font-weight: 700;
+  text-decoration: underline;
   color: #373867;
 }
 
@@ -25,8 +26,8 @@
   top: 40px;
   left: 0;
   height: 3px;
-  width: 120%;
-  background-color: #373867;
+  width: max-content;
+
 }
 
 .aside a {
