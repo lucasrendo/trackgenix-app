@@ -196,7 +196,7 @@ export const editProject = (obj, id) => {
       const data = await response.json();
 
       return !data.error
-        ? dispatch(editProjectSuccess(data.message))
+        ? dispatch(editProjectSuccess(data.data))
         : dispatch(editProjectError(data.message));
     } catch (error) {
       return dispatch(editProjectError(error.message));

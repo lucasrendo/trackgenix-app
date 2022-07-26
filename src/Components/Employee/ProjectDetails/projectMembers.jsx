@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { editProject, getEmployees } from 'redux/thunks/employee';
+import { editProject, getEmployees, getSingleProject } from 'redux/thunks/employee';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
@@ -43,8 +43,7 @@ const ProjectMembers = () => {
     defaultValues: {
       employeeId: '',
       role: '',
-      rate: 0,
-      hoursInProject: 0
+      rate: 0
     },
     resolver: joiResolver(employeeValidation)
   });
@@ -53,14 +52,14 @@ const ProjectMembers = () => {
     dispatch(getEmployees());
   }, []);
 
-  useEffect(() => project && setMembersList(formatMembersList()), [project?.employees]);
+  useEffect(() => project && setMembersList(formatMembersList()), [project]);
 
   // map members list for table from project employees
   const formatMembersList = () => {
     return project?.employees.map((employee) => {
       if (employee.employeeId) {
         return {
-          id: employee._id,
+          id: employee.employeeId._id,
           fullName:
             userId === employee.employeeId._id
               ? 'You'
@@ -74,6 +73,20 @@ const ProjectMembers = () => {
     });
   };
 
+  // map members list for edit request
+  const formatMembersReqList = () => {
+    return project?.employees.map((employee) => {
+      if (employee.employeeId) {
+        return {
+          employeeId: employee.employeeId._id,
+          hoursInProject: employee.hoursInProject,
+          role: employee.role,
+          rate: employee.rate
+        };
+      }
+    });
+  };
+
   const formatEmployees = () => {
     return employeeList.map((employee) => {
       return { id: employee._id, text: `${employee.firstName} ${employee.lastName}` };
@@ -82,14 +95,16 @@ const ProjectMembers = () => {
 
   // handle add employee in project
   const addEmployee = (employee) => {
-    setMembersList(membersList.push(employee));
+    let newMembersList = formatMembersReqList();
+    newMembersList.push(employee);
+    dispatch(editProject({ employees: newMembersList }, project._id));
   };
 
   // handle employee deletion from project
   const deleteEmployee = (id) => {
-    setMembersList(membersList.filter((employee) => employee._id !== id));
+    setMembersList(membersList.filter((employee) => employee.id !== id));
     let filteredList = project.employees
-      .filter((employee) => employee._id !== id)
+      .filter((employee) => employee.employeeId._id !== id)
       .map((employee) => {
         delete employee._id;
         return {
@@ -97,7 +112,7 @@ const ProjectMembers = () => {
           employeeId: employee.employeeId._id
         };
       });
-    dispatch(editProject({ employees: filteredList }, projectId));
+    dispatch(editProject({ employees: filteredList }, project._id));
   };
 
   const closeHandlerForm = () => {
@@ -105,7 +120,16 @@ const ProjectMembers = () => {
     setShowModalForm(false);
   };
 
-  const submitHandler = () => {};
+  const submitHandler = (data) => {
+    const reqData = {
+      ...data,
+      hoursInProject: 0
+    };
+    addEmployee(reqData);
+    reset();
+    dispatch(getSingleProject(project._id));
+    setShowModalForm(false);
+  };
 
   return (
     <>
@@ -119,37 +143,38 @@ const ProjectMembers = () => {
         />
         <Button onClick={() => setShowModalForm(true)}>+</Button>
       </div>
-      {isLoadingEmployees ? (
-        <Loading />
-      ) : (
-        <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
-          <h2 className={styles.modalText}>Add employee</h2>
-          <form onSubmit={handleSubmit(submitHandler)}>
-            <Select
-              id={'employeeId'}
-              text={'Employee'}
-              options={!isLoadingEmployees ? formatEmployees() : []}
-              register={register}
-              error={errors.employeeId}
-            />
-            <Select
-              id={'role'}
-              text={'Role'}
-              options={['PM', 'TL', 'DEV', 'QA']}
-              register={register}
-              error={errors.role}
-            />
-            <Input
-              id={'rate'}
-              text={'Rate'}
-              type={'number'}
-              register={register}
-              error={errors.rate}
-            />
-            <Button>Save</Button>
-          </form>
-        </Modal>
-      )}
+      <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
+        <h2 className={styles.modalText}>Add employee</h2>
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <Select
+            id={'employeeId'}
+            text={'Employee'}
+            options={!isLoadingEmployees ? formatEmployees() : []}
+            register={register}
+            error={errors.employeeId}
+          />
+          <Select
+            id={'role'}
+            text={'Role'}
+            options={[
+              { text: 'PM', id: 'PM' },
+              { text: 'TL', id: 'TL' },
+              { text: 'DEV', id: 'DEV' },
+              { text: 'QA', id: 'QA' }
+            ]}
+            register={register}
+            error={errors.role}
+          />
+          <Input
+            id={'rate'}
+            text={'Rate'}
+            type={'number'}
+            register={register}
+            error={errors.rate}
+          />
+          <Button>Save</Button>
+        </form>
+      </Modal>
     </>
   );
 };
