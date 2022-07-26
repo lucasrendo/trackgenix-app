@@ -57,19 +57,7 @@ export const projectsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        project: {
-          projectName: action.payload.projectName,
-          description: action.payload.description,
-          startDate: action.payload.startDate.substring(0, 10),
-          endDate: action.payload.endDate.substring(0, 10),
-          admin: action.payload.admin?._id,
-          client: action.payload.client,
-          role: action.payload.employees[0].role,
-          employeeId: action.payload.employees[0].employeeId?._id,
-          rate: action.payload.employees[0].rate,
-          hoursInProject: action.payload.employees[0].hoursInProject,
-          isActive: action.payload.isActive
-        }
+        project: action.payload
       };
     case GET_SINGLE_PROJECT_ERROR:
       return {

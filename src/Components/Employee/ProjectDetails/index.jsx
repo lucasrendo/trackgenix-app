@@ -7,6 +7,7 @@ import { format } from 'date-fns/esm/fp';
 import Loading from 'Components/Shared/Loading';
 import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
+import ProjectMembers from './projectMembers';
 
 const ProjectOverview = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,12 @@ const ProjectOverview = () => {
   const isLoading = useSelector((state) => state.projects.isLoading);
   const [error, setError] = useState('');
   const [projectName, setProjectName] = useState('');
+  const [details, setDetails] = useState({
+    client: '',
+    startDate: '',
+    endDate: '',
+    isActive: false
+  });
 
   // Get project information
   useEffect(() => {
@@ -22,7 +29,17 @@ const ProjectOverview = () => {
   }, []);
 
   // set initial name when project comes from server
-  useEffect(() => setProjectName(project?.projectName), [project]);
+  useEffect(() => {
+    if (project) {
+      setProjectName(project?.projectName);
+      setDetails({
+        client: project.client,
+        startDate: format('dd/MM/yyyy', new Date(project.startDate)),
+        endDate: format('dd/MM/yyyy', new Date(project.endDate)),
+        isActive: project.isActive
+      });
+    }
+  }, [project]);
 
   // discard edit changes
   const abort = () => {
@@ -38,19 +55,14 @@ const ProjectOverview = () => {
           <h2 className={styles.title}>{projectName}</h2>
           <div>
             <h4 className={styles.listTitle}>Project Details</h4>
-            <p className={styles.details}>Client: {project?.client}</p>
-            <p className={styles.details}>
-              Start Date: {format('dd/MM/yyyy', new Date(project?.startDate))}
-            </p>
-            <p className={styles.details}>
-              End Date: {format('dd/MM/yyyy', new Date(project?.endDate))}
-            </p>
-            <p className={styles.details}>Status: {project?.isActive ? 'Active' : 'Inactive'}</p>
+            <p className={styles.details}>Client: {details?.client}</p>
+            <p className={styles.details}>Start Date: {details?.startDate}</p>
+            <p className={styles.details}>End Date: {details?.endDate}</p>
+            <p className={styles.details}>Status: {details?.isActive ? 'Active' : 'Inactive'}</p>
           </div>
-          {/* <div className={styles.infoContainer}>
+          <div className={styles.infoContainer}>
             <ProjectMembers />
-            <ProjectDetails />
-          </div> */}
+          </div>
         </>
       )}
     </section>
