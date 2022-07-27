@@ -29,7 +29,7 @@ const AdminsForm = () => {
       .messages({ 'string.pattern.base': 'First name must be only letters' })
       .required(),
     lastName: Joi.string()
-      .pattern(new RegExp(/^[a-zA-Z ]+$/))
+      .pattern(/^[a-zA-Z ]+$/)
       .label('Last Name')
       .min(4)
       .max(15)
