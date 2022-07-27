@@ -55,7 +55,7 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.auth.error);
   const message = useSelector((state) => state.auth.message);
-  const showModal = useSelector((state) => state.auth.showModal);
+  const showModal = useSelector((state) => state.global.showModal);
   const {
     handleSubmit,
     register,
@@ -126,10 +126,10 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.btnsContainer}>
-          <Button>CREATE ACCOUNT</Button>
           <Button classes={'red'} onClick={() => history.goBack()}>
             Cancel
           </Button>
+          <Button>CREATE ACCOUNT</Button>
           <p className={styles.text}>
             Already have an account?{' '}
             <Link to="/auth/login" className={styles.link}>
