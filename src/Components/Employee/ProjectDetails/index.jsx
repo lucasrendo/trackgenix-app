@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { getSingleProject } from 'redux/thunks/employee';
-import { toggleModal } from 'redux/global/actions';
 import { format } from 'date-fns/esm/fp';
 import Loading from 'Components/Shared/Loading';
 import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 import ProjectMembers from './projectMembers';
+import ProjectTasks from './projectTasks';
 
 const ProjectOverview = () => {
   const dispatch = useDispatch();
@@ -41,11 +41,6 @@ const ProjectOverview = () => {
     }
   }, [project]);
 
-  // discard edit changes
-  const abort = () => {
-    setError('');
-  };
-
   return (
     <section className={styles.container}>
       {isLoading ? (
@@ -62,6 +57,7 @@ const ProjectOverview = () => {
           </div>
           <div className={styles.infoContainer}>
             <ProjectMembers />
+            <ProjectTasks />
           </div>
         </>
       )}
