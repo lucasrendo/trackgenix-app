@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import Input from 'Components/Shared/Input';
 import Button from 'Components/Shared/Button';
 import styles from './ProjectOverview.module.css';
 import generalStyles from '../admin.module.css';
@@ -61,7 +60,6 @@ const ProjectDetails = () => {
 
   useEffect(() => {
     if (project) {
-      console.log(project.startDate);
       setDetails({
         client: project.client,
         startDate: project.startDate.substring(0, 10),

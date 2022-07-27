@@ -12,9 +12,6 @@ import generalStyles from '../admin.module.css';
 import styles from './ProjectOverview.module.css';
 
 /*
-! Project comes from server without employee names to show on members list
-TODO - update server controller to handle this directly there or at least partially
-
 TODO - Add responsive styles
 */
 
@@ -26,6 +23,7 @@ const ProjectOverview = () => {
   const [editTitle, setEditTitle] = useState(false);
   const [error, setError] = useState('');
   const [projectName, setProjectName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
   const titleSchema = joi
     .string()
     .min(3)

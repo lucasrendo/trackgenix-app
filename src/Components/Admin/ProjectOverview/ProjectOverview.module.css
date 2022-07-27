@@ -1,9 +1,10 @@
-.container span[onClick] {
-  cursor: pointer;
+.membersContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px;
 }
 
 .membersContainer table {
-  margin-right: 30px;
   min-width: 450px;
   max-width: 600px;
 }
@@ -79,4 +80,13 @@
 
 .details span {
   font-weight: 700;
+}
+
+.membersContainer > button {
+  align-self: flex-end;
+  margin-right: 30px;
+  padding-bottom: 5px;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
 }
