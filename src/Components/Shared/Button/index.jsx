@@ -9,6 +9,9 @@ const Button = ({ children, classes, onClick }) => {
     case 'block':
       classes = `${styles.btn} ${styles.btnBlock}`;
       break;
+    case 'darker':
+      classes = `${styles.btn} ${styles.darkerBtn}`;
+      break;
     case 'red block':
       classes = `${styles.btn} ${styles.redBtn} ${styles.btnBlock}`;
       break;

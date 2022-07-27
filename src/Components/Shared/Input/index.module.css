@@ -17,9 +17,10 @@
   background-color: white;
   font-size: 17px;
   color: #373867;
+  max-width: 250px;
 }
 
-.inputContainer input[type="number"]{
+.inputContainer input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -49,12 +50,13 @@
   cursor: pointer;
 }
 
-.error{
+.error {
   margin: 0px;
   font-size: 14px;
-  color: #FF0303;
+  color: #ff0303;
+  width: 250px;
 }
 
-.inputContainer .inputError{
-  border: 2px solid #FF0303;;
+.inputContainer .inputError {
+  border: 2px solid #ff0303;
 }
