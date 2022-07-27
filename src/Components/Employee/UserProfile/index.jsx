@@ -18,7 +18,7 @@ const EmployeeProfile = () => {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.auth.user._id);
   const message = useSelector((state) => state.employees.message);
-  const employee = useSelector((state) => state.employees.employee);
+  const employee = useSelector((state) => state.auth.user);
   const showModal = useSelector((state) => state.global.showModal);
   const isLoading = useSelector((state) => state.employees.isLoading);
   const error = useSelector((state) => state.employees.error);
