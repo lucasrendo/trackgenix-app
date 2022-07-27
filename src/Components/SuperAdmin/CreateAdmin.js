@@ -29,7 +29,7 @@ const AdminsForm = () => {
       .messages({ 'string.pattern.base': 'First name must be only letters' })
       .required(),
     lastName: Joi.string()
-      .pattern(new RegExp(/^[a-zA-Z ]+$/))
+      .pattern(/^[a-zA-Z ]+$/)
       .label('Last Name')
       .min(4)
       .max(15)
@@ -88,41 +88,51 @@ const AdminsForm = () => {
 
   return (
     <section className={styles.container}>
-      {id ? <h2>Modify Admin</h2> : <h2>New Admin Account</h2>}
       <form onSubmit={handleSubmit(submitHandler)} className={styles.form}>
-        <Input
-          id={'firstName'}
-          register={register}
-          text={'First Name'}
-          type={'text'}
-          error={errors.firstName}
-        />
-        <Input
-          id={'lastName'}
-          register={register}
-          text={'Last Name'}
-          type={'text'}
-          error={errors.lastName}
-        />
-        <Input
-          id={'email'}
-          register={register}
-          text={'Email'}
-          type={'email'}
-          error={errors.email}
-        />
-        <Input
-          id={'password'}
-          register={register}
-          text={'Password'}
-          type={'password'}
-          error={errors.password}
-        />
+        <div className={styles.inputsContainer}>
+          {id ? (
+            <h2 className={styles.header}>Modify Admin Account</h2>
+          ) : (
+            <h2 className={styles.header}>New Admin Account</h2>
+          )}
+          <Input
+            id={'firstName'}
+            register={register}
+            text={'First Name'}
+            type={'text'}
+            error={errors.firstName}
+          />
+          <Input
+            id={'lastName'}
+            register={register}
+            text={'Last Name'}
+            type={'text'}
+            error={errors.lastName}
+          />
+          <Input
+            id={'email'}
+            register={register}
+            text={'Email'}
+            type={'email'}
+            error={errors.email}
+          />
+          <Input
+            id={'password'}
+            register={register}
+            text={'Password'}
+            type={'password'}
+            error={errors.password}
+          />
+        </div>
         <div className={styles.btnsContainer}>
           <Button classes={'red'} onClick={() => goBack()}>
             Back
           </Button>
-          {id ? <Button>Modify Account</Button> : <Button>Create Account</Button>}
+          {id ? (
+            <Button classes={'darker'}>Modify Account</Button>
+          ) : (
+            <Button classes={'darker'}>Create Account</Button>
+          )}
         </div>
       </form>
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>

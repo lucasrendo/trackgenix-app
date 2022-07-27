@@ -63,6 +63,11 @@
   color: white
 }
 
+.darkerBtn {
+  background-color: var(--bright-green);
+  color: var(--grayish-navy);
+}
+
 .redBtn:active {
   box-shadow: inset 0px 0px 0px 3px var(--scarlet);
   color: var(--grayish-navy);

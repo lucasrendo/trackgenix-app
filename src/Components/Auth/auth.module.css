@@ -9,7 +9,7 @@
 
 .text {
   margin: 10px;
-  color: #373867
+  color: #373867;
 }
 
 .link {
@@ -17,7 +17,7 @@
 }
 
 .link:visited {
-  color: inherit
+  color: inherit;
 }
 
 .link:hover {
