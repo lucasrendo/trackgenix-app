@@ -98,6 +98,7 @@ const RegisterForm = () => {
             text={'First Name'}
             type={'text'}
             error={errors.firstName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'lastName'}
@@ -105,6 +106,7 @@ const RegisterForm = () => {
             type={'text'}
             register={register}
             error={errors.lastName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'email'}
@@ -112,6 +114,7 @@ const RegisterForm = () => {
             type={'email'}
             register={register}
             error={errors.email}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'password'}
@@ -119,6 +122,7 @@ const RegisterForm = () => {
             type={'password'}
             register={register}
             error={errors.password}
+            onKeyDown={handleSubmit(submitHandler)}
           />
         </div>
         <div className={styles.btnsContainer}>
