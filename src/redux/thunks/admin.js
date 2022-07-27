@@ -1,4 +1,9 @@
 import {
+  getAuthenticationError,
+  getAuthenticationPending,
+  getAuthenticationSuccess
+} from 'redux/auth/actions';
+import {
   getEmployeesSuccess,
   getEmployeesPending,
   getEmployeesError,
@@ -52,6 +57,26 @@ import {
 } from 'redux/timesheets/actions';
 
 const url = `${process.env.REACT_APP_API_URL}/admin`;
+
+/**************
+  AUTH API
+***************/
+
+export const getAuthAdmin = () => {
+  const token = sessionStorage.getItem('token');
+  return (dispatch) => {
+    dispatch(getAuthenticationPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/auth/getAdmin`, { headers: { token } })
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getAuthenticationSuccess(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(getAuthenticationError(error));
+      });
+  };
+};
 
 /**************
   EMPLOYEES API

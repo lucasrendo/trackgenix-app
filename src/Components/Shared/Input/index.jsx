@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.module.css';
 
-const Input = ({ text, type, id, error, register }) => {
+const Input = ({ text, type, id, error, register, value }) => {
   return (
     <div className={type === 'checkbox' ? styles.check : styles.inputContainer}>
       <label htmlFor={id}>{text}</label>
