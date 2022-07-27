@@ -28,6 +28,7 @@ const ProjectMembers = () => {
   const isLoadingEmployees = useSelector((state) => state.employees.isLoading);
   const [membersList, setMembersList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
+  const [employeeToEditId, setEmployeeToEditId] = useState(null);
   const headers = [
     { header: 'Member', key: 'fullName' },
     { header: 'Role', key: 'role' },
@@ -100,6 +101,17 @@ const ProjectMembers = () => {
     dispatch(editProject({ employees: newMembersList }, project._id));
   };
 
+  // handle add employee in project
+  const editEmployee = (employee) => {
+    let newMembersList = formatMembersReqList();
+    newMembersList.map((emp, index) => {
+      if (employee.employeeId === emp.employeeId) {
+        newMembersList[index] = employee;
+      }
+    });
+    dispatch(editProject({ employees: newMembersList }, project._id));
+  };
+
   // handle employee deletion from project
   const deleteEmployee = (id) => {
     setMembersList(membersList.filter((employee) => employee.id !== id));
@@ -116,8 +128,25 @@ const ProjectMembers = () => {
   };
 
   const closeHandlerForm = () => {
-    reset();
+    reset({ employeeId: '', role: '', rate: 0 });
+    setEmployeeToEditId(null);
     setShowModalForm(false);
+  };
+
+  const openHandlerForm = (id) => {
+    let employeeToEdit = {};
+    project?.employees.map((employee) => {
+      if (id === employee.employeeId._id) {
+        employeeToEdit = {
+          employeeId: employee.employeeId._id,
+          role: employee.role,
+          rate: employee.rate
+        };
+      }
+    });
+    setEmployeeToEditId(employeeToEdit.employeeId);
+    reset(employeeToEdit);
+    setShowModalForm(true);
   };
 
   const submitHandler = (data) => {
@@ -125,10 +154,15 @@ const ProjectMembers = () => {
       ...data,
       hoursInProject: 0
     };
-    addEmployee(reqData);
+    if (employeeToEditId) {
+      editEmployee(reqData);
+    } else {
+      addEmployee(reqData);
+    }
     reset();
     dispatch(getSingleProject(project._id));
     setShowModalForm(false);
+    setEmployeeToEditId(null);
   };
 
   return (
@@ -139,6 +173,7 @@ const ProjectMembers = () => {
           data={membersList}
           headers={headers}
           deleteItem={(id) => deleteEmployee(id)}
+          editItem={(id) => openHandlerForm(id)}
           showButtons={true}
         />
         <Button onClick={() => setShowModalForm(true)}>+</Button>

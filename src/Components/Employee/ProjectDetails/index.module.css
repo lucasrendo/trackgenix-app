@@ -7,8 +7,13 @@
   margin-bottom: 30px;
 }
 
+.membersContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .membersContainer table {
-  margin-right: 30px;
   min-width: 450px;
   max-width: 600px;
 }

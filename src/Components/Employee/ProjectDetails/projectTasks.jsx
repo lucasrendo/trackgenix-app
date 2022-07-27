@@ -3,15 +3,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { format } from 'date-fns/esm/fp';
-import {
-  getTasks,
-  addTask,
-  editTask,
-  deleteTask,
-  getEmployees,
-  getSingleProject
-} from 'redux/thunks/employee';
+import { getTasks, addTask, editTask, deleteTask } from 'redux/thunks/employee';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
@@ -21,7 +13,7 @@ import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
 
 const taskValidation = joi.object({
-  employeeId: joi.string().allow('').label('Employee ID'),
+  employeeId: joi.string().required().label('Employee ID'),
   title: joi.string().max(30).required().label('Title'),
   description: joi.string().max(100).allow('').label('Description'),
   date: joi.date().allow('').label('Date'),
@@ -32,9 +24,11 @@ const ProjectTasks = () => {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.projects.project);
   const tasksList = useSelector((state) => state.tasks.list);
-  const employeeList = useSelector((state) => state.employees.list);
+  const userId = useSelector((state) => state.auth.user._id);
   const isLoading = useSelector((state) => state.tasks.isLoading);
   const isLoadingEmployees = useSelector((state) => state.employees.isLoading);
+  const taskId = useState('');
+  const [membersList, setMembersList] = useState([]);
   const [projectTasksList, setProjectTasksList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
   const headers = [
@@ -63,7 +57,8 @@ const ProjectTasks = () => {
     dispatch(getTasks());
   }, []);
 
-  useEffect(() => project && setProjectTasksList(formatProjectTasksList()), [project]);
+  useEffect(() => project && setProjectTasksList(formatProjectTasksList()), [tasksList]);
+  useEffect(() => project && setMembersList(formatMembersList()), [project]);
 
   const formatProjectTasksList = () => {
     const filteredList = tasksList?.filter((task) => task.projectId?._id === project._id);
@@ -77,9 +72,30 @@ const ProjectTasks = () => {
     });
   };
 
+  const formatMembersList = () => {
+    return project?.employees.map((employee) => {
+      if (employee.employeeId) {
+        return {
+          id: employee.employeeId._id,
+          fullName:
+            userId === employee.employeeId._id
+              ? 'You'
+              : `${employee.employeeId.firstName} ${employee.employeeId.lastName}`,
+          role: employee.role,
+          rate: employee.rate
+        };
+      }
+    });
+  };
+
+  const deleteTask = (id) => {
+    setProjectTasksList(projectTasksList.filter((task) => task.id !== id));
+    // dispatch(deleteTask(id));
+  };
+
   const formatEmployees = () => {
-    return employeeList.map((employee) => {
-      return { id: employee._id, text: `${employee.firstName} ${employee.lastName}` };
+    return membersList.map((employee) => {
+      return { id: employee.id, text: `${employee.fullName}` };
     });
   };
 
@@ -88,13 +104,27 @@ const ProjectTasks = () => {
     setShowModalForm(false);
   };
 
-  const submitHandler = (data) => {};
+  const submitHandler = (data) => {
+    const reqData = {
+      ...data,
+      projectId: project._id
+    };
+    dispatch(addTask(reqData));
+    reset();
+    dispatch(getTasks());
+    setShowModalForm(false);
+  };
 
   return (
     <>
       <div className={styles.membersContainer}>
         <h4 className={styles.listTitle}>Tasks</h4>
-        <List data={projectTasksList} headers={headers} showButtons={true} />
+        <List
+          data={projectTasksList}
+          headers={headers}
+          deleteItem={(id) => deleteTask(id)}
+          showButtons={true}
+        />
         <Button onClick={() => setShowModalForm(true)}>+</Button>
       </div>
       <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
