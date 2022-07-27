@@ -67,10 +67,10 @@ const EmployeeProfile = () => {
 
   useEffect(() => {
     reset({
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      address: employee.address,
-      birthDate: employee.birthDate?.substring(0, 10)
+      firstName: employee?.firstName,
+      lastName: employee?.lastName,
+      address: employee?.address,
+      birthDate: employee?.birthDate?.substring(0, 10)
     });
   }, [employee]);
 
