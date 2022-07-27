@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { format, addDays } from 'date-fns/esm/fp';
 import { getTasks, addTask, editTask, deleteTask } from 'redux/thunks/employee';
+import { resetMessage } from 'redux/tasks/actions';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
@@ -26,11 +28,13 @@ const ProjectTasks = () => {
   const tasksList = useSelector((state) => state.tasks.list);
   const userId = useSelector((state) => state.auth.user._id);
   const isLoading = useSelector((state) => state.tasks.isLoading);
+  const message = useSelector((state) => state.tasks.message);
   const isLoadingEmployees = useSelector((state) => state.employees.isLoading);
-  const taskId = useState('');
+  const [taskId, setTaskId] = useState(null);
   const [membersList, setMembersList] = useState([]);
   const [projectTasksList, setProjectTasksList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const headers = [
     { header: 'Title', key: 'title' },
     { header: 'Employee', key: 'employee' },
@@ -57,7 +61,7 @@ const ProjectTasks = () => {
     dispatch(getTasks());
   }, []);
 
-  useEffect(() => project && setProjectTasksList(formatProjectTasksList()), [tasksList]);
+  useEffect(() => setProjectTasksList(formatProjectTasksList()), [tasksList]);
   useEffect(() => project && setMembersList(formatMembersList()), [project]);
 
   const formatProjectTasksList = () => {
@@ -100,8 +104,39 @@ const ProjectTasks = () => {
   };
 
   const closeHandlerForm = () => {
-    reset();
+    reset({
+      employeeId: '',
+      title: '',
+      description: '',
+      date: '',
+      done: false
+    });
+    setTaskId(null);
     setShowModalForm(false);
+  };
+
+  const closeHandlerModal = () => {
+    dispatch(getTasks());
+    dispatch(resetMessage());
+    setShowModal(false);
+  };
+
+  const openHandlerForm = (id) => {
+    let taskToEdit = {};
+    tasksList?.map((task) => {
+      if (id === task._id) {
+        taskToEdit = {
+          employeeId: task.employeeId._id,
+          title: task.title,
+          description: task.description,
+          date: format('yyyy-MM-dd', addDays(1, new Date(task.date))),
+          done: task.done
+        };
+        setTaskId(task._id);
+      }
+    });
+    reset(taskToEdit);
+    setShowModalForm(true);
   };
 
   const submitHandler = (data) => {
@@ -109,23 +144,41 @@ const ProjectTasks = () => {
       ...data,
       projectId: project._id
     };
-    dispatch(addTask(reqData));
-    reset();
-    dispatch(getTasks());
+    if (taskId) {
+      dispatch(editTask(reqData, taskId));
+    } else {
+      dispatch(addTask(reqData));
+    }
+    reset({
+      employeeId: '',
+      title: '',
+      description: '',
+      date: '',
+      done: false
+    });
     setShowModalForm(false);
+    setTaskId(null);
+    setShowModal(true);
   };
 
   return (
     <>
       <div className={styles.membersContainer}>
         <h4 className={styles.listTitle}>Tasks</h4>
-        <List
-          data={projectTasksList}
-          headers={headers}
-          deleteItem={(id) => deleteTask(id)}
-          showButtons={true}
-        />
-        <Button onClick={() => setShowModalForm(true)}>+</Button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <List
+              data={projectTasksList}
+              headers={headers}
+              deleteItem={(id) => deleteTask(id)}
+              editItem={(id) => openHandlerForm(id)}
+              showButtons={true}
+            />
+            <Button onClick={() => setShowModalForm(true)}>Add task +</Button>
+          </>
+        )}
       </div>
       <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
         <h2 className={styles.modalText}>Add task</h2>
@@ -155,6 +208,9 @@ const ProjectTasks = () => {
           <Input type="checkbox" id="done" text="Done" error={errors.done} register={register} />
           <Button>Save</Button>
         </form>
+      </Modal>
+      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>
+        <h2 className={styles.modalText}>{message}</h2>
       </Modal>
     </>
   );

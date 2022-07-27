@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getSingleEmployee } from 'redux/thunks/employee';
 import Loading from 'Components/Shared/Loading';
 import styles from './index.module.css';
-import { format } from 'date-fns/esm/fp';
+import { format, addDays } from 'date-fns/esm/fp';
 import { Link } from 'react-router-dom';
 
 const EmployeeProjects = () => {
@@ -29,8 +29,8 @@ const EmployeeProjects = () => {
       return {
         id: project._id,
         role: role,
-        startDate: format('dd/MM/yyyy', new Date(project.startDate)),
-        endDate: format('dd/MM/yyyy', new Date(project.endDate)),
+        startDate: format('dd/MM/yyyy', addDays(1, new Date(project.startDate))),
+        endDate: format('dd/MM/yyyy', addDays(1, new Date(project.endDate))),
         projectName: project.projectName,
         client: project.client
       };

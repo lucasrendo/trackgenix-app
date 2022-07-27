@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { editProject, getEmployees, getSingleProject } from 'redux/thunks/employee';
+import { resetMessage } from 'redux/projects/actions';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
@@ -25,10 +26,14 @@ const ProjectMembers = () => {
   const project = useSelector((state) => state.projects.project);
   const userId = useSelector((state) => state.auth.user._id);
   const employeeList = useSelector((state) => state.employees.list);
+  const message = useSelector((state) => state.projects.message);
+  const isLoading = useSelector((state) => state.projects.isLoading);
   const isLoadingEmployees = useSelector((state) => state.employees.isLoading);
   const [membersList, setMembersList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [employeeToEditId, setEmployeeToEditId] = useState(null);
+  const [confirmation, setConfirmation] = useState(true);
   const headers = [
     { header: 'Member', key: 'fullName' },
     { header: 'Role', key: 'role' },
@@ -127,10 +132,22 @@ const ProjectMembers = () => {
     dispatch(editProject({ employees: filteredList }, project._id));
   };
 
+  const confirmationHandler = () => {
+    setConfirmation(false);
+    deleteEmployee(employeeToEditId);
+  };
+
   const closeHandlerForm = () => {
     reset({ employeeId: '', role: '', rate: 0 });
     setEmployeeToEditId(null);
     setShowModalForm(false);
+  };
+
+  const closeHandlerModal = () => {
+    dispatch(resetMessage());
+    setShowModal(false);
+    setConfirmation(true);
+    dispatch(getSingleProject(project._id));
   };
 
   const openHandlerForm = (id) => {
@@ -160,7 +177,6 @@ const ProjectMembers = () => {
       addEmployee(reqData);
     }
     reset();
-    dispatch(getSingleProject(project._id));
     setShowModalForm(false);
     setEmployeeToEditId(null);
   };
@@ -169,14 +185,23 @@ const ProjectMembers = () => {
     <>
       <div className={styles.membersContainer}>
         <h4 className={styles.listTitle}>Team members</h4>
-        <List
-          data={membersList}
-          headers={headers}
-          deleteItem={(id) => deleteEmployee(id)}
-          editItem={(id) => openHandlerForm(id)}
-          showButtons={true}
-        />
-        <Button onClick={() => setShowModalForm(true)}>+</Button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <List
+              data={membersList}
+              headers={headers}
+              deleteItem={(id) => {
+                setEmployeeToEditId(id);
+                setShowModal(true);
+              }}
+              editItem={(id) => openHandlerForm(id)}
+              showButtons={true}
+            />
+            <Button onClick={() => setShowModalForm(true)}>Add member +</Button>
+          </>
+        )}
       </div>
       <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
         <h2 className={styles.modalText}>Add employee</h2>
@@ -209,6 +234,16 @@ const ProjectMembers = () => {
           />
           <Button>Save</Button>
         </form>
+      </Modal>
+      <Modal
+        isOpen={showModal}
+        isConfirmation={confirmation}
+        handleClose={confirmation ? () => setShowModal(false) : () => closeHandlerModal()}
+        confirmed={() => confirmationHandler()}
+      >
+        <h2 className={styles.modalText}>
+          {confirmation ? 'Are you sure you want to delete this employee?' : message}
+        </h2>
       </Modal>
     </>
   );

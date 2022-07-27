@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { getSingleProject } from 'redux/thunks/employee';
-import { format } from 'date-fns/esm/fp';
+import { format, addDays } from 'date-fns/esm/fp';
 import Loading from 'Components/Shared/Loading';
-import Button from 'Components/Shared/Button';
 import styles from './index.module.css';
 import ProjectMembers from './projectMembers';
 import ProjectTasks from './projectTasks';
@@ -14,7 +13,6 @@ const ProjectOverview = () => {
   const projectId = useParams();
   const project = useSelector((state) => state.projects.project);
   const isLoading = useSelector((state) => state.projects.isLoading);
-  const [error, setError] = useState('');
   const [projectName, setProjectName] = useState('');
   const [details, setDetails] = useState({
     client: '',
@@ -34,8 +32,8 @@ const ProjectOverview = () => {
       setProjectName(project?.projectName);
       setDetails({
         client: project.client,
-        startDate: format('dd/MM/yyyy', new Date(project.startDate)),
-        endDate: format('dd/MM/yyyy', new Date(project.endDate)),
+        startDate: format('dd/MM/yyyy', addDays(1, new Date(project.startDate))),
+        endDate: format('dd/MM/yyyy', addDays(1, new Date(project.endDate))),
         isActive: project.isActive
       });
     }
