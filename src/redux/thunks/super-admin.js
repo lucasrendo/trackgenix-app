@@ -14,7 +14,7 @@ import {
   getSingleAdminError,
   getSingleAdminPending,
   getSingleAdminSuccess
-} from 'redux/admins/actions';
+} from 'redux/superadmin/actions';
 
 const url = `${process.env.REACT_APP_API_URL}/super-admin`;
 
