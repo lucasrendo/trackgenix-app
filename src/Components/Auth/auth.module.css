@@ -35,8 +35,9 @@
   background-image: url(assets/images/register-background.png);
   background-position: bottom left;
   background-repeat: no-repeat;
-  background-size: 20%;
+  background-size: 25%;
   background-color: white;
+  align-items: center;
 }
 
 .inputsContainer {

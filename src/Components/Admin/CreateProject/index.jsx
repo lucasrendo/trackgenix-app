@@ -115,6 +115,7 @@ function NewProject() {
           text="Project Name"
           error={errors.projectName}
           register={register}
+          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="text"
@@ -122,6 +123,7 @@ function NewProject() {
           text="Description"
           error={errors.description}
           register={register}
+          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="date"
@@ -129,6 +131,7 @@ function NewProject() {
           text="Start Date"
           error={errors.startDate}
           register={register}
+          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="date"
@@ -136,6 +139,7 @@ function NewProject() {
           text="End Date"
           error={errors.endDate}
           register={register}
+          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
         {fields.map((field, index) => (
