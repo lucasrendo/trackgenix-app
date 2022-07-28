@@ -62,14 +62,14 @@ const ProjectMembers = () => {
 
   // map members list for table from project employees
   const formatMembersList = () => {
-    return project?.employees.map((employee) => {
+    const filteredList = project?.employees.filter(
+      (employee) => userId !== employee.employeeId._id
+    );
+    return filteredList.map((employee) => {
       if (employee.employeeId) {
         return {
           id: employee.employeeId._id,
-          fullName:
-            userId === employee.employeeId._id
-              ? 'You'
-              : `${employee.employeeId.firstName} ${employee.employeeId.lastName}`,
+          fullName: `${employee.employeeId.firstName} ${employee.employeeId.lastName}`,
           role: employee.role,
           rate: employee.rate
         };
@@ -204,7 +204,7 @@ const ProjectMembers = () => {
         )}
       </div>
       <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
-        <h2 className={styles.modalText}>Add employee</h2>
+        <h2 className={styles.modalText}>Employee</h2>
         <form onSubmit={handleSubmit(submitHandler)}>
           <Select
             id={'employeeId'}

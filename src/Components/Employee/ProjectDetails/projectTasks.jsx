@@ -93,9 +93,9 @@ const ProjectTasks = () => {
     });
   };
 
-  const deleteTask = (id) => {
+  const delTask = (id) => {
     setProjectTasksList(projectTasksList.filter((task) => task.id !== id));
-    //dispatch(deleteTask(id));
+    dispatch(deleteTask(id));
   };
 
   const formatEmployees = () => {
@@ -118,7 +118,7 @@ const ProjectTasks = () => {
 
   const confirmationHandler = () => {
     setConfirmation(false);
-    deleteTask(taskId);
+    delTask(taskId);
   };
 
   const closeHandlerModal = () => {
@@ -129,6 +129,7 @@ const ProjectTasks = () => {
   };
 
   const openHandlerForm = (id) => {
+    setConfirmation(false);
     let taskToEdit = {};
     tasksList?.map((task) => {
       if (id === task._id) {
@@ -191,7 +192,7 @@ const ProjectTasks = () => {
         )}
       </div>
       <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
-        <h2 className={styles.modalText}>Add task</h2>
+        <h2 className={styles.modalText}>Task</h2>
         <form onSubmit={handleSubmit(submitHandler)}>
           <Select
             id={'employeeId'}
