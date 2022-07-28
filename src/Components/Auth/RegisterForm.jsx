@@ -55,7 +55,7 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.auth.error);
   const message = useSelector((state) => state.auth.message);
-  const showModal = useSelector((state) => state.auth.showModal);
+  const showModal = useSelector((state) => state.global.showModal);
   const {
     handleSubmit,
     register,
@@ -98,6 +98,7 @@ const RegisterForm = () => {
             text={'First Name'}
             type={'text'}
             error={errors.firstName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'lastName'}
@@ -105,6 +106,7 @@ const RegisterForm = () => {
             type={'text'}
             register={register}
             error={errors.lastName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'email'}
@@ -112,6 +114,7 @@ const RegisterForm = () => {
             type={'email'}
             register={register}
             error={errors.email}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'password'}
@@ -119,13 +122,14 @@ const RegisterForm = () => {
             type={'password'}
             register={register}
             error={errors.password}
+            onKeyDown={handleSubmit(submitHandler)}
           />
         </div>
         <div className={styles.btnsContainer}>
-          <Button>CREATE ACCOUNT</Button>
           <Button classes={'red'} onClick={() => history.goBack()}>
             Cancel
           </Button>
+          <Button>CREATE ACCOUNT</Button>
           <p className={styles.text}>
             Already have an account?{' '}
             <Link to="/auth/login" className={styles.link}>
