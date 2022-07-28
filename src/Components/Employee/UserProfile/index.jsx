@@ -132,7 +132,7 @@ const EmployeeProfile = () => {
             <Button classes={'red'} onClick={() => goBack()}>
               Cancel
             </Button>
-            <Button>Save</Button>
+            <Button classes={'darker'}>Save</Button>
           </div>
         </form>
       )}
