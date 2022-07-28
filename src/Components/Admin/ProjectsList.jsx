@@ -14,7 +14,6 @@ const ProjectsList = () => {
   const projectsList = useSelector((state) => state.projects.list);
   const deletingProject = useSelector((state) => state.projects.isLoading);
   const projectsApiMessage = useSelector((state) => state.projects.message);
-  const employeesList = useSelector((state) => state.employees.list);
   const showModal = useSelector((state) => state.global.showModal);
   const [confirmation, setConfirmation] = useState(true);
   const [id, setId] = useState('');
