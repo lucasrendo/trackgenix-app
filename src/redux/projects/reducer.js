@@ -119,7 +119,8 @@ export const projectsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        message: action.payload
+        message: action.payload.message,
+        project: action.payload.data
       };
     case EDIT_PROJECT_ERROR:
       return {

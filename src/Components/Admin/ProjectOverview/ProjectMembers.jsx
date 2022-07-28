@@ -4,22 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { editProject, getEmployees } from 'redux/thunks/admin';
+import { editProject } from 'redux/thunks/admin';
 import List from 'Components/Shared/List';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
 import Select from 'Components/Shared/Select';
 import Input from 'Components/Shared/Input';
-import styles from './ProjectOverview.module.css';
 import Loading from 'Components/Shared/Loading';
-
-/*
-! SUBMIT HANDLER NOT WORKING - No clues to why
-*/
+import generalStyles from '../admin.module.css';
+import styles from './ProjectOverview.module.css';
 
 const ProjectMembers = () => {
   const dispatch = useDispatch();
   const { projectId } = useParams();
+  const projectLoading = useSelector((state) => state.projects.isLoading);
   const project = useSelector((state) => state.projects.project);
   const message = useSelector((state) => state.projects.message);
   const employeesList = useSelector((state) => state.employees.list);
@@ -27,6 +25,8 @@ const ProjectMembers = () => {
   const [membersList, setMembersList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState('');
+  const [editMode, setEditMode] = useState(false);
   const headers = [
     { header: 'Member', key: 'fullName' },
     { header: 'Role', key: 'role' },
@@ -48,14 +48,13 @@ const ProjectMembers = () => {
     mode: 'onBlur',
     defaultValues: {
       employeeId: '',
-      role: 'DEV',
-      rate: 0,
-      hoursInProject: 0
+      role: '',
+      rate: 0
     },
     resolver: joiResolver(employeeSchema)
   });
 
-  useEffect(() => project && setMembersList(formatMembersList()), [project?.employees]);
+  useEffect(() => project && setMembersList(formatMembersList()), [project]);
 
   // map members list for table from project's employees
   const formatMembersList = () => {
@@ -69,29 +68,22 @@ const ProjectMembers = () => {
           rate: employee.rate
         };
       } else {
-        deleteEmployee(employee._id);
+        deleteHandler(employee._id);
       }
     });
   };
 
   const formatEmployeesList = () => {
-    const nonMembersList = employeesList.map((employee) => {
-      const existingMember = membersList.find((member) => member.employeeId === employee._id);
-      if (!existingMember)
-        return {
-          id: employee._id,
-          text: `${employee.firstName} ${employee.lastName}`
-        };
+    return employeesList.map((employee) => {
+      return {
+        id: employee._id,
+        text: `${employee.firstName} ${employee.lastName}`
+      };
     });
-    nonMembersList.forEach((employee, i) => {
-      !employee && nonMembersList.splice(i, 1);
-    });
-    return nonMembersList;
   };
 
   // handle employee deletion from project
-  const deleteEmployee = (id) => {
-    setMembersList(membersList.filter((employee) => employee.id !== id));
+  const deleteHandler = (id) => {
     const filteredList = project.employees
       .filter((employee) => employee._id !== id)
       .map((employee) => {
@@ -104,53 +96,81 @@ const ProjectMembers = () => {
     dispatch(editProject({ employees: filteredList }, projectId));
   };
 
-  // Add Employee
-  const addEmployee = () => {
-    dispatch(getEmployees());
-    !showModalForm && setShowModalForm(true);
-  };
-
   // Form modal Handlers
   const closeHandlerForm = () => {
     reset();
     setShowModalForm(false);
   };
 
-  const submitHandler = (newMember) => {
-    console.log(errors);
-    console.log(newMember);
-    // setMembersList(membersList.push();
-    // dispatch(editProject({ employees: membersList }, projectId));
-    // setShowModalForm(false);
-    // setShowModal(true);
+  const editHandler = (id) => {
+    setEditMode(true);
+    const member = membersList.find((member) => member.id === id);
+    setShowModalForm(true);
+    reset({
+      employeeId: member.employeeId,
+      role: member.role,
+      rate: member.rate
+    });
   };
 
-  const closeHandlerModal = () => {
-    // dispatch(getEmployeeTimesheets(id));
-    // dispatch(resetMessage());
-    // dispatch(resetTimesheet());
-    setShowModal(false);
+  const submitHandler = (data) => {
+    setError(undefined);
+    // Check for existing member
+    if (!editMode) {
+      const existingMember = membersList.find((member) => member.employeeId === data.employeeId);
+      if (existingMember) return setError('This employee is already a project member');
+    }
+    // Check for existing PM
+    const found = membersList.find((employee) => employee.role === 'PM');
+    if (data.role === 'PM' && found) return setError('Project manager already assigned');
+    // Change list of employees to database format
+    const formattedList = project.employees.map((employee) => {
+      delete employee._id;
+      return {
+        ...employee,
+        employeeId: employee.employeeId._id
+      };
+    });
+    // Update list of employees
+    if (editMode) {
+      const index = formattedList.findIndex((employee) => employee.employeeId === data.employeeId);
+      formattedList.splice(index, 1, { ...formattedList[index], ...data });
+      dispatch(editProject({ employees: formattedList }, projectId));
+    } else {
+      formattedList.push({ ...data, hoursInProject: 0 });
+      dispatch(editProject({ employees: formattedList }, projectId));
+    }
+    setShowModalForm(false);
+    setEditMode(false);
+    setShowModal(true);
   };
 
   return (
     <div className={styles.membersContainer}>
       <h4 className={styles.listTitle}>Team members</h4>
-      <List
-        data={membersList}
-        headers={headers}
-        deleteItem={(id) => deleteEmployee(id)}
-        showButtons={true}
-      />
-      <Button classes="accept" onClick={() => addEmployee()}>
-        +
-      </Button>
+      {projectLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <List
+            data={membersList}
+            headers={headers}
+            editItem={(id) => editHandler(id)}
+            deleteItem={(id) => deleteHandler(id)}
+            showButtons={true}
+          />
+          <Button classes="accept" onClick={() => setShowModalForm(true)}>
+            +
+          </Button>
+        </>
+      )}
       {
         <Modal isOpen={showModalForm} isConfirmation={false} handleClose={() => closeHandlerForm()}>
           <h2 className={styles.modalText}>Employee</h2>
           {employeesLoading ? (
             <Loading />
           ) : (
-            <form onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit(submitHandler)} onFocus={() => setError('')}>
               <Select
                 id={'employeeId'}
                 text={'Employee'}
@@ -173,12 +193,13 @@ const ProjectMembers = () => {
                 error={errors.rate}
               />
               <Button>Save</Button>
+              {error && <p className={generalStyles.error}>{error}</p>}
             </form>
           )}
         </Modal>
       }
-      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>
-        <h2 className={styles.modalText}>{message}</h2>
+      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => setShowModal(false)}>
+        <p className={styles.modalText}>{message}</p>
       </Modal>
     </div>
   );

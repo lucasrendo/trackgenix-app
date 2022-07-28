@@ -2,7 +2,7 @@ import joi from 'joi';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { editProject, getSingleProject } from 'redux/thunks/admin';
+import { editProject, getSingleProject, getEmployees } from 'redux/thunks/admin';
 import { toggleModal } from 'redux/global/actions';
 import ProjectMembers from './ProjectMembers';
 import ProjectDetails from './ProjectDetails';
@@ -35,6 +35,7 @@ const ProjectOverview = () => {
   // Get project information
   useEffect(() => {
     dispatch(getSingleProject(projectId));
+    dispatch(getEmployees());
   }, []);
 
   // set initial name when project comes from server
