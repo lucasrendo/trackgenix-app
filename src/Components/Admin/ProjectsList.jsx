@@ -8,22 +8,6 @@ import { toggleModal } from 'redux/global/actions';
 import Modal from 'Components/Shared/Modal';
 import styles from './admin.module.css';
 
-/*
-! Project manager field does not work correctly.
-* Problem comes from 2 places:
-* 1. We have employeeId and _id on each project member, 1 should stay and the other go
-* 2. We can add PMs to the project, then delete the employee from the DB and we'll have a PM on the
-* project whose id corresponds to no employee on the DB
-TODO - Fix app side adding members to project and server side project employees array object properties.
-
-! List component edit button route is not correctly implemented.
-* It's currently using a combination of variables and strings to create the path. It worked in the
-* previous applications but it's not suited for current application.
-TODO - Make it more reusable so it works in any context with any route.
-
-TODO - Update list to filter projects by admin id: it should only see the projects it created (i think)
-*/
-
 const ProjectsList = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.admins.isLoading);
@@ -61,11 +45,8 @@ const ProjectsList = () => {
   };
 
   const getProjectManager = (projectMembers) => {
-    //TODO - Working draft. Waiting for fixes outside the scope of this feature
     const found = projectMembers.find((employee) => employee.role === 'PM');
-    if (!found) return null;
-    const PM = employeesList.find((employee) => employee.employeeId === found.employeeId);
-    return PM ? `${PM.firstName} ${PM.lastName}` : 'PM id not in database';
+    return found && `${found.employeeId.firstName} ${found.employeeId.lastName}`;
   };
 
   const formatDate = (isoDate) => {
@@ -97,12 +78,12 @@ const ProjectsList = () => {
           <List
             data={listData()}
             headers={headers}
+            resource="/admin/projects"
             deleteItem={(id) => {
               setId(id);
               dispatch(toggleModal(true));
             }}
             showButtons={true}
-            //TODO add path to project details prop when list is fixed
           />
           <Modal
             handleClose={confirmation ? () => dispatch(toggleModal(false)) : () => closeHandler()}
