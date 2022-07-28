@@ -54,7 +54,10 @@ export const employeeReducer = (state = initialState, action) => {
           email: action.payload.data.email,
           password: action.payload.data.password,
           assignedProjects: action.payload.data.assignedProjects,
-          isActive: action.payload.data.isActive
+          isActive: action.payload.data.isActive,
+          secretWord: action.payload.data.secretWord,
+          address: action.payload.data.address,
+          birthDate: action.payload.data.birthDate
         },
         message: action.payload.message
       };
