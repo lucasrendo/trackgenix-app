@@ -27,28 +27,40 @@ function NewProject() {
   const validationSchema = joi.object({
     projectName: joi
       .string()
-      .min(1)
+      .min(3)
       .max(30)
       .pattern(/^[A-Za-z0-9 ]+$/)
       .required()
-      .label('Project name'),
+      .label('Project name')
+      .messages({
+        'string.pattern.base': `Project name should only have letters and/or numbers`,
+        'string.empty': `Project name cannot be an empty field`,
+        'string.max': `Project name should have a maximum length of 30`,
+        'string.min': `Project name should have a minimum length of 3`
+      }),
     description: joi.string().min(10).max(140).allow('').label('Description'),
     isActive: joi.boolean(),
     admin: joi.string().label('Admin').allow(''),
     client: joi
       .string()
-      .min(1)
+      .min(3)
       .max(20)
       .pattern(/^[A-Za-z0-9 ]+$/)
       .required()
-      .label('Client'),
+      .label('Client')
+      .messages({
+        'string.pattern.base': `Client should only have letters and/or numbers`,
+        'string.empty': `Client cannot be an empty field`,
+        'string.max': `Client should have a maximum length of 20`,
+        'string.min': `Client should have a minimum length of 3`
+      }),
     startDate: joi.date().required().label('Start Date'),
     endDate: joi.date().min(joi.ref('startDate')).allow('').label('End Date'),
     employees: joi
       .array()
       .items(
         joi.object({
-          employeeId: joi.string().required().label('Employee ID'),
+          employeeId: joi.string().required().label('Employee ID').required(),
           role: joi.string().valid('DEV', 'QA', 'PM', 'TL').insensitive().required().label('Role'),
           rate: joi.number().min(0).precision(2).required().label('Rate'),
           hoursInProject: joi.number().min(0).precision(1).required().label('Hours In Project')
@@ -115,7 +127,6 @@ function NewProject() {
           text="Project Name"
           error={errors.projectName}
           register={register}
-          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="text"
@@ -123,7 +134,6 @@ function NewProject() {
           text="Description"
           error={errors.description}
           register={register}
-          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="date"
@@ -131,7 +141,6 @@ function NewProject() {
           text="Start Date"
           error={errors.startDate}
           register={register}
-          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input
           type="date"
@@ -139,7 +148,6 @@ function NewProject() {
           text="End Date"
           error={errors.endDate}
           register={register}
-          onKeyDown={handleSubmit(submitHandler)}
         />
         <Input type="text" id="client" text="Client" error={errors.client} register={register} />
         {fields.map((field, index) => (
