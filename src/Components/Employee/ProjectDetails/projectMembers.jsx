@@ -36,8 +36,7 @@ const ProjectMembers = () => {
   const [confirmation, setConfirmation] = useState(true);
   const headers = [
     { header: 'Member', key: 'fullName' },
-    { header: 'Role', key: 'role' },
-    { header: 'Rate', key: 'rate' }
+    { header: 'Role', key: 'role' }
   ];
   const {
     register,
@@ -70,8 +69,7 @@ const ProjectMembers = () => {
         return {
           id: employee.employeeId._id,
           fullName: `${employee.employeeId.firstName} ${employee.employeeId.lastName}`,
-          role: employee.role,
-          rate: employee.rate
+          role: employee.role
         };
       } else {
         deleteEmployee(employee._id);
