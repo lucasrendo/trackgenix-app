@@ -126,6 +126,7 @@ const ProjectTasks = () => {
     dispatch(resetMessage());
     setShowModal(false);
     setConfirmation(true);
+    setTaskId(null);
   };
 
   const openHandlerForm = (id) => {
@@ -148,6 +149,7 @@ const ProjectTasks = () => {
   };
 
   const submitHandler = (data) => {
+    setConfirmation(false);
     const reqData = {
       ...data,
       projectId: project._id
