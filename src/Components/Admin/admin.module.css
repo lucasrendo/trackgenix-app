@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .container a {
@@ -18,9 +19,24 @@
 .container h2 {
   margin-left: 30px;
   margin-right: 30px;
+  margin-bottom: 10px;
   color: #373867;
   font-size: 40px;
   font-weight: 700;
+}
+
+.container h3 {
+  margin-top: 0;
+  margin-left: 30px;
+  margin-right: 30px;
+  color: #373867;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.employeeDetailsContainer table {
+  width: 200%;
 }
 
 .container h2 span {

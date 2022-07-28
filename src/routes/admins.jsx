@@ -16,7 +16,7 @@ const Admin = () => {
       <Route exact path="/admin/projects/add" component={NewProject} />
       <Route exact path="/admin/projects/:projectId" component={ProjectOverview} />
       <Route exact path="/admin/employees" component={EmployeeList} />
-      <Route exact path="/admin/employees/:id" component={Unfinished} />
+      <Route exact path="/admin/employees/:id" component={EmployeeDetails} />
       {/*reports*/}
       <Route exact path="/admin/reports" component={Unfinished} />
       <Route component={NotFound} />
