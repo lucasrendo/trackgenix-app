@@ -43,7 +43,7 @@ export const superAdminReducer = (state = initialState, action) => {
       return {
         ...state,
         error: true,
-        message: action.payload
+        message: action.payload.message
       };
     case GET_SINGLE_ADMIN_PENDING:
       return {

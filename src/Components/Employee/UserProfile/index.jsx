@@ -170,7 +170,7 @@ const EmployeeProfile = () => {
         </form>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={showModal} isConfirmation={false}>
-        <h2>User Profile successfully created</h2>
+        <h2>User Profile successfully updated</h2>
       </Modal>
     </section>
   );

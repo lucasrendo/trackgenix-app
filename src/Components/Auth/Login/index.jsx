@@ -75,7 +75,6 @@ function Login() {
       !superAdminRoutes && dispatch(toggleSidebar(true));
     }
   };
-
   return (
     <section className={styles.container}>
       {isLoading ? (
@@ -91,6 +90,7 @@ function Login() {
                 text="Email"
                 error={errors.email}
                 register={register}
+                onKeyDown={handleSubmit(submitHandler)}
               />
               <Input
                 type="password"
@@ -98,6 +98,7 @@ function Login() {
                 text="Password"
                 error={errors.password}
                 register={register}
+                onKeyDown={handleSubmit(submitHandler)}
               />
               <div className={styles.buttonContainer}>
                 <Button classes={'red'} onClick={() => history.push(homePath)}>
@@ -110,7 +111,7 @@ function Login() {
         </div>
       )}
       <Modal handleClose={() => closeHandler()} isOpen={modalMessage} isConfirmation={false}>
-        <h2>{message}</h2>
+        <h2>{message ? message : 'Login...'}</h2>
       </Modal>
       <p className={styles.text}>
         Do you not have an account?{' '}

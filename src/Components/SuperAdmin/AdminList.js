@@ -63,7 +63,7 @@ const AdminsList = () => {
       <h2>List of Admins</h2>
       <List
         data={formatListData(list)}
-        resource={'/superadmin'}
+        resource={'/superadmin/form'}
         headers={headers}
         deleteItem={(id) => {
           setId(id);
