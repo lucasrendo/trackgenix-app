@@ -101,6 +101,7 @@ const AdminsForm = () => {
             text={'First Name'}
             type={'text'}
             error={errors.firstName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'lastName'}
@@ -108,6 +109,7 @@ const AdminsForm = () => {
             text={'Last Name'}
             type={'text'}
             error={errors.lastName}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'email'}
@@ -115,6 +117,7 @@ const AdminsForm = () => {
             text={'Email'}
             type={'email'}
             error={errors.email}
+            onKeyDown={handleSubmit(submitHandler)}
           />
           <Input
             id={'password'}
@@ -122,6 +125,7 @@ const AdminsForm = () => {
             text={'Password'}
             type={'password'}
             error={errors.password}
+            onKeyDown={handleSubmit(submitHandler)}
           />
         </div>
         <div className={styles.btnsContainer}>
