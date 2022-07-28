@@ -35,6 +35,7 @@ const ProjectTasks = () => {
   const [projectTasksList, setProjectTasksList] = useState([]);
   const [showModalForm, setShowModalForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [confirmation, setConfirmation] = useState(true);
   const headers = [
     { header: 'Title', key: 'title' },
     { header: 'Employee', key: 'employee' },
@@ -94,7 +95,7 @@ const ProjectTasks = () => {
 
   const deleteTask = (id) => {
     setProjectTasksList(projectTasksList.filter((task) => task.id !== id));
-    // dispatch(deleteTask(id));
+    //dispatch(deleteTask(id));
   };
 
   const formatEmployees = () => {
@@ -115,10 +116,16 @@ const ProjectTasks = () => {
     setShowModalForm(false);
   };
 
+  const confirmationHandler = () => {
+    setConfirmation(false);
+    deleteTask(taskId);
+  };
+
   const closeHandlerModal = () => {
     dispatch(getTasks());
     dispatch(resetMessage());
     setShowModal(false);
+    setConfirmation(true);
   };
 
   const openHandlerForm = (id) => {
@@ -172,7 +179,10 @@ const ProjectTasks = () => {
             <List
               data={projectTasksList}
               headers={headers}
-              deleteItem={(id) => deleteTask(id)}
+              deleteItem={(id) => {
+                setTaskId(id);
+                setShowModal(true);
+              }}
               editItem={(id) => openHandlerForm(id)}
               showButtons={true}
             />
@@ -209,8 +219,15 @@ const ProjectTasks = () => {
           <Button>Save</Button>
         </form>
       </Modal>
-      <Modal isOpen={showModal} isConfirmation={false} handleClose={() => closeHandlerModal()}>
-        <h2 className={styles.modalText}>{message}</h2>
+      <Modal
+        isOpen={showModal}
+        isConfirmation={confirmation}
+        handleClose={confirmation ? () => setShowModal(false) : () => closeHandlerModal()}
+        confirmed={() => confirmationHandler()}
+      >
+        <h2 className={styles.modalText}>
+          {confirmation ? 'Are you sure you want to delete this task?' : message}
+        </h2>
       </Modal>
     </>
   );
