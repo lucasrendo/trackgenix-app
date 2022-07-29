@@ -4,15 +4,21 @@ import NewProject from 'Components/Admin/CreateProject';
 import Home from 'Components/Admin/Home';
 import Unfinished from 'Components/Shared/Unfinished';
 import NotFound from 'Components/Shared/NotFound';
+import EmployeeDetails from 'Components/Admin/EmployeeDetails';
+import EmployeeList from 'Components/Admin/EmployeesList';
+import ProjectOverview from 'Components/Admin/ProjectOverview/index';
+import ProjectsList from 'Components/Admin/ProjectsList';
 
 const Admin = () => {
   return (
     <Switch>
       <Route exact path="/admin" component={Home} />
-      <Route exact path="/admin/projects" component={Unfinished} />
+      <Route exact path="/admin/projects" component={ProjectsList} />
       <Route exact path="/admin/projects/add" component={NewProject} />
-      <Route exact path="/admin/projects/:id" component={Unfinished} />
-      <Route exact path="/admin/edit-project/:id" component={Unfinished} />
+      <Route exact path="/admin/projects/:projectId" component={ProjectOverview} />
+      <Route exact path="/admin/employees" component={EmployeeList} />
+      <Route exact path="/admin/employees/:id" component={Unfinished} />
+      {/*reports*/}
       <Route exact path="/admin/reports" component={Unfinished} />
       <Route component={NotFound} />
     </Switch>
