@@ -19,7 +19,7 @@ import {
 } from './constants';
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   error: false,
   employee: undefined,
   list: [],
@@ -48,23 +48,13 @@ export const employeeReducer = (state = initialState, action) => {
         ...state,
         error: false,
         isLoading: false,
-        employee: {
-          firstName: action.payload.data.firstName,
-          lastName: action.payload.data.lastName,
-          email: action.payload.data.email,
-          password: action.payload.data.password,
-          assignedProjects: action.payload.data.assignedProjects,
-          isActive: action.payload.data.isActive,
-          secretWord: action.payload.data.secretWord,
-          address: action.payload.data.address,
-          birthDate: action.payload.data.birthDate
-        },
+        employee: action.payload.data,
         message: action.payload.message
       };
     case GET_SINGLE_EMPLOYEES_PENDING:
       return { ...state, isLoading: true, message: 'Loading...' };
     case GET_SINGLE_EMPLOYEES_ERROR:
-      return { ...state, error: true, message: action.payload };
+      return { ...state, error: true, message: action.payload, isLoading: false };
     case ADD_EMPLOYEES_SUCCESS:
       return {
         ...state,

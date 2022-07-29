@@ -52,7 +52,7 @@ const EmployeesList = () => {
               })}
             </tbody>
           </table>
-          <Modal handleClose={() => toggleModal(false)} isOpen={showModal}>
+          <Modal handleClose={() => dispatch(toggleModal(false))} isOpen={showModal}>
             <p className={styles.modalText}>{employeesApiMessage}</p>
           </Modal>
         </div>
