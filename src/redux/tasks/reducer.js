@@ -69,7 +69,8 @@ export const tasksReducer = (state = initialState, action) => {
         isLoading: false,
         error: false,
         task: action.payload.data,
-        message: action.payload.message
+        message: action.payload.message,
+        list: [...state.list, action.payload.data]
       };
     case ADD_TASK_ERROR:
       return {
