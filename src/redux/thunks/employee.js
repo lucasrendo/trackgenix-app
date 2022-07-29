@@ -4,7 +4,10 @@ import {
   getSingleEmployeesError,
   editEmployeesSuccess,
   editEmployeesPending,
-  editEmployeesError
+  editEmployeesError,
+  getEmployeesPending,
+  getEmployeesSuccess,
+  getEmployeesError
 } from 'redux/employees/actions';
 import {
   getProjectsSuccess,
@@ -98,6 +101,24 @@ export const getSingleEmployee = (id) => {
   };
 };
 
+export const getEmployees = () => {
+  return async (dispatch) => {
+    dispatch(getEmployeesPending());
+    try {
+      const token = sessionStorage.getItem('token');
+
+      const response = await fetch(`${url}/employees`, { headers: { token } });
+      const data = await response.json();
+
+      return !data.error
+        ? dispatch(getEmployeesSuccess(data.data))
+        : dispatch(getEmployeesError(data.message));
+    } catch (error) {
+      return dispatch(getSingleEmployeesError(error));
+    }
+  };
+};
+
 export const editEmployees = (obj, id) => {
   return async (dispatch) => {
     dispatch(editEmployeesPending());
@@ -175,7 +196,7 @@ export const editProject = (obj, id) => {
       const data = await response.json();
 
       return !data.error
-        ? dispatch(editProjectSuccess(data.message))
+        ? dispatch(editProjectSuccess(data))
         : dispatch(editProjectError(data.message));
     } catch (error) {
       return dispatch(editProjectError(error.message));
